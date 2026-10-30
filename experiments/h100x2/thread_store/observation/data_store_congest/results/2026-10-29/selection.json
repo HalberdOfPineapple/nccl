@@ -1,4 +1,9 @@
 {
+ "copy": {
+  "ctas": 16,
+  "threads": 512,
+  "reason": "fewest copy CTAs on the plateau (E7.1, final build): 367.8 GB/s spread, 368.2 GB/s packed into G6; 512 threads/CTA for per-SM headroom"
+ },
  "writer": {
   "ctas": 64,
   "threads": 1024,
@@ -20,5 +25,10 @@
    "threads": 512,
    "reason": "higher-supply alternative (370.7 GB/s spread, final build); two GPCs when packed"
   }
- ]
+ ],
+ "tma_writer": {
+  "ctas": 64,
+  "chunks": 1,
+  "reason": "fewest TMA store CTAs within 95% of the no-limit ceiling (about 3285 GB/s): 64 CTAs (48 CTAs: 91%); 1 chunk in flight gives 3257 GB/s (97.1%) with even CTAs (slowest/fastest 0.98), 2 or 4 chunks are 0.8% faster but uneven (0.60-0.62); same CTA count as the thread-store writer"
+ }
 }

@@ -30,5 +30,18 @@
    "scripts/run_store_congest.py": "da3100b9ebcdf7a0c446ddd832af4cbe3a8ff7746a5dafae166dfebf7d33c64e",
    "scripts/analyze_store_congest.py": "6a041fb82ea866f52266661176b5c842013739224495d15e903576a3b1c56c71"
   }
+ },
+ "build_2026_10_30_tma": {
+  "utc": "2026-10-30T01:27:00+00:00",
+  "note": "TMA co-runners added under STORE_CONGEST_TMA (E7.5 reads, E7.6 stores) into bin/store_congest_tma; bin/store_congest rebuilt from the same source has the same SASS instructions as the E7.1-E7.4 build (cuobjdump instruction lines compared). Used for every record in direction/, mechanism/, tma_writer_alone/, tma_smoke/ (TMA kinds) and for the thread-store runs there (bin/store_congest).",
+  "files": {
+   "src/store_congest.cu": "537fc5d64ab4ebbd58ceade81b7f28c6f8815a3a94531021e0c144be0d7a7bc2",
+   "bin/store_congest": "06042995754844817d575899fee151cd70fdf6f323d4bd8415a4e2bf57c6ee6e",
+   "bin/store_congest_tma": "f8e11c7e76412fbcf7caeef2eae7aa28871e1191acb5e0ebb10e5eb5ab6cca86",
+   "Makefile": "6bbd8e6e88cb325b6194e1ba413b3466400c775a84c24178852fd61e24ed51bc",
+   "../../../h100x1/memory_co_runner/common/include/hbm_read_pressure.cuh": "6c209e64351261ff721b0ea4965a52d1e82064cd6f0b2401899881090daf23fd",
+   "scripts/run_store_congest.py": "1bd91e1e4e2892d2601a557642d6db1adf0fc192c181d1b8476f6ce1993efb5e",
+   "scripts/analyze_store_contention.py": "ac5c2662cb3d4f9503a6d33e999ef6ce18e8961cf8404406f7efb5b9d09f68bf"
+  }
  }
 }

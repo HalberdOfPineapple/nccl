@@ -27,6 +27,11 @@
 #include <string>
 #include <thread>
 #include <vector>
+#ifdef STORE_CONGEST_TMA
+// TMA co-runners for plan 07 E7.5 (bulk reads, from plan 04) and E7.6 (bulk stores). They are built
+// only into bin/store_congest_tma, so bin/store_congest keeps the device code of E7.1-E7.4.
+#include "hbm_read_pressure.cuh"
+#endif
 
 #define CUDA_CHECK(call) do { \
   cudaError_t status = (call); \
@@ -103,6 +108,10 @@ struct Config {
   int communicationEnabled = 1;     // 0: copy CTA 0 only times a window (writer-alone runs)
   size_t payloadBytes = size_t(2048) << 20;
   unsigned long long soloDurationNs = 20000000;
+#ifdef STORE_CONGEST_TMA
+  int writerKind = 0;               // co-runner: 0 thread stores, 1 TMA bulk reads (E7.5), 2 TMA bulk stores (E7.6)
+  int chunksInFlight = 3;           // TMA kinds: 64 KiB chunks in flight per co-runner CTA
+#endif
 };
 struct KernelArguments {
   ncclWindow_t window;
@@ -117,6 +126,10 @@ struct KernelArguments {
   int iteration;
   int writerIdle;
   unsigned long long writerIntervalPs;
+#ifdef STORE_CONGEST_TMA
+  HbmReadSettings tmaSettings;      // TMA kinds: buffer, one slice per co-runner CTA, chunks in flight, rate
+  unsigned long long* tmaChecksums; // kind 1: per co-runner CTA sum of the first word of every chunk read
+#endif
 };
 
 __device__ __forceinline__ unsigned long long readTimerNs() {
@@ -178,6 +191,24 @@ __global__ void verifyWriterBuffer(const uint4* buffer, int writerCtas, size_t s
     atomicAdd(mismatches, localMismatches);
   }
 }
+
+#ifdef STORE_CONGEST_TMA
+// E7.6: every word of the chunks written in this launch holds the launch's pattern word.
+__global__ void verifyTmaWriterBuffer(const uint32_t* buffer, int writerCtas, size_t sliceChunks, const unsigned long long* writerChunks, uint32_t pattern, unsigned long long* mismatches) {
+  const size_t chunkWords = writerBlockBytes / 4;
+  const size_t sliceWords = sliceChunks * chunkWords;
+  unsigned long long localMismatches = 0;
+  for (size_t wordIndex = size_t(blockIdx.x) * blockDim.x + threadIdx.x; wordIndex < sliceWords * writerCtas; wordIndex += size_t(blockDim.x) * gridDim.x) {
+    size_t writtenChunks = writerChunks[wordIndex / sliceWords] < sliceChunks ? writerChunks[wordIndex / sliceWords] : sliceChunks;
+    if (wordIndex % sliceWords < writtenChunks * chunkWords) {
+      localMismatches += buffer[wordIndex] != pattern;
+    }
+  }
+  if (localMismatches) {
+    atomicAdd(mismatches, localMismatches);
+  }
+}
+#endif
 
 // The copy starts only after every writer CTA has started, so writing covers the whole copy.
 __device__ void waitForWriters(KernelArguments arguments) {
@@ -357,6 +388,110 @@ __device__ void runWriter(KernelArguments arguments, int writerIndex) {
   }
 }
 
+#ifdef STORE_CONGEST_TMA
+// E7.5 co-runner: rate-controlled TMA bulk reads into shared memory (plan 04's read co-runner).
+// Thread 0 copies, thread 32 forwards the stop flag; idle mode keeps the CTA and its shared memory.
+__device__ void runTmaReader(KernelArguments arguments, int readerIndex) {
+  extern __shared__ __align__(128) uint8_t dynamicShared[];
+  __shared__ int sharedStopFlag;
+  CtaRecord& record = arguments.records[blockIdx.x];
+  if (threadIdx.x == 0) {
+    sharedStopFlag = 0;
+  }
+  __syncthreads();
+  if (threadIdx.x == 32) {
+    hbm_read_pressure::forwardStopFlag(&arguments.local->stop, &sharedStopFlag);
+  } else if (threadIdx.x == 0) {
+    record.startNs = readTimerNs();
+    cuda::atomic_ref<int, cuda::thread_scope_system>(arguments.local->writersReady).fetch_add(1, cuda::memory_order_release);
+    if (arguments.writerIdle) {
+      while (!hbm_read_pressure::stopRequested(&sharedStopFlag)) {
+        __nanosleep(256);
+      }
+      record.endNs = readTimerNs();
+    } else {
+      const HbmReadSettings& settings = arguments.tmaSettings;
+      uint64_t* barriers = reinterpret_cast<uint64_t*>(dynamicShared + size_t(settings.chunksInFlight) * settings.chunkBytes);
+      HbmReadResult result;
+      hbm_read_pressure::readUntilStopped(settings, readerIndex, dynamicShared, barriers, &sharedStopFlag, result);
+      record.endNs = result.endNs;
+      record.workUnits = result.chunksRead;        // A9: 64 KiB chunks read
+      arguments.writerBlocks[readerIndex] = result.chunksRead;
+      arguments.tmaChecksums[readerIndex] = result.checksum;
+    }
+  }
+  __syncthreads();
+}
+
+__host__ __device__ __forceinline__ uint32_t tmaWriterPattern(int iteration) {
+  return 0x5a000000u | uint32_t(iteration + 1);
+}
+// Wait until at most `pending` bulk-store groups of this thread are still writing. The count must
+// be an immediate operand, hence the switch.
+__device__ __forceinline__ void waitForBulkStores(int pending) {
+  switch (pending) {
+    case 0: asm volatile("cp.async.bulk.wait_group 0;" ::: "memory"); break;
+    case 1: asm volatile("cp.async.bulk.wait_group 1;" ::: "memory"); break;
+    case 2: asm volatile("cp.async.bulk.wait_group 2;" ::: "memory"); break;
+    case 3: asm volatile("cp.async.bulk.wait_group 3;" ::: "memory"); break;
+    case 4: asm volatile("cp.async.bulk.wait_group 4;" ::: "memory"); break;
+    case 5: asm volatile("cp.async.bulk.wait_group 5;" ::: "memory"); break;
+    case 6: asm volatile("cp.async.bulk.wait_group 6;" ::: "memory"); break;
+    default: asm volatile("cp.async.bulk.wait_group 7;" ::: "memory"); break;
+  }
+}
+// E7.6 co-runner: rate-controlled TMA bulk stores of one 64 KiB shared-memory chunk into this
+// CTA's slice of the local buffer. The chunk is filled once per launch with a launch-specific word,
+// so the source never changes and needs no read-completion wait; `chunksInFlight` bounds the chunks
+// whose writes have not completed. The end time is taken after every write has completed.
+__device__ void runTmaWriter(KernelArguments arguments, int writerIndex) {
+  extern __shared__ __align__(128) uint8_t dynamicShared[];
+  __shared__ int sharedStopFlag;
+  CtaRecord& record = arguments.records[blockIdx.x];
+  const HbmReadSettings& settings = arguments.tmaSettings;
+  uint32_t* source = reinterpret_cast<uint32_t*>(dynamicShared);
+  for (unsigned word = threadIdx.x; word < settings.chunkBytes / 4; word += blockDim.x) {
+    source[word] = tmaWriterPattern(arguments.iteration);
+  }
+  if (threadIdx.x == 0) {
+    sharedStopFlag = 0;
+  }
+  // Ordinary shared-memory writes must be visible to the bulk-copy unit before it reads them.
+  asm volatile("fence.proxy.async.shared::cta;" ::: "memory");
+  __syncthreads();
+  if (threadIdx.x == 32) {
+    hbm_read_pressure::forwardStopFlag(&arguments.local->stop, &sharedStopFlag);
+  } else if (threadIdx.x == 0) {
+    record.startNs = readTimerNs();
+    cuda::atomic_ref<int, cuda::thread_scope_system>(arguments.local->writersReady).fetch_add(1, cuda::memory_order_release);
+    if (arguments.writerIdle) {
+      while (!hbm_read_pressure::stopRequested(&sharedStopFlag)) {
+        __nanosleep(256);
+      }
+      record.endNs = readTimerNs();
+    } else {
+      const unsigned long long sliceChunks = settings.workingSetBytes / settings.chunkBytes / settings.pressureCtas;
+      uint8_t* slice = const_cast<uint8_t*>(settings.workingSet) + writerIndex * sliceChunks * settings.chunkBytes;
+      const uint32_t sourceAddress = hbm_read_pressure::sharedAddress(source);
+      unsigned long long chunks = 0;
+      while (!hbm_read_pressure::stopRequested(&sharedStopFlag)) {
+        hbm_read_pressure::waitForScheduledStart(settings, record.startNs, chunks);
+        asm volatile("cp.async.bulk.global.shared::cta.bulk_group [%0], [%1], %2;"
+                     :: "l"(slice + (chunks % sliceChunks) * settings.chunkBytes), "r"(sourceAddress), "r"(settings.chunkBytes) : "memory");
+        asm volatile("cp.async.bulk.commit_group;" ::: "memory");
+        ++chunks;
+        waitForBulkStores(settings.chunksInFlight - 1);
+      }
+      waitForBulkStores(0);
+      record.endNs = readTimerNs();
+      record.workUnits = chunks;                   // A9: 64 KiB chunks written
+      arguments.writerBlocks[writerIndex] = chunks;
+    }
+  }
+  __syncthreads();
+}
+#endif
+
 // Rank 0 runs one CTA per SM; each takes the role of its SM. Rank 1 runs only the receiver.
 __global__ void __launch_bounds__(maxThreadsPerCta, 1) storeCongest(KernelArguments arguments) {
   __shared__ int roleIndex;
@@ -384,6 +519,13 @@ __global__ void __launch_bounds__(maxThreadsPerCta, 1) storeCongest(KernelArgume
     record.roleIndex = roleIndex;
   }
   __syncthreads();
+#ifdef STORE_CONGEST_TMA
+  if (role == roleWriter && arguments.config.writerKind == 1) {
+    runTmaReader(arguments, roleIndex);
+  } else if (role == roleWriter && arguments.config.writerKind == 2) {
+    runTmaWriter(arguments, roleIndex);
+  } else
+#endif
   if (role == roleWriter) {
     runWriter(arguments, roleIndex);
   } else if (role == roleCopy && arguments.config.communicationEnabled) {
@@ -412,6 +554,9 @@ struct RankState {
   cudaDeviceProp properties;
   std::vector<std::vector<CtaRecord>> records;
   std::vector<int> writerIdleByIteration;   // retained launches only
+#ifdef STORE_CONGEST_TMA
+  unsigned long long* tmaChecksums;
+#endif
 };
 struct Placement {
   std::string mapPath;
@@ -480,6 +625,12 @@ static Config parseConfiguration(const char* path) {
       config.payloadBytes = size_t(value) << 20;
     } else if (key == "solo_ns") {
       config.soloDurationNs = value;
+#ifdef STORE_CONGEST_TMA
+    } else if (key == "writer_kind") {
+      config.writerKind = value;
+    } else if (key == "chunks_in_flight") {
+      config.chunksInFlight = value;
+#endif
     } else {
       fprintf(stderr, "Unknown config key %s\n", key.c_str());
       std::exit(1);
@@ -492,6 +643,10 @@ static void validateConfiguration(const Config& config) {
   bool writerValid = config.writerCtas >= 0 && config.writerCtas + config.copyCtas <= maxSms && config.writerThreads >= 32 && config.writerThreads % 32 == 0 && writerBlockVectors % config.writerThreads == 0 && config.writerThreads <= config.blockThreads && config.targetGbps >= 0;
   bool alternationValid = config.writerAlternate >= 0 && config.writerAlternate <= 2 && !(config.writerAlternate && (config.writerIdle || config.writerCtas == 0));
   bool runValid = config.blockThreads <= maxThreadsPerCta && config.blockThreads % 32 == 0 && config.iterations >= 1 && config.warmup >= 0 && config.soloDurationNs > 0 && config.payloadBytes >= (size_t(1) << 20) && config.payloadBytes <= (size_t(4096) << 20) && config.copyPlacement >= 0 && config.copyPlacement <= 1 && config.writerPlacement >= 0 && config.writerPlacement <= 1;
+#ifdef STORE_CONGEST_TMA
+  // TMA kinds use threads 0 and 32 only; at least two warps per CTA.
+  writerValid = writerValid && config.writerKind >= 0 && config.writerKind <= 2 && config.chunksInFlight >= 1 && config.chunksInFlight <= 8 && config.blockThreads >= 64;
+#endif
   if (!copyValid || !writerValid || !alternationValid || !runValid) {
     fprintf(stderr, "Invalid configuration (copy %d, writer %d, alternation %d, run %d)\n", copyValid, writerValid, alternationValid, runValid);
     std::exit(1);
@@ -633,6 +788,13 @@ static void setupRank(RankState& state, const Config& config, Placement& placeme
       CUDA_CHECK(cudaMemset(state.writerBuffer, 0, writerBufferBytes));
     }
   }
+#ifdef STORE_CONGEST_TMA
+  // E7.5 reads a buffer of byte 0x01, so every chunk's first word adds 0x01010101 to the checksum.
+  if (rank == 0 && config.writerCtas && config.writerKind == 1) {
+    CUDA_CHECK(cudaMemset(state.writerBuffer, 0x01, writerBufferBytes));
+  }
+  CUDA_CHECK(cudaMalloc(&state.tmaChecksums, maxSms * sizeof(unsigned long long)));
+#endif
   // More than half an SM's shared memory ensures no two CTAs share an SM.
   state.dynamicSharedBytes = ((state.properties.sharedMemPerMultiprocessor / 2 + 255) / 256) * 256;
   if (config.sharedBytes) {
@@ -642,6 +804,13 @@ static void setupRank(RankState& state, const Config& config, Placement& placeme
     }
     state.dynamicSharedBytes = config.sharedBytes;
   }
+#ifdef STORE_CONGEST_TMA
+  size_t tmaSharedBytes = config.writerKind == 1 ? size_t(config.chunksInFlight) * (writerBlockBytes + sizeof(uint64_t)) : config.writerKind == 2 ? writerBlockBytes : 0;
+  if (state.dynamicSharedBytes < tmaSharedBytes) {
+    fprintf(stderr, "shared_bytes too small for the TMA co-runner (%zu needed)\n", tmaSharedBytes);
+    std::exit(1);
+  }
+#endif
   CUDA_CHECK(cudaFuncSetAttribute(storeCongest, cudaFuncAttributeMaxDynamicSharedMemorySize, state.dynamicSharedBytes));
   int residentCtas = 0;
   CUDA_CHECK(cudaOccupancyMaxActiveBlocksPerMultiprocessor(&residentCtas, storeCongest, config.blockThreads, state.dynamicSharedBytes));
@@ -715,6 +884,28 @@ static void collectIteration(RankState& state, const Config& config, int rank, i
       fprintf(stderr, "Role counts differ from the role table\n");
       std::exit(1);
     }
+#ifdef STORE_CONGEST_TMA
+    if (config.writerCtas && !writerIdle && config.writerKind == 1) {
+      std::vector<unsigned long long> chunks(config.writerCtas);
+      std::vector<unsigned long long> checksums(config.writerCtas);
+      CUDA_CHECK(cudaMemcpy(chunks.data(), state.writerBlocks, chunks.size() * sizeof(unsigned long long), cudaMemcpyDeviceToHost));
+      CUDA_CHECK(cudaMemcpy(checksums.data(), state.tmaChecksums, checksums.size() * sizeof(unsigned long long), cudaMemcpyDeviceToHost));
+      for (int reader = 0; reader < config.writerCtas; ++reader) {
+        if (chunks[reader] == 0 || checksums[reader] != chunks[reader] * 0x01010101ull) {
+          fprintf(stderr, "READ CHECKSUM FAILURE: reader %d chunks=%llu checksum=%llu\n", reader, chunks[reader], checksums[reader]);
+          std::exit(4);
+        }
+      }
+    } else if (config.writerCtas && !writerIdle && config.writerKind == 2) {
+      size_t sliceChunks = writerBufferBytes / writerBlockBytes / config.writerCtas;
+      verifyTmaWriterBuffer<<<528, 256, 0, state.stream>>>(reinterpret_cast<const uint32_t*>(state.writerBuffer), config.writerCtas, sliceChunks, state.writerBlocks, tmaWriterPattern(iteration), state.mismatches);
+      unsigned long long mismatches = readMismatches(state);
+      if (mismatches) {
+        fprintf(stderr, "TMA WRITER CHECK FAILURE: %llu mismatching words\n", mismatches);
+        std::exit(4);
+      }
+    } else
+#endif
     if (config.writerCtas && !writerIdle) {
       size_t sliceBlocks = writerBufferBytes / writerBlockBytes / config.writerCtas;
       verifyWriterBuffer<<<528, 256, 0, state.stream>>>(state.writerBuffer, config.writerCtas, sliceBlocks, state.writerBlocks, iteration, state.mismatches);
@@ -748,6 +939,9 @@ static void cleanupRank(RankState& state) {
   CUDA_CHECK(cudaFree(state.local));
   CUDA_CHECK(cudaFree(state.deviceRecords));
   CUDA_CHECK(cudaFree(state.mismatches));
+#ifdef STORE_CONGEST_TMA
+  CUDA_CHECK(cudaFree(state.tmaChecksums));
+#endif
   CUDA_CHECK(cudaStreamDestroy(state.stream));
   NCCL_CHECK(ncclCommDestroy(state.communicator));
 }
@@ -758,6 +952,10 @@ static void runRank(RankState& state, Config config, Placement& placement, int r
     prepareIteration(state, config, rank);
     pthread_barrier_wait(hostBarrier);
     KernelArguments arguments{state.window, state.writerBuffer, state.writerBlocks, state.roleOfSm, config.payloadBytes / sizeof(uint32_t), state.local, state.deviceRecords, config, rank, iteration, launchIsIdle(config, iteration), writerIntervalPs(config)};
+#ifdef STORE_CONGEST_TMA
+    arguments.tmaSettings = HbmReadSettings{reinterpret_cast<const uint8_t*>(state.writerBuffer), writerBufferBytes, config.writerCtas, unsigned(writerBlockBytes), config.chunksInFlight, writerIntervalPs(config)};
+    arguments.tmaChecksums = state.tmaChecksums;
+#endif
     void* kernelArguments[] = {&arguments};
     // Cooperative launch: every CTA is resident at once, so waits between roles cannot deadlock.
     CUDA_CHECK(cudaLaunchCooperativeKernel(reinterpret_cast<void*>(storeCongest), state.gridCtas, config.blockThreads, kernelArguments, state.dynamicSharedBytes, state.stream));
@@ -794,6 +992,9 @@ static void writeJson(const char* path, const char* configPath, const Config& co
           config.useUnmapped, config.blockThreads, config.detailed, config.communicationEnabled, config.soloDurationNs, config.payloadBytes, writerBlockBytes, writerBufferBytes,
           placement.mapPath.c_str(), placement.mapUuid.c_str());
   writeIntegerList(output, placement.gpcOfSm);
+#ifdef STORE_CONGEST_TMA
+  fprintf(output, ",\"writer_kind\":%d,\"chunks_in_flight\":%d", config.writerKind, config.chunksInFlight);
+#endif
   fprintf(output, ",\"role_of_sm\":");
   writeIntegerList(output, placement.roleOfSm);
   fprintf(output, ",\"ranks\":[");
