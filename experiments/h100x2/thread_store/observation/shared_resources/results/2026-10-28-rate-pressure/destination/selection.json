@@ -1,0 +1,14 @@
+{
+  "ctas": 128,
+  "threads": 512,
+  "reason": "128 x 512 (370.62 GB/s) and 128 x 1024 (370.40 GB/s) differ by less than 1% with 24 idle destination pressure CTAs and 196864-byte shared memory, so 128 x 512 is kept as planned.",
+  "mutual_percents": [
+    80
+  ],
+  "level95": {
+    "pressure_ctas": 48,
+    "target_gbps": 3185,
+    "target_percent": 95,
+    "reason": "24 pressure CTAs stop at about 91% of peak. Screen, reads alone, one run each (target 95% / no limit): source 32: 3038/3075, 40: 3129/2822, 48: 3149/2950 GB/s; destination 32: 3146/3165, 40: 3164/3178, 48: 3159/3178 GB/s. 48 CTAs with the 95% target is the highest targeted rate on the source GPU and within 0.2% of the best on the destination GPU; one setting is used for both."
+  }
+}

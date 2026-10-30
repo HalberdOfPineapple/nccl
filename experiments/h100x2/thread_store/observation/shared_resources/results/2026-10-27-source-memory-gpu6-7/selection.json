@@ -1,0 +1,29 @@
+{
+  "read_threads": 1024,
+  "read_threads_reason": "Highest median logical read rate at every read CTA count in the five-round standalone grid (reads phase).",
+  "unroll_points": [
+    [
+      32,
+      1024
+    ],
+    [
+      64,
+      1024
+    ],
+    [
+      100,
+      1024
+    ],
+    [
+      128,
+      1024
+    ],
+    [
+      131,
+      1024
+    ]
+  ],
+  "unroll_points_reason": "Strongest read thread count at the largest read budgets of the communication groups (100 for C=32, 64 for C=64, 128/131 for C=1) plus an intermediate 32-CTA point.",
+  "read_unroll": 16,
+  "read_unroll_reason": "Highest median logical read rate at every unroll point (32/64/100/128/131 x 1024). The plan criterion (<1% over two successive increases) is not met at any point; thread count and SM count are at hardware limits, so this is the strongest achieved setting, not an established saturation point."
+}

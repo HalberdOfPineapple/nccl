@@ -1,0 +1,35 @@
+{
+  "note": "Per read_unroll instantiation of fusedPush. Load grouping counts consecutive LDG.E.128 before a three-source IADD3 checksum add; a static heuristic, not dynamic outstanding requests.",
+  "variants": {
+    "4": {
+      "registers": 64,
+      "spill_load_bytes": 0,
+      "vector_loads_in_kernel": 5,
+      "longest_load_group_before_checksum_add": 2
+    },
+    "16": {
+      "registers": 64,
+      "spill_load_bytes": 0,
+      "vector_loads_in_kernel": 17,
+      "longest_load_group_before_checksum_add": 5
+    },
+    "8": {
+      "registers": 56,
+      "spill_load_bytes": 0,
+      "vector_loads_in_kernel": 9,
+      "longest_load_group_before_checksum_add": 4
+    },
+    "2": {
+      "registers": 56,
+      "spill_load_bytes": 0,
+      "vector_loads_in_kernel": 3,
+      "longest_load_group_before_checksum_add": 2
+    },
+    "1": {
+      "registers": 48,
+      "spill_load_bytes": 0,
+      "vector_loads_in_kernel": 2,
+      "longest_load_group_before_checksum_add": 2
+    }
+  }
+}

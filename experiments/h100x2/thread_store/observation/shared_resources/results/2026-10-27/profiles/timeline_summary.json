@@ -1,0 +1,74 @@
+[
+  {
+    "case": "healthy",
+    "source_kernel_ms": 3.339132,
+    "destination_kernel_ms": 3.33547,
+    "device_completed_us": 3330.176,
+    "throughput_gbps": 80.60698773878617,
+    "co_rate": 0,
+    "minimum_overlap_fraction": 0,
+    "nvtx_range_ms": 3.357499,
+    "source_grid": 32,
+    "destination_grid": 1
+  },
+  {
+    "case": "compute",
+    "source_kernel_ms": 3.291036,
+    "destination_kernel_ms": 3.281903,
+    "device_completed_us": 3276.8,
+    "throughput_gbps": 81.92,
+    "co_rate": 25.448829788269652,
+    "minimum_overlap_fraction": 1.0,
+    "nvtx_range_ms": 3.310335,
+    "source_grid": 132,
+    "destination_grid": 1
+  },
+  {
+    "case": "source_memory",
+    "source_kernel_ms": 3.355132,
+    "destination_kernel_ms": 3.240879,
+    "device_completed_us": 3235.808,
+    "throughput_gbps": 82.95778241477862,
+    "co_rate": 258.2122279832326,
+    "minimum_overlap_fraction": 1.0,
+    "nvtx_range_ms": 3.377175,
+    "source_grid": 132,
+    "destination_grid": 1
+  },
+  {
+    "case": "destination_memory",
+    "source_kernel_ms": 3.351677,
+    "destination_kernel_ms": 3.452879,
+    "device_completed_us": 3340.928,
+    "throughput_gbps": 80.34757288992759,
+    "co_rate": 246.8536650987596,
+    "minimum_overlap_fraction": 1.0,
+    "nvtx_range_ms": 3.498738,
+    "source_grid": 32,
+    "destination_grid": 101
+  },
+  {
+    "case": "vector_source_memory",
+    "source_kernel_ms": 3.387837,
+    "destination_kernel_ms": 3.352784,
+    "device_completed_us": 3347.456,
+    "throughput_gbps": 80.19088406240441,
+    "co_rate": 935.4339644052731,
+    "minimum_overlap_fraction": 1.0,
+    "nvtx_range_ms": 3.410099,
+    "source_grid": 132,
+    "destination_grid": 1
+  },
+  {
+    "case": "vector_destination_memory",
+    "source_kernel_ms": 3.347677,
+    "destination_kernel_ms": 3.373456,
+    "device_completed_us": 3334.656,
+    "throughput_gbps": 80.4986949178566,
+    "co_rate": 851.3674374436162,
+    "minimum_overlap_fraction": 1.0,
+    "nvtx_range_ms": 3.405639,
+    "source_grid": 32,
+    "destination_grid": 101
+  }
+]

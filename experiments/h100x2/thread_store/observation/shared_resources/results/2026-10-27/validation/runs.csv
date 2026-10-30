@@ -1,0 +1,3 @@
+run,config,kind,co_ctas,ctas,threads,pacing,detailed,communication,vector_reads,completed_us,throughput_gbps,issue_us,ordering_us,notification_us,ack_wait_us,issue_spread_us,receiver_wait_us,co_rate,minimum_overlap_fraction,co_active_us,co_work_units,throughput_iqr
+healthy,healthy,0.0,0.0,32.0,256.0,0.0,1.0,1.0,0.0,3329.216,80.63023186504554,3237.176,1.696,1.672,89.70400000000001,181.488,3330.752,0.0,0.0,0.0,0.0,0.13566241592810968
+source_memory,vector_source_memory_100,2.0,100.0,32.0,256.0,0.0,1.0,1.0,1.0,3351.2960000000003,80.09899977989696,3261.352,1.712,1.68,86.2,130.94400000000002,3352.7839999999997,936.3181995539917,1.0,3386.816,12095.5,0.07916973955427409

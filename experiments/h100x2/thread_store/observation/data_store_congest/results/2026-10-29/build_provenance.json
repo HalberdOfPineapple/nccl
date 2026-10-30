@@ -1,0 +1,34 @@
+{
+ "utc": "2026-10-29T21:37:42.027634+00:00",
+ "note": "Builds used for every retained record of 2026-10-29 (E7.0-E7.2). store_congest includes the 128-byte part alignment.",
+ "files": {
+  "src/store_congest.cu": "c099b103d232b1e6df656bfd5393685b306dbcccd13acbd8e3eb4d5acdd77c65",
+  "bin/store_congest": "66ec3c87d5380ca7e72e7fb4c32dfa350ce67b3f818f88bdba05ef397e771f9f",
+  "src/gpc_probe.cu": "7eaec759834f0c41fec88fe2754b03c3428d4fe41ad60921556bfb91b740333a",
+  "bin/gpc_probe": "80b289a1eaa225f471f8ba434748360465c9b6ffef52b4bd931628af73f581f9",
+  "Makefile": "94afd8c7dbb6006cc68640ab7ec97b325dbb07abd4a840e10c4839e315a20455",
+  "../../../../build/lib/libnccl.so.2.32.3": "db3e1c884f0ed15289e1087720ad255802acb0a1ec1ff90a2ccc4e74661bbd89"
+ },
+ "nvcc": "Build cuda_13.0.r13.0/compiler.36424714_0",
+ "git_head": "12df1a11afad322be5a204a2db890161cbf8131d",
+ "rebuild_2026_10_30": {
+  "utc": "2026-10-30T00:00:00+00:00",
+  "note": "Host-only change: GPUs 0 and 1 added to authorizedGpu in both programs. store_congest device SASS (cuobjdump -sass, sm_90) is identical to the 2026-10-29 build; used for all GPU 0/1 records (gpc_map gpu0/gpu1, the rest of copy_floor, writer_rate, writer_placement, copy_placement packed).",
+  "files": {
+   "src/store_congest.cu": "2e6c14f8375ff6db212d4e87e346a57d17a88ff774267ec460f87f1ba0775ab1",
+   "bin/store_congest": "b5dfa2ed7a102f742eab119a45005495ba9aff473c849a9af6d4afef167a4e40",
+   "src/gpc_probe.cu": "34095eedf8983905574e4a7b8bb8390b1324be7b0c002e043147b9d9a9d0adc1",
+   "bin/gpc_probe": "5f932cd172871d1c08f4b50a11d45e6eab604fe239778937d78fb878d5d15f5b"
+  }
+ },
+ "rebuild_2026_10_30_no_copy_batch": {
+  "utc": "2026-10-30T00:44:00+00:00",
+  "note": "copy_batch removed from store_congest (one 4-byte peer store per loop step; schema_version 2). The copy loop has the same 22 instructions per store as the old copy_batch=1 loop in a different order, and per-SM copy rates differ from the earlier build below the plateau, so E7.1 copy records were remeasured (labels without _b<N>). Later comment-only edits leave the device SASS identical (cuobjdump -sass compared); hashes below are of the final source and binary.",
+  "files": {
+   "src/store_congest.cu": "f8b0f829bafd5cf1567ce7e012c4724d132185c86c511e6b73c1f4024060d83c",
+   "bin/store_congest": "44a981aeda6cad1a15bb8f48e5118529555f85f08857670234a403e57f348efc",
+   "scripts/run_store_congest.py": "da3100b9ebcdf7a0c446ddd832af4cbe3a8ff7746a5dafae166dfebf7d33c64e",
+   "scripts/analyze_store_congest.py": "6a041fb82ea866f52266661176b5c842013739224495d15e903576a3b1c56c71"
+  }
+ }
+}

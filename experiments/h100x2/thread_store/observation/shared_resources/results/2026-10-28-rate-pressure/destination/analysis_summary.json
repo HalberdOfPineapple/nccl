@@ -1,0 +1,1004 @@
+{
+  "records": {
+    "runs": 120,
+    "transfers": 948,
+    "read_only_windows": 275,
+    "gpu_pairs": [
+      [
+        6,
+        7
+      ]
+    ]
+  },
+  "validation": {
+    "validate": {
+      "previous": {
+        "median": 370.82252053177103,
+        "minimum": 370.7497937471277,
+        "maximum": 370.893227400436
+      },
+      "new": {
+        "median": 370.6156820315841,
+        "minimum": 370.57270503557027,
+        "maximum": 370.73443303949284
+      }
+    },
+    "validate_final": {
+      "previous": {
+        "median": 370.85940721611064,
+        "minimum": 370.8337907364713,
+        "maximum": 370.99062692511643
+      },
+      "new": {
+        "median": 370.65355112149575,
+        "minimum": 370.6248931293236,
+        "maximum": 370.71600083522605
+      }
+    }
+  },
+  "calibration": [
+    {
+      "ctas": 128,
+      "threads": 512,
+      "median": 370.61568239329495,
+      "minimum": 370.4111240549988,
+      "maximum": 370.7764234359803
+    },
+    {
+      "ctas": 128,
+      "threads": 1024,
+      "median": 370.39681087319445,
+      "minimum": 370.257846085967,
+      "maximum": 370.4714460526433
+    }
+  ],
+  "idle_check": {
+    "healthy": 370.6883568219449,
+    "healthy_min": 370.60033223664186,
+    "healthy_max": 370.71702512750164,
+    "healthy_iqr": 0.07063362404545614,
+    "pressure": 370.6023799948921,
+    "pressure_min": 370.47451274764313,
+    "pressure_max": 370.61977628233944,
+    "paired_percent": -0.028441219375197058,
+    "paired_min": -0.05410534749361595,
+    "paired_max": 0.005246634718392151,
+    "effect_iqr": -1.2172223670344569,
+    "lower_pairs": 4
+  },
+  "pressure": {
+    "communication": [
+      {
+        "target_percent": 20,
+        "healthy": 370.6381996650066,
+        "healthy_min": 370.46428786426964,
+        "healthy_max": 370.6719817638228,
+        "healthy_iqr": 0.10539636724763568,
+        "pressure": 370.05171247461726,
+        "pressure_min": 369.94147940793323,
+        "pressure_max": 370.1976014789871,
+        "paired_percent": -0.14112249775826147,
+        "paired_min": -0.16733643753004124,
+        "paired_max": -0.10285362259560005,
+        "paired_values": [
+          -0.10285362259560005,
+          -0.12163332853379893,
+          -0.16733643753004124,
+          -0.14112249775826147,
+          -0.16403439533975162
+        ],
+        "effect_iqr": -5.564586386657373,
+        "lower_pairs": 5,
+        "healthy_p05": 370.26908250542385,
+        "pressure_p05": 369.79002085056345,
+        "healthy_worst": 370.2190347993027,
+        "pressure_worst": 369.69895825873306
+      },
+      {
+        "target_percent": 40,
+        "healthy": 370.70678773649405,
+        "healthy_min": 370.6248926771513,
+        "healthy_max": 370.88912667484544,
+        "healthy_iqr": 0.1628299959169226,
+        "pressure": 369.7223827106337,
+        "pressure_min": 369.68471234971844,
+        "pressure_max": 369.78655517193,
+        "paired_percent": -0.2757099196959212,
+        "paired_min": -0.3145802560112765,
+        "paired_max": -0.22619568242319144,
+        "paired_values": [
+          -0.22619568242319144,
+          -0.28704326572880356,
+          -0.2757099196959212,
+          -0.2479087048635198,
+          -0.3145802560112765
+        ],
+        "effect_iqr": -6.0456000156296685,
+        "lower_pairs": 5,
+        "healthy_p05": 370.2292648552611,
+        "pressure_p05": 369.2818168869803,
+        "healthy_worst": 370.15369001654716,
+        "pressure_worst": 369.0970910630902
+      },
+      {
+        "target_percent": 60,
+        "healthy": 370.6770952517569,
+        "healthy_min": 370.5103038579515,
+        "healthy_max": 370.8297002478332,
+        "healthy_iqr": 0.10654096235293764,
+        "pressure": 369.55441622167564,
+        "pressure_min": 369.4496440734648,
+        "pressure_max": 369.61445679757514,
+        "paired_percent": -0.2871387166518802,
+        "paired_min": -0.3304531870054528,
+        "paired_max": -0.28626998316714225,
+        "paired_values": [
+          -0.30482758135631505,
+          -0.28626998316714225,
+          -0.3304531870054528,
+          -0.2871387166518802,
+          -0.2866749706938454
+        ],
+        "effect_iqr": -10.537534158572415,
+        "lower_pairs": 5,
+        "healthy_p05": 370.2407882830971,
+        "pressure_p05": 369.28984236781844,
+        "healthy_worst": 369.84973188058353,
+        "pressure_worst": 368.96518660244993
+      },
+      {
+        "target_percent": 80,
+        "healthy": 370.6197771866466,
+        "healthy_min": 370.45201361062095,
+        "healthy_max": 370.7231683131545,
+        "healthy_iqr": 0.2251122186601151,
+        "pressure": 367.54862498538284,
+        "pressure_min": 367.4439724960032,
+        "pressure_max": 367.70166968333217,
+        "paired_percent": -0.8286530806792647,
+        "paired_min": -0.8845402978378991,
+        "paired_max": -0.7424292016886325,
+        "paired_values": [
+          -0.8845402978378991,
+          -0.8286530806792647,
+          -0.7916597099191125,
+          -0.7424292016886325,
+          -0.8391401572941715
+        ],
+        "effect_iqr": -13.64276101734282,
+        "lower_pairs": 5,
+        "healthy_p05": 370.27919404009936,
+        "pressure_p05": 367.2409810895265,
+        "healthy_worst": 370.20269644078644,
+        "pressure_worst": 367.10025819438977
+      },
+      {
+        "target_percent": 95,
+        "healthy": 370.58907598031044,
+        "healthy_min": 370.4438341127548,
+        "healthy_max": 370.691431802249,
+        "healthy_iqr": 0.06446715112156198,
+        "pressure": 363.93290910062325,
+        "pressure_min": 363.41583622390516,
+        "pressure_max": 364.6309382773037,
+        "paired_percent": -1.821395360468081,
+        "paired_min": -1.9437559039512609,
+        "paired_max": -1.5691706272756623,
+        "paired_values": [
+          -1.7735739015088958,
+          -1.5691706272756623,
+          -1.823220641698342,
+          -1.821395360468081,
+          -1.9437559039512609
+        ],
+        "effect_iqr": -103.24896887619622,
+        "lower_pairs": 5,
+        "healthy_p05": 369.9871680312832,
+        "pressure_p05": 362.93326077824895,
+        "healthy_worst": 369.68062931053475,
+        "pressure_worst": 362.6330055117259
+      }
+    ],
+    "reads": [
+      {
+        "target_percent": 20,
+        "target_gbps": 670.464,
+        "alone_gbps": 669.9561661801752,
+        "alone_min": 669.9540230988105,
+        "alone_max": 669.957237725999,
+        "with_copy_gbps": 669.8165238967649,
+        "with_copy_min": 669.7645931077582,
+        "with_copy_max": 669.83452203141,
+        "minimum_coverage": 1.0
+      },
+      {
+        "target_percent": 40,
+        "target_gbps": 1340.928,
+        "alone_gbps": 1340.8307101727448,
+        "alone_min": 1340.8285655333245,
+        "alone_max": 1340.8349994721673,
+        "with_copy_gbps": 1340.4132864883659,
+        "with_copy_min": 1340.3985797010216,
+        "with_copy_max": 1340.4279762646424,
+        "minimum_coverage": 1.0
+      },
+      {
+        "target_percent": 60,
+        "target_gbps": 2011.392,
+        "alone_gbps": 2010.6950229371005,
+        "alone_min": 2010.6918067976244,
+        "alone_max": 2010.7014552469186,
+        "with_copy_gbps": 2009.9687582419097,
+        "with_copy_min": 2009.919359193273,
+        "with_copy_max": 2010.0054451551869,
+        "minimum_coverage": 1.0
+      },
+      {
+        "target_percent": 80,
+        "target_gbps": 2681.856,
+        "alone_gbps": 2652.606190111368,
+        "alone_min": 2651.5941591363453,
+        "alone_max": 2652.692478951813,
+        "with_copy_gbps": 2451.7477029662714,
+        "with_copy_min": 2448.2577012219535,
+        "with_copy_max": 2454.1104356968667,
+        "minimum_coverage": 1.0
+      },
+      {
+        "target_percent": 95,
+        "target_gbps": 3184.704,
+        "alone_gbps": 3162.3043382993865,
+        "alone_min": 3158.581413462261,
+        "alone_max": 3163.9496300940036,
+        "with_copy_gbps": 2645.0245200514723,
+        "with_copy_min": 2644.052789948143,
+        "with_copy_max": 2645.432075539815,
+        "minimum_coverage": 1.0
+      }
+    ],
+    "phases": [
+      {
+        "target_percent": 20,
+        "metric": "completed_us",
+        "healthy": 5794.016,
+        "healthy_min": 5793.488,
+        "healthy_max": 5796.736,
+        "healthy_iqr": 1.6480000000001382,
+        "pressure": 5803.2,
+        "pressure_min": 5800.912,
+        "pressure_max": 5804.928,
+        "paired_percent": 0.14132090887009063,
+        "paired_min": 0.10297637617020516,
+        "paired_max": 0.16763649117768065,
+        "paired_values": [
+          0.10297637617020516,
+          0.12178417965513777,
+          0.16763649117768065,
+          0.14132090887009063,
+          0.16430745099773603
+        ],
+        "effect_iqr": 5.5728155339802345,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 20,
+        "metric": "issue_us",
+        "healthy": 5600.928,
+        "healthy_min": 5599.224,
+        "healthy_max": 5605.208,
+        "healthy_iqr": 0.543999999999869,
+        "pressure": 5602.951999999999,
+        "pressure_min": 5600.616,
+        "pressure_max": 5603.736,
+        "paired_percent": 0.03370768863808493,
+        "paired_min": -0.07535848803468248,
+        "paired_max": 0.0665806547478498,
+        "paired_values": [
+          0.001142744500914894,
+          0.0665806547478498,
+          0.03370768863808493,
+          -0.07535848803468248,
+          0.05013454913185278
+        ],
+        "effect_iqr": 3.7205882352939703,
+        "lower_pairs": 1
+      },
+      {
+        "target_percent": 20,
+        "metric": "ordering_us",
+        "healthy": 9.751999999999999,
+        "healthy_min": 9.52,
+        "healthy_max": 9.928,
+        "healthy_iqr": 0.2159999999999993,
+        "pressure": 9.896,
+        "pressure_min": 9.696,
+        "pressure_max": 9.968,
+        "paired_percent": 0.24752475247524774,
+        "paired_min": -2.3368251410153196,
+        "paired_max": 4.453781512605026,
+        "paired_values": [
+          -0.16142050040353073,
+          -2.3368251410153196,
+          2.214930270713711,
+          0.24752475247524774,
+          4.453781512605026
+        ],
+        "effect_iqr": 0.6666666666666776,
+        "lower_pairs": 2
+      },
+      {
+        "target_percent": 20,
+        "metric": "ack_wait_us",
+        "healthy": 181.536,
+        "healthy_min": 179.624,
+        "healthy_max": 183.848,
+        "healthy_iqr": 2.944000000000017,
+        "pressure": 189.632,
+        "pressure_min": 185.488,
+        "pressure_max": 190.712,
+        "paired_percent": 3.727944102949632,
+        "paired_min": 0.8920412514686005,
+        "paired_max": 5.678528481717371,
+        "paired_values": [
+          3.1460771942039,
+          0.8920412514686005,
+          5.678528481717371,
+          5.054644808743158,
+          3.727944102949632
+        ],
+        "effect_iqr": 2.7499999999999853,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 20,
+        "metric": "issue_spread_us",
+        "healthy": 1510.608,
+        "healthy_min": 1508.9279999999999,
+        "healthy_max": 1514.368,
+        "healthy_iqr": 2.495999999999867,
+        "pressure": 1515.616,
+        "pressure_min": 1511.056,
+        "pressure_max": 1518.032,
+        "paired_percent": 0.1861448968799584,
+        "paired_min": -0.15214267602062792,
+        "paired_max": 0.6033422403189492,
+        "paired_values": [
+          0.029656932837651695,
+          -0.15214267602062792,
+          0.6033422403189492,
+          0.1861448968799584,
+          0.4608343750661881
+        ],
+        "effect_iqr": 2.0064102564103785,
+        "lower_pairs": 1
+      },
+      {
+        "target_percent": 20,
+        "metric": "receiver_wait_us",
+        "healthy": 5795.632,
+        "healthy_min": 5795.04,
+        "healthy_max": 5798.255999999999,
+        "healthy_iqr": 1.727999999999156,
+        "pressure": 5804.752,
+        "pressure_min": 5802.352000000001,
+        "pressure_max": 5806.496,
+        "paired_percent": 0.1421116970344416,
+        "paired_min": 0.10432824204154034,
+        "paired_max": 0.16759159557140357,
+        "paired_values": [
+          0.10432824204154034,
+          0.12064824273212427,
+          0.16759159557140357,
+          0.1421116970344416,
+          0.16177700723580823
+        ],
+        "effect_iqr": 5.277777777780819,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 40,
+        "metric": "completed_us",
+        "healthy": 5792.9439999999995,
+        "healthy_min": 5790.096,
+        "healthy_max": 5794.224,
+        "healthy_iqr": 2.5440000000007785,
+        "pressure": 5808.368,
+        "pressure_min": 5807.360000000001,
+        "pressure_max": 5808.96,
+        "paired_percent": 0.2764742762920047,
+        "paired_min": 0.226708529045494,
+        "paired_max": 0.31557335146086274,
+        "paired_values": [
+          0.226708529045494,
+          0.2878635935432472,
+          0.2764742762920047,
+          0.2485254158658634,
+          0.31557335146086274
+        ],
+        "effect_iqr": 6.0628930817594995,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 40,
+        "metric": "issue_us",
+        "healthy": 5600.448,
+        "healthy_min": 5594.528,
+        "healthy_max": 5603.4400000000005,
+        "healthy_iqr": 1.0960000000004584,
+        "pressure": 5602.16,
+        "pressure_min": 5600.112,
+        "pressure_max": 5604.280000000001,
+        "paired_percent": 0.019996286403944907,
+        "paired_min": -0.007709549847967345,
+        "paired_max": 0.17431318602749712,
+        "paired_values": [
+          -0.007709549847967345,
+          0.019996286403944907,
+          0.020855474419190223,
+          0.003000030000310794,
+          0.17431318602749712
+        ],
+        "effect_iqr": 1.5620437956193598,
+        "lower_pairs": 1
+      },
+      {
+        "target_percent": 40,
+        "metric": "ordering_us",
+        "healthy": 9.911999999999999,
+        "healthy_min": 9.632,
+        "healthy_max": 10.096,
+        "healthy_iqr": 0.15199999999999925,
+        "pressure": 9.824,
+        "pressure_min": 9.608,
+        "pressure_max": 10.064,
+        "paired_percent": -2.1513944223107484,
+        "paired_min": -4.83359746434231,
+        "paired_max": 3.405315614617943,
+        "paired_values": [
+          -4.83359746434231,
+          -2.259887005649719,
+          -2.1513944223107484,
+          3.405315614617943,
+          1.7799352750809128
+        ],
+        "effect_iqr": -0.5789473684210502,
+        "lower_pairs": 3
+      },
+      {
+        "target_percent": 40,
+        "metric": "ack_wait_us",
+        "healthy": 179.712,
+        "healthy_min": 178.112,
+        "healthy_max": 183.752,
+        "healthy_iqr": 3.7040000000000077,
+        "pressure": 194.336,
+        "pressure_min": 191.86399999999998,
+        "pressure_max": 196.808,
+        "paired_percent": 7.329523144714445,
+        "paired_min": 4.414645826984187,
+        "paired_max": 10.070068271649312,
+        "paired_values": [
+          7.198183760683774,
+          8.166354973728751,
+          10.070068271649312,
+          7.329523144714445,
+          4.414645826984187
+        ],
+        "effect_iqr": 3.948164146868249,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 40,
+        "metric": "issue_spread_us",
+        "healthy": 1511.728,
+        "healthy_min": 1504.3200000000002,
+        "healthy_max": 1517.424,
+        "healthy_iqr": 3.9839999999999236,
+        "pressure": 1512.368,
+        "pressure_min": 1510.928,
+        "pressure_max": 1520.016,
+        "paired_percent": 0.09539456250993172,
+        "paired_min": -0.4280939276036122,
+        "paired_max": 0.5349925547755596,
+        "paired_values": [
+          0.4302598473476138,
+          -0.4280939276036122,
+          0.09539456250993172,
+          0.09208005672975972,
+          0.5349925547755596
+        ],
+        "effect_iqr": 0.16064257028109563,
+        "lower_pairs": 1
+      },
+      {
+        "target_percent": 40,
+        "metric": "receiver_wait_us",
+        "healthy": 5794.528,
+        "healthy_min": 5791.648,
+        "healthy_max": 5795.7919999999995,
+        "healthy_iqr": 2.3679999999994834,
+        "pressure": 5809.968000000001,
+        "pressure_min": 5808.784,
+        "pressure_max": 5810.5599999999995,
+        "paired_percent": 0.27667482148674427,
+        "paired_min": 0.2241626338557401,
+        "paired_max": 0.31631756626093743,
+        "paired_values": [
+          0.2241626338557401,
+          0.28667776921609267,
+          0.27667482148674427,
+          0.250671540222025,
+          0.31631756626093743
+        ],
+        "effect_iqr": 6.520270270271908,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 60,
+        "metric": "completed_us",
+        "healthy": 5793.407999999999,
+        "healthy_min": 5791.024,
+        "healthy_max": 5796.016,
+        "healthy_iqr": 1.66399999999976,
+        "pressure": 5811.008,
+        "pressure_min": 5810.064,
+        "pressure_max": 5812.656,
+        "paired_percent": 0.2879743777351118,
+        "paired_min": 0.2870937554347641,
+        "paired_max": 0.3315475812222468,
+        "paired_values": [
+          0.305732695170402,
+          0.2870937554347641,
+          0.3315475812222468,
+          0.2879743777351118,
+          0.28749917147214976
+        ],
+        "effect_iqr": 10.576923076924821,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 60,
+        "metric": "issue_us",
+        "healthy": 5600.816000000001,
+        "healthy_min": 5597.72,
+        "healthy_max": 5602.656,
+        "healthy_iqr": 2.1760000000003856,
+        "pressure": 5601.808,
+        "pressure_min": 5600.368,
+        "pressure_max": 5604.496,
+        "paired_percent": 0.03643653541418601,
+        "paired_min": -0.01513567850676134,
+        "paired_max": 0.10061239218825957,
+        "paired_values": [
+          0.06327495754292478,
+          -0.007998834455558157,
+          0.03643653541418601,
+          0.10061239218825957,
+          -0.01513567850676134
+        ],
+        "effect_iqr": 0.4558823529407646,
+        "lower_pairs": 2
+      },
+      {
+        "target_percent": 60,
+        "metric": "ordering_us",
+        "healthy": 9.888,
+        "healthy_min": 9.672,
+        "healthy_max": 10.192,
+        "healthy_iqr": 0.1999999999999993,
+        "pressure": 9.751999999999999,
+        "pressure_min": 9.576,
+        "pressure_max": 10.016,
+        "paired_percent": -0.9538950715421324,
+        "paired_min": -6.043956043956045,
+        "paired_max": 1.2944983818770295,
+        "paired_values": [
+          -1.2976480129764822,
+          0.8271298593879095,
+          -0.9538950715421324,
+          -6.043956043956045,
+          1.2944983818770295
+        ],
+        "effect_iqr": -0.6800000000000075,
+        "lower_pairs": 3
+      },
+      {
+        "target_percent": 60,
+        "metric": "ack_wait_us",
+        "healthy": 181.672,
+        "healthy_min": 176.784,
+        "healthy_max": 182.632,
+        "healthy_iqr": 0.7760000000000105,
+        "pressure": 195.76,
+        "pressure_min": 194.45600000000002,
+        "pressure_max": 200.024,
+        "paired_percent": 9.42422236929188,
+        "paired_min": 6.787628503646426,
+        "paired_max": 10.73400307720156,
+        "paired_values": [
+          6.787628503646426,
+          9.522975163169644,
+          9.42422236929188,
+          10.73400307720156,
+          7.362719626579772
+        ],
+        "effect_iqr": 18.15463917525748,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 60,
+        "metric": "issue_spread_us",
+        "healthy": 1514.368,
+        "healthy_min": 1510.848,
+        "healthy_max": 1519.408,
+        "healthy_iqr": 6.11200000000008,
+        "pressure": 1511.216,
+        "pressure_min": 1505.6,
+        "pressure_max": 1520.848,
+        "paired_percent": -0.34735459821240156,
+        "paired_min": -0.8171603677221473,
+        "paired_max": 0.5543272434914259,
+        "paired_values": [
+          -0.34735459821240156,
+          -0.12255937790548455,
+          -0.8171603677221473,
+          -0.4846645805017369,
+          0.5543272434914259
+        ],
+        "effect_iqr": -0.5157068062827229,
+        "lower_pairs": 4
+      },
+      {
+        "target_percent": 60,
+        "metric": "receiver_wait_us",
+        "healthy": 5794.9439999999995,
+        "healthy_min": 5792.48,
+        "healthy_max": 5797.648,
+        "healthy_iqr": 1.680000000000291,
+        "pressure": 5812.5599999999995,
+        "pressure_min": 5811.744,
+        "pressure_max": 5814.112,
+        "paired_percent": 0.2899078921211329,
+        "paired_min": 0.2839772266270746,
+        "paired_max": 0.33422644532221657,
+        "paired_values": [
+          0.3056508125838686,
+          0.2839772266270746,
+          0.33422644532221657,
+          0.2878964787196736,
+          0.2899078921211329
+        ],
+        "effect_iqr": 10.48571428571246,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 80,
+        "metric": "completed_us",
+        "healthy": 5794.304,
+        "healthy_min": 5792.688,
+        "healthy_max": 5796.928,
+        "healthy_iqr": 3.5200000000004366,
+        "pressure": 5842.72,
+        "pressure_min": 5840.2880000000005,
+        "pressure_max": 5844.384,
+        "paired_percent": 0.8355792171070187,
+        "paired_min": 0.7479823796328056,
+        "paired_max": 0.8924354289407521,
+        "paired_values": [
+          0.8924354289407521,
+          0.8355792171070187,
+          0.7979751139964408,
+          0.7479823796328056,
+          0.8462405267460449
+        ],
+        "effect_iqr": 13.754545454543797,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 80,
+        "metric": "issue_us",
+        "healthy": 5602.224,
+        "healthy_min": 5598.424,
+        "healthy_max": 5604.632,
+        "healthy_iqr": 4.583999999999833,
+        "pressure": 5602.048000000001,
+        "pressure_min": 5599.536,
+        "pressure_max": 5605.896000000001,
+        "paired_percent": 0.01527964608341037,
+        "paired_min": -0.08935606536409901,
+        "paired_max": 0.1060007571482835,
+        "paired_values": [
+          0.1060007571482835,
+          -0.08935606536409901,
+          -0.060521368753552185,
+          0.01527964608341037,
+          0.06473250329022129
+        ],
+        "effect_iqr": -0.03839441535765326,
+        "lower_pairs": 2
+      },
+      {
+        "target_percent": 80,
+        "metric": "ordering_us",
+        "healthy": 9.815999999999999,
+        "healthy_min": 9.687999999999999,
+        "healthy_max": 9.96,
+        "healthy_iqr": 0.16000000000000014,
+        "pressure": 9.864,
+        "pressure_min": 9.712,
+        "pressure_max": 10.136,
+        "paired_percent": 0.24772914946327163,
+        "paired_min": -0.8149959250203564,
+        "paired_max": 2.674230145867096,
+        "paired_values": [
+          -0.7228915662650715,
+          -0.8149959250203564,
+          0.24772914946327163,
+          1.565074135090616,
+          2.674230145867096
+        ],
+        "effect_iqr": 0.3000000000000111,
+        "lower_pairs": 2
+      },
+      {
+        "target_percent": 80,
+        "metric": "ack_wait_us",
+        "healthy": 180.504,
+        "healthy_min": 179.93599999999998,
+        "healthy_max": 181.184,
+        "healthy_iqr": 0.9279999999999973,
+        "pressure": 226.39999999999998,
+        "pressure_min": 225.47199999999998,
+        "pressure_max": 230.792,
+        "paired_percent": 25.822514671883347,
+        "paired_min": 24.912467313743726,
+        "paired_max": 27.37990109501942,
+        "paired_values": [
+          25.653101119601907,
+          27.37990109501942,
+          26.025459688826015,
+          24.912467313743726,
+          25.822514671883347
+        ],
+        "effect_iqr": 49.45689655172427,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 80,
+        "metric": "issue_spread_us",
+        "healthy": 1516.08,
+        "healthy_min": 1506.2240000000002,
+        "healthy_max": 1520.2559999999999,
+        "healthy_iqr": 5.7439999999999145,
+        "pressure": 1513.424,
+        "pressure_min": 1504.576,
+        "pressure_max": 1517.312,
+        "paired_percent": -0.17518864439870496,
+        "paired_min": -0.8356487328449735,
+        "paired_max": 0.6458534719935294,
+        "paired_values": [
+          0.6458534719935294,
+          -0.8356487328449735,
+          -0.5004814356304732,
+          -0.17518864439870496,
+          -0.037947463844500984
+        ],
+        "effect_iqr": -0.4623955431754855,
+        "lower_pairs": 4
+      },
+      {
+        "target_percent": 80,
+        "metric": "receiver_wait_us",
+        "healthy": 5795.776,
+        "healthy_min": 5794.144,
+        "healthy_max": 5799.567999999999,
+        "healthy_iqr": 3.8239999999996144,
+        "pressure": 5844.255999999999,
+        "pressure_min": 5841.856,
+        "pressure_max": 5845.936,
+        "paired_percent": 0.8364712507867633,
+        "paired_min": 0.7480581117810248,
+        "paired_max": 0.8938680157068779,
+        "paired_values": [
+          0.8938680157068779,
+          0.8364712507867633,
+          0.7749542724561742,
+          0.7480581117810248,
+          0.8462970019272875
+        ],
+        "effect_iqr": 12.677824267783592,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 95,
+        "metric": "completed_us",
+        "healthy": 5794.784,
+        "healthy_min": 5793.184,
+        "healthy_max": 5797.0560000000005,
+        "healthy_iqr": 1.0079999999998108,
+        "pressure": 5900.768,
+        "pressure_min": 5889.472,
+        "pressure_max": 5909.168,
+        "paired_percent": 1.8551856290070612,
+        "paired_min": 1.5941884984378207,
+        "paired_max": 1.982360607934952,
+        "paired_values": [
+          1.8055973517905555,
+          1.5941884984378207,
+          1.8570789396642695,
+          1.8551856290070612,
+          1.982360607934952
+        ],
+        "effect_iqr": 105.14285714287725,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 95,
+        "metric": "issue_us",
+        "healthy": 5601.0,
+        "healthy_min": 5598.36,
+        "healthy_max": 5602.871999999999,
+        "healthy_iqr": 0.48800000000028376,
+        "pressure": 5601.656000000001,
+        "pressure_min": 5600.288,
+        "pressure_max": 5603.6,
+        "paired_percent": 0.03285000971218199,
+        "paired_min": -0.04611920457936458,
+        "paired_max": 0.05887438464122763,
+        "paired_values": [
+          0.03285000971218199,
+          0.007570444413662614,
+          0.04642028209249638,
+          0.05887438464122763,
+          -0.04611920457936458
+        ],
+        "effect_iqr": 1.3442622950829448,
+        "lower_pairs": 1
+      },
+      {
+        "target_percent": 95,
+        "metric": "ordering_us",
+        "healthy": 9.896,
+        "healthy_min": 9.591999999999999,
+        "healthy_max": 9.975999999999999,
+        "healthy_iqr": 0.23199999999999932,
+        "pressure": 9.824,
+        "pressure_min": 9.664,
+        "pressure_max": 10.168,
+        "paired_percent": 0.08084074373482242,
+        "paired_min": -2.0850040096230815,
+        "paired_max": 2.4186822351960124,
+        "paired_values": [
+          -0.7395234182415833,
+          -2.0850040096230815,
+          2.4186822351960124,
+          2.006420545746379,
+          0.08084074373482242
+        ],
+        "effect_iqr": -0.3103448275862119,
+        "lower_pairs": 2
+      },
+      {
+        "target_percent": 95,
+        "metric": "ack_wait_us",
+        "healthy": 181.576,
+        "healthy_min": 178.48000000000002,
+        "healthy_max": 185.096,
+        "healthy_iqr": 3.2799999999999727,
+        "pressure": 287.216,
+        "pressure_min": 275.18399999999997,
+        "pressure_max": 295.52,
+        "paired_percent": 56.077887159026844,
+        "paired_min": 48.67095993430435,
+        "paired_max": 65.57597489914832,
+        "paired_values": [
+          58.51472471190782,
+          48.67095993430435,
+          55.45666828215183,
+          56.077887159026844,
+          65.57597489914832
+        ],
+        "effect_iqr": 32.207317073171005,
+        "lower_pairs": 0
+      },
+      {
+        "target_percent": 95,
+        "metric": "issue_spread_us",
+        "healthy": 1513.616,
+        "healthy_min": 1512.288,
+        "healthy_max": 1516.9279999999999,
+        "healthy_iqr": 1.3120000000001255,
+        "pressure": 1513.088,
+        "pressure_min": 1502.08,
+        "pressure_max": 1519.504,
+        "paired_percent": 0.05289997672399682,
+        "paired_min": -0.8219062308521319,
+        "paired_max": 0.38900223042039883,
+        "paired_values": [
+          -0.3987005316006931,
+          0.05289997672399682,
+          0.38900223042039883,
+          0.1628320081204615,
+          -0.8219062308521319
+        ],
+        "effect_iqr": -0.40243902439022067,
+        "lower_pairs": 2
+      },
+      {
+        "target_percent": 95,
+        "metric": "receiver_wait_us",
+        "healthy": 5796.352000000001,
+        "healthy_min": 5794.816000000001,
+        "healthy_max": 5798.736,
+        "healthy_iqr": 0.9920000000001892,
+        "pressure": 5902.384,
+        "pressure_min": 5891.280000000001,
+        "pressure_max": 5910.688,
+        "paired_percent": 1.8552358448900241,
+        "paired_min": 1.5959340104464204,
+        "paired_max": 1.9812776576919822,
+        "paired_values": [
+          1.8062229680681607,
+          1.5959340104464204,
+          1.8562798197561348,
+          1.8552358448900241,
+          1.9812776576919822
+        ],
+        "effect_iqr": 106.8870967741724,
+        "lower_pairs": 0
+      }
+    ],
+    "references": {
+      "opening": 370.61056515070527,
+      "closing": 370.6003453470329
+    },
+    "placement": {
+      "runs": 25,
+      "distinct_copy_sm_sets": 1,
+      "reference_min": 370.4438341127548,
+      "reference_max": 370.88912667484544,
+      "largest_spread_within_one_sm_set": 0.4452925620906285
+    }
+  },
+  "mutual": [
+    {
+      "target_percent": 80,
+      "alone_active_us": 5858.144,
+      "with_copy_active_us": 5849.392,
+      "healthy": 2650.7978358839823,
+      "healthy_min": 2650.706970859585,
+      "healthy_max": 2650.8389346621952,
+      "healthy_iqr": 0.10195414891541077,
+      "pressure": 2448.7581937710033,
+      "pressure_min": 2447.588578991895,
+      "pressure_max": 2452.4962680353747,
+      "paired_percent": -7.623239610271271,
+      "paired_min": -7.665965851534717,
+      "paired_max": -7.478666319930493,
+      "effect_iqr": -1981.671606916233,
+      "lower_pairs": 5
+    },
+    {
+      "target_percent": 95,
+      "alone_active_us": 5920.5599999999995,
+      "with_copy_active_us": 5914.24,
+      "healthy": 3156.4011700642104,
+      "healthy_min": 3156.004098614062,
+      "healthy_max": 3156.8204654362453,
+      "healthy_iqr": 0.4348967841947342,
+      "pressure": 2645.157007815543,
+      "pressure_min": 2644.702668716714,
+      "pressure_max": 2645.469027761683,
+      "paired_percent": -16.19996247523393,
+      "paired_min": -16.220635708201925,
+      "paired_max": -16.176628892103693,
+      "effect_iqr": -1175.5528687003289,
+      "lower_pairs": 5
+    }
+  ],
+  "probes": {
+    "median_percent": 0.003012840177030185,
+    "minimum_percent": -0.004655837735834112,
+    "maximum_percent": 0.0556133910470491
+  }
+}

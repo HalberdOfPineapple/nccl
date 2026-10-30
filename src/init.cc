@@ -2864,7 +2864,7 @@ static ncclResult_t ncclCommInitRankDev(ncclComm_t* newcomm, int nranks, int nId
   NCCLCHECKGOTO(ncclInit(), res, fail);
 
   levelMask = COMPILER_ATOMIC_LOAD(&ncclDebugLevelMask, std::memory_order_acquire);
-  if ((levelMask & (1u << NCCL_LOG_INFO)) || ((levelMask & (1u << NCCL_LOG_VERSION)) && myrank == 0)) {
+  if ((levelMask & (1u << NCCL_LOG_INFO)) || ((e & (1u << NCCL_LOG_VERSION)) && myrank == 0)) {
     static std::once_flag once;
     std::call_once(once, showVersion);
   }

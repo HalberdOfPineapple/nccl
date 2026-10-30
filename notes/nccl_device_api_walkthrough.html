@@ -1,0 +1,1349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NCCL Device API Walkthrough</title>
+<style>
+:root {
+  --bg: #fbfbfa;
+  --panel: #ffffff;
+  --panel-2: #f3f3f1;
+  --fg: #1d1d1f;
+  --muted: #5f6368;
+  --border: #dcdcd8;
+  --accent: #1f6feb;
+  --accent-soft: #e6efff;
+  --lsa: #1a7f37;
+  --lsa-soft: #e3f4e8;
+  --gin: #b35900;
+  --gin-soft: #fff0e0;
+  --cft: #7c3aed;
+  --cft-soft: #f1eaff;
+  --warn: #b42318;
+  --warn-soft: #fdecea;
+  --code-bg: #f5f5f3;
+  --code-fg: #24292f;
+  --cmt: #6a737d;
+  --kw: #cf222e;
+  --fn: #8250df;
+  --str: #0a3069;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111214;
+    --panel: #18191c;
+    --panel-2: #1f2125;
+    --fg: #e6e6e6;
+    --muted: #a0a4ab;
+    --border: #33363c;
+    --accent: #6ea8ff;
+    --accent-soft: #1a2740;
+    --lsa: #4cc76d;
+    --lsa-soft: #15291c;
+    --gin: #ffa24d;
+    --gin-soft: #2e2012;
+    --cft: #b794ff;
+    --cft-soft: #241a3a;
+    --warn: #ff7b6e;
+    --warn-soft: #351a18;
+    --code-bg: #1c1e22;
+    --code-fg: #d8dade;
+    --cmt: #8b949e;
+    --kw: #ff7b72;
+    --fn: #d2a8ff;
+    --str: #a5d6ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111214;
+  --panel: #18191c;
+  --panel-2: #1f2125;
+  --fg: #e6e6e6;
+  --muted: #a0a4ab;
+  --border: #33363c;
+  --accent: #6ea8ff;
+  --accent-soft: #1a2740;
+  --lsa: #4cc76d;
+  --lsa-soft: #15291c;
+  --gin: #ffa24d;
+  --gin-soft: #2e2012;
+  --cft: #b794ff;
+  --cft-soft: #241a3a;
+  --warn: #ff7b6e;
+  --warn-soft: #351a18;
+  --code-bg: #1c1e22;
+  --code-fg: #d8dade;
+  --cmt: #8b949e;
+  --kw: #ff7b72;
+  --fn: #d2a8ff;
+  --str: #a5d6ff;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+code, pre, .mono { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); max-width: 1320px; margin: 0 auto; }
+nav.toc {
+  position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto;
+  padding: 28px 18px 28px 20px; border-right: 1px solid var(--border); font-size: 14px;
+}
+nav.toc .brand { font-weight: 700; font-size: 15px; margin-bottom: 14px; }
+nav.toc ol { list-style: none; padding: 0; margin: 0; }
+nav.toc li { margin: 2px 0; }
+nav.toc li a { display: block; padding: 3px 8px; border-radius: 6px; color: var(--muted); }
+nav.toc li a:hover { background: var(--panel-2); color: var(--fg); text-decoration: none; }
+nav.toc li.sub a { padding-left: 22px; font-size: 13px; }
+main { padding: 36px 44px 80px; min-width: 0; }
+header.hero h1 { font-size: 34px; line-height: 1.2; margin: 0 0 10px; letter-spacing: -0.01em; }
+header.hero p.lede { font-size: 18px; color: var(--muted); max-width: 820px; margin: 0 0 18px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.pill { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); background: var(--panel); }
+.pill.lsa { color: var(--lsa); border-color: var(--lsa); background: var(--lsa-soft); }
+.pill.gin { color: var(--gin); border-color: var(--gin); background: var(--gin-soft); }
+.pill.cft { color: var(--cft); border-color: var(--cft); background: var(--cft-soft); }
+section { margin-top: 56px; }
+h2 { font-size: 26px; margin: 0 0 12px; padding-top: 8px; border-top: 1px solid var(--border); padding-top: 22px; }
+h2 .num { color: var(--accent); margin-right: 8px; }
+h3 { font-size: 19px; margin: 30px 0 10px; }
+h4 { font-size: 16px; margin: 22px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+p { margin: 10px 0; max-width: 900px; }
+ul, ol { max-width: 900px; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 0.88em; }
+pre {
+  background: var(--code-bg); color: var(--code-fg); padding: 14px 16px; border-radius: 10px;
+  border: 1px solid var(--border); overflow-x: auto; font-size: 13.5px; line-height: 1.55; margin: 12px 0;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+pre .c { color: var(--cmt); font-style: italic; }
+pre .k { color: var(--kw); }
+pre .f { color: var(--fn); }
+pre .s { color: var(--str); }
+pre .hl { background: var(--accent-soft); display: inline-block; width: 100%; }
+pre .n { display: inline-block; min-width: 2.2em; color: var(--cmt); user-select: none; }
+.co { display: inline-block; min-width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 12px/20px sans-serif; text-align: center; margin: 0 3px; font-style: normal; }
+.src { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: var(--muted); background: var(--panel-2); border: 1px solid var(--border); border-radius: 5px; padding: 0 6px; white-space: nowrap; }
+a.src:hover { color: var(--accent); text-decoration: none; border-color: var(--accent); }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 16px 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.card h5 { margin: 0 0 6px; font-size: 15px; }
+.card p, .card ul { margin: 6px 0; font-size: 14.5px; }
+.callout { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 16px; border-radius: 0 10px 10px 0; margin: 16px 0; max-width: 940px; }
+.callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+.callout.lsa { border-color: var(--lsa); background: var(--lsa-soft); }
+.callout.gin { border-color: var(--gin); background: var(--gin-soft); }
+.callout b:first-child { display: block; margin-bottom: 2px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 12px 0; }
+.tablewrap { overflow-x: auto; }
+th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: var(--panel-2); font-weight: 600; }
+td code { font-size: 12.5px; }
+figure { margin: 18px 0; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+/* call-chain trees */
+.chain { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 14px 10px; margin: 14px 0; font-size: 14px; overflow-x: auto; }
+.chain .title { font-weight: 600; margin: 0 0 6px 6px; }
+.chain ul { list-style: none; margin: 0; padding-left: 22px; position: relative; }
+.chain > ul { padding-left: 8px; }
+.chain li { position: relative; padding: 3px 0 3px 14px; }
+.chain ul ul li::before { content: ""; position: absolute; left: -8px; top: 0; bottom: 0; border-left: 1px solid var(--border); }
+.chain ul ul li:last-child::before { bottom: calc(100% - 15px); }
+.chain ul ul li::after { content: ""; position: absolute; left: -8px; top: 15px; width: 16px; border-top: 1px solid var(--border); }
+.chain .fn { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 600; font-size: 13px; }
+.chain .note { color: var(--muted); font-size: 13px; }
+.chain .tag { font-size: 11px; padding: 0 6px; border-radius: 4px; margin-left: 4px; }
+.tag.host { background: var(--accent-soft); color: var(--accent); }
+.tag.dev { background: var(--lsa-soft); color: var(--lsa); }
+.tag.net { background: var(--gin-soft); color: var(--gin); }
+.tag.cpu { background: var(--cft-soft); color: var(--cft); }
+details { margin: 12px 0; }
+details > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.steps { counter-reset: step; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: step; position: relative; padding-left: 40px; margin: 12px 0; }
+.steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+/* SVG theming */
+svg text { fill: var(--fg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+svg .t-muted { fill: var(--muted); }
+svg .t-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+svg .t-lsa { fill: var(--lsa); } svg .t-gin { fill: var(--gin); } svg .t-cft { fill: var(--cft); } svg .t-acc { fill: var(--accent); } svg .t-warn { fill: var(--warn); }
+svg .box { fill: var(--panel); stroke: var(--border); stroke-width: 1.3; }
+svg .box2 { fill: var(--panel-2); stroke: var(--border); stroke-width: 1.3; }
+svg .b-acc { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; }
+svg .b-lsa { fill: var(--lsa-soft); stroke: var(--lsa); stroke-width: 1.4; }
+svg .b-gin { fill: var(--gin-soft); stroke: var(--gin); stroke-width: 1.4; }
+svg .b-cft { fill: var(--cft-soft); stroke: var(--cft); stroke-width: 1.4; }
+svg .b-warn { fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.4; }
+svg .ln { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+svg .ln-acc { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+svg .ln-lsa { stroke: var(--lsa); stroke-width: 1.8; fill: none; }
+svg .ln-gin { stroke: var(--gin); stroke-width: 1.8; fill: none; }
+svg .ln-cft { stroke: var(--cft); stroke-width: 1.8; fill: none; }
+svg .dash { stroke-dasharray: 5 4; }
+svg .f-acc { fill: var(--accent); } svg .f-lsa { fill: var(--lsa); } svg .f-gin { fill: var(--gin); } svg .f-muted { fill: var(--muted); } svg .f-cft { fill: var(--cft); }
+.theme-toggle { position: fixed; right: 16px; top: calc(14px + env(safe-area-inset-top, 0px)); z-index: 5; background: var(--panel); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  nav.toc { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 18px 16px; }
+  nav.toc ol { columns: 2; column-gap: 16px; }
+  main { padding: 24px 16px 60px; }
+  .grid2, .grid3 { grid-template-columns: minmax(0, 1fr); }
+  header.hero h1 { font-size: 27px; }
+}
+@media (max-width: 560px) { nav.toc ol { columns: 1; } }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">◐ Theme</button>
+<div class="layout">
+<nav class="toc" aria-label="Table of contents">
+  <div class="brand">NCCL Device API</div>
+  <ol>
+    <li><a href="#overview">1. What it is</a></li>
+    <li><a href="#codemap">2. Code map</a></li>
+    <li><a href="#concepts">3. Core concepts</a></li>
+    <li class="sub"><a href="#c-devcomm">ncclDevComm</a></li>
+    <li class="sub"><a href="#c-window">Windows &amp; flat VA</a></li>
+    <li class="sub"><a href="#c-teams">Teams</a></li>
+    <li class="sub"><a href="#c-coop">Coop groups</a></li>
+    <li><a href="#host">4. Host-side setup</a></li>
+    <li class="sub"><a href="#h-win">Window registration</a></li>
+    <li class="sub"><a href="#h-devcomm">ncclDevCommCreate</a></li>
+    <li><a href="#ex1">5. Example 1 · LSA AllReduce</a></li>
+    <li class="sub"><a href="#ex1-setup">The case we trace</a></li>
+    <li class="sub"><a href="#ex1-memory">Memory at kernel start</a></li>
+    <li class="sub"><a href="#ex1-lines">Line by line</a></li>
+    <li class="sub"><a href="#ex1-summary">At a glance</a></li>
+    <li><a href="#ex2">6. Example 2 · GIN AlltoAll</a></li>
+    <li class="sub"><a href="#ex2-put">ncclGin::put</a></li>
+    <li class="sub"><a href="#ex2-backends">Backends</a></li>
+    <li class="sub"><a href="#ex2-sig">Signals &amp; flush</a></li>
+    <li class="sub"><a href="#ex2-bar">GIN barrier</a></li>
+    <li><a href="#ex3">7. Example 3 · Hybrid AlltoAll</a></li>
+    <li><a href="#ex4">8. Example 4 · CFT AllGather</a></li>
+    <li><a href="#more">9. Other modules</a></li>
+    <li><a href="#ordering">10. Ordering &amp; pitfalls</a></li>
+    <li><a href="#ref">11. Quick reference</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="meta">
+    <span class="pill">NCCL 2.32.3</span>
+    <span class="pill lsa">LSA · load/store</span>
+    <span class="pill gin">GIN · GPU-initiated networking</span>
+    <span class="pill cft">CFT · fabric transport</span>
+  </div>
+  <h1>NCCL Device API: a code walkthrough</h1>
+  <p class="lede">This page explains how a user CUDA kernel communicates with other GPUs directly from device code. It follows four example kernels from <code>docs/examples/06_device_api</code> and traces every call through NCCL's headers and the host runtime, down to the NVLink stores, NIC work requests and proxy descriptors that actually move the data.</p>
+  <p class="lede" style="font-size:15px">Linked badges open the file at the <code>v2.32.3-1</code> tag on GitHub; badges such as <span class="src">core__funcs.h:146</span> give the file and line in this checkout. Chain tags: <span class="tag host" style="font-size:11px;padding:0 6px;border-radius:4px">host</span> runs on the CPU in the calling thread, <span class="tag dev" style="font-size:11px;padding:0 6px;border-radius:4px">device</span> is inlined into the user kernel, <span class="tag net" style="font-size:11px;padding:0 6px;border-radius:4px">nic</span> is NIC hardware, and <span class="tag cpu" style="font-size:11px;padding:0 6px;border-radius:4px">proxy</span> is a CPU helper thread.</p>
+</header>
+
+<!-- ============================================================= -->
+<section id="overview">
+<h2><span class="num">1</span>What the device API is</h2>
+<p>The classic NCCL <em>host API</em> (<code>ncclAllReduce</code>, <code>ncclSend</code>, …) enqueues work that NCCL's own kernels run, and the CPU decides what happens and when. The <em>device API</em> turns this around. NCCL hands the application a small, by-value <code>ncclDevComm</code> struct plus <code>ncclWindow_t</code> handles to registered memory, and the application's <strong>own kernel</strong> calls header-only, inlined device functions to read and write peer memory, synchronise with peers, and post network operations. Communication can therefore be fused into compute kernels with no host round-trip.</p>
+
+<figure>
+<svg viewBox="0 0 1000 430" role="img" aria-label="Architecture overview of the NCCL device API">
+  <!-- host column -->
+  <rect x="20" y="20" width="300" height="390" rx="14" class="box2"/>
+  <text x="170" y="46" text-anchor="middle" font-weight="700" font-size="15">Host (setup, once)</text>
+  <rect x="40" y="64" width="260" height="44" rx="8" class="box"/>
+  <text x="170" y="91" text-anchor="middle" class="t-mono" font-size="13">ncclCommInitRank → ncclComm_t</text>
+  <rect x="40" y="122" width="260" height="44" rx="8" class="box"/>
+  <text x="170" y="149" text-anchor="middle" class="t-mono" font-size="13">ncclMemAlloc (cuMem)</text>
+  <rect x="40" y="180" width="260" height="56" rx="8" class="b-acc"/>
+  <text x="170" y="203" text-anchor="middle" class="t-mono" font-size="13">ncclCommWindowRegister</text>
+  <text x="170" y="223" text-anchor="middle" font-size="12" class="t-muted">→ ncclWindow_t (device ptr)</text>
+  <rect x="40" y="250" width="260" height="56" rx="8" class="b-acc"/>
+  <text x="170" y="273" text-anchor="middle" class="t-mono" font-size="13">ncclDevCommCreate(reqs)</text>
+  <text x="170" y="293" text-anchor="middle" font-size="12" class="t-muted">→ ncclDevComm (POD, by value)</text>
+  <rect x="40" y="320" width="260" height="70" rx="8" class="box"/>
+  <text x="170" y="343" text-anchor="middle" class="t-mono" font-size="13">kernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(</text>
+  <text x="170" y="362" text-anchor="middle" class="t-mono" font-size="13">  sendWin, recvWin, devComm)</text>
+  <text x="170" y="380" text-anchor="middle" font-size="12" class="t-muted">args copied into kernel params</text>
+  <path d="M300 355 L370 355" class="ln-acc"/><polygon points="370,350 380,355 370,360" class="f-acc"/>
+
+  <!-- device column -->
+  <rect x="380" y="20" width="340" height="390" rx="14" class="box2"/>
+  <text x="550" y="46" text-anchor="middle" font-weight="700" font-size="15">Your CUDA kernel</text>
+  <text x="550" y="66" text-anchor="middle" font-size="12" class="t-muted">#include "nccl_device.h" (header-only, inlined)</text>
+  <rect x="400" y="80" width="300" height="40" rx="8" class="box"/>
+  <text x="550" y="105" text-anchor="middle" font-size="13">Teams · Coop · ncclSymPtr · window queries</text>
+  <rect x="400" y="132" width="145" height="56" rx="8" class="b-lsa"/>
+  <text x="472" y="155" text-anchor="middle" font-size="13" class="t-lsa" font-weight="600">LSA</text>
+  <text x="472" y="174" text-anchor="middle" font-size="11.5">ncclGetLsaPointer</text>
+  <rect x="555" y="132" width="145" height="56" rx="8" class="b-lsa"/>
+  <text x="627" y="155" text-anchor="middle" font-size="13" class="t-lsa" font-weight="600">Multimem</text>
+  <text x="627" y="174" text-anchor="middle" font-size="11.5">NVLS multicast ptr</text>
+  <rect x="400" y="200" width="145" height="56" rx="8" class="b-gin"/>
+  <text x="472" y="223" text-anchor="middle" font-size="13" class="t-gin" font-weight="600">GIN</text>
+  <text x="472" y="242" text-anchor="middle" font-size="11.5">ncclGin put/signal</text>
+  <rect x="555" y="200" width="145" height="56" rx="8" class="b-cft"/>
+  <text x="627" y="223" text-anchor="middle" font-size="13" class="t-cft" font-weight="600">CFT</text>
+  <text x="627" y="242" text-anchor="middle" font-size="11.5">ncclCft put/red</text>
+  <rect x="400" y="268" width="300" height="56" rx="8" class="b-acc"/>
+  <text x="550" y="291" text-anchor="middle" font-size="13" font-weight="600">Barriers</text>
+  <text x="550" y="310" text-anchor="middle" font-size="11.5">ncclLsaBarrierSession · ncclGinBarrierSession · ncclBarrierSession</text>
+  <rect x="400" y="336" width="300" height="56" rx="8" class="box"/>
+  <text x="550" y="359" text-anchor="middle" font-size="13" font-weight="600">Collective helpers</text>
+  <text x="550" y="378" text-anchor="middle" font-size="11.5">reduce_copy · LL A2A · gin scratch</text>
+
+  <!-- transports column -->
+  <rect x="780" y="20" width="200" height="390" rx="14" class="box2"/>
+  <text x="880" y="46" text-anchor="middle" font-weight="700" font-size="15">Hardware path</text>
+  <rect x="800" y="80" width="160" height="56" rx="8" class="b-lsa"/>
+  <text x="880" y="103" text-anchor="middle" font-size="13">NVLink / P2P</text>
+  <text x="880" y="122" text-anchor="middle" font-size="11.5" class="t-muted">plain ld/st, atomics</text>
+  <rect x="800" y="150" width="160" height="56" rx="8" class="b-lsa"/>
+  <text x="880" y="173" text-anchor="middle" font-size="13">NVSwitch NVLS</text>
+  <text x="880" y="192" text-anchor="middle" font-size="11.5" class="t-muted">multimem.ld_reduce/st</text>
+  <rect x="800" y="220" width="160" height="70" rx="8" class="b-gin"/>
+  <text x="880" y="243" text-anchor="middle" font-size="13">RDMA NIC</text>
+  <text x="880" y="261" text-anchor="middle" font-size="11.5" class="t-muted">GDAKI: GPU rings doorbell</text>
+  <text x="880" y="278" text-anchor="middle" font-size="11.5" class="t-muted">Proxy: CPU thread posts</text>
+  <rect x="800" y="304" width="160" height="56" rx="8" class="b-cft"/>
+  <text x="880" y="327" text-anchor="middle" font-size="13">CUDA Fabric (CFT)</text>
+  <text x="880" y="346" text-anchor="middle" font-size="11.5" class="t-muted">logical endpoints</text>
+  <path d="M545 160 L790 108" class="ln-lsa"/>
+  <path d="M700 160 L790 178" class="ln-lsa"/>
+  <path d="M545 228 L790 255" class="ln-gin"/>
+  <path d="M700 228 L790 330" class="ln-cft"/>
+</svg>
+<figcaption>Figure 1. The host builds handles once. The kernel then talks to every transport through inlined device functions, so the CPU is not on the data path (except for the optional GIN proxy backend).</figcaption>
+</figure>
+
+<div class="grid3">
+  <div class="card"><h5 class="t-lsa" style="color:var(--lsa)">LSA: Load/Store Accessible</h5><p>Peers in the same NVLink domain (the <em>LSA team</em>) have their memory mapped into your VA space. You get a raw pointer and use ordinary loads and stores.</p></div>
+  <div class="card"><h5 style="color:var(--gin)">GIN: GPU-Initiated Networking</h5><p>For peers that are not load/store reachable, a GPU thread posts one-sided RDMA <code>put</code>s with remote <em>signals</em>, either straight to the NIC (GDAKI/EFA-GDA/GPI) or through a CPU proxy.</p></div>
+  <div class="card"><h5 style="color:var(--cft)">CFT: CUDA Fabric Transport</h5><p>For large multi-node NVLink domains (sm_100+, CUDA 13.3+), puts, reductions and gets go through fabric <em>logical endpoints</em>, with counted completion.</p></div>
+</div>
+</section>
+
+<!-- ============================================================= -->
+<section id="codemap">
+<h2><span class="num">2</span>Code map</h2>
+<p>The device API is a <strong>header-only device library</strong> plus a <strong>host runtime</strong> that allocates its resources. The headers are deliberately stratified (see <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/README.md" target="_blank" rel="noopener" class="src">nccl_device/README.md</a>), so you can learn the API by reading only the top-level headers.</p>
+
+<figure>
+<svg viewBox="0 0 1000 250" role="img" aria-label="Header layering">
+  <rect x="20" y="20" width="300" height="210" rx="12" class="b-acc"/>
+  <text x="170" y="48" text-anchor="middle" font-weight="700" font-size="15">Layer 1 · public API</text>
+  <text x="170" y="70" text-anchor="middle" class="t-mono" font-size="12.5">nccl_device/foo.h</text>
+  <text x="40" y="104" font-size="13">• declarations and contracts only</text>
+  <text x="40" y="126" font-size="13">• host.h = host-side API + reqs</text>
+  <text x="40" y="148" font-size="13">• core.h, coop.h, gin.h, ptr.h,</text>
+  <text x="52" y="168" font-size="13">lsa_barrier.h, gin_barrier.h,</text>
+  <text x="52" y="188" font-size="13">barrier.h, cft.h, ll_a2a.h,</text>
+  <text x="52" y="208" font-size="13">reduce_copy.h</text>
+  <rect x="350" y="20" width="300" height="210" rx="12" class="box"/>
+  <text x="500" y="48" text-anchor="middle" font-weight="700" font-size="15">Layer 2 · types</text>
+  <text x="500" y="70" text-anchor="middle" class="t-mono" font-size="12.5">impl/foo__types.h</text>
+  <text x="370" y="104" font-size="13">• struct definitions</text>
+  <text x="370" y="126" font-size="13">• ncclDevComm (comm__types.h)</text>
+  <text x="370" y="148" font-size="13">• ncclWindow_vidmem (core__types.h)</text>
+  <text x="370" y="170" font-size="13">• *Session_internal state</text>
+  <text x="370" y="192" font-size="13">• includes layer 1; acyclic</text>
+  <rect x="680" y="20" width="300" height="210" rx="12" class="box"/>
+  <text x="830" y="48" text-anchor="middle" font-weight="700" font-size="15">Layer 3 · inline impl</text>
+  <text x="830" y="70" text-anchor="middle" class="t-mono" font-size="12.5">impl/foo__funcs.h</text>
+  <text x="700" y="104" font-size="13">• NCCL_DEVICE_INLINE bodies</text>
+  <text x="700" y="126" font-size="13">• may include each other (cycles ok)</text>
+  <text x="700" y="148" font-size="13">• GIN backends: gin/gdaki, gin/proxy,</text>
+  <text x="712" y="168" font-size="13">gin/gpi, gin/efa_gda</text>
+  <text x="700" y="192" font-size="13">• nccl_device.h pulls in all of them</text>
+  <path d="M320 125 L350 125" class="ln-acc"/><polygon points="342,120 350,125 342,130" class="f-acc"/>
+  <path d="M650 125 L680 125" class="ln-acc"/><polygon points="672,120 680,125 672,130" class="f-acc"/>
+</svg>
+<figcaption>Figure 2. Header stratification. User translation units include only <code>nccl_device.h</code>, which pulls in every <code>impl/*__funcs.h</code>.</figcaption>
+</figure>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Area</th><th>Files</th><th>Role</th></tr></thead>
+<tbody>
+<tr><td>Umbrella</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device.h" target="_blank" rel="noopener" class="src">src/include/nccl_device.h</a></td><td>Includes host.h, coop.h and all <code>impl/*__funcs.h</code> (GIN only on Linux).</td></tr>
+<tr><td>Host API</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/host.h" target="_blank" rel="noopener" class="src">nccl_device/host.h</a></td><td><code>ncclDevCommRequirements</code>, <code>ncclCommProperties</code>, <code>ncclDevCommCreate/Destroy</code>, host pointer queries, team helpers, <code>*CreateRequirement</code>.</td></tr>
+<tr><td>Core</td><td><span class="src">core.h</span> <span class="src">impl/core__types.h</span> <span class="src">impl/core__funcs.h</span> <span class="src">impl/comm__types.h</span></td><td>Teams, windows, pointer arithmetic, resource buffers, <code>ncclDevComm</code> layout.</td></tr>
+<tr><td>Cooperative groups</td><td><span class="src">coop.h</span></td><td><code>ncclCoopThread/Warp/Tile/Lanes/WarpSpan/Cta/Any</code>: who participates in a call.</td></tr>
+<tr><td>Barriers</td><td><span class="src">lsa_barrier.h</span> <span class="src">gin_barrier.h</span> <span class="src">barrier.h</span> <span class="src">cft_barrier.h</span> + impl</td><td>Memory-based, signal-based, hybrid and CFT barriers.</td></tr>
+<tr><td>GIN</td><td><span class="src">gin.h</span> <span class="src">impl/gin__funcs.h</span> <span class="src">gin/gin_device_common.h</span> <span class="src">gin/{gdaki,proxy,gpi,efa_gda}/</span></td><td><code>ncclGin</code> put/get/signal/counter/flush and backend dispatch.</td></tr>
+<tr><td>CFT</td><td><span class="src">cft.h</span> <span class="src">impl/cft__funcs.h</span></td><td><code>ncclCft</code> fabric put/red/get with counters.</td></tr>
+<tr><td>Helpers</td><td><span class="src">ptr.h</span> <span class="src">reduce_copy.h</span> <span class="src">ll_a2a.h</span> <span class="src">impl/multimem__funcs.h</span> <span class="src">impl/vector__*.h</span></td><td>Symmetric pointers, vectorised reduce/copy over LSA/multimem, low-latency all-to-all.</td></tr>
+<tr><td>Host runtime</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc" target="_blank" rel="noopener" class="src">src/dev_runtime.cc</a> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc" target="_blank" rel="noopener" class="src">src/group.cc</a> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/gin/gin_host.cc" target="_blank" rel="noopener" class="src">src/gin/gin_host.cc</a> <span class="src">src/nccl_device/*.cc</span></td><td>Symmetric memory ("devr" = device runtime), window registration, devComm creation, GIN contexts, requirement helpers.</td></tr>
+<tr><td>Examples</td><td><a href="https://github.com/NVIDIA/nccl/tree/v2.32.3-1/docs/examples/06_device_api/" target="_blank" rel="noopener" class="src">docs/examples/06_device_api/</a></td><td>The kernels walked through on this page.</td></tr>
+<tr><td>Internal user</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L254" target="_blank" rel="noopener" class="src">src/sym_kernels.cc:254</a></td><td>NCCL's own symmetric-memory collective kernels are built on the same devComm (<code>ncclDevrCommCreateInternal(..., isInternal=true)</code>).</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ============================================================= -->
+<section id="concepts">
+<h2><span class="num">3</span>Core concepts</h2>
+
+<h3 id="c-devcomm">3.1 <code>ncclDevComm</code>: the by-value device communicator</h3>
+<p><code>ncclDevComm</code> is a plain struct (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/comm__types.h#L28" target="_blank" rel="noopener" class="src">impl/comm__types.h:28</a>) that you pass to the kernel <strong>by value</strong>. It holds no pointers to host memory. Everything it references (windows, resource buffers, GIN handles) is already device-accessible.</p>
+<pre><code><span class="k">struct</span> ncclDevComm {
+  <span class="k">unsigned int</span> magic, version;            <span class="c">// ABI versioning (see src/devcomm/devcomm_v*.cc compat shims)</span>
+  <span class="k">int</span> rank, nRanks;   uint32_t nRanks_rcp32; <span class="c">// world team; *_rcp32 = reciprocal for fast int div</span>
+  <span class="k">int</span> lsaRank, lsaSize; uint32_t lsaSize_rcp32; <span class="c">// my position in the load/store team</span>
+  ncclDevCommWindowTable_t windowTable;  <span class="c">// device-side VA→window lookup (ncclFindWindow)</span>
+  ncclWindow_t resourceWindow;           <span class="c">// symmetric buffer holding barrier state etc.</span>
+  ncclResourceWindow_vidmem_t resourceWindow_inlined; <span class="c">// {lsaFlatBase, stride4G, mcOffset4K} copied inline</span>
+  ncclGinBarrierHandle_t hybridDenseGinBarrier;
+  ncclMultimemHandle_t lsaMultimem;      <span class="c">// NVLS multicast base for the LSA team</span>
+  ncclLsaBarrierHandle_t lsaBarrier;     <span class="c">// ← reqs.lsaBarrierCount</span>
+  ncclGinBarrierHandle_t railGinBarrier; <span class="c">// ← reqs.railGinBarrierCount</span>
+  uint8_t ginConnectionCount, backendIndex;
+  uint8_t ginNetDeviceTypes[NCCL_GIN_MAX_CONNECTIONS]; <span class="c">// PROXY / GDAKI / GPI / EFA_GDA per connection</span>
+  <span class="k">void</span>* ginHandles[NCCL_GIN_MAX_CONNECTIONS];          <span class="c">// backend GPU context arrays</span>
+  <span class="k">int</span> ginSignalCount, ginCounterCount;
+  uint64_t* ginSignalShadows;            <span class="c">// per-context expected-value shadows</span>
+  uint32_t ginContextCount; <span class="k">int</span> ginConnectionStride, ginContextStride;
+  uint32_t* abortFlag;
+  ncclLsaBarrierHandle_t hybridLsaBarrier;   <span class="c">// ← reqs.barrierCount (ncclBarrierSession)</span>
+  ncclGinBarrierHandle_t hybridRailGinBarrier;
+  ncclGinBarrierHandle_t worldGinBarrier;    <span class="c">// ← reqs.worldGinBarrierCount</span>
+  <span class="c">// ... CFT: cftRank/cftSize, ucLeId/mcLeId, cftBarrier, cftMultimemBarrier</span>
+};</code></pre>
+
+<h3 id="c-window">3.2 Windows and the flat LSA virtual address space</h3>
+<p>An <code>ncclWindow_t</code> is a <strong>device pointer</strong> to an <code>ncclWindow_vidmem</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/core__types.h#L30" target="_blank" rel="noopener" class="src">impl/core__types.h:30</a>). Its key fields are <code>lsaFlatBase</code> (where LSA rank 0's copy of this window lives in my VA), <code>stride4G</code> (the distance between ranks' copies, in units of 4 GiB), <code>lsaRank</code>/<code>worldRank</code>, <code>mcOffset4K</code> (multicast offset), <code>ginOffset4K</code> and <code>ginWinsDefaultBackend[]</code> (NIC registration handles).</p>
+<p>The trick that makes LSA pointer lookup cost a single integer add: on first use, the host reserves one huge VA range of <code>lsaSize × bigSize</code> bytes (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L397" target="_blank" rel="noopener" class="src">dev_runtime.cc:397</a>). Here <code>bigSize</code> is at least the largest GPU memory in the team, rounded up to 4 GiB (<span class="src">dev_runtime.cc:200</span>). Every peer's physical allocation is mapped at the <em>same</em> <code>bigOffset</code> inside that peer's slot.</p>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Flat LSA VA layout">
+  <text x="20" y="28" font-weight="700" font-size="14">Process VA on LSA rank 1 (lsaSize = 4)</text>
+  <text x="20" y="48" font-size="12.5" class="t-muted">devr-&gt;lsaFlatBase: one cuMemAddressReserve(lsaSize × bigSize)</text>
+  <g>
+    <rect x="20" y="70" width="230" height="110" rx="6" class="box"/>
+    <rect x="252" y="70" width="230" height="110" rx="6" class="b-acc"/>
+    <rect x="484" y="70" width="230" height="110" rx="6" class="box"/>
+    <rect x="716" y="70" width="230" height="110" rx="6" class="box"/>
+    <text x="135" y="92" text-anchor="middle" font-size="13">slot 0 → rank 0 memory</text>
+    <text x="367" y="92" text-anchor="middle" font-size="13" font-weight="600">slot 1 → my memory</text>
+    <text x="599" y="92" text-anchor="middle" font-size="13">slot 2 → rank 2 memory</text>
+    <text x="831" y="92" text-anchor="middle" font-size="13">slot 3 → rank 3 memory</text>
+    <!-- windows -->
+    <rect x="70" y="110" width="70" height="26" rx="4" class="b-lsa"/><text x="105" y="128" text-anchor="middle" font-size="11.5">sendbuf</text>
+    <rect x="150" y="110" width="70" height="26" rx="4" class="b-gin"/><text x="185" y="128" text-anchor="middle" font-size="11.5">recvbuf</text>
+    <rect x="302" y="110" width="70" height="26" rx="4" class="b-lsa"/><text x="337" y="128" text-anchor="middle" font-size="11.5">sendbuf</text>
+    <rect x="382" y="110" width="70" height="26" rx="4" class="b-gin"/><text x="417" y="128" text-anchor="middle" font-size="11.5">recvbuf</text>
+    <rect x="534" y="110" width="70" height="26" rx="4" class="b-lsa"/><text x="569" y="128" text-anchor="middle" font-size="11.5">sendbuf</text>
+    <rect x="614" y="110" width="70" height="26" rx="4" class="b-gin"/><text x="649" y="128" text-anchor="middle" font-size="11.5">recvbuf</text>
+    <rect x="766" y="110" width="70" height="26" rx="4" class="b-lsa"/><text x="801" y="128" text-anchor="middle" font-size="11.5">sendbuf</text>
+    <rect x="846" y="110" width="70" height="26" rx="4" class="b-gin"/><text x="881" y="128" text-anchor="middle" font-size="11.5">recvbuf</text>
+    <text x="135" y="165" text-anchor="middle" font-size="11" class="t-muted">imported via cuMemImport + cuMemMap</text>
+    <text x="599" y="165" text-anchor="middle" font-size="11" class="t-muted">imported via cuMemImport + cuMemMap</text>
+    <text x="367" y="165" text-anchor="middle" font-size="11" class="t-muted">my own handle, mapped again</text>
+  </g>
+  <!-- brackets -->
+  <path d="M20 195 L20 205 L250 205 L250 195" class="ln"/>
+  <text x="135" y="222" text-anchor="middle" font-size="12" class="t-mono">bigSize (multiple of 4 GiB)</text>
+  <path d="M20 60 L20 66" class="ln"/><path d="M70 60 L70 66" class="ln"/>
+  <path d="M70 140 L70 250" class="ln-acc dash"/>
+  <text x="76" y="246" font-size="12" class="t-mono t-acc">win-&gt;lsaFlatBase = flatBase + bigOffset(sendbuf)</text>
+  <path d="M534 140 L534 280" class="ln-lsa dash"/>
+  <text x="540" y="276" font-size="12" class="t-mono t-lsa">ncclGetLsaPointer(win, off, 2) = lsaFlatBase + 2·stride4G·2³² + off</text>
+</svg>
+<figcaption>Figure 3. Because every rank's copy sits at a fixed stride, a peer pointer is a pure address computation with no table lookup. <code>add4G</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/utility.h#L171" target="_blank" rel="noopener" class="src">utility.h:171</a>) adds <code>peer·stride4G</code> to the <em>upper</em> 32 bits of the address.</figcaption>
+</figure>
+
+<h3 id="c-teams">3.3 Teams</h3>
+<p>A <code>ncclTeam</code> is just <code>{nRanks, rank, stride}</code> (<span class="src">core.h:51</span>): an arithmetic progression of world ranks containing the caller. Device-side constructors are trivial reads of <code>ncclDevComm</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/core__funcs.h#L16" target="_blank" rel="noopener" class="src">core__funcs.h:16-73</a>), and conversion is <code>world = comm.rank + (peer − team.rank)·team.stride</code> (<span class="src">core__funcs.h:93</span>).</p>
+<figure>
+<svg viewBox="0 0 1000 220" role="img" aria-label="Team diagram: world, LSA and rail teams">
+  <rect x="40" y="40" width="440" height="130" rx="12" class="b-lsa"/>
+  <rect x="520" y="40" width="440" height="130" rx="12" class="b-lsa"/>
+  <text x="260" y="32" text-anchor="middle" font-size="13" class="t-lsa" font-weight="600">node 0 = LSA team {nRanks 4, stride 1}</text>
+  <text x="740" y="32" text-anchor="middle" font-size="13" class="t-lsa" font-weight="600">node 1 = LSA team {nRanks 4, stride 1}</text>
+  <g font-size="14" text-anchor="middle">
+    <circle cx="100" cy="105" r="28" class="box"/><text x="100" y="110">0</text>
+    <circle cx="210" cy="105" r="28" class="b-acc"/><text x="210" y="110" font-weight="700">1</text>
+    <circle cx="320" cy="105" r="28" class="box"/><text x="320" y="110">2</text>
+    <circle cx="430" cy="105" r="28" class="box"/><text x="430" y="110">3</text>
+    <circle cx="580" cy="105" r="28" class="box"/><text x="580" y="110">4</text>
+    <circle cx="690" cy="105" r="28" class="b-gin"/><text x="690" y="110">5</text>
+    <circle cx="800" cy="105" r="28" class="box"/><text x="800" y="110">6</text>
+    <circle cx="910" cy="105" r="28" class="box"/><text x="910" y="110">7</text>
+  </g>
+  <path d="M210 135 C 260 200, 640 200, 690 135" class="ln-gin"/>
+  <text x="450" y="205" text-anchor="middle" font-size="13" class="t-gin">rail team of rank 1 = {nRanks 2, rank 0, stride 4} → world ranks {1, 5}</text>
+  <text x="500" y="20" text-anchor="middle" font-size="12" class="t-muted">world team = {nRanks 8, rank 1, stride 1}</text>
+</svg>
+<figcaption>Figure 4. Teams from rank 1's point of view. <code>ncclTeamRail</code> is the outer factor of the LSA team: one rank per node at the same local index. Hybrid barriers and GIN "rail" connectivity use it.</figcaption>
+</figure>
+<div class="tablewrap"><table>
+<thead><tr><th>Team</th><th>Device constructor</th><th>Value</th><th>Reached by</th></tr></thead>
+<tbody>
+<tr><td>World</td><td><code>ncclTeamWorld(devComm)</code></td><td>{nRanks, rank, 1}</td><td>GIN (full connectivity)</td></tr>
+<tr><td>LSA</td><td><code>ncclTeamLsa(devComm)</code></td><td>{lsaSize, lsaRank, 1}</td><td>NVLink load/store, multimem</td></tr>
+<tr><td>Rail</td><td><code>ncclTeamRail(devComm)</code></td><td>{nRanks/lsaSize, rank/lsaSize, lsaSize}</td><td>GIN (rail connectivity)</td></tr>
+<tr><td>CFT</td><td><code>ncclTeamCft(devComm, mode)</code></td><td>flat / hierarchical over multimem or LSA</td><td>CFT logical endpoints</td></tr>
+</tbody></table></div>
+<p>Tag types <code>ncclTeamTagWorld</code>, <code>ncclTeamTagLsa</code> and <code>ncclTeamTagRail</code> are empty structs. They select convenience constructors that bind the team and the matching barrier handle stored in <code>ncclDevComm</code>.</p>
+
+<h3 id="c-coop">3.4 Coop: who participates in a call</h3>
+<p>Almost every device API call takes a <em>Coop</em> object as its first argument. It is NCCL's minimal version of CUDA cooperative groups, providing <code>thread_rank()</code>, <code>size()</code> and <code>sync()</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/coop.h" target="_blank" rel="noopener" class="src">coop.h</a>). All threads in the coop must make the call together. NCCL then typically elects <code>thread_rank()==0</code> to do serial work (posting a NIC WQE) or spreads per-peer work across the threads (barrier arrivals), and brackets the work with <code>coop.sync()</code>.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Type</th><th>Members</th><th><code>sync()</code></th></tr></thead>
+<tbody>
+<tr><td><code>ncclCoopThread</code> = <code>ncclCoopTile&lt;1&gt;</code></td><td>the calling thread</td><td>no-op</td></tr>
+<tr><td><code>ncclCoopWarp</code> = <code>ncclCoopTile&lt;32&gt;</code></td><td>aligned power-of-two lanes</td><td><code>__syncwarp(mask)</code></td></tr>
+<tr><td><code>ncclCoopLanes</code></td><td>arbitrary lane mask</td><td><code>__syncwarp(lmask)</code></td></tr>
+<tr><td><code>ncclCoopWarpSpan</code></td><td>consecutive warps with an id in 0..15</td><td>named barrier <code>bar.sync id</code></td></tr>
+<tr><td><code>ncclCoopCta</code> (<span class="src">coop.h:156</span>)</td><td>whole block</td><td><code>__syncthreads()</code></td></tr>
+<tr><td><code>ncclCoopAny</code></td><td>type-erased (vtable), used by the C API</td><td>dispatch</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ============================================================= -->
+<section id="host">
+<h2><span class="num">4</span>Host-side setup: the shared prologue of every example</h2>
+<p>All four examples follow the same host recipe. The figure below shows it as a timeline, and the subsections trace the two NCCL-specific calls.</p>
+
+<figure>
+<svg viewBox="0 0 1000 470" role="img" aria-label="Host setup sequence diagram">
+  <g font-size="13" text-anchor="middle" font-weight="600">
+    <rect x="30" y="14" width="170" height="34" rx="8" class="box2"/><text x="115" y="36">Application</text>
+    <rect x="290" y="14" width="200" height="34" rx="8" class="b-acc"/><text x="390" y="36">NCCL host runtime</text>
+    <rect x="580" y="14" width="170" height="34" rx="8" class="box2"/><text x="665" y="36">Peer ranks</text>
+    <rect x="810" y="14" width="160" height="34" rx="8" class="b-lsa"/><text x="890" y="36">GPU</text>
+  </g>
+  <path d="M115 48 V460 M390 48 V460 M665 48 V460 M890 48 V460" class="ln dash"/>
+  <g font-size="12">
+    <path d="M115 75 H385" class="ln-acc"/><polygon points="385,70 393,75 385,80" class="f-acc"/>
+    <text x="250" y="68" text-anchor="middle" class="t-mono">ncclCommInitRank</text>
+    <path d="M390 90 H660" class="ln"/><text x="525" y="85" text-anchor="middle" class="t-muted">bootstrap, topology, LSA/GIN support</text>
+
+    <path d="M115 120 H385" class="ln-acc"/><polygon points="385,115 393,120 385,125" class="f-acc"/>
+    <text x="250" y="113" text-anchor="middle" class="t-mono">ncclCommQueryProperties</text>
+    <path d="M385 136 H120" class="ln"/><polygon points="120,131 112,136 120,141" class="f-muted"/>
+    <text x="250" y="150" text-anchor="middle" class="t-muted">deviceApiSupport, ginType, nLsaTeams…</text>
+
+    <path d="M115 175 H885" class="ln-acc"/><polygon points="885,170 893,175 885,180" class="f-acc"/>
+    <text x="500" y="168" text-anchor="middle" class="t-mono">ncclMemAlloc  (cuMemCreate + cuMemMap, exportable handle)</text>
+
+    <path d="M115 212 H385" class="ln-acc"/><polygon points="385,207 393,212 385,217" class="f-acc"/>
+    <text x="250" y="205" text-anchor="middle" class="t-mono">ncclCommWindowRegister ×2</text>
+    <path d="M390 228 H660" class="ln"/><text x="525" y="223" text-anchor="middle" class="t-muted">allgather handles, import + map peers</text>
+    <path d="M390 246 H885" class="ln"/><text x="640" y="260" text-anchor="middle" class="t-muted">copy ncclWindow_vidmem → device shadow pool</text>
+
+    <path d="M115 290 H385" class="ln-acc"/><polygon points="385,285 393,290 385,295" class="f-acc"/>
+    <text x="250" y="283" text-anchor="middle" class="t-mono">ncclDevCommCreate(reqs)</text>
+    <path d="M390 306 H660" class="ln"/><text x="525" y="301" text-anchor="middle" class="t-muted">GIN connect/contexts, bootstrap barrier</text>
+    <path d="M390 322 H885" class="ln"/><text x="640" y="336" text-anchor="middle" class="t-muted">resource window: barriers, signal shadows (zeroed)</text>
+
+    <path d="M115 370 H885" class="ln-lsa"/><polygon points="885,365 893,370 885,375" class="f-lsa"/>
+    <text x="500" y="363" text-anchor="middle" class="t-mono">kernel&lt;&lt;&lt;…&gt;&gt;&gt;(windows, devComm)   ← all comms happen in here</text>
+    <path d="M115 405 H385" class="ln-acc"/><polygon points="385,400 393,405 385,410" class="f-acc"/>
+    <text x="250" y="398" text-anchor="middle" class="t-mono">ncclDevCommDestroy</text>
+    <path d="M115 440 H385" class="ln-acc"/><polygon points="385,435 393,440 385,445" class="f-acc"/>
+    <text x="250" y="433" text-anchor="middle" class="t-mono">ncclCommWindowDeregister, ncclMemFree</text>
+  </g>
+</svg>
+<figcaption>Figure 5. Window registration and devComm creation are <em>collective</em>: every rank must call them in the same order, because they run bootstrap allgathers and barriers.</figcaption>
+</figure>
+
+<div class="callout"><b>Both calls are "group-aware".</b>Each call opens an internal group (<code>ncclGroupStartInternal</code>), enqueues a task on <code>comm-&gt;devrState</code>, and closes the group. If the application wraps several registrations in <code>ncclGroupStart/End</code>, they are batched and executed together when the group ends, by <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L372" target="_blank" rel="noopener" class="src">group.cc:372 ncclCommGroupRegisterSymmetric</a>. With <code>NCCL_ENQUEUE_REARCH_ENABLE</code>, the same work goes through <code>ncclMgmtTaskEnqueue</code> instead.</div>
+
+<h3 id="h-win">4.1 <code>ncclCommWindowRegister</code>: turning a buffer into a symmetric window</h3>
+<div class="chain">
+<div class="title">Call chain: window registration</div>
+<ul>
+<li><span class="fn">ncclCommWindowRegister(comm, buff, size, &amp;win, NCCL_WIN_COLL_SYMMETRIC)</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1800" target="_blank" rel="noopener" class="src">dev_runtime.cc:1800</a>
+  <ul>
+  <li><span class="fn">ncclDevrInitOnce</span> <span class="src">:160</span> <span class="note">decides lsaSize/lsaSelf/lsaRankList, nLsaTeams and bigSize (≥ max GPU memory, 4 GiB aligned)</span></li>
+  <li><span class="note">enqueue </span><span class="fn">ncclDevrRegTask</span><span class="note"> on regTaskQueue → ncclGroupEndInternal</span>
+    <ul>
+    <li><span class="fn">ncclCommGroupRegisterSymmetric</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L372" target="_blank" rel="noopener" class="src">group.cc:372</a>
+      <ul>
+      <li><span class="fn">ncclDevrWindowRegisterInGroup</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1149" target="_blank" rel="noopener" class="src">dev_runtime.cc:1149</a>
+        <ul>
+        <li><span class="fn">ncclCommRegister</span> <span class="note">local registration for the host collectives as well</span></li>
+        <li><span class="fn">ncclSymkInitOnce</span> <span class="note">only with NCCL_WIN_COLL_SYMMETRIC: lazily initialise NCCL's symmetric kernels</span></li>
+        <li><span class="fn">ncclCuMemGetAddressRange</span> + <span class="fn">cuMemRetainAllocationHandle</span> <span class="note">per physical segment; window offset must be aligned</span></li>
+        <li><span class="fn">symMemoryObtain</span> <span class="src">:698</span>
+          <ul>
+          <li><span class="fn">bootstrapAllGather</span> <span class="note">segment counts, sizes, flags of every rank (must agree)</span></li>
+          <li><span class="fn">ncclSpaceAlloc(&amp;devr-&gt;bigSpace, …)</span> <span class="src">:814</span> <span class="note">pick a bigOffset common to the whole LSA team</span></li>
+          <li><span class="fn">symMemoryMapLsaTeam</span> <span class="src">:358</span>
+            <ul>
+            <li><span class="fn">symMemoryExportSegmentHandle</span> → <span class="fn">bootstrapIntraNodeAllGather</span></li>
+            <li><span class="fn">cuMemAddressReserve(lsaSize·bigSize)</span> <span class="src">:397</span> <span class="note">once per comm → devr-&gt;lsaFlatBase</span></li>
+            <li><span class="fn">symMemoryImportAndMapSegmentsForRank(r)</span> <span class="src">:340</span> <span class="note">map peer r at lsaFlatBase + r·bigSize + bigOffset</span></li>
+            <li><span class="fn">bootstrapIntraNodeBarrier</span></li>
+            </ul></li>
+          <li><span class="note">team bindings (multimem / CFT), then </span><span class="fn">symMemoryRegisterGin</span> <span class="src">:639</span> <span class="note">if GIN is already enabled → ncclGinRegister (NIC MR)</span></li>
+          </ul></li>
+        <li><span class="fn">symWindowCreate</span> <span class="src">:1000</span>
+          <ul>
+          <li><span class="fn">ncclShadowPoolAlloc</span> <span class="note">device ncclWindow_vidmem + host shadow copy</span></li>
+          <li><span class="note">fill: </span><code>lsaFlatBase = flatBase + bigOffset</code> <span class="src">:1026</span><span class="note">, </span><code>stride4G = bigSize&gt;&gt;32</code><span class="note">, lsaRank, worldRank, ginOffset4K, mcOffset4K, ucLeIdBase</span></li>
+          <li><span class="fn">symWindowInitGin</span> <span class="note">if GIN enabled: copy per-connection GIN window handles</span></li>
+          <li><span class="fn">cudaMemcpyAsync</span> <span class="note">host shadow → device; also insert into devComm window table (32-entry chained pages)</span></li>
+          </ul></li>
+        <li><span class="fn">bootstrapBarrier</span> <span class="note">world barrier; insert into the global window map</span></li>
+        </ul></li>
+      </ul></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+<p>The user-facing result is <code>win</code>, a device pointer to an immutable <code>ncclWindow_vidmem</code>. Device code only ever <em>reads</em> it, through <code>nccl::utility::loadConst</code>, which in this version is a plain load (<code>NCCL_DEVICE_LOADCONST_USE_LDG</code> is 0, <span class="src">utility.h:436</span>).</p>
+
+<h3 id="h-devcomm">4.2 <code>ncclDevCommCreate</code>: allocating device resources from requirements</h3>
+<p>The kernel needs barrier state and GIN signals that are agreed across ranks. You declare how many you need in <code>ncclDevCommRequirements</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/host.h#L30" target="_blank" rel="noopener" class="src">host.h:30</a>), always starting from <code>NCCL_DEV_COMM_REQUIREMENTS_INITIALIZER</code>, which stamps size, magic and version so newer libraries can serve older device code.</p>
+
+<div class="chain">
+<div class="title">Call chain: device communicator creation</div>
+<ul>
+<li><span class="fn">ncclDevCommCreate(comm, &amp;reqs, &amp;devComm)</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1979" target="_blank" rel="noopener" class="src">dev_runtime.cc:1979</a>
+  <ul>
+  <li><span class="note">check </span><code>reqs-&gt;magic</code><span class="note">; choose deviceCodeVersion (reqs-&gt;version, or runtime version if JIT / useRuntimeVersion)</span></li>
+  <li><span class="fn">ncclDevrInitOnce</span>, <span class="fn">deepCopyDevCommRequirements</span>, <span class="note">version-compat filter, CFT capability checks</span></li>
+  <li><span class="note">enqueue on </span><code>devrState.commCreateTaskQueue</code><span class="note"> → group end → </span><span class="fn">ncclCommGroupRegisterSymmetric</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L388" target="_blank" rel="noopener" class="src">group.cc:388</a>
+    <ul>
+    <li><span class="fn">ncclDevrCommCreateInternal</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1399" target="_blank" rel="noopener" class="src">dev_runtime.cc:1399</a>
+      <ul>
+      <li><span class="note">GIN validation (resources requested ⇒ ginConnectionType ≠ NONE; FULL needs global FULL support)</span></li>
+      <li><span class="fn">ncclGinConnectOnce</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/gin/gin_host.cc#L92" target="_blank" rel="noopener" class="src">gin_host.cc:92</a> <span class="note">first time only: connect NIC comms to all peers, then </span><span class="fn">symMemoryRegisterGin</span><span class="note"> for every existing memory</span></li>
+      <li><span class="note">fill rank/nRanks/lsaRank/lsaSize (+ reciprocals); </span><span class="fn">symTeamObtain(lsa, lsaMultimem)</span><span class="note"> → lsaMultimem.mcBasePtr</span></li>
+      <li><span class="note">build a linked list of </span><span class="fn">ncclDevResourceRequirements</span><span class="note">:</span>
+        <ul>
+        <li><span class="fn">ncclLsaBarrierCreateRequirement(lsa, barrierCount)</span> <span class="src">:1576</span> <span class="note">→ hybridLsaBarrier; plus hybrid rail and dense GIN barriers</span></li>
+        <li><span class="fn">ncclLsaBarrierCreateRequirement(lsa, lsaBarrierCount)</span> <span class="src">:1591</span> <span class="note">→ lsaBarrier</span></li>
+        <li><span class="fn">ncclGinBarrierCreateRequirement(rail / world, …)</span> <span class="src">:1600</span> <span class="note">→ railGinBarrier, worldGinBarrier</span></li>
+        <li><span class="note">CFT barriers, plus user-supplied </span><code>reqs.resourceRequirementsList</code></li>
+        </ul></li>
+      <li><span class="note">layout pass</span> <span class="src">:1619</span><span class="note">: each buffer gets a 128-byte-aligned offset → </span><code>*outBufferHandle = offset/128</code><span class="note">; GIN signal ranges appended after </span><code>reqs.ginSignalCount</code><span class="note"> (user signals start at id 0); signal shadows appended at the end</span></li>
+      <li><span class="fn">ncclGinDevCommSetup</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/gin/gin_host.cc#L412" target="_blank" rel="noopener" class="src">gin_host.cc:412</a> <span class="note">try each active backend that matches reqs.ginType</span>
+        <ul>
+        <li><span class="fn">ginDevCommSetupWithBackend</span> <span class="src">gin_host.cc:245</span> <span class="note">contexts = round-up(ginContextCount, #NIC conns); connection stride (FULL=1, RAIL=ranks/host)</span></li>
+        <li><span class="fn">backend-&gt;ncclGin-&gt;createContext(…)</span> <span class="src">gin_host.cc:353</span> <span class="note">per NIC connection → devComm.ginHandles[], ginNetDeviceTypes[]</span></li>
+        <li><span class="note">Proxy backend: start </span><span class="fn">ncclGinProgress</span><span class="note"> thread(s)</span> <span class="src">gin_host.cc:388</span><span class="tag cpu">proxy</span></li>
+        </ul></li>
+      <li><span class="fn">cuMemCreate(bufSizeTotal)</span> <span class="src">:1690</span> → <span class="fn">symMemoryObtain</span> → <span class="fn">symWindowCreate</span> <span class="note">the resource buffer is itself a symmetric window (devComm.resourceWindow)</span></li>
+      <li><span class="note">copy lsaFlatBase/stride4G/mcOffset4K inline; </span><code>ginSignalShadows</code> <span class="src">:1704</span><span class="note">; </span><span class="fn">cudaMemsetAsync(0)</span></li>
+      <li><span class="fn">bootstrapBarrier</span> <span class="src">:1712</span> <span class="note">everyone's resources are zeroed before any kernel can run</span></li>
+      </ul></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+<figure>
+<svg viewBox="0 0 1000 198" role="img" aria-label="Resource window layout">
+  <text x="20" y="22" font-weight="700" font-size="14">devComm.resourceWindow: one symmetric buffer, handle h ⇒ byte offset h·128</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="20" y="40" width="150" height="60" class="b-acc"/><text x="95" y="65">CFT barriers</text><text x="95" y="83" class="t-muted">(if requested)</text>
+    <rect x="170" y="40" width="120" height="60" class="b-gin"/><text x="230" y="65">world GIN bar</text><text x="230" y="83" class="t-muted">signals only</text>
+    <rect x="290" y="40" width="110" height="60" class="b-gin"/><text x="345" y="65">rail GIN bar</text><text x="345" y="83" class="t-muted">signals only</text>
+    <rect x="400" y="40" width="170" height="60" class="b-lsa"/><text x="485" y="65">lsaBarrier</text><text x="485" y="83" class="t-muted">(3n + n·lsaSize)·4 B</text>
+    <rect x="570" y="40" width="150" height="60" class="b-gin"/><text x="645" y="65">hybrid dense/rail</text><text x="645" y="83" class="t-muted">signals only</text>
+    <rect x="720" y="40" width="130" height="60" class="b-lsa"/><text x="785" y="65">hybridLsaBarrier</text><text x="785" y="83" class="t-muted">barrierCount</text>
+    <rect x="850" y="40" width="130" height="60" class="box2"/><text x="915" y="65">signal shadows</text><text x="915" y="83" class="t-muted">ctx × signals × 8 B</text>
+  </g>
+  <text x="20" y="130" font-size="12.5" class="t-muted">GIN barriers need no buffer bytes: ncclGinBarrierCreateRequirement only reserves nBarriers·team.nRanks GIN signal ids (nccl_device/gin_barrier.cc:14).</text>
+  <text x="20" y="152" font-size="12.5" class="t-muted">An LSA barrier with n barriers reserves (3n + n·team.nRanks) uint32 slots (nccl_device/lsa_barrier.cc:14).</text>
+  <text x="20" y="174" font-size="12.5" class="t-muted">The requirement list is built head-first, so this is the order in memory; user resources follow hybridLsaBarrier.</text>
+</svg>
+<figcaption>Figure 6. All device-side synchronisation state lives in one zero-initialised symmetric allocation. Every rank computes the same layout, so a handle means the same offset on every peer.</figcaption>
+</figure>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Requirement field</th><th>Resulting devComm field</th><th>Used by</th></tr></thead>
+<tbody>
+<tr><td><code>lsaBarrierCount</code></td><td><code>lsaBarrier</code></td><td><code>ncclLsaBarrierSession(…, ncclTeamTagLsa(), idx)</code> (Example 1)</td></tr>
+<tr><td><code>worldGinBarrierCount</code></td><td><code>worldGinBarrier</code></td><td><code>ncclGinBarrierSession(…, ncclTeamTagWorld(), idx)</code> (Example 2)</td></tr>
+<tr><td><code>railGinBarrierCount</code></td><td><code>railGinBarrier</code></td><td><code>ncclGinBarrierSession(…, ncclTeamTagRail(), idx)</code></td></tr>
+<tr><td><code>barrierCount</code></td><td><code>hybridLsaBarrier</code>, <code>hybridRailGinBarrier</code>, <code>hybridDenseGinBarrier</code></td><td><code>ncclBarrierSession(…, ncclTeamTagWorld(), gin, idx)</code> (Example 3)</td></tr>
+<tr><td><code>ginSignalCount</code> / <code>ginCounterCount</code></td><td>user ids <code>0..N-1</code></td><td><code>ncclGin_*SignalInc{id}</code>, <code>waitSignal</code>, counters</td></tr>
+<tr><td><code>ginConnectionType</code></td><td><code>ginConnectionStride</code>, <code>ginHandles</code></td><td>which peers GIN can reach (NONE / FULL / RAIL / CUSTOM_STRIDE)</td></tr>
+<tr><td><code>ginContextCount</code> (hint)</td><td><code>ginContextCount</code></td><td>the <code>contextIndex</code> passed to <code>ncclGin{devComm, ctx}</code></td></tr>
+<tr><td><code>lsaMultimem</code></td><td><code>lsaMultimem.mcBasePtr</code></td><td>multimem pointers, multimem barriers</td></tr>
+<tr><td><code>cftCaps</code>, <code>cftBarrierCount</code></td><td><code>ucLeId</code>, <code>mcLeId</code>, <code>cftBarrier</code></td><td><code>ncclCft</code>, CFT barriers (Example 4)</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ============================================================= -->
+<section id="ex1">
+<h2><span class="num">5</span>Example 1 · AllReduce over LSA (pure load/store)</h2>
+<p>Source: <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/examples/06_device_api/01_allreduce_lsa/c/main.cu" target="_blank" rel="noopener" class="src">06_device_api/01_allreduce_lsa/c/main.cu</a>. This section follows the kernel one line at a time. For each line it shows the code that actually runs once NCCL's inline functions are expanded, and traces it with real numbers.</p>
+
+<h3 id="ex1-setup">5.1 The concrete case we will trace</h3>
+<ul>
+<li>One machine with <strong>4 H100 GPUs</strong> connected by NVLink. There is one process (rank) per GPU: ranks 0, 1, 2 and 3.</li>
+<li>Each rank has a <code>sendbuf</code> and a <code>recvbuf</code> of <strong>1,048,576 floats</strong> (4 MiB). Before the kernel, rank <em>r</em> fills its <code>sendbuf</code> with the value <em>r</em>.</li>
+<li>Goal: afterwards, every element of every rank's <code>recvbuf</code> is 0 + 1 + 2 + 3 = <strong>6</strong>.</li>
+<li>Each rank launches the same kernel with <strong>16 blocks × 512 threads</strong>. The four launches run at the same time, one per GPU.</li>
+<li>When we follow "one thread", it is <strong>rank 2, block 5, thread 7</strong>.</li>
+</ul>
+
+<p>Terms used below, in plain words:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Term</th><th>Meaning in this example</th></tr></thead>
+<tbody>
+<tr><td>LSA ("load/store accessible")</td><td>The GPUs whose memory this GPU can read and write with ordinary pointers over NVLink. Here that is all 4 GPUs, so "LSA rank" and "rank" are the same number (the example checks <code>props.nLsaTeams == 1</code> to make sure).</td></tr>
+<tr><td><code>devComm</code> (<code>ncclDevComm</code>)</td><td>A plain struct of numbers and GPU pointers that the host filled in with <code>ncclDevCommCreate</code> and passed to the kernel as an argument. The fields this example reads: <code>rank</code>, <code>nRanks</code>, <code>lsaRank</code>, <code>lsaSize</code>, <code>lsaBarrier</code> and the location of the "resource buffer" (5.2).</td></tr>
+<tr><td>window (<code>sendwin</code>, <code>recvwin</code>)</td><td>A pointer to a small struct in GPU memory that describes where one registered buffer lives on <em>every</em> GPU. It is created by <code>ncclCommWindowRegister</code>.</td></tr>
+<tr><td>barrier</td><td>A point that a block cannot pass until the block with the same index on every other GPU has also reached it. Here it is built from integer flags in GPU memory.</td></tr>
+<tr><td>epoch</td><td>A counter: how many times this barrier has been passed so far. Flags carry epoch values, so old flags never look new.</td></tr>
+</tbody></table></div>
+
+<h3 id="ex1-memory">5.2 What is in memory when the kernel starts</h3>
+<p>Three things prepared by the host code decide everything the kernel does.</p>
+
+<h4>(a) One big address range that shows all 4 GPUs' memory</h4>
+<p>On each GPU, NCCL reserves a range of <em>virtual addresses</em> (addresses only, no memory behind them yet) that is 4 × 80 GiB long. The 80 GiB is <code>bigSize</code>: the largest GPU memory among the ranks (the H100s here report 81,559 MiB ≈ 79.6 GiB), rounded up to a multiple of 4 GiB (<span class="src">dev_runtime.cc:193-200</span>). The range is split into 4 slots, one per GPU. When you register a buffer, NCCL maps <em>every</em> GPU's copy of it into that GPU's slot, at the <em>same offset</em> inside each slot. NVLink lets a GPU access pages that belong to another GPU, so after this mapping an ordinary pointer into slot 3 reads GPU 3's memory.</p>
+
+<figure>
+<svg viewBox="0 0 1000 285" role="img" aria-label="Address range on rank 2 with the four slots">
+  <text x="20" y="24" font-weight="700" font-size="14">Virtual address range inside rank 2's process (example addresses)</text>
+  <g font-size="12.5" text-anchor="middle">
+    <rect x="20" y="44" width="235" height="120" rx="6" class="box"/>
+    <rect x="257" y="44" width="235" height="120" rx="6" class="box"/>
+    <rect x="494" y="44" width="235" height="120" rx="6" class="b-acc"/>
+    <rect x="731" y="44" width="235" height="120" rx="6" class="box"/>
+    <text x="137" y="64">slot 0 = GPU 0's memory</text>
+    <text x="374" y="64">slot 1 = GPU 1's memory</text>
+    <text x="611" y="64" font-weight="700">slot 2 = my own memory</text>
+    <text x="848" y="64">slot 3 = GPU 3's memory</text>
+    <rect x="45" y="80" width="90" height="28" rx="4" class="b-lsa"/><text x="90" y="99">sendbuf</text>
+    <rect x="145" y="80" width="90" height="28" rx="4" class="b-gin"/><text x="190" y="99">recvbuf</text>
+    <rect x="282" y="80" width="90" height="28" rx="4" class="b-lsa"/><text x="327" y="99">sendbuf</text>
+    <rect x="382" y="80" width="90" height="28" rx="4" class="b-gin"/><text x="427" y="99">recvbuf</text>
+    <rect x="519" y="80" width="90" height="28" rx="4" class="b-lsa"/><text x="564" y="99">sendbuf</text>
+    <rect x="619" y="80" width="90" height="28" rx="4" class="b-gin"/><text x="664" y="99">recvbuf</text>
+    <rect x="756" y="80" width="90" height="28" rx="4" class="b-lsa"/><text x="801" y="99">sendbuf</text>
+    <rect x="856" y="80" width="90" height="28" rx="4" class="b-gin"/><text x="901" y="99">recvbuf</text>
+    <rect x="45" y="116" width="190" height="24" rx="4" class="box2"/><text x="140" y="133" font-size="11.5">barrier flags (resource buf)</text>
+    <rect x="282" y="116" width="190" height="24" rx="4" class="box2"/><text x="377" y="133" font-size="11.5">barrier flags (resource buf)</text>
+    <rect x="519" y="116" width="190" height="24" rx="4" class="box2"/><text x="614" y="133" font-size="11.5">barrier flags (resource buf)</text>
+    <rect x="756" y="116" width="190" height="24" rx="4" class="box2"/><text x="851" y="133" font-size="11.5">barrier flags (resource buf)</text>
+    <text x="137" y="156" class="t-muted" font-size="11">reads/writes go over NVLink</text>
+    <text x="374" y="156" class="t-muted" font-size="11">reads/writes go over NVLink</text>
+    <text x="611" y="156" class="t-muted" font-size="11">local HBM</text>
+    <text x="848" y="156" class="t-muted" font-size="11">reads/writes go over NVLink</text>
+  </g>
+  <g font-size="12" class="t-mono">
+    <text x="45" y="190" class="t-mono">0x7F00_0060_0000</text>
+    <text x="282" y="190" class="t-mono">0x7F14_0060_0000</text>
+    <text x="519" y="190" class="t-mono">0x7F28_0060_0000</text>
+    <text x="756" y="190" class="t-mono">0x7F3C_0060_0000</text>
+  </g>
+  <text x="20" y="214" font-size="12.5" class="t-muted">↑ address of each GPU's sendbuf as seen by rank 2. Consecutive slots are exactly 80 GiB = 0x14_0000_0000 apart.</text>
+  <text x="20" y="240" font-size="12.5">Base of the range (0x7F00_0000_0000) and sendbuf's offset in the slot (0x60_0000) are example values: NCCL chooses them at run time.</text>
+  <text x="20" y="262" font-size="12.5">Each process has its own base address, but the layout inside the range is identical on all 4 GPUs.</text>
+</svg>
+<figcaption>Figure 7. After <code>ncclCommWindowRegister</code>, finding GPU p's copy of a buffer is "my address of GPU 0's copy + p × 80 GiB".</figcaption>
+</figure>
+
+<h4>(b) The window structs <code>sendwin</code> and <code>recvwin</code></h4>
+<p><code>sendwin</code> points to this struct in GPU memory (only the fields this kernel uses are shown; definition at <span class="src">impl/core__types.h:30</span>). The values are rank 2's, with the example addresses from the figure:</p>
+<pre><code>sendwin-&gt;lsaFlatBase = 0x7F00_0060_0000   <span class="c">// where GPU 0's sendbuf appears in MY address range</span>
+sendwin-&gt;stride4G    = 20                  <span class="c">// distance between slots, in units of 4 GiB (20 × 4 GiB = 80 GiB)</span>
+sendwin-&gt;lsaRank     = 2                   <span class="c">// my own slot number</span></code></pre>
+
+<h4>(c) The barrier flags</h4>
+<p>On the host, the example sets <code>reqs.lsaBarrierCount = 16</code> before calling <code>ncclDevCommCreate</code>. That asks NCCL for 16 independent barriers among the LSA GPUs, one per block. NCCL then allocates, on every GPU, an array of <code>(3·16 + 16·4)</code> = 112 <code>uint32_t</code> = 448 bytes and fills it with zeros (formula at <span class="src">nccl_device/lsa_barrier.cc:14</span>). The array lives inside a larger allocation called the <em>resource buffer</em>, which NCCL maps into the same 4-slot address range as your buffers. So GPU 2 can write into GPU 0's flag array with a normal store.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Array index</th><th>What it holds</th><th>Used in this example?</th></tr></thead>
+<tbody>
+<tr><td>0 … 15</td><td>saved epoch of barrier 0…15, multicast variant</td><td>no</td></tr>
+<tr><td>16 … 31</td><td><strong>saved epoch</strong> of barrier <em>b</em> at <code>[16 + b]</code>: how many times block <em>b</em> has passed its barrier in earlier kernels</td><td>yes</td></tr>
+<tr><td>32 … 47</td><td>multicast inbox</td><td>no</td></tr>
+<tr><td>48 … 111</td><td><strong>inbox</strong>: <code>[48 + b·4 + s]</code> is written <em>only</em> by GPU <em>s</em>, to say "my block <em>b</em> has reached round <em>n</em>"</td><td>yes</td></tr>
+</tbody></table></div>
+<p><code>devComm.lsaBarrier</code> is the receipt for that allocation, two numbers <code>{bufHandle, nBarriers}</code> (<span class="src">impl/lsa_barrier__types.h:13</span>). <code>nBarriers</code> is 16. <code>bufHandle</code> is where the array starts inside the resource buffer, in units of 128 bytes. To find the array on GPU <em>p</em>, the kernel uses the same slot arithmetic as for windows: <code>resourceBufferOfGPU0 + p × 80 GiB + bufHandle × 128</code>. The resource buffer's address and slot stride are copied into <code>devComm.resourceWindow_inlined</code>, so this needs no extra lookup.</p>
+
+<h3 id="ex1-lines">5.3 The kernel, line by line</h3>
+<p>Each step shows the original line, then <strong>the code that effectively runs</strong>. This is NCCL's inline functions expanded by hand, with names simplified and the multicast branches removed because this example doesn't use them. Function names and source lines are listed after each step for readers who want to check.</p>
+<p>The shorthand used in the expanded code:</p>
+<pre><code><span class="c">// bar(p) = address of the 112-entry flag array on GPU p, as seen by this GPU</span>
+uint32_t* bar(<span class="k">int</span> p) {
+  <span class="k">char</span>* gpu0 = devComm.resourceWindow_inlined.lsaFlatBase;      <span class="c">// GPU 0's resource buffer in my range</span>
+  <span class="k">return</span> (uint32_t*)(gpu0 + p * (devComm.resourceWindow_inlined.stride4G * 4GiB)
+                       + devComm.lsaBarrier.bufHandle * 128);
+}</code></pre>
+
+<h4>Step 1 · line 68: create the barrier object</h4>
+<pre><code>ncclLsaBarrierSession&lt;ncclCoopCta&gt; bar { ncclCoopCta(), devComm, ncclTeamTagLsa(), blockIdx.x };</code></pre>
+<p>What the arguments mean:</p>
+<ul>
+<li><code>ncclCoopCta()</code>: "the whole block (all 512 threads) calls this together". Inside NCCL this choice only decides two things: <code>sync()</code> becomes <code>__syncthreads()</code>, and threads are numbered by <code>threadIdx.x</code>.</li>
+<li><code>ncclTeamTagLsa()</code>: an empty marker type. Passing it picks the constructor that means "synchronise with all GPUs in my LSA group, using the flag array created for <code>lsaBarrierCount</code>". That constructor just calls the general one with those two things filled in (<span class="src">lsa_barrier__funcs.h:33</span>):
+  <ul>
+  <li>The group is <code>ncclTeamLsa(devComm)</code>, which returns the three numbers <code>{nRanks = devComm.lsaSize = 4, rank = devComm.lsaRank = 2, stride = 1}</code> (<span class="src">core__funcs.h:26</span>).</li>
+  <li>The flag array is <code>devComm.lsaBarrier</code>, the <code>{bufHandle, nBarriers = 16}</code> receipt from 5.2(c).</li>
+  </ul></li>
+<li><code>blockIdx.x</code>: which of the 16 barriers this block uses. Block 5 on every GPU uses barrier 5, so block 5 only ever waits for the four "block 5"s.</li>
+</ul>
+<p>What runs:</p>
+<pre><code><span class="k">const int</span> R  = devComm.lsaSize;        <span class="c">// 4 GPUs in the group</span>
+<span class="k">const int</span> me = devComm.lsaRank;        <span class="c">// 2</span>
+<span class="k">const int</span> b  = blockIdx.x;             <span class="c">// 5</span>
+uint32_t epoch = bar(me)[16 + b];      <span class="c">// how many times barrier 5 was passed before. 0 on the first launch</span></code></pre>
+<p>Nothing is communicated yet. The object just remembers R, me, b and <code>epoch</code>, the last in a register.</p>
+
+<h4>Step 2 · line 69: first barrier, "is everyone here?"</h4>
+<pre><code>bar.sync(ncclCoopCta(), cuda::memory_order_acquire);</code></pre>
+<p><code>sync</code> = <code>arrive</code> (tell the others "I'm here") followed by <code>wait</code> (wait until all others said so). What runs:</p>
+<pre><code>__syncthreads();                                   <span class="c">// all 512 threads of the block got here</span>
+
+<span class="c">// ---- arrive: threads 0, 1, 2 each notify one other GPU ----</span>
+<span class="k">if</span> (threadIdx.x &lt; R - 1) {
+  <span class="k">int</span> peer = threadIdx.x + (me &lt;= threadIdx.x ? 1 : 0);   <span class="c">// skip myself: threads 0,1,2 → GPUs 0,1,3</span>
+  store_relaxed(&amp;bar(peer)[48 + b*R + me], epoch + 1);   <span class="c">// write "1" into peer's inbox slot for (block 5, sender 2)</span>
+}
+
+<span class="c">// ---- wait: threads 0, 1, 2 each wait for one other GPU ----</span>
+<span class="k">if</span> (threadIdx.x &lt; R - 1) {
+  <span class="k">int</span> peer = threadIdx.x + (me &lt;= threadIdx.x ? 1 : 0);
+  <span class="k">while</span> (load_acquire(&amp;bar(me)[48 + b*R + peer]) &lt; epoch + 1) {
+    <span class="c">// spin. Every 10,000 polls, also check devComm.abortFlag (null for user comms)</span>
+  }
+}
+epoch = epoch + 1;                                 <span class="c">// now 1</span>
+__syncthreads();                                   <span class="c">// the other 509 threads wait here for threads 0-2</span></code></pre>
+
+<figure>
+<svg viewBox="0 0 1000 330" role="img" aria-label="Barrier 5 flag slots on the four GPUs">
+  <text x="20" y="24" font-weight="700" font-size="14">Barrier 5, first launch: the 4 inbox slots [68], [69], [70], [71] on each GPU</text>
+  <text x="20" y="44" font-size="12.5" class="t-muted">Slot 48 + 5·4 + s = 68 + s belongs to sender s. Each GPU writes "1" into its own slot on the 3 other GPUs.</text>
+  <g font-size="12.5" text-anchor="middle">
+    <!-- GPU boxes -->
+    <rect x="20" y="70" width="220" height="120" rx="10" class="box"/>
+    <rect x="270" y="70" width="220" height="120" rx="10" class="box"/>
+    <rect x="520" y="70" width="220" height="120" rx="10" class="b-acc"/>
+    <rect x="770" y="70" width="220" height="120" rx="10" class="box"/>
+    <text x="130" y="92" font-weight="700">GPU 0 flags</text>
+    <text x="380" y="92" font-weight="700">GPU 1 flags</text>
+    <text x="630" y="92" font-weight="700">GPU 2 flags (me)</text>
+    <text x="880" y="92" font-weight="700">GPU 3 flags</text>
+    <!-- slots: GPU0 -->
+    <rect x="35" y="108" width="45" height="34" class="box2"/><text x="57" y="130">–</text>
+    <rect x="82" y="108" width="45" height="34" class="b-lsa"/><text x="104" y="130">1</text>
+    <rect x="129" y="108" width="45" height="34" class="b-gin"/><text x="151" y="130">1</text>
+    <rect x="176" y="108" width="45" height="34" class="b-lsa"/><text x="198" y="130">1</text>
+    <!-- GPU1 -->
+    <rect x="285" y="108" width="45" height="34" class="b-lsa"/><text x="307" y="130">1</text>
+    <rect x="332" y="108" width="45" height="34" class="box2"/><text x="354" y="130">–</text>
+    <rect x="379" y="108" width="45" height="34" class="b-gin"/><text x="401" y="130">1</text>
+    <rect x="426" y="108" width="45" height="34" class="b-lsa"/><text x="448" y="130">1</text>
+    <!-- GPU2 -->
+    <rect x="535" y="108" width="45" height="34" class="b-lsa"/><text x="557" y="130">1</text>
+    <rect x="582" y="108" width="45" height="34" class="b-lsa"/><text x="604" y="130">1</text>
+    <rect x="629" y="108" width="45" height="34" class="box2"/><text x="651" y="130">–</text>
+    <rect x="676" y="108" width="45" height="34" class="b-lsa"/><text x="698" y="130">1</text>
+    <!-- GPU3 -->
+    <rect x="785" y="108" width="45" height="34" class="b-lsa"/><text x="807" y="130">1</text>
+    <rect x="832" y="108" width="45" height="34" class="b-lsa"/><text x="854" y="130">1</text>
+    <rect x="879" y="108" width="45" height="34" class="b-gin"/><text x="901" y="130">1</text>
+    <rect x="926" y="108" width="45" height="34" class="box2"/><text x="948" y="130">–</text>
+    <g font-size="10.5" class="t-muted">
+      <text x="57" y="158">[68]</text><text x="104" y="158">[69]</text><text x="151" y="158">[70]</text><text x="198" y="158">[71]</text>
+      <text x="307" y="158">[68]</text><text x="354" y="158">[69]</text><text x="401" y="158">[70]</text><text x="448" y="158">[71]</text>
+      <text x="557" y="158">[68]</text><text x="604" y="158">[69]</text><text x="651" y="158">[70]</text><text x="698" y="158">[71]</text>
+      <text x="807" y="158">[68]</text><text x="854" y="158">[69]</text><text x="901" y="158">[70]</text><text x="948" y="158">[71]</text>
+    </g>
+    <text x="130" y="180" font-size="11" class="t-muted">from GPU: 0  1  2  3</text>
+    <text x="380" y="180" font-size="11" class="t-muted">from GPU: 0  1  2  3</text>
+    <text x="630" y="180" font-size="11" class="t-muted">from GPU: 0  1  2  3</text>
+    <text x="880" y="180" font-size="11" class="t-muted">from GPU: 0  1  2  3</text>
+  </g>
+  <!-- arrows from GPU2 thread to slot [70] on others -->
+  <path d="M600 200 C 520 260, 230 260, 151 146" class="ln-gin"/>
+  <path d="M630 200 C 600 250, 430 250, 401 146" class="ln-gin"/>
+  <path d="M660 200 C 700 250, 880 250, 901 146" class="ln-gin"/>
+  <g font-size="12.5">
+    <text x="20" y="290">Orange: the three stores made by rank 2's threads 0, 1, 2 during <tspan class="t-mono">arrive</tspan> (into slot [70] on GPUs 0, 1, 3).</text>
+    <text x="20" y="312">Green: written by the other GPUs. Rank 2 waits until its own [68], [69], [71] reach 1, i.e. GPUs 0, 1, 3 have arrived.</text>
+  </g>
+</svg>
+<figcaption>Figure 8. Each sender owns its own slot on each receiver, so there are no atomic adds and no two GPUs ever write the same word. "–" is a GPU's slot for itself, which is never used.</figcaption>
+</figure>
+
+<p><strong>Why this first barrier is needed.</strong> Step 4 reads the other GPUs' <code>sendbuf</code>. Each rank fills its <code>sendbuf</code> with <code>cudaMemcpy</code> before launching the kernel. When GPU 0's block 5 has stored its flag, GPU 0's kernel is running, so the copy GPU 0 issued before the launch has finished. The barrier also stops a fast GPU from writing into a slow GPU's <code>recvbuf</code> while that GPU might still be using it for something earlier.</p>
+<p><strong>The <code>memory_order_acquire</code> argument</strong> only changes the wait: the flag loads are acquire loads, so data read after the loop is not read early. The store side gets <code>releaseOrderOf(acquire)</code> = relaxed, so no fence is emitted before the flag stores (<span class="src">utility.h:328</span>).</p>
+<p class="note" style="color:var(--muted);font-size:14px">Code: <span class="src">lsa_barrier__funcs.h:165</span> sync → <span class="src">:55</span> arrive → <span class="src">lsa_barrier__types.h:42</span> ucInbox → <span class="src">core__funcs.h:274</span> ncclGetResourceBufferPeerPointer; wait → <span class="src">lsa_barrier__funcs.h:85</span> waitInternal. The real wait compares <code>got - (epoch+1) &lt;= 0x7FFFFFFF</code> rather than <code>&lt;</code>, so it stays correct when the 32-bit counter wraps around.</p>
+
+<h4>Step 3 · lines 76–77: decide which elements this thread handles</h4>
+<pre><code><span class="k">const int</span> globalTid      = threadIdx.x + blockDim.x * (rank + blockIdx.x * nRanks);
+<span class="k">const int</span> globalNthreads = blockDim.x * gridDim.x * nRanks;</code></pre>
+<p>Plain arithmetic, no NCCL calls. All threads on all 4 GPUs together form one big pool of 512 × 16 × 4 = 32,768 threads, and each array element is handled by exactly one of them. For our thread: <code>globalTid = 7 + 512 × (2 + 5 × 4) = 11,271</code>, and it handles elements 11,271, 44,039, 76,807, … (adding 32,768 each time). That is 32 elements in total.</p>
+<p>Put differently: the array is cut into 2,048 chunks of 512 elements, and chunk <em>k</em> goes to rank <code>k % 4</code>, block <code>(k / 4) % 16</code>:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>chunk</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>…</th><th>22</th><th>…</th><th>63</th><th>64</th><th>…</th></tr></thead>
+<tbody><tr><td>handled by (rank, block)</td><td>0,0</td><td>1,0</td><td>2,0</td><td>3,0</td><td>0,1</td><td>…</td><td><strong>2,5</strong></td><td>…</td><td>3,15</td><td>0,0</td><td>…</td></tr></tbody>
+</table></div>
+
+<h4>Step 4 · lines 83–87: read the 4 inputs and add them</h4>
+<pre><code><span class="k">for</span> (<span class="k">int</span> peer=0; peer&lt;nRanks; peer++) {
+  <span class="k">float</span>* sendPtr = (<span class="k">float</span>*)ncclGetLsaPointer(sendwin, sendoffset, peer);
+  v += sendPtr[offset];
+}</code></pre>
+<p>What <code>ncclGetLsaPointer</code> runs (<span class="src">core__funcs.h:146</span>):</p>
+<pre><code><span class="k">char</span>* base = sendwin-&gt;lsaFlatBase;                      <span class="c">// 0x7F00_0060_0000 (GPU 0's sendbuf)</span>
+uint32_t s = sendwin-&gt;stride4G;                         <span class="c">// 20</span>
+<span class="k">return</span> base + (uint64_t)(peer * s) * 4GiB + sendoffset;   <span class="c">// sendoffset is 0 here</span></code></pre>
+<p>(The source writes the multiplication by 4 GiB as <code>add4G(base, peer*s)</code>, which adds <code>peer*s</code> to the upper 32 bits of the address; <span class="src">utility.h:171</span>.) For our thread at <code>offset = 11,271</code>:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>peer</th><th>sendPtr</th><th>address of <code>sendPtr[11271]</code></th><th>physically on</th><th>value read</th></tr></thead>
+<tbody>
+<tr><td>0</td><td class="mono">0x7F00_0060_0000</td><td class="mono">0x7F00_0060_B01C</td><td>GPU 0, over NVLink</td><td>0</td></tr>
+<tr><td>1</td><td class="mono">0x7F14_0060_0000</td><td class="mono">0x7F14_0060_B01C</td><td>GPU 1, over NVLink</td><td>1</td></tr>
+<tr><td>2</td><td class="mono">0x7F28_0060_0000</td><td class="mono">0x7F28_0060_B01C</td><td>GPU 2 (local)</td><td>2</td></tr>
+<tr><td>3</td><td class="mono">0x7F3C_0060_0000</td><td class="mono">0x7F3C_0060_B01C</td><td>GPU 3, over NVLink</td><td>3</td></tr>
+</tbody></table></div>
+<p>(11,271 × 4 bytes = 0xB01C.) After the loop, <code>v = 6</code>. These are ordinary <code>ld.global</code> instructions. NCCL is not involved in the transfer: the GPU's memory system sends the request over NVLink because of how the page is mapped.</p>
+<p>Note that <code>ncclGetLsaPointer</code> takes an <em>LSA</em> index (0…lsaSize−1), not a world rank. The kernel can pass <code>peer</code> from <code>0…nRanks−1</code> only because this example has a single LSA group, so the two numberings coincide.</p>
+
+<h4>Step 5 · lines 89–92: write the sum to all 4 receive buffers</h4>
+<pre><code><span class="k">for</span> (<span class="k">int</span> peer=0; peer&lt;nRanks; peer++) {
+  <span class="k">float</span>* recvPtr = (<span class="k">float</span>*)ncclGetLsaPointer(recvwin, recvoffset, peer);
+  recvPtr[offset] = v;
+}</code></pre>
+<p>The same address arithmetic, using <code>recvwin</code>. Our thread stores 6 into element 11,271 of the <code>recvbuf</code> on GPUs 0, 1, 2 and 3: three remote NVLink stores and one local store. No other thread anywhere writes element 11,271, so there is no conflict. After all 32,768 threads finish steps 4–5, each element of each <code>recvbuf</code> has been written exactly once.</p>
+
+<h4>Step 6 · line 97: second barrier, "everyone has finished writing"</h4>
+<pre><code>bar.sync(ncclCoopCta(), cuda::memory_order_release);</code></pre>
+<p>The same code as step 2, with two differences:</p>
+<pre><code>__syncthreads();
+cuda::atomic_thread_fence(cuda::memory_order_release, cuda::thread_scope_system);   <span class="c">// NEW: added because of "release"</span>
+<span class="k">if</span> (threadIdx.x &lt; R - 1) { <span class="c">/* store epoch+1 = 2 into bar(peer)[48 + b*R + me] */</span> }
+<span class="k">if</span> (threadIdx.x &lt; R - 1) { <span class="c">/* spin until bar(me)[48 + b*R + peer] &gt;= 2, using relaxed loads */</span> }
+epoch = epoch + 1;                                 <span class="c">// now 2</span>
+__syncthreads();</code></pre>
+<p>The fence makes the GPU finish pushing out this block's earlier stores (the 4 stores per element from step 5) before the flag stores that follow. So when GPU 0 sees "2" in its slot from GPU 2, all of GPU 2 block 5's writes into GPU 0's <code>recvbuf</code> have already landed. Once a block passes this barrier, the matching block on every GPU has finished its part, and every element of this GPU's <code>recvbuf</code> is final. The spin loads are relaxed (<code>acquireOrderOf(release)</code> = relaxed, <span class="src">utility.h:323</span>), because nothing in this kernel reads <code>recvbuf</code> afterwards. The host reads it after the kernel ends, and kernel completion already makes all writes visible.</p>
+
+<h4>Step 7 · line 98: closing brace, the destructor saves the epoch</h4>
+<pre><code><span class="k">if</span> (threadIdx.x == 0) bar(me)[16 + b] = epoch;   <span class="c">// store 2</span>
+__syncthreads();</code></pre>
+<p>Flags are never reset to zero. Next time this kernel runs, step 1 reads 2 and the two barriers use flag values 3 and 4. Because values only increase, a flag left over from an earlier launch can never satisfy a wait in a later one. This is also why the barrier object cannot be copied (<span class="src">lsa_barrier.h:28</span>): two copies would each write their own epoch back (<span class="src">lsa_barrier__funcs.h:39</span>).</p>
+
+<h3 id="ex1-summary">5.4 The whole kernel at a glance</h3>
+<figure>
+<svg viewBox="0 0 1000 250" role="img" aria-label="Timeline of the AllReduce kernel on four GPUs">
+  <g font-size="12.5" text-anchor="middle">
+    <text x="60" y="58" text-anchor="start" font-weight="600">GPU 0</text>
+    <text x="60" y="108" text-anchor="start" font-weight="600">GPU 1</text>
+    <text x="60" y="158" text-anchor="start" font-weight="600">GPU 2</text>
+    <text x="60" y="208" text-anchor="start" font-weight="600">GPU 3</text>
+    <g>
+      <rect x="130" y="38" width="110" height="34" rx="6" class="box2"/><text x="185" y="60">read epoch</text>
+      <rect x="250" y="38" width="150" height="34" rx="6" class="b-acc"/><text x="325" y="60">barrier: flags = 1</text>
+      <rect x="410" y="38" width="260" height="34" rx="6" class="b-lsa"/><text x="540" y="60">load 4 × 32 values, store 4 × 32 sums</text>
+      <rect x="680" y="38" width="190" height="34" rx="6" class="b-acc"/><text x="775" y="60">fence + barrier: flags = 2</text>
+      <rect x="880" y="38" width="100" height="34" rx="6" class="box2"/><text x="930" y="60">save epoch</text>
+    </g>
+    <g transform="translate(0,50)">
+      <rect x="130" y="38" width="110" height="34" rx="6" class="box2"/><text x="185" y="60">read epoch</text>
+      <rect x="250" y="38" width="150" height="34" rx="6" class="b-acc"/><text x="325" y="60">barrier: flags = 1</text>
+      <rect x="410" y="38" width="260" height="34" rx="6" class="b-lsa"/><text x="540" y="60">load 4 × 32 values, store 4 × 32 sums</text>
+      <rect x="680" y="38" width="190" height="34" rx="6" class="b-acc"/><text x="775" y="60">fence + barrier: flags = 2</text>
+      <rect x="880" y="38" width="100" height="34" rx="6" class="box2"/><text x="930" y="60">save epoch</text>
+    </g>
+    <g transform="translate(0,100)">
+      <rect x="130" y="38" width="110" height="34" rx="6" class="box2"/><text x="185" y="60">read epoch</text>
+      <rect x="250" y="38" width="150" height="34" rx="6" class="b-acc"/><text x="325" y="60">barrier: flags = 1</text>
+      <rect x="410" y="38" width="260" height="34" rx="6" class="b-lsa"/><text x="540" y="60">load 4 × 32 values, store 4 × 32 sums</text>
+      <rect x="680" y="38" width="190" height="34" rx="6" class="b-acc"/><text x="775" y="60">fence + barrier: flags = 2</text>
+      <rect x="880" y="38" width="100" height="34" rx="6" class="box2"/><text x="930" y="60">save epoch</text>
+    </g>
+    <g transform="translate(0,150)">
+      <rect x="130" y="38" width="110" height="34" rx="6" class="box2"/><text x="185" y="60">read epoch</text>
+      <rect x="250" y="38" width="150" height="34" rx="6" class="b-acc"/><text x="325" y="60">barrier: flags = 1</text>
+      <rect x="410" y="38" width="260" height="34" rx="6" class="b-lsa"/><text x="540" y="60">load 4 × 32 values, store 4 × 32 sums</text>
+      <rect x="680" y="38" width="190" height="34" rx="6" class="b-acc"/><text x="775" y="60">fence + barrier: flags = 2</text>
+      <rect x="880" y="38" width="100" height="34" rx="6" class="box2"/><text x="930" y="60">save epoch</text>
+    </g>
+  </g>
+  <path d="M400 30 V235" class="ln-acc dash"/><path d="M870 30 V235" class="ln-acc dash"/>
+  <text x="400" y="24" text-anchor="middle" font-size="12" class="t-acc">no GPU passes until all 4 arrive</text>
+  <text x="870" y="24" text-anchor="middle" font-size="12" class="t-acc">all recvbufs complete</text>
+</svg>
+<figcaption>Figure 9. One block (block 5) on each GPU, first launch. The 16 blocks on a GPU run this independently, each with its own barrier and its own 512-element chunks. Per element, the work is 4 loads plus 4 stores done by one thread somewhere in the system.</figcaption>
+</figure>
+
+<div class="callout warn"><b>Why the block count must not exceed <code>lsaBarrierCount</code></b>Block <code>b</code> uses saved-epoch slot <code>16 + b</code> and inbox slots <code>48 + 4b … 51 + 4b</code>. With 17 blocks but only 16 barriers, block 16 would read and write its epoch in slot 32 (the multicast inbox), and its inbox slots 112–115 lie past the end of the 112-entry array, in memory that belongs to some other resource. Launching fewer blocks than barriers is fine: the unused barriers stay idle.</div>
+</section>
+
+
+<!-- ============================================================= -->
+<section id="ex2">
+<h2><span class="num">6</span>Example 2 · AlltoAll over pure GIN (network only)</h2>
+<p><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/examples/06_device_api/02_alltoall_gin/c/main.cu" target="_blank" rel="noopener" class="src">06_device_api/02_alltoall_gin/c/main.cu</a>. Every rank sends <code>count</code> floats to every rank (itself included) with one-sided RDMA puts issued from GPU threads. Host requirements: <code>worldGinBarrierCount = 16</code>, <code>ginSignalCount = 16</code>, <code>ginConnectionType = NCCL_GIN_CONNECTION_FULL</code>.</p>
+
+<pre><code><span class="n">75</span><span class="k">template</span> &lt;<span class="k">typename</span> T&gt;
+<span class="n">76</span><span class="k">__global__ void</span> <span class="f">PureGinAlltoAllKernel</span>(ncclWindow_t sendwin, size_t sendoffset,
+<span class="n">77</span>                                      ncclWindow_t recvwin, size_t recvoffset,
+<span class="n">78</span>                                      size_t count, <span class="k">struct</span> ncclDevComm devComm) {
+<span class="n">79</span>  <span class="k">int</span> ginContext = 0;
+<span class="n">80</span>  <span class="k">unsigned int</span> signalIndex = blockIdx.x;
+<span class="hl"><span class="n">81</span>  ncclGin gin { devComm, ginContext };                                   <span class="co">1</span></span>
+<span class="hl"><span class="n">82</span>  uint64_t signalValue = gin.<span class="f">readSignal</span>(signalIndex);                  <span class="co">2</span></span>
+<span class="n">84</span>  ncclGinBarrierSession&lt;ncclCoopCta&gt; bar { ncclCoopCta(), gin, ncclTeamTagWorld(), blockIdx.x };
+<span class="hl"><span class="n">85</span>  bar.<span class="f">sync</span>(ncclCoopCta(), cuda::memory_order_acquire, ncclGinFenceLevel::None);   <span class="co">3</span></span>
+<span class="n">87</span>  <span class="k">int</span> tid = threadIdx.x + blockIdx.x * blockDim.x;
+<span class="n">88</span>  <span class="k">int</span> nthreads = blockDim.x * gridDim.x;
+<span class="n">90</span>  <span class="k">const</span> size_t size = count * <span class="k">sizeof</span>(T);
+<span class="n">91</span>  <span class="k">for</span> (<span class="k">int</span> r = tid; r &lt; devComm.nRanks; r += nthreads) {
+<span class="hl"><span class="n">92</span>    gin.<span class="f">put</span>(ncclTeamWorld(devComm), r,                                    <span class="co">4</span></span>
+<span class="n">93</span>        recvwin, recvoffset + devComm.rank * size,     <span class="c">// dst: my slot in r's recvbuf</span>
+<span class="n">94</span>        sendwin, sendoffset + r * size,                <span class="c">// src: r's slot in my sendbuf</span>
+<span class="n">95</span>        size, ncclGin_WeakSignalInc{signalIndex});     <span class="c">// +1 on r's signal[signalIndex] when landed</span>
+<span class="n">96</span>  }
+<span class="n">99</span>  <span class="k">int</span> receivingCta = (devComm.rank % nthreads) / blockDim.x;
+<span class="n">100</span>  <span class="k">if</span> (blockIdx.x == receivingCta)
+<span class="hl"><span class="n">101</span>    gin.<span class="f">waitSignal</span>(ncclCoopCta(), signalIndex, signalValue + devComm.nRanks);  <span class="co">5</span></span>
+<span class="hl"><span class="n">103</span>  gin.<span class="f">flush</span>(ncclCoopCta());                                              <span class="co">6</span></span>
+<span class="n">104</span>  bar.<span class="f">sync</span>(ncclCoopCta(), cuda::memory_order_release, ncclGinFenceLevel::None);
+<span class="n">105</span>}</code></pre>
+
+<ol class="steps">
+<li><strong>Bind a GIN context.</strong> <code>ncclGin</code> loads the backend type, the backend GPU-context handle and the signal-shadow base for context 0 into registers.</li>
+<li><strong>Snapshot the signal.</strong> Signals are monotonically increasing 64-bit counters that are never implicitly reset. The kernel therefore records the current value and waits for <em>baseline + expected</em>, which keeps it re-launchable.</li>
+<li><strong>Entry barrier</strong> over the world team, with no fence: pure synchronisation so that no rank writes into a peer's <code>recvbuf</code> before that peer is ready.</li>
+<li><strong>One put per destination</strong>, issued by the thread whose global id equals the destination rank. The put carries a <em>weak signal increment</em>: when this put's data has landed at rank <code>r</code>, the NIC atomically adds 1 to <code>r</code>'s signal <code>signalIndex</code>.</li>
+<li><strong>Wait for arrivals.</strong> Explained in the next figure. Exactly one CTA per rank receives all nRanks increments.</li>
+<li><strong>Flush</strong> waits until this context's outgoing puts have been consumed locally, so <code>sendbuf</code> is reusable. It does not mean they are visible remotely; the receiver's signal guarantees that.</li>
+</ol>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Which CTA receives the signals">
+  <text x="20" y="24" font-weight="700" font-size="14">Why only receivingCta waits (16 CTAs × 512 threads, nRanks = 4)</text>
+  <g font-size="13" text-anchor="middle">
+    <rect x="30" y="50" width="250" height="200" rx="12" class="box2"/>
+    <text x="155" y="74" font-weight="700">sender rank s (any s)</text>
+    <rect x="50" y="90" width="210" height="34" rx="6" class="box"/><text x="155" y="112" class="t-mono" font-size="12">tid 0 (CTA 0) → put to rank 0</text>
+    <rect x="50" y="130" width="210" height="34" rx="6" class="box"/><text x="155" y="152" class="t-mono" font-size="12">tid 1 (CTA 0) → put to rank 1</text>
+    <rect x="50" y="170" width="210" height="34" rx="6" class="b-gin"/><text x="155" y="192" class="t-mono" font-size="12">tid 2 (CTA 0) → put to rank 2</text>
+    <rect x="50" y="210" width="210" height="34" rx="6" class="box"/><text x="155" y="232" class="t-mono" font-size="12">tid 3 (CTA 0) → put to rank 3</text>
+    <rect x="640" y="70" width="330" height="170" rx="12" class="b-gin"/>
+    <text x="805" y="96" font-weight="700">receiver rank 2</text>
+    <text x="805" y="124" class="t-mono" font-size="12">signal[0] += 1 from ranks 0,1,2,3</text>
+    <text x="805" y="150" class="t-mono" font-size="12">receivingCta = (2 % 8192) / 512 = 0</text>
+    <text x="805" y="176" class="t-mono" font-size="12">CTA 0: waitSignal(0, base + 4)</text>
+    <text x="805" y="204" class="t-muted" font-size="12">signal id = sender's blockIdx.x, which is the</text>
+    <text x="805" y="222" class="t-muted" font-size="12">same for every sender (thread id = dest rank)</text>
+  </g>
+  <path d="M260 187 L630 150" class="ln-gin"/><polygon points="630,145 640,149 631,155" class="f-gin"/>
+  <text x="445" y="155" text-anchor="middle" font-size="12" class="t-gin">RDMA write + remote atomic add</text>
+  <text x="445" y="285" text-anchor="middle" font-size="12" class="t-muted">With nRanks ≤ 512 all puts come from CTA 0 and only CTA 0 on each rank waits. Other CTAs only flush and take the barriers.</text>
+</svg>
+<figcaption>Figure 10. Signal-based completion. The receiver needs no message parsing: one 64-bit counter reaching <code>base + nRanks</code> proves that all nRanks payloads have landed (each weak signal covers its own put).</figcaption>
+</figure>
+
+<h3 id="ex2-put">6.1 Call chain: <code>ncclGin</code> construction and <code>put</code></h3>
+<div class="chain">
+<ul>
+<li><span class="fn">ncclGin gin{devComm, ctx}</span><span class="tag dev">device</span> <span class="note">(ncclGin = ncclGin_BackendMask&lt;ALL&gt;, </span><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/gin.h#L127" target="_blank" rel="noopener" class="src">gin.h:127</a><span class="note">)</span>
+  <ul><li><span class="fn">ncclGinInitCommon</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/gin__funcs.h#L113" target="_blank" rel="noopener" class="src">gin__funcs.h:113</a> <span class="note">connectionId = ctx mod ginConnectionCount, contextId = ctx / count; _ginBackend, _ginHandle; _signalShadows = ginSignalShadows + ctx·ginSignalCount</span></li></ul></li>
+<li><span class="fn">gin.put(team, peer, dstWin, dstOff, srcWin, srcOff, bytes, ncclGin_WeakSignalInc{id})</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/gin__funcs.h#L639" target="_blank" rel="noopener" class="src">gin__funcs.h:639</a>
+  <ul>
+  <li><span class="fn">_makeCtx()</span> <span class="src">:159</span> <span class="note">ncclGinCtx {backend, rank, nRanks (divided by connection stride), handle, contextId}</span></li>
+  <li><span class="fn">coop.sync()</span>; <span class="note">only </span><code>coop.thread_rank()==0</code><span class="note"> continues (default coop = ncclCoopThread, so each calling thread posts its own put)</span></li>
+  <li><span class="note">compile-time translation of the action object:</span>
+    <ul>
+    <li><span class="fn">ncclGin_getSignalDescriptor(WeakSignalInc)</span> <span class="src">:270</span> <span class="note">→ {INDEXED, id, isStrong=false}</span></li>
+    <li><span class="fn">ncclGin_getSignalOp</span> → <code>ncclGinSignalInc</code>, <span class="fn">getSignalOpArg</span> → 1; <span class="note">no counter, no descriptor</span></li>
+    </ul></li>
+  <li><span class="fn">teamRankToGinRank(comm, team, peer)</span> <span class="src">:43</span> <span class="note">team → world → divide by ginConnectionStride</span></li>
+  <li><span class="fn">getGinWindow(win, backendIndex, connectionId)</span> <span class="src">:24</span> <span class="note">NIC registration of dst and src; offset = 4096·ginOffset4K + off</span></li>
+  <li><span class="fn">ncclGinCall&lt;ncclGinApi_Put&gt;(ctx, ncclCoopThread(), …)</span> → <span class="fn">ncclGinCallImpl</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/gin/gin_device_common.h#L209" target="_blank" rel="noopener" class="src">gin_device_common.h:209</a>
+    <ul>
+    <li><span class="note">switch on backend (compile-time when the mask has one bit):</span></li>
+    <li><span class="fn">ncclGinApi_Put&lt;GIN_GDAKI&gt;::call</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/gin/gdaki/gin_gdaki.h#L550" target="_blank" rel="noopener" class="src">gin_gdaki.h:550</a> → <span class="fn">putImpl</span> → <span class="fn">putImplMode</span> <span class="src">:52</span>
+      <ul>
+      <li><span class="note">qp = gdaki-&gt;gdqp + peer; raddr/rkey from dst window, laddr/lkey from src window</span></li>
+      <li><span class="note">signal address = signals_table.offset + id, rkey per peer</span></li>
+      <li><span class="fn">doca_gpu_dev_verbs_put_signal&lt;ADD&gt;</span> <span class="src">:104</span> <span class="note">GPU builds RDMA WRITE + ATOMIC FETCH_ADD WQEs and rings the NIC doorbell</span><span class="tag net">nic</span></li>
+      </ul></li>
+    <li><span class="fn">ncclGinApi_Put&lt;GIN_PROXY&gt;::call</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/gin/proxy/gin_proxy.h#L499" target="_blank" rel="noopener" class="src">gin_proxy.h:499</a> → <span class="fn">nccl::gin::proxy::put</span> <span class="src">:250</span>
+      <ul>
+      <li><span class="note">split into DataChunkSize pieces; buildGfd (GPU "function descriptor")</span></li>
+      <li><span class="fn">postGfd</span> <span class="src">:106</span> <span class="note">claim slot via pi.fetch_add, wait for credits (ci), write 16-B vectors with write-through stores</span></li>
+      <li><span class="fn">ncclGinProgress</span> <span class="note">CPU thread polls the queue and calls the net plugin's iput/iputSignal</span><span class="tag cpu">proxy</span></li>
+      </ul></li>
+    <li><span class="note">GPI / EFA-GDA: analogous specialisations in </span><span class="src">gin/gpi/gin_gpi.h</span>, <span class="src">gin/efa_gda/gin_efa_gda.h</span></li>
+    </ul></li>
+  <li><span class="fn">coop.sync()</span></li>
+  </ul></li>
+</ul>
+</div>
+
+<h3 id="ex2-backends">6.2 GIN backend dispatch</h3>
+<figure>
+<svg viewBox="0 0 1000 330" role="img" aria-label="GIN backend dispatch">
+  <rect x="20" y="20" width="250" height="70" rx="10" class="b-acc"/>
+  <text x="145" y="48" text-anchor="middle" font-size="13" class="t-mono">gin.put(…, WeakSignalInc)</text>
+  <text x="145" y="70" text-anchor="middle" font-size="12" class="t-muted">thread_rank 0 of coop</text>
+  <path d="M270 55 L330 55" class="ln-acc"/><polygon points="322,50 330,55 322,60" class="f-acc"/>
+  <rect x="330" y="20" width="260" height="70" rx="10" class="box"/>
+  <text x="460" y="48" text-anchor="middle" font-size="13" class="t-mono">ncclGinCallImpl&lt;ncclGinApi_Put&gt;</text>
+  <text x="460" y="70" text-anchor="middle" font-size="12" class="t-muted">switch (ctx.backend)</text>
+  <path d="M460 90 L170 130" class="ln"/><path d="M460 90 L460 130" class="ln"/><path d="M460 90 L760 130" class="ln"/>
+  <rect x="40" y="130" width="260" height="90" rx="10" class="b-gin"/>
+  <text x="170" y="155" text-anchor="middle" font-weight="700" font-size="13">GDAKI (DOCA GPUNetIO)</text>
+  <text x="170" y="177" text-anchor="middle" font-size="12">GPU writes WQE into QP,</text>
+  <text x="170" y="195" text-anchor="middle" font-size="12">rings doorbell (MMIO)</text>
+  <text x="170" y="213" text-anchor="middle" font-size="11.5" class="t-muted">CPU completely off the path</text>
+  <rect x="330" y="130" width="260" height="90" rx="10" class="b-cft"/>
+  <text x="460" y="155" text-anchor="middle" font-weight="700" font-size="13">PROXY</text>
+  <text x="460" y="177" text-anchor="middle" font-size="12">GPU writes GFD into per-peer</text>
+  <text x="460" y="195" text-anchor="middle" font-size="12">ring; CPU thread forwards</text>
+  <text x="460" y="213" text-anchor="middle" font-size="11.5" class="t-muted">works with any GIN-capable net plugin</text>
+  <rect x="620" y="130" width="300" height="90" rx="10" class="b-gin"/>
+  <text x="770" y="155" text-anchor="middle" font-weight="700" font-size="13">GPI / EFA-GDA</text>
+  <text x="770" y="177" text-anchor="middle" font-size="12">vendor device-side verbs</text>
+  <text x="770" y="195" text-anchor="middle" font-size="12">(same ncclGinApi_* contract)</text>
+  <path d="M170 220 L170 260 L760 260" class="ln-gin"/><path d="M460 220 L460 260" class="ln-cft"/><path d="M770 220 L770 260" class="ln-gin"/>
+  <rect x="300" y="265" width="400" height="50" rx="10" class="box2"/>
+  <text x="500" y="287" text-anchor="middle" font-size="13" font-weight="600">Remote NIC: RDMA WRITE payload, then ATOMIC ADD on signal</text>
+  <text x="500" y="305" text-anchor="middle" font-size="12" class="t-muted">receiver's GPU polls signal memory (waitSignal)</text>
+</svg>
+<figcaption>Figure 11. Backends implement a fixed set of <code>ncclGinApi_*</code> templates (Put, PutValue, Get, Flush, FlushAsync, Wait, GetSignalPtr, GetCounterPtr, ResetSignal/Counter, …), declared in <span class="src">gin_device_common.h:113-205</span>. Only backends compiled in (<code>NCCL_GIN_*_ENABLE</code>) appear in the switch. <code>ncclGin_BackendOne&lt;T&gt;</code> lets a kernel pin one backend and remove the switch entirely.</figcaption>
+</figure>
+
+<h3 id="ex2-sig">6.3 Call chain: signals and flush</h3>
+<div class="chain">
+<ul>
+<li><span class="fn">gin.readSignal(id, bits=64)</span><span class="tag dev">device</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/gin__funcs.h#L1130" target="_blank" rel="noopener" class="src">gin__funcs.h:1130</a>
+  <ul><li><span class="fn">ncclGinCall&lt;ncclGinApi_GetSignalPtr&gt;</span> <span class="note">→ {ptr, offset}: signals_table.buffer + id (GDAKI) or proxyCtx-&gt;signals + id (proxy)</span></li>
+  <li><span class="note">atomic load, subtract backend offset, mask to </span><code>bits</code></li></ul></li>
+<li><span class="fn">gin.waitSignal(coop, id, least)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/gin__funcs.h#L1373" target="_blank" rel="noopener" class="src">gin__funcs.h:1373</a>
+  <ul><li><span class="fn">coop.sync()</span>; thread 0: <span class="fn">GetSignalPtr</span> → <span class="fn">waitRollingLessEq</span> <span class="src">:85</span> <span class="note">spin with acquire loads until least ≤ value (wrap-aware), with abort-flag polling</span>; <span class="fn">coop.sync()</span></li></ul></li>
+<li><span class="fn">gin.flush(coop, order)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/gin__funcs.h#L977" target="_blank" rel="noopener" class="src">gin__funcs.h:977</a>
+  <ul><li><span class="fn">ncclGinCall&lt;ncclGinApi_Flush&gt;</span> <span class="note">GDAKI: coop threads stride over peers, and each posts a flush request on that peer's QP (flushAsyncImpl) and waits for it (waitImpl), followed by a system-scope fence. Proxy: for each peer queue, wait until the GFD at the current producer index has been completed by the CPU proxy</span></li></ul></li>
+</ul>
+</div>
+<div class="callout gin"><b>Weak vs strong signals</b>A <em>weak</em> signal (<code>ncclGin_WeakSignalInc</code>) only promises that its own bundled put has landed. A <em>strong</em> signal promises that this put <strong>and every earlier put on the same context to the same peer</strong> have landed, which costs a NIC fence on some backends. The deprecated <code>ncclGin_SignalInc</code> chooses based on <code>devComm.ginStrongLegacySignals</code>. VA signals (<code>ncclGin_*VASignal*</code>) target an arbitrary 8-byte location in a registered window instead of an indexed signal slot.</div>
+
+<h3 id="ex2-bar">6.4 Call chain: <code>ncclGinBarrierSession::sync</code></h3>
+<div class="chain">
+<ul>
+<li><span class="fn">ncclGinBarrierSession(coop, gin, ncclTeamTagWorld, idx)</span><span class="tag dev">device</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/gin_barrier__funcs.h#L31" target="_blank" rel="noopener" class="src">gin_barrier__funcs.h:31</a> <span class="note">→ team = world, handle = comm.worldGinBarrier; </span><code>signal = handle.signal0 + idx·nRanks</code></li>
+<li><span class="fn">sync(coop, order, fence)</span> → <span class="fn">syncInternal&lt;false&gt;</span> <span class="src">:71</span>
+  <ul>
+  <li><span class="note">if fence has </span><code>Put</code><span class="note"> and the backend has no strong signals: </span><span class="fn">fenceFlush</span> <span class="note">(gin.flush)</span></li>
+  <li><span class="note">for each peer (rotated, (rank+1+i) mod n): </span><span class="fn">signalPeer</span> <span class="src">:98</span> → <span class="fn">gin.signal(team, peer, SignalInc{signal + myRank})</span> <span class="src">gin__funcs.h:888</span> <span class="note">a payload-less Put (hasWins=false), i.e. only the remote atomic</span></li>
+  <li><span class="note">for each peer: </span><span class="fn">waitForPeer</span> <span class="src">:104</span>
+    <ul><li><code>waitVal = ++shadow[signal + peer]</code> <span class="note">the shadow (in the resource window) remembers how many arrivals were already consumed</span></li>
+    <li><span class="fn">gin.waitSignal(ncclCoopThread, signal + peer, waitVal, 32 bits)</span></li></ul></li>
+  <li><span class="note">if fence has </span><code>Get</code><span class="note">: </span><span class="fn">fenceFlush</span> <span class="note">after the wait, so peers don't wait for our gets</span></li>
+  </ul></li>
+</ul>
+</div>
+<p>Unlike the LSA barrier, the GIN barrier persists its state in the <em>signal shadows</em>, so its destructor is empty. Signals are indexed by <code>(barrier idx, sender rank)</code>, giving each sender a private counter at each receiver, the same inbox idea as the LSA barrier implemented with NIC atomics.</p>
+</section>
+
+<!-- ============================================================= -->
+<section id="ex3">
+<h2><span class="num">7</span>Example 3 · Hybrid AlltoAll (LSA for neighbours, GIN for the rest)</h2>
+<p><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/examples/06_device_api/03_alltoall_hybrid/c/main.cu" target="_blank" rel="noopener" class="src">06_device_api/03_alltoall_hybrid/c/main.cu</a>. This is the production pattern: peers in my NVLink domain get direct stores, and all other peers get GIN puts. Host requirements: <code>barrierCount = 16</code> (the hybrid barrier, <em>not</em> <code>worldGinBarrierCount</code>), <code>ginSignalCount = 16</code>, FULL connectivity.</p>
+
+<pre><code>  ncclGin gin { devComm, 0 };
+  uint64_t signalValue = gin.<span class="f">readSignal</span>(signalIndex);
+<span class="hl">  ncclBarrierSession&lt;ncclCoopCta&gt; bar { ncclCoopCta(), ncclTeamTagWorld(), gin, blockIdx.x };   <span class="co">1</span></span>
+  bar.<span class="f">sync</span>(ncclCoopCta(), cuda::memory_order_acquire, ncclGinFenceLevel::None);
+
+  ncclTeam world = ncclTeamWorld(devComm);
+  ncclTeam lsa   = ncclTeamLsa(devComm);
+<span class="hl">  <span class="k">const int</span> startLsa = world.rank - lsa.rank;   <span class="c">// first world rank of my node</span>                 <span class="co">2</span></span>
+  <span class="k">const int</span> lsaSize  = lsa.nRanks;
+
+  <span class="c">// Remote peers: world ranks [0, startLsa) and [startLsa+lsaSize, nRanks) → GIN</span>
+  <span class="k">for</span> (<span class="k">int</span> r = tid; r &lt; startLsa; r += nthreads)
+    gin.<span class="f">put</span>(world, r, recvwin, recvoffset + world.rank*size, sendwin, sendoffset + r*size,
+            size, ncclGin_WeakSignalInc{signalIndex});
+  <span class="k">for</span> (<span class="k">int</span> r = startLsa + lsaSize + tid; r &lt; world.nRanks; r += nthreads)
+    gin.<span class="f">put</span>(<span class="c">/* same */</span>);
+
+  <span class="c">// Local peers: element-wise NVLink stores                                                 3</span>
+  T* sendLocal = (T*)<span class="f">ncclGetLocalPointer</span>(sendwin, sendoffset);
+  <span class="k">for</span> (size_t offset = tid; offset &lt; count; offset += nthreads)
+    <span class="k">for</span> (<span class="k">int</span> lp = 0; lp &lt; lsa.nRanks; lp++) {
+      T* recvPtr = (T*)<span class="f">ncclGetLsaPointer</span>(recvwin, recvoffset, lp);
+      recvPtr[world.rank*count + offset] = sendLocal[(startLsa+lp)*count + offset];
+    }
+
+<span class="hl">  <span class="k">int</span> numRemotePeers = world.nRanks - lsa.nRanks;                                              <span class="co">4</span></span>
+  <span class="k">if</span> (blockIdx.x == receivingCta)
+    gin.<span class="f">waitSignal</span>(ncclCoopCta(), signalIndex, signalValue + numRemotePeers);
+  gin.<span class="f">flush</span>(ncclCoopCta());
+<span class="hl">  bar.<span class="f">sync</span>(ncclCoopCta(), cuda::memory_order_release, ncclGinFenceLevel::None);               <span class="co">5</span></span></code></pre>
+
+<figure>
+<svg viewBox="0 0 1000 250" role="img" aria-label="Hybrid peer classification">
+  <text x="20" y="24" font-weight="700" font-size="14">Peer classification for world rank 5 (2 nodes × 4 GPUs)</text>
+  <g font-size="14" text-anchor="middle">
+    <rect x="30" y="50" width="440" height="110" rx="12" class="b-gin"/>
+    <text x="250" y="72" font-size="13" class="t-gin" font-weight="600">node 0 · world [0, startLsa=4) → GIN puts</text>
+    <circle cx="90" cy="115" r="26" class="box"/><text x="90" y="120">0</text>
+    <circle cx="190" cy="115" r="26" class="box"/><text x="190" y="120">1</text>
+    <circle cx="290" cy="115" r="26" class="box"/><text x="290" y="120">2</text>
+    <circle cx="390" cy="115" r="26" class="box"/><text x="390" y="120">3</text>
+    <rect x="530" y="50" width="440" height="110" rx="12" class="b-lsa"/>
+    <text x="750" y="72" font-size="13" class="t-lsa" font-weight="600">node 1 · LSA team [4, 8) → ld/st via NVLink</text>
+    <circle cx="590" cy="115" r="26" class="box"/><text x="590" y="120">4</text>
+    <circle cx="690" cy="115" r="26" class="b-acc"/><text x="690" y="120" font-weight="700">5</text>
+    <circle cx="790" cy="115" r="26" class="box"/><text x="790" y="120">6</text>
+    <circle cx="890" cy="115" r="26" class="box"/><text x="890" y="120">7</text>
+  </g>
+  <text x="250" y="190" text-anchor="middle" font-size="12.5">numRemotePeers = 8 − 4 = 4 signal increments expected</text>
+  <text x="750" y="190" text-anchor="middle" font-size="12.5">visibility is guaranteed by the final release barrier</text>
+  <text x="500" y="230" text-anchor="middle" font-size="12.5" class="t-muted">Self (rank 5) is in the LSA team, so the self-copy is a local store and contributes no signal.</text>
+</svg>
+<figcaption>Figure 12. The LSA range is contiguous in world ranks (the LSA team has stride 1), so "startLsa = world.rank − lsa.rank" splits peers into three ranges.</figcaption>
+</figure>
+
+<h3>7.1 Call chain: the hybrid <code>ncclBarrierSession</code></h3>
+<div class="chain">
+<ul>
+<li><span class="fn">ncclBarrierSession(coop, ncclTeamTagWorld, gin, idx)</span><span class="tag dev">device</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/barrier__funcs.h#L31" target="_blank" rel="noopener" class="src">barrier__funcs.h:31</a>
+  <ul>
+  <li><span class="note">innerLsaBar = </span><span class="fn">ncclLsaBarrierSession</span><span class="note">(lsa team, comm.hybridLsaBarrier)</span></li>
+  <li><span class="note">outerRailGinBar = </span><span class="fn">ncclGinBarrierSession</span><span class="note">(rail team, comm.hybridRailGinBarrier)</span></li>
+  <li><span class="note">outerDenseGinBar = </span><span class="fn">ncclGinBarrierSession</span><span class="note">({nRanks/ginContextStride, …}, comm.hybridDenseGinBarrier)</span></li>
+  </ul></li>
+<li><span class="fn">sync(coop, order, fence)</span> <span class="src">:142</span>
+  <ul>
+  <li><span class="fn">selectBarrierAlgo</span> <span class="src">:79</span> <span class="note">decide which sub-barriers to run (below)</span></li>
+  <li><span class="note">[producer flush] → </span><span class="fn">innerLsaBar.sync</span> <span class="note">(release only, when a GIN stage follows)</span> → <span class="fn">outerRail/DenseGinBar.sync</span> <span class="note">(acquire)</span></li>
+  </ul></li>
+</ul>
+</div>
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="selectBarrierAlgo decision tree">
+  <g font-size="12.5" text-anchor="middle">
+    <rect x="370" y="10" width="260" height="40" rx="8" class="b-acc"/><text x="500" y="35">fence includes Put?</text>
+    <rect x="40" y="90" width="300" height="56" rx="8" class="b-lsa"/><text x="190" y="113" font-weight="600">Hierarchical</text><text x="190" y="133">LSA barrier → rail GIN barrier</text>
+    <rect x="560" y="90" width="400" height="40" rx="8" class="b-acc"/><text x="760" y="115">GIN connects only the rail team (stride == lsaSize)?</text>
+    <rect x="460" y="170" width="220" height="40" rx="8" class="b-acc"/><text x="570" y="195">backend auto-flushes on signal?</text>
+    <rect x="40" y="170" width="300" height="56" rx="8" class="b-lsa"/><text x="190" y="193" font-weight="600">Hierarchical + producer flush</text><text x="190" y="213">flush own puts, LSA → rail GIN</text>
+    <rect x="720" y="170" width="240" height="40" rx="8" class="b-acc"/><text x="840" y="195">fully connected (stride 1)?</text>
+    <rect x="560" y="245" width="190" height="50" rx="8" class="b-gin"/><text x="655" y="266" font-weight="600">Dense GIN only</text><text x="655" y="284">all ranks via GIN</text>
+    <rect x="770" y="245" width="210" height="50" rx="8" class="b-gin"/><text x="875" y="266" font-weight="600">LSA → dense GIN</text><text x="875" y="284">partial stride</text>
+  </g>
+  <g font-size="11.5">
+    <path d="M430 50 L250 90" class="ln"/><text x="300" y="68" class="t-muted">no (e.g. fence None)</text>
+    <path d="M570 50 L700 90" class="ln"/><text x="650" y="68" class="t-muted">yes</text>
+    <path d="M620 130 L340 150 L340 120" class="ln"/><text x="420" y="152" class="t-muted">yes → hierarchical</text>
+    <path d="M760 130 L600 170" class="ln"/><text x="700" y="155" class="t-muted">no</text>
+    <path d="M520 210 L340 205" class="ln"/><text x="420" y="225" class="t-muted">yes</text>
+    <path d="M680 190 L720 190" class="ln"/><text x="684" y="182" class="t-muted">no</text>
+    <path d="M800 210 L680 245" class="ln"/><text x="730" y="232" class="t-muted">yes</text>
+    <path d="M880 210 L880 245" class="ln"/><text x="888" y="232" class="t-muted">no</text>
+  </g>
+</svg>
+<figcaption>Figure 13. <code>selectBarrierAlgo</code> (<span class="src">barrier__funcs.h:79-137</span>). The example passes <code>ncclGinFenceLevel::None</code>, so it always takes the cheap hierarchical path: synchronise inside the node over NVLink, then one GIN barrier among the node leaders' rails. Data visibility for the puts comes from the signals, not from the barrier.</figcaption>
+</figure>
+</section>
+
+<!-- ============================================================= -->
+<section id="ex4">
+<h2><span class="num">8</span>Example 4 · CFT counted AllGather (short tour)</h2>
+<p><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/examples/06_device_api/05_allgather_cft_counted/c/main.cu" target="_blank" rel="noopener" class="src">06_device_api/05_allgather_cft_counted/c/main.cu</a>. This needs sm_100+, CUDA 13.3+ and <code>props.cftSupport</code>. The host sets <code>reqs.cftCaps = NCCL_CFT</code> and registers the receive window with <code>NCCL_WIN_COLL_SYMMETRIC | NCCL_WIN_CFT_COUNTED</code>, which reserves a counter area after the payload.</p>
+<ol class="steps">
+<li><strong>Local slice</strong>: copy my own <code>sendbuf</code> into <code>recv[rank]</code>, then atomically add my local byte count to my own counter (<code>red.release.sys.add.u64</code>).</li>
+<li><strong>Stage through shared memory</strong>: TMA <code>memcpy_async_tx</code> moves a chunk into SMEM, because CFT puts read from SMEM (<code>smemSource</code>).</li>
+<li><strong>Address a peer</strong>: <code>ncclGetCftLeInfo(recvWin, off, peer, team, devComm, &amp;leId, &amp;leOffset)</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/core__funcs.h#L190" target="_blank" rel="noopener" class="src">core__funcs.h:190</a>) turns the window plus peer into a <em>logical endpoint id</em> (<code>ucLeIdBase + flatRank + Δ·stride</code>) and an endpoint offset (<code>mcOffset4K·4096 + off</code>).</li>
+<li><strong>Counted put</strong>: <code>cft.putCounted(coop, leId, dataOff, counterOff, smem, bytes)</code> writes the data and atomically adds <code>bytes</code> to the destination's counter. Then <code>cft.submit</code> and <code>cft.flush</code> push the batch out.</li>
+<li><strong>Completion by byte count</strong>: <code>cft.waitCounted(coop, acquire, Generic, counterPtr, bytes·nRanks, abortFlag)</code>. No barrier is needed, because the counter reaching the total byte count proves every peer's data has arrived.</li>
+</ol>
+<p>Example 06 is the multimem variant: <code>ncclGetMultimemLeInfo</code> and <code>putMultimemCounted</code> issue a single multicast put per chunk that reaches every member of the CFT multimem team. Example 04 shows <code>ncclCftBarrierSession</code>, which is created from <code>reqs.cftBarrierCount</code>.</p>
+</section>
+
+<!-- ============================================================= -->
+<section id="more">
+<h2><span class="num">9</span>Other modules worth knowing</h2>
+<div class="grid2">
+  <div class="card"><h5>Multimem (NVLS)</h5><p>With <code>reqs.lsaMultimem = true</code> (or a <code>ncclTeamRequirements</code> entry with <code>multimem</code>), the host binds windows to an NVSwitch multicast object. <code>ncclGetLsaMultimemPointer(win, off, devComm)</code> returns a <code>mcBasePtr + mcOffset4K·4096 + off</code> address. <code>multimem.ld_reduce</code> on it returns the sum across the team in one instruction, and <code>multimem.st</code> broadcasts. See <span class="src">impl/multimem__funcs.h</span>. LSA barriers can also arrive with one <code>multimem.red</code>.</p></div>
+  <div class="card"><h5>reduce_copy.h</h5><p>Vectorised, unrolled building blocks: <code>ncclLsaReduceSum</code>, <code>ncclMultimemReduceSum</code>, <code>ncclLsaCopy</code>, <code>ncclLsaReduceSumLsaCopy</code>, and others. They take a Coop plus source/destination <em>lambdas</em> (or <code>ncclSymPtr</code> + team), so you can write an LSA AllReduce in a few lines with peak vector widths (<span class="src">impl/reduce_copy__funcs.h</span>, <span class="src">impl/vector__funcs.h</span>).</p></div>
+  <div class="card"><h5>LL A2A (<code>ncclLLA2ASession</code>)</h5><p>A low-latency all-to-all for small messages. Data and a flag are packed into one 16-byte store (the LL protocol), so <code>recv(slot)</code> just spins on the slot. You configure it with <code>reqs.lsaLLA2ABlockCount/SlotCount</code> or <code>ncclLLA2ACreateRequirement</code>, and <code>endEpoch</code> closes a round (<span class="src">ll_a2a.h</span>).</p></div>
+  <div class="card"><h5>Custom resources</h5><p>Libraries can add their own symmetric scratch or GIN signals by chaining <code>ncclDevResourceRequirements</code> into <code>reqs.resourceRequirementsList</code>. On return, <code>*outBufferHandle</code> and <code>*outGinSignalStart</code> are filled, and the device gets the memory through <code>ncclGetResourceBuffer*Pointer(devComm, handle, …)</code> (<span class="src">core__funcs.h:250-331</span>).</p></div>
+  <div class="card"><h5>C / IR entry points</h5><p>Every templated C++ call has an <code>NCCL_IR_EXTERN_C</code> C-ABI twin (<code>ncclGin_C</code>, <code>ncclGinPut_v3</code>, <code>ncclGinFlush</code>, …) that takes <code>ncclCoopAny</code>. These are used by bindings (<span class="src">bindings/ir/</span>, nccl4py) and by JIT-compiled device code.</p></div>
+  <div class="card"><h5>ABI compatibility</h5><p><code>ncclDevComm.magic/version</code> plus <span class="src">src/devcomm/devcomm_v*.cc</span> let a newer <code>libnccl</code> fill an older struct layout (<code>devCommCopyNewToOld</code>), so pre-compiled kernels keep working across library upgrades. <code>reqs.useRuntimeVersion</code> opts into the current layout for JIT code.</p></div>
+</div>
+</section>
+
+<!-- ============================================================= -->
+<section id="ordering">
+<h2><span class="num">10</span>Memory ordering and pitfalls</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Mechanism</th><th>What it guarantees</th><th>What it does <em>not</em></th></tr></thead>
+<tbody>
+<tr><td>LSA barrier <code>sync(release)</code> / <code>sync(acquire)</code></td><td>Release fence before the inbox store, and acquire on the inbox load. Your plain NVLink stores before <code>sync</code> are visible to peers after their <code>sync</code>.</td><td>Says nothing about in-flight GIN puts. Use signals or a <code>Put</code> fence for those.</td></tr>
+<tr><td>GIN weak signal</td><td>When the receiver sees the increment, that put's payload is visible.</td><td>Says nothing about earlier puts. Use a strong signal for that.</td></tr>
+<tr><td>GIN strong signal</td><td>The increment implies this put and all earlier puts on the same context to that peer are visible.</td><td>Covers other contexts only if you fence them (<code>ncclGinAllContexts</code>).</td></tr>
+<tr><td><code>gin.flush()</code></td><td>Local completion: source buffers can be reused.</td><td>Remote visibility.</td></tr>
+<tr><td>GIN barrier, fence <code>Put</code></td><td>After return, puts from team members to me that were issued before the barrier are visible. Implemented by flushing first when the backend lacks strong signals.</td><td>—</td></tr>
+<tr><td>GIN barrier, fence <code>None</code></td><td>Pure rendezvous (cheapest).</td><td>Any data visibility.</td></tr>
+</tbody></table></div>
+
+<div class="callout warn"><b>Common mistakes</b>
+<ul style="margin:6px 0">
+<li><strong>Grid size ≠ barrier count.</strong> Each session uses <code>index = blockIdx.x</code>, so launch at most <code>lsaBarrierCount</code> / <code>worldGinBarrierCount</code> / <code>barrierCount</code> CTAs.</li>
+<li><strong>Wrong requirement for the barrier type</strong>: <code>ncclBarrierSession</code> uses <code>barrierCount</code>, while <code>ncclGinBarrierSession(…TagWorld…)</code> uses <code>worldGinBarrierCount</code>. A count of zero leaves the handle pointing at nothing.</li>
+<li><strong>Waiting for an absolute signal value.</strong> Always <code>readSignal</code> a baseline first, or call <code>resetSignal</code> under a barrier, because signals persist across kernel launches.</li>
+<li><strong>Diverging Coop.</strong> Every thread named by the Coop must call (<code>sync()</code> inside is <code>__syncthreads</code> for <code>ncclCoopCta</code>). Calling <code>waitSignal(ncclCoopCta(), …)</code> from a subset of a block deadlocks.</li>
+<li><strong>Copying sessions</strong> is forbidden by design, because the LSA session's destructor persists the epoch.</li>
+<li><strong>Using LSA pointers for non-LSA peers.</strong> <code>ncclGetLsaPointer</code> takes an <em>LSA</em> rank. For world ranks outside the node you must use GIN (or CFT).</li>
+<li><strong>Non-collective setup.</strong> Window registration and <code>ncclDevCommCreate</code> contain bootstrap barriers. All ranks must call them, in the same order.</li>
+<li><strong>Hang safety.</strong> All spin loops poll <code>devComm.abortFlag</code> (set for internal comms) via <code>testAbort</code>. Timeout overloads (<code>sync(…, timeoutCycles)</code>, <code>waitSignal(…, timeoutCycles)</code>) return <code>ncclTimeout</code> instead of spinning forever.</li>
+</ul></div>
+</section>
+
+<!-- ============================================================= -->
+<section id="ref">
+<h2><span class="num">11</span>Quick reference</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Call</th><th>Side</th><th>Defined at</th><th>One-liner</th></tr></thead>
+<tbody>
+<tr><td><code>ncclCommQueryProperties</code></td><td>host</td><td><span class="src">dev_runtime.cc:1919</span></td><td>deviceApiSupport, ginType, nLsaTeams, multimem/CFT support</td></tr>
+<tr><td><code>ncclCommWindowRegister</code></td><td>host</td><td><span class="src">dev_runtime.cc:1800</span></td><td>collective; returns device <code>ncclWindow_t</code></td></tr>
+<tr><td><code>ncclDevCommCreate / Destroy</code></td><td>host</td><td><span class="src">dev_runtime.cc:1979 / 2086</span></td><td>collective; allocate barriers, signals, GIN contexts</td></tr>
+<tr><td><code>ncclGetLsaDevicePointer</code> etc.</td><td>host</td><td><span class="src">dev_runtime.cc:2301</span></td><td>the same pointer queries for host-side use</td></tr>
+<tr><td><code>ncclTeamWorld/Lsa/Rail/Cft</code></td><td>device</td><td><span class="src">core__funcs.h:16-73</span></td><td>team descriptors</td></tr>
+<tr><td><code>ncclGetLocal/Lsa/PeerPointer</code></td><td>device</td><td><span class="src">core__funcs.h:137-173</span></td><td>flat-VA arithmetic</td></tr>
+<tr><td><code>ncclGetLsaMultimemPointer</code></td><td>device</td><td><span class="src">core__funcs.h:184</span></td><td>NVLS multicast address</td></tr>
+<tr><td><code>ncclFindWindow(coop, comm, ptr)</code></td><td>device</td><td><span class="src">core__funcs.h:220</span></td><td>warp-parallel search of the window table</td></tr>
+<tr><td><code>ncclLsaBarrierSession</code></td><td>device</td><td><span class="src">lsa_barrier__funcs.h</span></td><td>NVLink flag barrier (arrive / wait / sync)</td></tr>
+<tr><td><code>ncclGinBarrierSession</code></td><td>device</td><td><span class="src">gin_barrier__funcs.h</span></td><td>signal-based barrier with Put/Get fences</td></tr>
+<tr><td><code>ncclBarrierSession</code></td><td>device</td><td><span class="src">barrier__funcs.h</span></td><td>hybrid LSA + GIN barrier with algorithm selection</td></tr>
+<tr><td><code>ncclGin::put / putValue / get / signal</code></td><td>device</td><td><span class="src">gin__funcs.h:639 / 749 / 888</span></td><td>one-sided network ops with remote/local actions</td></tr>
+<tr><td><code>ncclGin::readSignal / waitSignal / resetSignal</code></td><td>device</td><td><span class="src">gin__funcs.h:1130 / 1373</span></td><td>completion detection</td></tr>
+<tr><td><code>ncclGin::flush / flushAsync / wait</code></td><td>device</td><td><span class="src">gin__funcs.h:977 / 1220</span></td><td>local completion</td></tr>
+<tr><td><code>ncclCft::put[Counted|Multimem…] / red / get / waitCounted</code></td><td>device</td><td><span class="src">impl/cft__funcs.h</span></td><td>fabric transport</td></tr>
+<tr><td><code>ncclLLA2ASession</code></td><td>device</td><td><span class="src">impl/ll_a2a__funcs.h</span></td><td>low-latency all-to-all</td></tr>
+</tbody></table></div>
+<p style="color:var(--muted);font-size:14px;margin-top:28px">Generated from the source at commit <code>12df1a11</code> (NCCL 2.32.3-1). Line numbers refer to that tree.</p>
+</section>
+</main>
+</div>
+<script>
+(function () {
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('nccl-devapi-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('nccl-devapi-theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

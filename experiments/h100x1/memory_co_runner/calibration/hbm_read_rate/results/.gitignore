@@ -1,0 +1,9 @@
+# Raw run records, device snapshots, telemetry, logs and profiler files stay local.
+# Keep compact derived summaries, provenance, selections and figures reviewable.
+*.json
+!*summary.json
+!*provenance.json
+!selection.json
+*.log
+*.ncu-rep
+raw/

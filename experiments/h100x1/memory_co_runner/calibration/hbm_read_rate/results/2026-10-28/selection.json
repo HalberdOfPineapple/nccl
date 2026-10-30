@@ -1,0 +1,32 @@
+{
+  "per_cta_settings": {
+    "largest": {
+      "chunk_kib": 64,
+      "chunks_in_flight": 3,
+      "label": "highest rate per CTA",
+      "reason": "Stage 1: highest median rate at 8 CTAs (1360 GB/s, 170 GB/s per CTA); 192 KiB shared memory per CTA."
+    },
+    "fits_fused": {
+      "chunk_kib": 96,
+      "chunks_in_flight": 1,
+      "label": "fits today's 114 KiB reservation",
+      "reason": "Stage 1: highest median rate with at most 114 KiB in flight (724 GB/s at 8 CTAs); next best 3 x 32 KiB (686 GB/s) is more than 2% lower."
+    }
+  },
+  "rate_settings": {
+    "largest": {
+      "pressure_ctas": 24,
+      "chunk_kib": 64,
+      "chunks_in_flight": 3,
+      "label": "few SMs; needs 192 KiB shared memory",
+      "reason": "Stage 2: smallest CTA count with at least 95% of this setting's best rate (24 CTAs: 3061.8 GB/s = 96.0% of 3188.3)."
+    },
+    "fits_fused": {
+      "pressure_ctas": 64,
+      "chunk_kib": 96,
+      "chunks_in_flight": 1,
+      "label": "fits today's 114 KiB reservation",
+      "reason": "Stage 2: smallest CTA count with at least 95% of this setting's best rate (64 CTAs: 3137.6 GB/s = 98.9% of 3172.2; 48 CTAs reach 93.0%)."
+    }
+  }
+}

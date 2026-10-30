@@ -1,0 +1,22 @@
+[
+  {
+    "destination_read_ctas": 100,
+    "threads_per_cta": 256,
+    "communication_ctas": 32,
+    "pairs": 5,
+    "copy_alone_gbps": 80.5512598234441,
+    "copy_with_reads_gbps": 80.5744729092787,
+    "paired_change_percent": 0.07885801942433268,
+    "effect_iqr": 0.1443606156094936
+  },
+  {
+    "destination_read_ctas": 131,
+    "threads_per_cta": 256,
+    "communication_ctas": 32,
+    "pairs": 5,
+    "copy_alone_gbps": 80.4600929762922,
+    "copy_with_reads_gbps": 80.59459714804052,
+    "paired_change_percent": 0.07254453528013904,
+    "effect_iqr": 1.520511669267116
+  }
+]

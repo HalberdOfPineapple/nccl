@@ -1,0 +1,22 @@
+[
+  {
+    "ctas": 128,
+    "threads": 512,
+    "read_ctas": 0,
+    "co_rate": 0,
+    "throughput_gbps": 371.27591395945825,
+    "minimum_overlap_fraction": 0,
+    "source_kernel_ms": 5.792171,
+    "destination_kernel_ms": 5.788787
+  },
+  {
+    "ctas": 128,
+    "threads": 512,
+    "read_ctas": 131,
+    "co_rate": 1636.9396138588256,
+    "throughput_gbps": 370.69142771919553,
+    "minimum_overlap_fraction": 1.0,
+    "source_kernel_ms": 5.803179,
+    "destination_kernel_ms": 5.821587
+  }
+]

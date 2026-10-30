@@ -1,0 +1,4 @@
+Excluded: first copy_sweep attempt, 2026-10-29, GPUs 4,5. Copy part boundaries were elementCount*k/copyCtas,
+not multiples of 32 elements (128 B) for 48 and 96 CTAs, so every warp store split over two 128-byte lines
+(234-273 GB/s instead of about 370 GB/s). Fixed in store_congest.cu by rounding boundaries down to 128 B.
+Stopped by hand during copy_c32_t512_b2_spread_R1; the run in progress may be incomplete.

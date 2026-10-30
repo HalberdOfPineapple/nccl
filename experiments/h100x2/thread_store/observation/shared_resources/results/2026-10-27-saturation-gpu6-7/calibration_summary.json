@@ -1,0 +1,127 @@
+{
+  "accepted_invocations": 121,
+  "retained_transfers": 1452,
+  "confirmed": [
+    {
+      "ctas": 128,
+      "threads": 512,
+      "payload_mib": 2048,
+      "batch": 8,
+      "gbps": 370.75184327104364,
+      "minimum_gbps": 370.6607162583125,
+      "maximum_gbps": 370.86146669612896,
+      "completed_us": 5792.24,
+      "issue_us": 5599.248,
+      "ordering_us": 9.92,
+      "ack_us": 180.272
+    },
+    {
+      "ctas": 128,
+      "threads": 768,
+      "payload_mib": 2048,
+      "batch": 8,
+      "gbps": 369.20674587808287,
+      "minimum_gbps": 369.12857242379386,
+      "maximum_gbps": 369.4038796493252,
+      "completed_us": 5816.48,
+      "issue_us": 5616.08,
+      "ordering_us": 11.175999999999998,
+      "ack_us": 187.64
+    },
+    {
+      "ctas": 128,
+      "threads": 1024,
+      "payload_mib": 2048,
+      "batch": 8,
+      "gbps": 370.5348683395008,
+      "minimum_gbps": 370.4346319618011,
+      "maximum_gbps": 370.63205903483333,
+      "completed_us": 5795.632,
+      "issue_us": 5607.936,
+      "ordering_us": 9.175999999999998,
+      "ack_us": 175.96
+    },
+    {
+      "ctas": 128,
+      "threads": 1024,
+      "payload_mib": 2048,
+      "batch": 1,
+      "gbps": 367.7570834423659,
+      "minimum_gbps": 367.7187979434457,
+      "maximum_gbps": 367.8850997657564,
+      "completed_us": 5839.407999999999,
+      "issue_us": 5624.368,
+      "ordering_us": 22.888,
+      "ack_us": 190.8
+    },
+    {
+      "ctas": 128,
+      "threads": 1024,
+      "payload_mib": 2048,
+      "batch": 2,
+      "gbps": 368.83844433759305,
+      "minimum_gbps": 368.7148283117591,
+      "maximum_gbps": 369.0625849829766,
+      "completed_us": 5822.2880000000005,
+      "issue_us": 5617.2880000000005,
+      "ordering_us": 16.904,
+      "ack_us": 185.76
+    },
+    {
+      "ctas": 128,
+      "threads": 1024,
+      "payload_mib": 2048,
+      "batch": 4,
+      "gbps": 370.01898963116804,
+      "minimum_gbps": 369.93026479674006,
+      "maximum_gbps": 370.08734783069906,
+      "completed_us": 5803.712,
+      "issue_us": 5608.744000000001,
+      "ordering_us": 10.656,
+      "ack_us": 180.976
+    },
+    {
+      "ctas": 64,
+      "threads": 1024,
+      "payload_mib": 2048,
+      "batch": 8,
+      "gbps": 356.0416376860517,
+      "minimum_gbps": 355.94721448533573,
+      "maximum_gbps": 356.1134328248202,
+      "completed_us": 6031.552,
+      "issue_us": 5612.136,
+      "ordering_us": 8.176,
+      "ack_us": 406.728
+    },
+    {
+      "ctas": 128,
+      "threads": 1024,
+      "payload_mib": 4096,
+      "batch": 8,
+      "gbps": 371.72526989655097,
+      "minimum_gbps": 371.5148524608893,
+      "maximum_gbps": 371.7937454957969,
+      "completed_us": 11554.144,
+      "issue_us": 11225.448,
+      "ordering_us": 9.584,
+      "ack_us": 321.192
+    }
+  ],
+  "paired_changes_percent": {
+    "threads_512_to_768": -0.4249642104922402,
+    "threads_768_to_1024": 0.34814500472486465,
+    "batch_2_to_4": 0.31232788598614114,
+    "batch_4_to_8": 0.13332367823477576,
+    "payload_2048_to_4096": 0.313433884804426
+  },
+  "thread_rate_spread_percent": 0.41849110565033154,
+  "plateau_criterion_passed": true,
+  "probe_paired_change_percent": 0.01989706969245386,
+  "selected": {
+    "ctas": 128,
+    "threads": 512,
+    "payload_mib": 2048,
+    "batch": 8,
+    "gbps": 370.75184327104364
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "ctas": 64,
+  "threads": 512,
+  "reason": "Calibration with 24 idle pressure CTAs, 5 runs each: 64 x 512 has the highest median (370.40 GB/s); 64 x 768 is 0.16% lower and 64 x 1024 2.2% lower, so the curve is not rising. 96 and 108 CTAs give about 270 and 257 GB/s (uneven CTA regions). Run levels at 64 CTAs depend on which SMs the copy CTAs occupy (fixed within a run, different between runs); pairs therefore alternate idle and reading launches inside each run.",
+  "mutual_percents": [
+    80
+  ],
+  "level95": {
+    "pressure_ctas": 48,
+    "target_gbps": 3185,
+    "target_percent": 95,
+    "reason": "24 pressure CTAs stop at about 91% of peak. Screen, reads alone, one run each (target 95% / no limit): source 32: 3038/3075, 40: 3129/2822, 48: 3149/2950 GB/s; destination 32: 3146/3165, 40: 3164/3178, 48: 3159/3178 GB/s. 48 CTAs with the 95% target is the highest targeted rate on the source GPU and within 0.2% of the best on the destination GPU; one setting is used for both."
+  }
+}

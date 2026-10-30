@@ -237,7 +237,7 @@ int run_parallel(context_t *ctx, void *(*ncclExample)(int, int, int, int)) {
 
   // Create separate context for each thread
   context_t *thread_contexts =
-      (context_t *)malloc(ctx->total_ranks * sizeof(context_t));
+      (context_t *) malloc(ctx->total_ranks * sizeof(context_t));
   if (thread_contexts == NULL) {
     printf("Failed to allocate thread contexts\n");
     return 1;
@@ -273,7 +273,7 @@ int run_example(int argc, char *argv[],
                 void *(*ncclExample)(int, int, int, int)) {
 
   // 1. Allocate context
-  context_t *ctx = (context_t *)calloc(1, sizeof(context_t));
+  context_t *ctx = (context_t *) calloc(1, sizeof(context_t));
   if (ctx == NULL) {
     printf("Failed to allocate memory for context\n");
     return 1;

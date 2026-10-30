@@ -1,0 +1,1 @@
+Read AGENTS.md at the root folder of this repo.

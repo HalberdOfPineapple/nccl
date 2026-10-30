@@ -79,14 +79,18 @@ __global__ void simpleAllReduceKernel(ncclWindow_t sendwin, size_t sendoffset,
   // Grid stride loop over all elements with the globalThreads
   for (size_t offset = globalTid; offset < count; offset += globalNthreads) {
     float v = 0.0f;
+
+    // Essence: ReduceScatter. One thread reduces one element. The overall pattern is each rank reduces striped blocks
     // Access remote (and local [peer==rank]) memory and reduce locally
-    for (int peer=0; peer<nRanks; peer++) {
+    for (int peer=0; peer < nRanks; peer++) {
       // Access peer memory directly using LSA (Load/Store Accessible) pointers
       float* sendPtr = (float*)ncclGetLsaPointer(sendwin, sendoffset, peer);
       v += sendPtr[offset];
     }
+
+    // Eseence: AllGather. One thread multicasts the reduced value to all peers. 
     // Write the result back to remote and local memory
-    for (int peer=0; peer<nRanks; peer++) {
+    for (int peer=0; peer < nRanks; peer++) {
       float* recvPtr = (float*)ncclGetLsaPointer(recvwin, recvoffset, peer);
       recvPtr[offset] = v;
     }

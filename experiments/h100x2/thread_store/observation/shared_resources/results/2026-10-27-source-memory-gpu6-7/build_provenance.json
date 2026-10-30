@@ -1,0 +1,12 @@
+{
+  "src/push_harness.cu": "e5f16e096c4e1565eb754d88749d1fbd56ee7a047836b9bae7acd3eccab8633d",
+  "bin/push_harness": "f15fd0f7b8b1f80dbef81417b718f5233f6edf85131b2da94d5ba9e70f40b9d8",
+  "equivalent_binaries": [
+    {
+      "sha256": "0e71fb6f673625be454c8af7c01565ef371a9e47a60e6199d3fd32b5527000ef",
+      "installed_utc": "2026-10-27T22:08:20.76Z",
+      "reason": "Accidental make -B of unchanged source during the reads phase, to capture the ptxas report. cuobjdump -sass output is byte-identical to the original binary; only host-side build bytes differ.",
+      "first_invocation_possibly_affected": "reads_m96_t256_R1 (rebuild landed during this invocation); all later invocations use this binary"
+    }
+  ]
+}

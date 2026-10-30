@@ -1,0 +1,42 @@
+[
+  {
+    "ctas": 16,
+    "threads": 256,
+    "read_ctas": 0,
+    "co_rate": 0,
+    "throughput_gbps": 41.112566163497355,
+    "minimum_overlap_fraction": 0,
+    "source_kernel_ms": 6.540141,
+    "destination_kernel_ms": 6.534162
+  },
+  {
+    "ctas": 16,
+    "threads": 256,
+    "read_ctas": 131,
+    "co_rate": 1130.8558341652474,
+    "throughput_gbps": 41.27114574723501,
+    "minimum_overlap_fraction": 1.0,
+    "source_kernel_ms": 6.51438,
+    "destination_kernel_ms": 6.542705
+  },
+  {
+    "ctas": 64,
+    "threads": 512,
+    "read_ctas": 0,
+    "co_rate": 0,
+    "throughput_gbps": 315.46794028054603,
+    "minimum_overlap_fraction": 0,
+    "source_kernel_ms": 0.871234,
+    "destination_kernel_ms": 0.855678
+  },
+  {
+    "ctas": 64,
+    "threads": 512,
+    "read_ctas": 131,
+    "co_rate": 1647.3693430656933,
+    "throughput_gbps": 314.5098980203959,
+    "minimum_overlap_fraction": 1.0,
+    "source_kernel_ms": 0.87197,
+    "destination_kernel_ms": 0.882526
+  }
+]

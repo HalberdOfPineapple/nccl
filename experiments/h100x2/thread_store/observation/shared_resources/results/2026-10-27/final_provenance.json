@@ -1,0 +1,15 @@
+{
+  "sha256": {
+    "experiments/h100x2/thread_store/common/src/push_harness.cu": "65cad82330cd412b8dda0109d81c820eb9803a38755fdceeb375963fb04885eb",
+    "experiments/h100x2/thread_store/common/bin/push_harness": "e25fab170c3748770541dc0e06ba5f31c79db986eafc252d4fc4049c5f4acf7b",
+    "experiments/h100x2/thread_store/common/scripts/profile_campaign.sh": "d4eeaff5b3a38855bc991fdefb14b0289fbe1c94c5e103c5ecb7074779ede297"
+  },
+  "device_sass_identical_to_vector_campaign": true,
+  "accepted_hardware_counter_reports": 0,
+  "accepted_named_range_timeline_reports": 6,
+  "primary_invocations": 279,
+  "primary_retained_transfers": 3156,
+  "primary_retained_solo_windows": 80,
+  "followup_invocations": 20,
+  "followup_retained_windows": 240
+}

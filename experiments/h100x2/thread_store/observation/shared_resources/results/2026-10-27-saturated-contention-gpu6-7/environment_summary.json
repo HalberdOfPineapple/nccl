@@ -1,0 +1,3116 @@
+[
+  {
+    "run": "calibration_m100_R1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 124.99,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 151.65,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.15,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 151.66,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 124.4,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 152.16,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.16,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 153.15,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.17,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m100_R5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 152.29,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 124.81,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 158.15,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.33,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 157.09,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.3,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 157.89,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.25,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 156.86,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.06,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m131_R5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 157.93,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 435.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.57,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 136.99,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 124.76,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 137.84,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.61,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 138.96,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 124.02,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 137.69,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R5",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.53,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m32_R5",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 137.65,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R1",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 660.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 123.41,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R1",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 129.41,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R2",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 480.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.5,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R2",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 131.97,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.04,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 131.34,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.8,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 132.22,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.86,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "calibration_m8_R5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 132.12,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "closing_reference",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.99,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "closing_reference",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.11,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "mutual_m100_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 127.1,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.62,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 127.94,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 147.85,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H3",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 690.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.75,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H3",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 145.9,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H4",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 765.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.07,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H4",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 147.25,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 735.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.94,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.34,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 540.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.77,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m100_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 159.2,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "mutual_m100_P2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.82,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_P2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 161.31,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "mutual_m100_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 735.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.38,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m100_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.01,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "mutual_m100_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.58,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m100_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 159.79,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457312
+  },
+  {
+    "run": "mutual_m100_P5",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.01,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m100_P5",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 159.74,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "mutual_m131_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 125.14,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.57,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 540.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.97,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.7,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H3",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 123.51,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H3",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 149.64,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 127.59,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.34,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 127.62,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 149.76,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.13,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 161.39,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "mutual_m131_P2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.43,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m131_P2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 163.48,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "mutual_m131_P3",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 525.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.44,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m131_P3",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 163.27,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "mutual_m131_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 140.6,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m131_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 163.46,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "mutual_m131_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.32,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457306,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m131_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.59,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "mutual_m32_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 128.09,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 138.98,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.25,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 137.19,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 750.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.95,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 138.6,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 495.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.76,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 138.78,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 124.31,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 510.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 138.81,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 525.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.26,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 153.16,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "mutual_m32_P2",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 630.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.09,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m32_P2",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 154.44,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "mutual_m32_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 570.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.11,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 153.81,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "mutual_m32_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 630.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.74,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457313,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m32_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 152.73,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "mutual_m32_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.82,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m32_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 155.09,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "mutual_m8_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 128.36,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 134.01,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 128.83,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 134.3,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 123.5,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 133.02,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 630.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 127.88,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 132.76,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H5",
+    "gpu": 6,
+    "samples": 12,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 126.88,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_H5",
+    "gpu": 7,
+    "samples": 12,
+    "sm_clock_min_mhz": 450.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 132.91,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.15,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m8_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 675.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 149.34,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "mutual_m8_P2",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.36,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_P2",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 149.35,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "mutual_m8_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.12,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "mutual_m8_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.72,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457312
+  },
+  {
+    "run": "mutual_m8_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 140.86,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 720.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.93,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "mutual_m8_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 765.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.2,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "mutual_m8_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 151.61,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "opening_reference",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 140.03,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "opening_reference",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 145.98,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m100_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.53,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m100_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.85,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m100_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.45,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m100_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 147.39,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m100_H3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.55,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m100_H3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.98,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m100_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 600.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.98,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m100_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.14,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m100_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 145.02,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m100_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.48,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m100_P1",
+    "gpu": 6,
+    "samples": 12,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.41,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m100_P1",
+    "gpu": 7,
+    "samples": 12,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.36,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m100_P2",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.6,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m100_P2",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 160.04,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m100_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 720.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.35,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m100_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 158.81,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "primary_m100_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.76,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m100_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 160.09,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m100_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 585.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.58,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m100_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 160.68,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m131_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 660.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.6,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.68,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m131_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.96,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m131_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.96,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m131_H3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 540.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.79,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m131_H3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 147.56,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457312
+  },
+  {
+    "run": "primary_m131_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 690.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.58,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.87,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m131_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.71,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.54,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m131_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.21,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457313,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 161.05,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m131_P2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.26,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_P2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.95,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m131_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.45,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 161.23,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m131_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.29,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m131_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.57,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m131_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.58,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457313,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m131_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.26,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m32_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 735.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 140.65,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457314,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m32_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 435.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 147.25,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m32_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 540.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 140.88,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m32_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.18,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m32_H3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.75,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 31457313,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m32_H3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.48,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "primary_m32_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 690.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.04,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457313,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m32_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.92,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457312
+  },
+  {
+    "run": "primary_m32_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.89,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457314,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m32_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 450.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.6,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m32_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.24,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457307,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m32_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 152.01,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m32_P2",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.78,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m32_P2",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 153.01,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "primary_m32_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 465.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.62,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m32_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 153.16,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457312
+  },
+  {
+    "run": "primary_m32_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.18,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m32_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 152.37,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m32_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 720.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 145.82,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457307,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m32_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 390.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 153.89,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m8_H1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 435.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.58,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m8_H1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.4,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "primary_m8_H2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.44,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457311,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m8_H2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 147.12,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "primary_m8_H3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 750.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.26,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m8_H3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 405.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 146.83,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "primary_m8_H4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.51,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m8_H4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.33,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "primary_m8_H5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 600.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 141.37,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m8_H5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 148.88,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "primary_m8_P1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.83,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m8_P1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.17,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "primary_m8_P2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.52,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m8_P2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 149.19,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "primary_m8_P3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.13,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "primary_m8_P3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 149.5,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "primary_m8_P4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 585.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.39,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457306,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m8_P4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.37,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "primary_m8_P5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.9,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "primary_m8_P5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 150.85,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "probe_d0_R1",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.56,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457313,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "probe_d0_R1",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 375.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 161.84,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457312
+  },
+  {
+    "run": "probe_d0_R2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 142.58,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457308,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "probe_d0_R2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.55,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "probe_d0_R3",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.07,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "probe_d0_R3",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 163.65,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457314
+  },
+  {
+    "run": "probe_d0_R4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 585.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.68,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457314,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "probe_d0_R4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.25,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "probe_d0_R5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 705.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.6,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 0
+  },
+  {
+    "run": "probe_d0_R5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 435.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 164.43,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 0,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "probe_d1_R1",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 420.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.44,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457310,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "probe_d1_R1",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 161.27,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457309
+  },
+  {
+    "run": "probe_d1_R2",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 735.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 143.96,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "probe_d1_R2",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 163.35,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  },
+  {
+    "run": "probe_d1_R3",
+    "gpu": 6,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 145.07,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457309,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "probe_d1_R3",
+    "gpu": 7,
+    "samples": 10,
+    "sm_clock_min_mhz": 345.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 163.93,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457307
+  },
+  {
+    "run": "probe_d1_R4",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 735.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 144.71,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457307,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "probe_d1_R4",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 360.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 162.83,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457311
+  },
+  {
+    "run": "probe_d1_R5",
+    "gpu": 6,
+    "samples": 11,
+    "sm_clock_min_mhz": 750.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 145.44,
+    "clock_reason_masks": [
+      "0x0000000000000000",
+      "0x0000000000000001"
+    ],
+    "tx_delta_kib": 31457312,
+    "rx_delta_kib": 1
+  },
+  {
+    "run": "probe_d1_R5",
+    "gpu": 7,
+    "samples": 11,
+    "sm_clock_min_mhz": 1980.0,
+    "sm_clock_max_mhz": 1980.0,
+    "power_max_w": 165.21,
+    "clock_reason_masks": [
+      "0x0000000000000000"
+    ],
+    "tx_delta_kib": 1,
+    "rx_delta_kib": 31457310
+  }
+]

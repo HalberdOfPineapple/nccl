@@ -1,0 +1,7 @@
+{
+  "concurrency_and_payload_gpu_instructions_identical": true,
+  "instruction_sha256": "d872555df0df78be925df3e0d2a4d431a9cec5f901c2ff67118e8343e696b9d4",
+  "concurrency_registers": 54,
+  "batch_registers": 52,
+  "batch_spill_bytes": 0
+}

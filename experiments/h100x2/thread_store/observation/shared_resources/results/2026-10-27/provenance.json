@@ -1,0 +1,79 @@
+{
+  "utc": "2026-10-27T05:22:42.809213+00:00",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "12df1a11afad322be5a204a2db890161cbf8131d\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--stat"
+      ],
+      "returncode": 0,
+      "stdout": " docs/examples/06_device_api/01_allreduce_lsa/c/main.cu | 8 ++++++--\n docs/examples/common/src/utils.cc                      | 4 ++--\n src/init.cc                                            | 2 +-\n 3 files changed, 9 insertions(+), 5 deletions(-)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/local/cuda/bin/nvcc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Aug_20_01:58:59_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.88\nBuild cuda_13.0.r13.0/compiler.36424714_0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nsys",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "NVIDIA Nsight Systems version 2026.4.1.191-264138605071v0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "ncu",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "NVIDIA (R) Nsight Compute Command Line Profiler\nCopyright (c) 2018-2025 NVIDIA Corporation\nVersion 2025.3.1.0 (build 36398880) (public-release)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nvidia-smi",
+        "topo",
+        "-m"
+      ],
+      "returncode": 0,
+      "stdout": "\t\u001b[4mGPU0\tGPU1\tGPU2\tGPU3\tGPU4\tGPU5\tGPU6\tGPU7\tCPU Affinity\tNUMA Affinity\tGPU NUMA ID\u001b[0m\nGPU0\t X \tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU1\tNV18\t X \tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU2\tNV18\tNV18\t X \tNV18\tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU3\tNV18\tNV18\tNV18\t X \tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU4\tNV18\tNV18\tNV18\tNV18\t X \tNV18\tNV18\tNV18\t52-103,156-207\t1\t\tN/A\nGPU5\tNV18\tNV18\tNV18\tNV18\tNV18\t X \tNV18\tNV18\t52-103,156-207\t1\t\tN/A\nGPU6\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t X \tNV18\t52-103,156-207\t1\t\tN/A\nGPU7\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t X \t52-103,156-207\t1\t\tN/A\n\nLegend:\n\n  X    = Self\n  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)\n  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node\n  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)\n  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)\n  PIX  = Connection traversing at most a single PCIe bridge\n  NV#  = Connection traversing a bonded set of # NVLinks\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nvidia-smi",
+        "-i",
+        "4,5,6,7",
+        "--query-gpu=index,uuid,name,pci.bus_id",
+        "--format=csv"
+      ],
+      "returncode": 0,
+      "stdout": "index, uuid, name, pci.bus_id\n4, GPU-e4e41214-ef43-a1c0-80ab-391fd7b067a5, NVIDIA H100 80GB HBM3, 00000000:84:00.0\n5, GPU-4355f0c0-dd9b-8592-3d88-d250d9730a63, NVIDIA H100 80GB HBM3, 00000000:85:00.0\n6, GPU-3ebe5de5-496c-2d06-ac87-55f171a54e27, NVIDIA H100 80GB HBM3, 00000000:8B:00.0\n7, GPU-a8a608db-0a7a-970b-210c-28f9c04360c8, NVIDIA H100 80GB HBM3, 00000000:8C:00.0\n",
+      "stderr": ""
+    }
+  ],
+  "sha256": {
+    "experiments/h100x2/thread_store/common/src/push_harness.cu": "ea743f811f20524c96a1abd75e296e24ecfe3865744b30faf6e882f8196fd1e3",
+    "experiments/h100x2/thread_store/common/bin/push_harness": "3ba5bd7a9364e9e6afe304528f5a02195d0b48672c72bf220b7eda32a932fd2b",
+    "build/lib/libnccl.so.2.32.3": "db3e1c884f0ed15289e1087720ad255802acb0a1ec1ff90a2ccc4e74661bbd89"
+  }
+}

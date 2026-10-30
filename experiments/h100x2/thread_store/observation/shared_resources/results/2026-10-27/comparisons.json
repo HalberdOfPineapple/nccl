@@ -1,0 +1,3038 @@
+[
+  {
+    "name": "compute",
+    "co_ctas": 8,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.06465712090034,
+        "perturbed": 82.09517380159527,
+        "healthy_iqr": 0.02448843254012445,
+        "effect_iqr": 1.246167170762294,
+        "paired_percent_median": 0.03718614293357625,
+        "healthy_range": [
+          82.03536235366215,
+          82.09959902475217
+        ],
+        "perturbed_range": [
+          82.07753392219684,
+          82.1385849844217
+        ]
+      },
+      "completed_us": {
+        "healthy": 3271.0240000000003,
+        "perturbed": 3269.808,
+        "healthy_iqr": 0.9760000000001128,
+        "effect_iqr": -1.2459016393444762,
+        "paired_percent_median": -0.037174903027314965,
+        "healthy_range": [
+          3269.6319999999996,
+          3272.192
+        ],
+        "perturbed_range": [
+          3268.08,
+          3270.5119999999997
+        ]
+      },
+      "issue_us": {
+        "healthy": 3170.824,
+        "perturbed": 3164.288,
+        "healthy_iqr": 0.8959999999997308,
+        "effect_iqr": -7.294642857145114,
+        "paired_percent_median": -0.21641363759038468,
+        "healthy_range": [
+          3169.824,
+          3176.056
+        ],
+        "perturbed_range": [
+          3163.08,
+          3164.84
+        ]
+      },
+      "ordering_us": {
+        "healthy": 9.96,
+        "perturbed": 10.304,
+        "healthy_iqr": 0.7599999999999998,
+        "effect_iqr": 0.4526315789473678,
+        "paired_percent_median": 0.43859649122808264,
+        "healthy_range": [
+          9.824,
+          10.943999999999999
+        ],
+        "perturbed_range": [
+          8.936,
+          10.992
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.016000000000000014,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.664,
+          1.68
+        ],
+        "perturbed_range": [
+          1.656,
+          1.688
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 87.184,
+        "perturbed": 92.584,
+        "healthy_iqr": 0.43200000000000216,
+        "effect_iqr": 12.49999999999995,
+        "paired_percent_median": 7.314159698612532,
+        "healthy_range": [
+          83.952,
+          89.2
+        ],
+        "perturbed_range": [
+          91.336,
+          95.888
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 204.38400000000001,
+        "perturbed": 239.45600000000002,
+        "healthy_iqr": 1.6799999999999784,
+        "effect_iqr": 20.876190476190747,
+        "paired_percent_median": 15.46703936641045,
+        "healthy_range": [
+          176.54399999999998,
+          208.4
+        ],
+        "perturbed_range": [
+          232.112,
+          240.38400000000001
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3272.672,
+        "perturbed": 3271.392,
+        "healthy_iqr": 1.0720000000001164,
+        "effect_iqr": -1.1940298507463256,
+        "paired_percent_median": -0.039111771665478745,
+        "healthy_range": [
+          3271.184,
+          3273.696
+        ],
+        "perturbed_range": [
+          3269.616,
+          3271.968
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 1.858878016002795,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.858435329382632,
+          1.8596664560788119
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3281.3280000000004,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3280.5280000000002,
+          3285.056
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "compute",
+    "co_ctas": 32,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.02453486747797,
+        "perturbed": 83.23187773827516,
+        "healthy_iqr": 0.234953841550805,
+        "effect_iqr": 5.138638563337228,
+        "paired_percent_median": 1.4974515557747647,
+        "healthy_range": [
+          81.82610778636375,
+          82.10763449557203
+        ],
+        "perturbed_range": [
+          83.05141411044059,
+          83.31288733513428
+        ]
+      },
+      "completed_us": {
+        "healthy": 3272.624,
+        "perturbed": 3225.152,
+        "healthy_iqr": 9.391999999999825,
+        "effect_iqr": -5.054514480408926,
+        "paired_percent_median": -1.4753578657302424,
+        "healthy_range": [
+          3269.312,
+          3280.56
+        ],
+        "perturbed_range": [
+          3222.016,
+          3232.16
+        ]
+      },
+      "issue_us": {
+        "healthy": 3173.4480000000003,
+        "perturbed": 3149.184,
+        "healthy_iqr": 6.751999999999953,
+        "effect_iqr": -3.5936018957346407,
+        "paired_percent_median": -0.773165339403703,
+        "healthy_range": [
+          3171.288,
+          3180.616
+        ],
+        "perturbed_range": [
+          3146.776,
+          3157.248
+        ]
+      },
+      "ordering_us": {
+        "healthy": 10.608,
+        "perturbed": 10.136,
+        "healthy_iqr": 0.49599999999999866,
+        "effect_iqr": -0.9516129032258116,
+        "paired_percent_median": -0.1576044129235843,
+        "healthy_range": [
+          9.975999999999999,
+          11.192
+        ],
+        "perturbed_range": [
+          9.623999999999999,
+          10.872
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.8639999999999999,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 24.99999999999997,
+        "paired_percent_median": 11.961722488038284,
+        "healthy_range": [
+          1.664,
+          1.696
+        ],
+        "perturbed_range": [
+          1.784,
+          1.88
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 87.592,
+        "perturbed": 59.792,
+        "healthy_iqr": 1.5759999999999934,
+        "effect_iqr": -17.639593908629514,
+        "paired_percent_median": -31.494464944649447,
+        "healthy_range": [
+          85.096,
+          89.71199999999999
+        ],
+        "perturbed_range": [
+          58.76,
+          61.456
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 203.32799999999997,
+        "perturbed": 194.832,
+        "healthy_iqr": 7.935999999999979,
+        "effect_iqr": -1.0705645161290327,
+        "paired_percent_median": -3.256185155626501,
+        "healthy_range": [
+          172.38400000000001,
+          210.48000000000002
+        ],
+        "perturbed_range": [
+          192.848,
+          201.96800000000002
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3274.1279999999997,
+        "perturbed": 3226.7039999999997,
+        "healthy_iqr": 9.424000000000433,
+        "effect_iqr": -5.032258064515895,
+        "paired_percent_median": -1.4736996051284534,
+        "healthy_range": [
+          3270.9120000000003,
+          3282.08
+        ],
+        "perturbed_range": [
+          3223.568,
+          3233.712
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 7.431921094392428,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          7.376288657902789,
+          7.437258714249433
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3237.2,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3235.056,
+          3245.056
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "compute",
+    "co_ctas": 100,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 81.88641378340274,
+        "perturbed": 83.2211494884079,
+        "healthy_iqr": 0.08474858536985153,
+        "effect_iqr": 15.749356749498943,
+        "paired_percent_median": 1.6031878499664254,
+        "healthy_range": [
+          81.78063890444851,
+          82.06264799369171
+        ],
+        "perturbed_range": [
+          83.09173617098955,
+          83.34931057241917
+        ]
+      },
+      "completed_us": {
+        "healthy": 3278.1440000000002,
+        "perturbed": 3225.568,
+        "healthy_iqr": 3.39200000000028,
+        "effect_iqr": -15.499999999998726,
+        "paired_percent_median": -1.577877542664119,
+        "healthy_range": [
+          3271.1040000000003,
+          3282.384
+        ],
+        "perturbed_range": [
+          3220.608,
+          3230.5919999999996
+        ]
+      },
+      "issue_us": {
+        "healthy": 3180.0,
+        "perturbed": 3157.768,
+        "healthy_iqr": 3.4400000000000546,
+        "effect_iqr": -6.462790697674308,
+        "paired_percent_median": -0.7001257861635302,
+        "healthy_range": [
+          3174.416,
+          3181.4880000000003
+        ],
+        "perturbed_range": [
+          3151.9120000000003,
+          3162.608
+        ]
+      },
+      "ordering_us": {
+        "healthy": 10.544,
+        "perturbed": 10.096,
+        "healthy_iqr": 0.27999999999999936,
+        "effect_iqr": -1.600000000000005,
+        "paired_percent_median": -4.0756914119359555,
+        "healthy_range": [
+          10.120000000000001,
+          10.992
+        ],
+        "perturbed_range": [
+          8.815999999999999,
+          10.864
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.808,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 18.0,
+        "paired_percent_median": 8.173076923076938,
+        "healthy_range": [
+          1.648,
+          1.68
+        ],
+        "perturbed_range": [
+          1.712,
+          1.92
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 86.08,
+        "perturbed": 55.56,
+        "healthy_iqr": 0.9919999999999902,
+        "effect_iqr": -30.766129032258362,
+        "paired_percent_median": -35.608992076653756,
+        "healthy_range": [
+          84.664,
+          86.832
+        ],
+        "perturbed_range": [
+          54.176,
+          55.912000000000006
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 205.10399999999998,
+        "perturbed": 247.296,
+        "healthy_iqr": 0.17599999999998772,
+        "effect_iqr": 239.7272727272895,
+        "paired_percent_median": 21.15114646700984,
+        "healthy_range": [
+          202.672,
+          205.552
+        ],
+        "perturbed_range": [
+          244.56,
+          258.784
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3279.696,
+        "perturbed": 3227.072,
+        "healthy_iqr": 3.375999999999749,
+        "effect_iqr": -15.587677725119581,
+        "paired_percent_median": -1.576629248518857,
+        "healthy_range": [
+          3272.656,
+          3283.968
+        ],
+        "perturbed_range": [
+          3222.192,
+          3232.192
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 23.110837920955902,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          23.071445874344548,
+          23.209598586156684
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3238.3199999999997,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3234.56,
+          3244.96
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "source_memory",
+    "co_ctas": 8,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.05783955432005,
+        "perturbed": 81.77505760731454,
+        "healthy_iqr": 0.05621786040182997,
+        "effect_iqr": -5.030108669811855,
+        "paired_percent_median": -0.405530646235186,
+        "healthy_range": [
+          82.04860345369379,
+          82.11124783940394
+        ],
+        "perturbed_range": [
+          81.67155576735603,
+          82.20619682111035
+        ]
+      },
+      "completed_us": {
+        "healthy": 3271.2960000000003,
+        "perturbed": 3282.608,
+        "healthy_iqr": 2.2399999999997817,
+        "effect_iqr": 5.050000000000447,
+        "paired_percent_median": 0.4071824637475352,
+        "healthy_range": [
+          3269.168,
+          3271.6639999999998
+        ],
+        "perturbed_range": [
+          3265.392,
+          3286.768
+        ]
+      },
+      "issue_us": {
+        "healthy": 3172.88,
+        "perturbed": 3160.84,
+        "healthy_iqr": 1.231999999999971,
+        "effect_iqr": -9.772727272727474,
+        "paired_percent_median": -0.3997227647911328,
+        "healthy_range": [
+          3171.616,
+          3174.2
+        ],
+        "perturbed_range": [
+          3157.616,
+          3168.392
+        ]
+      },
+      "ordering_us": {
+        "healthy": 9.768,
+        "perturbed": 9.704,
+        "healthy_iqr": 0.6559999999999988,
+        "effect_iqr": -0.09756097560975636,
+        "paired_percent_median": -4.563335955940195,
+        "healthy_range": [
+          9.120000000000001,
+          10.408000000000001
+        ],
+        "perturbed_range": [
+          8.576,
+          10.336
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.672,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.03200000000000003,
+        "effect_iqr": -0.25,
+        "paired_percent_median": -0.4784688995215336,
+        "healthy_range": [
+          1.648,
+          1.704
+        ],
+        "perturbed_range": [
+          1.664,
+          1.688
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 84.984,
+        "perturbed": 107.232,
+        "healthy_iqr": 1.960000000000008,
+        "effect_iqr": 11.351020408163222,
+        "paired_percent_median": 26.33364750235627,
+        "healthy_range": [
+          83.888,
+          88.336
+        ],
+        "perturbed_range": [
+          93.08,
+          117.27199999999999
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 205.568,
+        "perturbed": 237.488,
+        "healthy_iqr": 2.1759999999999877,
+        "effect_iqr": 14.6691176470589,
+        "paired_percent_median": 17.086061370986826,
+        "healthy_range": [
+          202.832,
+          207.808
+        ],
+        "perturbed_range": [
+          201.072,
+          289.424
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3272.864,
+        "perturbed": 3284.1279999999997,
+        "healthy_iqr": 2.1600000000003092,
+        "effect_iqr": 5.214814814813915,
+        "paired_percent_median": 0.40355519901384973,
+        "healthy_range": [
+          3270.7039999999997,
+          3273.28
+        ],
+        "perturbed_range": [
+          3266.848,
+          3288.368
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 20.480681403058192,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          20.361963487791154,
+          20.59906590850752
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3386.768,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3366.288,
+          3391.792
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "source_memory",
+    "co_ctas": 32,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.04378945408938,
+        "perturbed": 82.3247940161205,
+        "healthy_iqr": 0.15143222257032107,
+        "effect_iqr": 1.8556457619225495,
+        "paired_percent_median": 0.5032729714030459,
+        "healthy_range": [
+          81.87962014998607,
+          82.0666628866696
+        ],
+        "perturbed_range": [
+          82.00729492562104,
+          83.61766732123887
+        ]
+      },
+      "completed_us": {
+        "healthy": 3271.8559999999998,
+        "perturbed": 3260.688,
+        "healthy_iqr": 6.0479999999997744,
+        "effect_iqr": -1.84656084656086,
+        "paired_percent_median": -0.500755534473396,
+        "healthy_range": [
+          3270.944,
+          3278.416
+        ],
+        "perturbed_range": [
+          3210.272,
+          3273.312
+        ]
+      },
+      "issue_us": {
+        "healthy": 3172.224,
+        "perturbed": 3148.776,
+        "healthy_iqr": 3.711999999999989,
+        "effect_iqr": -6.316810344827691,
+        "paired_percent_median": -0.7346599076946347,
+        "healthy_range": [
+          3170.072,
+          3181.08
+        ],
+        "perturbed_range": [
+          3145.744,
+          3160.016
+        ]
+      },
+      "ordering_us": {
+        "healthy": 10.104,
+        "perturbed": 9.399999999999999,
+        "healthy_iqr": 0.2560000000000002,
+        "effect_iqr": -2.75,
+        "paired_percent_median": -8.045052292839916,
+        "healthy_range": [
+          9.488,
+          10.847999999999999
+        ],
+        "perturbed_range": [
+          8.056000000000001,
+          9.559999999999999
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.672,
+        "perturbed": 1.68,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.664,
+          1.696
+        ],
+        "perturbed_range": [
+          1.664,
+          1.92
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 87.424,
+        "perturbed": 91.848,
+        "healthy_iqr": 3.1999999999999886,
+        "effect_iqr": 1.3825000000000025,
+        "paired_percent_median": 5.060395314787702,
+        "healthy_range": [
+          85.112,
+          90.328
+        ],
+        "perturbed_range": [
+          53.36,
+          114.47200000000001
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 205.696,
+        "perturbed": 162.99200000000002,
+        "healthy_iqr": 3.775999999999982,
+        "effect_iqr": -11.309322033898354,
+        "paired_percent_median": -20.83462853590301,
+        "healthy_range": [
+          173.312,
+          205.888
+        ],
+        "perturbed_range": [
+          130.30399999999997,
+          195.376
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3273.456,
+        "perturbed": 3262.1440000000002,
+        "healthy_iqr": 6.031999999999698,
+        "effect_iqr": -1.8753315649868143,
+        "paired_percent_median": -0.5044210155871864,
+        "healthy_range": [
+          3272.4480000000003,
+          3280.032
+        ],
+        "perturbed_range": [
+          3211.808,
+          3274.624
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 82.41657758379571,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          81.99148686376216,
+          82.5582884024102
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3367.4880000000003,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3317.7439999999997,
+          3382.544
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "source_memory",
+    "co_ctas": 100,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.04980915538309,
+        "perturbed": 84.43873185912193,
+        "healthy_iqr": 0.07664520212458115,
+        "effect_iqr": 31.168587693927975,
+        "paired_percent_median": 2.9739523462205986,
+        "healthy_range": [
+          81.91880072262501,
+          82.11566636185069
+        ],
+        "perturbed_range": [
+          82.71851308389158,
+          84.63168638659434
+        ]
+      },
+      "completed_us": {
+        "healthy": 3271.616,
+        "perturbed": 3179.056,
+        "healthy_iqr": 3.05600000000004,
+        "effect_iqr": -30.287958115182832,
+        "paired_percent_median": -2.888065465424361,
+        "healthy_range": [
+          3268.992,
+          3276.848
+        ],
+        "perturbed_range": [
+          3171.808,
+          3245.168
+        ]
+      },
+      "issue_us": {
+        "healthy": 3171.9759999999997,
+        "perturbed": 3114.656,
+        "healthy_iqr": 0.7519999999999527,
+        "effect_iqr": -76.22340425532356,
+        "paired_percent_median": -1.8229029068319247,
+        "healthy_range": [
+          3169.768,
+          3179.544
+        ],
+        "perturbed_range": [
+          3111.76,
+          3125.8559999999998
+        ]
+      },
+      "ordering_us": {
+        "healthy": 10.096,
+        "perturbed": 8.016,
+        "healthy_iqr": 0.927999999999999,
+        "effect_iqr": -2.24137931034483,
+        "paired_percent_median": -21.333333333333314,
+        "healthy_range": [
+          8.472000000000001,
+          10.6
+        ],
+        "perturbed_range": [
+          7.016,
+          8.056000000000001
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.88,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 13.043478260869556,
+        "healthy_range": [
+          1.656,
+          1.7999999999999998
+        ],
+        "perturbed_range": [
+          1.68,
+          1.92
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 86.352,
+        "perturbed": 54.36,
+        "healthy_iqr": 1.4399999999999835,
+        "effect_iqr": -22.216666666666924,
+        "paired_percent_median": -39.12381293674968,
+        "healthy_range": [
+          84.26400000000001,
+          89.29599999999999
+        ],
+        "perturbed_range": [
+          44.36,
+          109.376
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 204.89600000000002,
+        "perturbed": 112.896,
+        "healthy_iqr": 2.3360000000000127,
+        "effect_iqr": -39.38356164383541,
+        "paired_percent_median": -45.36517932570463,
+        "healthy_range": [
+          202.49599999999998,
+          208.336
+        ],
+        "perturbed_range": [
+          93.344,
+          151.51999999999998
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3273.184,
+        "perturbed": 3180.624,
+        "healthy_iqr": 3.0559999999995853,
+        "effect_iqr": -30.287958115187486,
+        "paired_percent_median": -2.8891255912129044,
+        "healthy_range": [
+          3270.416,
+          3278.4
+        ],
+        "perturbed_range": [
+          3173.376,
+          3246.688
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 259.00246752082376,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          258.46781593775404,
+          259.2096454981409
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3288.368,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3280.992,
+          3359.056
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "destination_memory",
+    "co_ctas": 8,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.06505752950365,
+        "perturbed": 82.04258806123921,
+        "healthy_iqr": 0.016045742235675675,
+        "effect_iqr": -1.400338353589815,
+        "paired_percent_median": -0.02738006764493317,
+        "healthy_range": [
+          82.01771645131541,
+          82.09316754265322
+        ],
+        "perturbed_range": [
+          81.93680357109614,
+          82.06104354747441
+        ]
+      },
+      "completed_us": {
+        "healthy": 3271.008,
+        "perturbed": 3271.904,
+        "healthy_iqr": 0.6400000000003274,
+        "effect_iqr": 1.3999999999995736,
+        "paired_percent_median": 0.027392167796591593,
+        "healthy_range": [
+          3269.888,
+          3272.8959999999997
+        ],
+        "perturbed_range": [
+          3271.168,
+          3276.1279999999997
+        ]
+      },
+      "issue_us": {
+        "healthy": 3172.8720000000003,
+        "perturbed": 3172.728,
+        "healthy_iqr": 0.7520000000004075,
+        "effect_iqr": -0.19148936170233352,
+        "paired_percent_median": -0.03703974339267502,
+        "healthy_range": [
+          3172.2,
+          3174.968
+        ],
+        "perturbed_range": [
+          3170.0879999999997,
+          3175.712
+        ]
+      },
+      "ordering_us": {
+        "healthy": 9.92,
+        "perturbed": 10.24,
+        "healthy_iqr": 0.8640000000000008,
+        "effect_iqr": 0.37037037037037035,
+        "paired_percent_median": 7.234042553191511,
+        "healthy_range": [
+          9.32,
+          10.264
+        ],
+        "perturbed_range": [
+          9.472,
+          11.48
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.672,
+        "perturbed": 1.672,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.664,
+          1.696
+        ],
+        "perturbed_range": [
+          1.664,
+          1.68
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 86.784,
+        "perturbed": 86.104,
+        "healthy_iqr": 0.5679999999999836,
+        "effect_iqr": -1.1971830985915959,
+        "paired_percent_median": -0.4732739420935217,
+        "healthy_range": [
+          86.208,
+          87.776
+        ],
+        "perturbed_range": [
+          85.184,
+          88.464
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 202.272,
+        "perturbed": 204.59199999999998,
+        "healthy_iqr": 0.11199999999999477,
+        "effect_iqr": 20.71428571428662,
+        "paired_percent_median": 1.2831683168316843,
+        "healthy_range": [
+          202.0,
+          205.344
+        ],
+        "perturbed_range": [
+          200.368,
+          211.36
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3272.416,
+        "perturbed": 3273.44,
+        "healthy_iqr": 0.7359999999994216,
+        "effect_iqr": 1.3913043478270273,
+        "paired_percent_median": 0.031291865092941684,
+        "healthy_range": [
+          3271.4399999999996,
+          3274.352
+        ],
+        "perturbed_range": [
+          3272.7039999999997,
+          3277.648
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 20.31023158030856,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          20.286387109144258,
+          20.320851737095474
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3365.28,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3362.24,
+          3377.4080000000004
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "destination_memory",
+    "co_ctas": 32,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.02453323624928,
+        "perturbed": 81.99607085532,
+        "healthy_iqr": 0.036492405627896574,
+        "effect_iqr": -0.7799535393612377,
+        "paired_percent_median": -0.09036554869872315,
+        "healthy_range": [
+          81.96722974662114,
+          82.07469470006635
+        ],
+        "perturbed_range": [
+          81.95041131672278,
+          82.1172739512445
+        ]
+      },
+      "completed_us": {
+        "healthy": 3272.624,
+        "perturbed": 3273.76,
+        "healthy_iqr": 1.456000000000131,
+        "effect_iqr": 0.7802197802199998,
+        "paired_percent_median": 0.09044729855920419,
+        "healthy_range": [
+          3270.624,
+          3274.912
+        ],
+        "perturbed_range": [
+          3268.928,
+          3275.584
+        ]
+      },
+      "issue_us": {
+        "healthy": 3173.08,
+        "perturbed": 3172.3599999999997,
+        "healthy_iqr": 1.1840000000001965,
+        "effect_iqr": -0.6081081081082222,
+        "paired_percent_median": 0.03580117740491495,
+        "healthy_range": [
+          3170.504,
+          3174.576
+        ],
+        "perturbed_range": [
+          3171.112,
+          3174.928
+        ]
+      },
+      "ordering_us": {
+        "healthy": 10.56,
+        "perturbed": 9.792,
+        "healthy_iqr": 0.6400000000000006,
+        "effect_iqr": -1.2,
+        "paired_percent_median": -5.460218408736351,
+        "healthy_range": [
+          9.96,
+          10.968
+        ],
+        "perturbed_range": [
+          9.416,
+          10.84
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.656,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 1.0,
+        "paired_percent_median": 0.48309178743961567,
+        "healthy_range": [
+          1.656,
+          1.672
+        ],
+        "perturbed_range": [
+          1.664,
+          1.672
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 86.016,
+        "perturbed": 87.768,
+        "healthy_iqr": 1.887999999999991,
+        "effect_iqr": 0.9279661016949172,
+        "paired_percent_median": -0.14880952380952328,
+        "healthy_range": [
+          84.936,
+          88.624
+        ],
+        "perturbed_range": [
+          85.19200000000001,
+          88.78399999999999
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 207.744,
+        "perturbed": 207.072,
+        "healthy_iqr": 2.2079999999999984,
+        "effect_iqr": -0.3043478260869554,
+        "paired_percent_median": 0.04596292324190454,
+        "healthy_range": [
+          205.264,
+          208.864
+        ],
+        "perturbed_range": [
+          176.56,
+          208.95999999999998
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3274.192,
+        "perturbed": 3275.2479999999996,
+        "healthy_iqr": 1.4559999999996762,
+        "effect_iqr": 0.7252747252746017,
+        "paired_percent_median": 0.08942664327564742,
+        "healthy_range": [
+          3272.192,
+          3276.56
+        ],
+        "perturbed_range": [
+          3270.464,
+          3277.2
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 79.34262453523556,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          79.32090101417467,
+          79.3850240683722
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3380.624,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3374.448,
+          3385.888
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "destination_memory",
+    "co_ctas": 100,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.00369132793477,
+        "perturbed": 82.01811761392295,
+        "healthy_iqr": 0.11514276397420531,
+        "effect_iqr": 0.12529042633900134,
+        "paired_percent_median": -0.004405442047838992,
+        "healthy_range": [
+          81.97644394741559,
+          82.10361073942158
+        ],
+        "perturbed_range": [
+          81.96122401929134,
+          82.05663111953558
+        ]
+      },
+      "completed_us": {
+        "healthy": 3273.456,
+        "perturbed": 3272.88,
+        "healthy_iqr": 4.5919999999996435,
+        "effect_iqr": -0.1254355400697009,
+        "paired_percent_median": 0.004399020484768812,
+        "healthy_range": [
+          3269.4719999999998,
+          3274.544
+        ],
+        "perturbed_range": [
+          3271.344,
+          3275.152
+        ]
+      },
+      "issue_us": {
+        "healthy": 3172.8,
+        "perturbed": 3173.392,
+        "healthy_iqr": 1.368000000000393,
+        "effect_iqr": 0.432748538011311,
+        "paired_percent_median": 0.01689457532836336,
+        "healthy_range": [
+          3170.12,
+          3174.344
+        ],
+        "perturbed_range": [
+          3172.88,
+          3174.04
+        ]
+      },
+      "ordering_us": {
+        "healthy": 10.656,
+        "perturbed": 9.864,
+        "healthy_iqr": 0.6240000000000006,
+        "effect_iqr": -1.2692307692307678,
+        "paired_percent_median": -4.511834319526642,
+        "healthy_range": [
+          9.808,
+          10.96
+        ],
+        "perturbed_range": [
+          8.656,
+          11.016
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.03200000000000003,
+        "effect_iqr": 0.0,
+        "paired_percent_median": -0.4739336492891044,
+        "healthy_range": [
+          1.656,
+          1.736
+        ],
+        "perturbed_range": [
+          1.648,
+          1.68
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 87.49600000000001,
+        "perturbed": 87.864,
+        "healthy_iqr": 1.7520000000000095,
+        "effect_iqr": 0.2100456621004526,
+        "paired_percent_median": 0.8851172552240216,
+        "healthy_range": [
+          84.608,
+          88.488
+        ],
+        "perturbed_range": [
+          85.936,
+          89.24000000000001
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 204.672,
+        "perturbed": 205.28,
+        "healthy_iqr": 8.49600000000001,
+        "effect_iqr": 0.07156308851224145,
+        "paired_percent_median": 0.297060662914328,
+        "healthy_range": [
+          178.768,
+          208.99200000000002
+        ],
+        "perturbed_range": [
+          180.57600000000002,
+          208.56
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3274.944,
+        "perturbed": 3274.3999999999996,
+        "healthy_iqr": 4.688000000000102,
+        "effect_iqr": -0.11604095563146587,
+        "paired_percent_median": 0.0048855797228908315,
+        "healthy_range": [
+          3270.96,
+          3276.048
+        ],
+        "perturbed_range": [
+          3272.896,
+          3276.848
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 246.74278219712818,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          246.64435832162928,
+          246.84480194634756
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3383.312,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3381.472,
+          3384.784
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_source_memory",
+    "co_ctas": 8,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.60001919975849,
+        "perturbed": 80.7287947376612,
+        "healthy_iqr": 0.03445692410423362,
+        "effect_iqr": 3.7372905809340513,
+        "paired_percent_median": 0.1597711007779834,
+        "healthy_range": [
+          80.57021571483645,
+          80.62286936441257
+        ],
+        "perturbed_range": [
+          80.57679701461745,
+          81.13558374251872
+        ]
+      },
+      "completed_us": {
+        "healthy": 3330.464,
+        "perturbed": 3325.152,
+        "healthy_iqr": 1.4239999999999782,
+        "effect_iqr": -3.730337078651671,
+        "paired_percent_median": -0.15949729527177103,
+        "healthy_range": [
+          3329.52,
+          3331.696
+        ],
+        "perturbed_range": [
+          3308.48,
+          3331.424
+        ]
+      },
+      "issue_us": {
+        "healthy": 3241.0559999999996,
+        "perturbed": 3218.48,
+        "healthy_iqr": 1.2959999999998217,
+        "effect_iqr": -17.419753086421814,
+        "paired_percent_median": -0.6973077407081196,
+        "healthy_range": [
+          3238.936,
+          3242.184
+        ],
+        "perturbed_range": [
+          3213.376,
+          3219.712
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.712,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 0.9433962264151052,
+        "healthy_range": [
+          1.696,
+          1.72
+        ],
+        "perturbed_range": [
+          1.696,
+          1.728
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.704,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 1.4285714285714235,
+        "healthy_range": [
+          1.664,
+          1.68
+        ],
+        "perturbed_range": [
+          1.664,
+          1.76
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 85.864,
+        "perturbed": 102.19200000000001,
+        "healthy_iqr": 1.1519999999999868,
+        "effect_iqr": 14.173611111111276,
+        "paired_percent_median": 17.911010558069364,
+        "healthy_range": [
+          84.456,
+          86.78399999999999
+        ],
+        "perturbed_range": [
+          87.16,
+          112.696
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 199.76,
+        "perturbed": 205.36,
+        "healthy_iqr": 2.7040000000000077,
+        "effect_iqr": 2.071005917159766,
+        "paired_percent_median": 3.099719663596323,
+        "healthy_range": [
+          198.032,
+          205.552
+        ],
+        "perturbed_range": [
+          158.096,
+          212.256
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3332.112,
+        "perturbed": 3326.5600000000004,
+        "healthy_iqr": 1.2000000000002728,
+        "effect_iqr": -4.626666666665348,
+        "paired_percent_median": -0.16662104995269766,
+        "healthy_range": [
+          3330.992,
+          3333.28
+        ],
+        "perturbed_range": [
+          3310.0,
+          3332.848
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 77.03721234123553,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          76.94156659414803,
+          77.08025021105759
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3358.7200000000003,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3338.912,
+          3360.16
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_source_memory",
+    "co_ctas": 32,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.45121540644496,
+        "perturbed": 81.49699880733257,
+        "healthy_iqr": 0.07402820397885534,
+        "effect_iqr": 14.126823895205153,
+        "paired_percent_median": 1.400448904207896,
+        "healthy_range": [
+          80.37105205567097,
+          80.49599141613216
+        ],
+        "perturbed_range": [
+          81.11714759636016,
+          82.47817802019625
+        ]
+      },
+      "completed_us": {
+        "healthy": 3336.624,
+        "perturbed": 3293.808,
+        "healthy_iqr": 3.0719999999996617,
+        "effect_iqr": -13.93750000000147,
+        "paired_percent_median": -1.3810976924219287,
+        "healthy_range": [
+          3334.768,
+          3339.952
+        ],
+        "perturbed_range": [
+          3254.624,
+          3309.232
+        ]
+      },
+      "issue_us": {
+        "healthy": 3248.3360000000002,
+        "perturbed": 3194.7439999999997,
+        "healthy_iqr": 2.4960000000000946,
+        "effect_iqr": -21.471153846153253,
+        "paired_percent_median": -1.6418535863939043,
+        "healthy_range": [
+          3245.6000000000004,
+          3249.12
+        ],
+        "perturbed_range": [
+          3191.616,
+          3201.552
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.712,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 2.0,
+        "paired_percent_median": 0.9433962264151052,
+        "healthy_range": [
+          1.696,
+          1.704
+        ],
+        "perturbed_range": [
+          1.696,
+          1.752
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.888,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 13.461538461538458,
+        "healthy_range": [
+          1.664,
+          1.664
+        ],
+        "perturbed_range": [
+          1.664,
+          1.92
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 84.27199999999999,
+        "perturbed": 92.048,
+        "healthy_iqr": 2.951999999999998,
+        "effect_iqr": 2.6341463414634196,
+        "paired_percent_median": 5.569318286081293,
+        "healthy_range": [
+          82.096,
+          87.19200000000001
+        ],
+        "perturbed_range": [
+          56.848,
+          103.4
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 201.648,
+        "perturbed": 144.24,
+        "healthy_iqr": 1.0560000000000116,
+        "effect_iqr": -54.363636363635756,
+        "paired_percent_median": -28.29303213490295,
+        "healthy_range": [
+          198.656,
+          202.624
+        ],
+        "perturbed_range": [
+          98.19200000000001,
+          148.608
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3338.24,
+        "perturbed": 3295.248,
+        "healthy_iqr": 3.119999999999891,
+        "effect_iqr": -13.779487179487576,
+        "paired_percent_median": -1.378081890050331,
+        "healthy_range": [
+          3336.416,
+          3341.456
+        ],
+        "perturbed_range": [
+          3256.176,
+          3310.816
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 308.4229931283264,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          307.842321821111,
+          309.14389188665564
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3328.352,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3288.88,
+          3343.968
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_source_memory",
+    "co_ctas": 100,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.46279399700612,
+        "perturbed": 80.2864381028374,
+        "healthy_iqr": 0.06946963560940844,
+        "effect_iqr": -2.5386039903862385,
+        "paired_percent_median": -0.13591193000175306,
+        "healthy_range": [
+          80.39570545776357,
+          80.53154031369965
+        ],
+        "perturbed_range": [
+          80.04702574518566,
+          81.19448593483045
+        ]
+      },
+      "completed_us": {
+        "healthy": 3336.1440000000002,
+        "perturbed": 3343.4719999999998,
+        "healthy_iqr": 2.880000000000109,
+        "effect_iqr": 2.5444444444441814,
+        "paired_percent_median": 0.13609158388561138,
+        "healthy_range": [
+          3333.2960000000003,
+          3338.928
+        ],
+        "perturbed_range": [
+          3306.08,
+          3353.472
+        ]
+      },
+      "issue_us": {
+        "healthy": 3248.568,
+        "perturbed": 3255.4080000000004,
+        "healthy_iqr": 1.4159999999997126,
+        "effect_iqr": 4.830508474577354,
+        "paired_percent_median": 0.24635032000905888,
+        "healthy_range": [
+          3246.1279999999997,
+          3249.192
+        ],
+        "perturbed_range": [
+          3254.8639999999996,
+          3262.0240000000003
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.752,
+        "healthy_iqr": 0.016000000000000014,
+        "effect_iqr": 3.5,
+        "paired_percent_median": 3.301886792452824,
+        "healthy_range": [
+          1.696,
+          1.728
+        ],
+        "perturbed_range": [
+          1.696,
+          1.8
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.92,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 31.99999999999997,
+        "paired_percent_median": 15.384615384615397,
+        "healthy_range": [
+          1.664,
+          1.672
+        ],
+        "perturbed_range": [
+          1.68,
+          1.92
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 84.664,
+        "perturbed": 83.656,
+        "healthy_iqr": 3.6880000000000024,
+        "effect_iqr": -0.2733188720173522,
+        "paired_percent_median": -3.6398820493918183,
+        "healthy_range": [
+          82.208,
+          87.56
+        ],
+        "perturbed_range": [
+          45.792,
+          87.512
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 198.20800000000003,
+        "perturbed": 122.944,
+        "healthy_iqr": 3.647999999999996,
+        "effect_iqr": -20.63157894736845,
+        "paired_percent_median": -39.09321496512364,
+        "healthy_range": [
+          195.632,
+          201.856
+        ],
+        "perturbed_range": [
+          80.72,
+          133.98399999999998
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3337.776,
+        "perturbed": 3345.0240000000003,
+        "healthy_iqr": 3.088000000000193,
+        "effect_iqr": 2.3471502590673734,
+        "paired_percent_median": 0.13410989347844016,
+        "healthy_range": [
+          3334.816,
+          3340.544
+        ],
+        "perturbed_range": [
+          3307.6000000000004,
+          3355.184
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 934.1168861668554,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          933.4615595531045,
+          936.3444601169804
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3381.584,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3341.936,
+          3389.584
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_destination_memory",
+    "co_ctas": 8,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.6147365027766,
+        "perturbed": 80.58764410847695,
+        "healthy_iqr": 0.07005559934421512,
+        "effect_iqr": -0.3867270361434777,
+        "paired_percent_median": -0.009121648595955545,
+        "healthy_range": [
+          80.5365685669773,
+          80.62093727808048
+        ],
+        "perturbed_range": [
+          80.5404319715355,
+          80.62868175315816
+        ]
+      },
+      "completed_us": {
+        "healthy": 3329.8559999999998,
+        "perturbed": 3330.9759999999997,
+        "healthy_iqr": 2.8960000000001855,
+        "effect_iqr": 0.38674033149165027,
+        "paired_percent_median": 0.00912198494391614,
+        "healthy_range": [
+          3329.6,
+          3333.088
+        ],
+        "perturbed_range": [
+          3329.2799999999997,
+          3332.928
+        ]
+      },
+      "issue_us": {
+        "healthy": 3240.7839999999997,
+        "perturbed": 3240.016,
+        "healthy_iqr": 0.5520000000005894,
+        "effect_iqr": -1.3913043478238305,
+        "paired_percent_median": -0.01407202407549546,
+        "healthy_range": [
+          3237.728,
+          3241.568
+        ],
+        "perturbed_range": [
+          3239.864,
+          3240.9440000000004
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.696,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.696,
+          1.72
+        ],
+        "perturbed_range": [
+          1.696,
+          1.696
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.02400000000000002,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.664,
+          1.688
+        ],
+        "perturbed_range": [
+          1.664,
+          1.72
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 88.32,
+        "perturbed": 86.56,
+        "healthy_iqr": 0.8239999999999981,
+        "effect_iqr": -2.1359223300970815,
+        "paired_percent_median": -1.9927536231883924,
+        "healthy_range": [
+          83.984,
+          88.76
+        ],
+        "perturbed_range": [
+          86.208,
+          88.096
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 202.912,
+        "perturbed": 201.824,
+        "healthy_iqr": 1.5840000000000032,
+        "effect_iqr": -0.6868686868686816,
+        "paired_percent_median": -1.1588755774802229,
+        "healthy_range": [
+          199.28,
+          204.336
+        ],
+        "perturbed_range": [
+          195.424,
+          203.216
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3331.408,
+        "perturbed": 3332.48,
+        "healthy_iqr": 2.895999999999731,
+        "effect_iqr": 0.3701657458564282,
+        "paired_percent_median": 0.008637857811266691,
+        "healthy_range": [
+          3331.1679999999997,
+          3334.5119999999997
+        ],
+        "perturbed_range": [
+          3330.736,
+          3334.48
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 74.63810823210613,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          74.60019901595912,
+          74.69520020190274
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3360.096,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3357.136,
+          3361.904
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_destination_memory",
+    "co_ctas": 32,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.57640518077893,
+        "perturbed": 80.61940275109507,
+        "healthy_iqr": 0.0654078775464626,
+        "effect_iqr": 0.657376021498151,
+        "paired_percent_median": 0.05959669164625758,
+        "healthy_range": [
+          80.51569382912027,
+          80.63992003637748
+        ],
+        "perturbed_range": [
+          80.5408194330478,
+          80.66706160666926
+        ]
+      },
+      "completed_us": {
+        "healthy": 3331.44,
+        "perturbed": 3329.6639999999998,
+        "healthy_iqr": 2.7040000000001783,
+        "effect_iqr": -0.6568047337278763,
+        "paired_percent_median": -0.05955382657348851,
+        "healthy_range": [
+          3328.816,
+          3333.952
+        ],
+        "perturbed_range": [
+          3327.696,
+          3332.9120000000003
+        ]
+      },
+      "issue_us": {
+        "healthy": 3241.1440000000002,
+        "perturbed": 3240.52,
+        "healthy_iqr": 2.455999999999676,
+        "effect_iqr": -0.25407166123792074,
+        "paired_percent_median": -0.06883042551512064,
+        "healthy_range": [
+          3239.928,
+          3242.752
+        ],
+        "perturbed_range": [
+          3237.56,
+          3241.392
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.696,
+        "healthy_iqr": 0.016000000000000014,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.696,
+          1.72
+        ],
+        "perturbed_range": [
+          1.696,
+          1.72
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.016000000000000014,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.9756097560975618,
+        "healthy_range": [
+          1.64,
+          1.664
+        ],
+        "perturbed_range": [
+          1.656,
+          1.704
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 86.176,
+        "perturbed": 86.52000000000001,
+        "healthy_iqr": 1.3599999999999994,
+        "effect_iqr": 0.25294117647059444,
+        "paired_percent_median": 0.9034797387959648,
+        "healthy_range": [
+          84.672,
+          89.432
+        ],
+        "perturbed_range": [
+          82.33600000000001,
+          90.24000000000001
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 201.83999999999997,
+        "perturbed": 200.288,
+        "healthy_iqr": 1.9359999999999786,
+        "effect_iqr": -0.8016528925619738,
+        "paired_percent_median": 0.055471907441173585,
+        "healthy_range": [
+          198.112,
+          205.28
+        ],
+        "perturbed_range": [
+          171.984,
+          204.848
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3332.992,
+        "perturbed": 3331.232,
+        "healthy_iqr": 2.5760000000004766,
+        "effect_iqr": -0.6832298136645546,
+        "paired_percent_median": -0.05808594800107425,
+        "healthy_range": [
+          3330.3199999999997,
+          3335.536
+        ],
+        "perturbed_range": [
+          3329.312,
+          3334.496
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 289.3663696750849,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          289.2744568688997,
+          289.44233172346594
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3364.3360000000002,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3361.888,
+          3366.736
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_destination_memory",
+    "co_ctas": 100,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.5512598234441,
+        "perturbed": 80.5744729092787,
+        "healthy_iqr": 0.1607992992866656,
+        "effect_iqr": 0.1443606156094936,
+        "paired_percent_median": 0.07885801942433268,
+        "healthy_range": [
+          80.39993972324503,
+          80.61047520124076
+        ],
+        "perturbed_range": [
+          80.40456247563213,
+          80.67404302543301
+        ]
+      },
+      "completed_us": {
+        "healthy": 3332.48,
+        "perturbed": 3331.52,
+        "healthy_iqr": 6.655999999999949,
+        "effect_iqr": -0.1442307692307758,
+        "paired_percent_median": -0.07879804158038572,
+        "healthy_range": [
+          3330.032,
+          3338.752
+        ],
+        "perturbed_range": [
+          3327.408,
+          3338.56
+        ]
+      },
+      "issue_us": {
+        "healthy": 3242.136,
+        "perturbed": 3241.704,
+        "healthy_iqr": 4.0,
+        "effect_iqr": -0.10799999999994725,
+        "paired_percent_median": -0.013324549001025865,
+        "healthy_range": [
+          3239.568,
+          3247.64
+        ],
+        "perturbed_range": [
+          3237.048,
+          3249.192
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.696,
+        "healthy_iqr": 0.016000000000000014,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.696,
+          1.72
+        ],
+        "perturbed_range": [
+          1.696,
+          1.696
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.664,
+          1.688
+        ],
+        "perturbed_range": [
+          1.64,
+          1.712
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 86.504,
+        "perturbed": 83.488,
+        "healthy_iqr": 0.568000000000012,
+        "effect_iqr": -5.309859154929474,
+        "paired_percent_median": -3.486543974845102,
+        "healthy_range": [
+          83.632,
+          87.936
+        ],
+        "perturbed_range": [
+          82.208,
+          87.70400000000001
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 199.952,
+        "perturbed": 198.72,
+        "healthy_iqr": 3.8559999999999945,
+        "effect_iqr": -0.31950207468879693,
+        "paired_percent_median": -0.616147875490114,
+        "healthy_range": [
+          195.776,
+          205.47199999999998
+        ],
+        "perturbed_range": [
+          177.024,
+          205.808
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3334.096,
+        "perturbed": 3333.1360000000004,
+        "healthy_iqr": 6.800000000000182,
+        "effect_iqr": -0.14117647058816998,
+        "paired_percent_median": -0.07684180194025281,
+        "healthy_range": [
+          3331.456,
+          3340.4
+        ],
+        "perturbed_range": [
+          3328.96,
+          3340.176
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 850.362777616356,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          850.1892677673666,
+          850.5318576384772
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3366.2560000000003,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3362.2079999999996,
+          3372.624
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_destination_memory",
+    "co_ctas": 131,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.4600929762922,
+        "perturbed": 80.59459714804052,
+        "healthy_iqr": 0.08845980893599403,
+        "effect_iqr": 1.520511669267116,
+        "paired_percent_median": 0.07254453528013904,
+        "healthy_range": [
+          80.42460606527641,
+          80.66434604979762
+        ],
+        "perturbed_range": [
+          80.357581970388,
+          80.69849327310261
+        ]
+      },
+      "completed_us": {
+        "healthy": 3336.2560000000003,
+        "perturbed": 3330.688,
+        "healthy_iqr": 3.66399999999976,
+        "effect_iqr": -1.5196506550219913,
+        "paired_percent_median": -0.0724947309293289,
+        "healthy_range": [
+          3327.808,
+          3337.728
+        ],
+        "perturbed_range": [
+          3326.3999999999996,
+          3340.512
+        ]
+      },
+      "issue_us": {
+        "healthy": 3246.8,
+        "perturbed": 3241.072,
+        "healthy_iqr": 6.599999999999909,
+        "effect_iqr": -0.8678787878788098,
+        "paired_percent_median": 0.0059270381602472,
+        "healthy_range": [
+          3239.392,
+          3248.824
+        ],
+        "perturbed_range": [
+          3239.584,
+          3248.24
+        ]
+      },
+      "ordering_us": {
+        "healthy": 1.696,
+        "perturbed": 1.696,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.696,
+          1.696
+        ],
+        "perturbed_range": [
+          1.696,
+          1.728
+        ]
+      },
+      "notification_us": {
+        "healthy": 1.664,
+        "perturbed": 1.664,
+        "healthy_iqr": 0.008000000000000007,
+        "effect_iqr": 0.0,
+        "paired_percent_median": 0.0,
+        "healthy_range": [
+          1.664,
+          1.68
+        ],
+        "perturbed_range": [
+          1.664,
+          1.688
+        ]
+      },
+      "ack_wait_us": {
+        "healthy": 85.792,
+        "perturbed": 84.648,
+        "healthy_iqr": 3.304000000000002,
+        "effect_iqr": -0.3462469733656189,
+        "paired_percent_median": 0.05673758865247791,
+        "healthy_range": [
+          84.344,
+          88.45599999999999
+        ],
+        "perturbed_range": [
+          83.664,
+          89.72
+        ]
+      },
+      "issue_spread_us": {
+        "healthy": 201.088,
+        "perturbed": 199.392,
+        "healthy_iqr": 3.1359999999999673,
+        "effect_iqr": -0.5408163265306173,
+        "paired_percent_median": -2.159064143832934,
+        "healthy_range": [
+          197.792,
+          203.792
+        ],
+        "perturbed_range": [
+          176.976,
+          203.584
+        ]
+      },
+      "receiver_wait_us": {
+        "healthy": 3337.728,
+        "perturbed": 3332.24,
+        "healthy_iqr": 3.6480000000001382,
+        "effect_iqr": -1.5043859649123015,
+        "paired_percent_median": -0.07245959537794944,
+        "healthy_range": [
+          3329.552,
+          3339.264
+        ],
+        "perturbed_range": [
+          3327.952,
+          3342.096
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 1082.3272562567117,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1080.85401401802,
+          1082.9561315700848
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 3366.64,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          3360.944,
+          3375.104
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 1.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "instrumentation_overhead",
+    "co_ctas": null,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 82.06064113626067,
+        "perturbed": 82.03055051948411,
+        "healthy_iqr": 0.01725446942960218,
+        "effect_iqr": -1.7439317331275102,
+        "paired_percent_median": -0.03666875661694213,
+        "healthy_range": [
+          81.96843074333562,
+          82.07669926311979
+        ],
+        "perturbed_range": [
+          81.87043004427133,
+          82.12732408047572
+        ]
+      },
+      "completed_us": {
+        "healthy": 3271.184,
+        "perturbed": 3272.384,
+        "healthy_iqr": 0.6879999999996471,
+        "effect_iqr": 1.744186046512258,
+        "paired_percent_median": 0.03668396519425077,
+        "healthy_range": [
+          3270.544,
+          3274.8639999999996
+        ],
+        "perturbed_range": [
+          3268.5280000000002,
+          3278.7839999999997
+        ]
+      },
+      "issue_us": {
+        "healthy": null,
+        "perturbed": 3172.6319999999996,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "ordering_us": {
+        "healthy": null,
+        "perturbed": 9.76,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "notification_us": {
+        "healthy": null,
+        "perturbed": 1.664,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "ack_wait_us": {
+        "healthy": null,
+        "perturbed": 86.92,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "issue_spread_us": {
+        "healthy": null,
+        "perturbed": 205.44,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "receiver_wait_us": {
+        "healthy": 3272.816,
+        "perturbed": 3273.984,
+        "healthy_iqr": 0.6720000000000255,
+        "effect_iqr": 1.738095238095351,
+        "paired_percent_median": 0.0356879213496919,
+        "healthy_range": [
+          3272.16,
+          3276.5280000000002
+        ],
+        "perturbed_range": [
+          3270.048,
+          3280.352
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 0.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          0.0,
+          0.0
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 0.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          0.0,
+          0.0
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 0.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  {
+    "name": "vector_instrumentation_overhead",
+    "co_ctas": null,
+    "pairs": 5,
+    "metrics": {
+      "throughput_gbps": {
+        "healthy": 80.57408316476837,
+        "perturbed": 80.59808865711443,
+        "healthy_iqr": 0.020114488600796676,
+        "effect_iqr": 1.193442837274646,
+        "paired_percent_median": 0.048032137054998536,
+        "healthy_range": [
+          80.50642287118637,
+          80.62559113734585
+        ],
+        "perturbed_range": [
+          80.5543562799084,
+          80.627131537011
+        ]
+      },
+      "completed_us": {
+        "healthy": 3331.536,
+        "perturbed": 3330.544,
+        "healthy_iqr": 0.8320000000003347,
+        "effect_iqr": -1.19230769230744,
+        "paired_percent_median": -0.048020821828342886,
+        "healthy_range": [
+          3329.408,
+          3334.3360000000002
+        ],
+        "perturbed_range": [
+          3329.344,
+          3332.352
+        ]
+      },
+      "issue_us": {
+        "healthy": null,
+        "perturbed": 3241.16,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "ordering_us": {
+        "healthy": null,
+        "perturbed": 1.696,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "notification_us": {
+        "healthy": null,
+        "perturbed": 1.664,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "ack_wait_us": {
+        "healthy": null,
+        "perturbed": 85.48,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "issue_spread_us": {
+        "healthy": null,
+        "perturbed": 201.08800000000002,
+        "healthy_iqr": null,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": null,
+        "perturbed_range": null
+      },
+      "receiver_wait_us": {
+        "healthy": 3333.264,
+        "perturbed": 3332.032,
+        "healthy_iqr": 0.7680000000000291,
+        "effect_iqr": -1.604166666666568,
+        "paired_percent_median": -0.0494388925687983,
+        "healthy_range": [
+          3331.056,
+          3335.92
+        ],
+        "perturbed_range": [
+          3330.912,
+          3333.8720000000003
+        ]
+      },
+      "co_rate": {
+        "healthy": 0.0,
+        "perturbed": 0.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          0.0,
+          0.0
+        ]
+      },
+      "co_active_us": {
+        "healthy": 0.0,
+        "perturbed": 0.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          0.0,
+          0.0
+        ]
+      },
+      "minimum_overlap_fraction": {
+        "healthy": 0.0,
+        "perturbed": 0.0,
+        "healthy_iqr": 0.0,
+        "effect_iqr": null,
+        "paired_percent_median": null,
+        "healthy_range": [
+          0.0,
+          0.0
+        ],
+        "perturbed_range": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,24 @@
+{
+ "writer": {
+  "ctas": 64,
+  "threads": 1024,
+  "reason": "fewest writer CTAs at 1024 threads/CTA within 95% of the no-limit ceiling (64 CTAs: 3194 GB/s; ceiling about 3277 GB/s; 48 CTAs: 2409 GB/s)"
+ },
+ "copy_placement_settings": [
+  {
+   "ctas": 16,
+   "threads": 512,
+   "reason": "reference: fewest copy CTAs on the plateau (367.8 GB/s spread, final build); 512 threads/CTA leaves about 51% per-SM headroom"
+  },
+  {
+   "ctas": 16,
+   "threads": 256,
+   "reason": "fewest threads on the plateau (370.5 GB/s spread, final build) but only about 24% per-SM headroom"
+  },
+  {
+   "ctas": 32,
+   "threads": 512,
+   "reason": "higher-supply alternative (370.7 GB/s spread, final build); two GPCs when packed"
+  }
+ ]
+}

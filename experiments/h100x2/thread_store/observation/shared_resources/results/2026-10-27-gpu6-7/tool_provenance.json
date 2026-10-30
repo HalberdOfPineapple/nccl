@@ -1,0 +1,42 @@
+[
+  {
+    "command": [
+      "/usr/local/cuda/bin/nvcc",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Aug_20_01:58:59_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.88\nBuild cuda_13.0.r13.0/compiler.36424714_0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nsys",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "NVIDIA Nsight Systems version 2026.4.1.191-264138605071v0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nvidia-smi",
+      "--query-gpu=index,uuid,name,driver_version",
+      "--format=csv",
+      "-i",
+      "6,7"
+    ],
+    "returncode": 0,
+    "stdout": "index, uuid, name, driver_version\n6, GPU-3ebe5de5-496c-2d06-ac87-55f171a54e27, NVIDIA H100 80GB HBM3, 595.71.05\n7, GPU-a8a608db-0a7a-970b-210c-28f9c04360c8, NVIDIA H100 80GB HBM3, 595.71.05\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nvidia-smi",
+      "topo",
+      "-m"
+    ],
+    "returncode": 0,
+    "stdout": "\t\u001b[4mGPU0\tGPU1\tGPU2\tGPU3\tGPU4\tGPU5\tGPU6\tGPU7\tCPU Affinity\tNUMA Affinity\tGPU NUMA ID\u001b[0m\nGPU0\t X \tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU1\tNV18\t X \tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU2\tNV18\tNV18\t X \tNV18\tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU3\tNV18\tNV18\tNV18\t X \tNV18\tNV18\tNV18\tNV18\t0-51,104-155\t0\t\tN/A\nGPU4\tNV18\tNV18\tNV18\tNV18\t X \tNV18\tNV18\tNV18\t52-103,156-207\t1\t\tN/A\nGPU5\tNV18\tNV18\tNV18\tNV18\tNV18\t X \tNV18\tNV18\t52-103,156-207\t1\t\tN/A\nGPU6\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t X \tNV18\t52-103,156-207\t1\t\tN/A\nGPU7\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\tNV18\t X \t52-103,156-207\t1\t\tN/A\n\nLegend:\n\n  X    = Self\n  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)\n  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node\n  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)\n  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)\n  PIX  = Connection traversing at most a single PCIe bridge\n  NV#  = Connection traversing a bonded set of # NVLinks\n",
+    "stderr": ""
+  }
+]
