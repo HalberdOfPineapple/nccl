@@ -27,6 +27,7 @@ Each individual plan lives in its experiment directory alongside the report, con
 | [05_synchronization_progress.md](synchronization_progress/05_synchronization_progress.md) | Synchronization and progress | a slow CTA at a barrier; a slow rank at a barrier; completion-flag polling; buffer-reuse waits; completion-signal granularity |
 | [06_metric_discriminability.md](metric_discriminability/06_metric_discriminability.md) | Cross-cutting analysis | which observations separate which problems |
 | [07_data_store_congest.md](data_store_congest/07_data_store_congest.md) | Shared-resource contention: store flows on the issuing GPU | store-only copy against local writes from other SMs; copy and writers in different GPCs versus the same GPCs; local reads as a direction contrast; TMA bulk stores as a writer variant |
+| [08_peer_store_l2_path.md](peer_store_l2_path/08_peer_store_l2_path.md) | Memory access and locality: path of incoming stores at the destination | whether peer stores access the destination's L2; whether L2 keeps them (HBM writes against footprint); reads right after a push; lines already in L2; pushing out other data |
 
 ## Rules for exploratory observation plans
 

@@ -50,6 +50,7 @@ def main():
     parser.add_argument("--gpus", help="SOURCE,DESTINATION physical GPU indices")
     # store_congest only: the source GPU's SM-to-GPC map (plan 07).
     parser.add_argument("--gpc-map", type=Path)
+    parser.add_argument("--destination-gpc-map", type=Path)
     arguments = parser.parse_args()
     config = {}
     for line in arguments.config.read_text().splitlines():
@@ -95,6 +96,8 @@ def main():
                     command += ["--gpus", f"{source_gpu},{destination_gpu}"]
                 if arguments.gpc_map:
                     command += ["--gpc-map", str(arguments.gpc_map.resolve())]
+                if arguments.destination_gpc_map:
+                    command += ["--destination-gpc-map", str(arguments.destination_gpc_map.resolve())]
                 result = subprocess.run(command, stdout=log, stderr=log, timeout=45, env={**os.environ, "NCCL_DEBUG": "WARN"})
             if result.returncode:
                 raise RuntimeError(f"Harness exited {result.returncode}; see {arguments.output.with_suffix('.log')}")

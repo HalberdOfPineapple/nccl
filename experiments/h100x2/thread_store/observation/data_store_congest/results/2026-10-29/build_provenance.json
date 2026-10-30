@@ -43,5 +43,33 @@
    "scripts/run_store_congest.py": "1bd91e1e4e2892d2601a557642d6db1adf0fc192c181d1b8476f6ce1993efb5e",
    "scripts/analyze_store_contention.py": "ac5c2662cb3d4f9503a6d33e999ef6ce18e8961cf8404406f7efb5b9d09f68bf"
   }
+ },
+ "build_2026_10_30_destination": {
+  "utc": "2026-10-30T20:59:00+00:00",
+  "note": "Destination role table and writer_rank added under STORE_CONGEST_DEST into bin/store_congest_dest, used for destination/ and destination_check/. Its copy loop has the same instructions in the same order as bin/store_congest; bin/store_congest and bin/store_congest_tma kept their SASS instructions (cuobjdump compared).",
+  "files": {
+   "src/store_congest.cu": "e66b4dd4e4efa37581f6e41582f82fe81be143ceb429bbb7beaca00574f18e87",
+   "bin/store_congest": "d6eaa7eec71b9660a763be58cb727a25fc04e1a4a7b783668b9e4bfd4a1cf1da",
+   "bin/store_congest_tma": "1015f9a3ce01e0054e5a6c6367d07ca2d2cf4eb69db60d9d3e529c132973b99c",
+   "bin/store_congest_dest": "e46aed344679119af35dbd3130cada76ecec884febfb5750c0ca3d2b870b4172",
+   "Makefile": "f617290d589a3f1b65d375d2e5db7d5717b48af34d5183895b96be5ca82e05e0",
+   "scripts/run_one.py": "ab2d6c2976d7595d5e3f97fa1dd4f9c79920b35c0fe9491cc86e2127f0b822bc",
+   "scripts/run_store_congest.py": "68b0e665701cf670dca6f5a89ac06e00b6d7c946b42840e5c2ed189934a89681",
+   "scripts/analyze_store_contention.py": "976079b0c9f4ac7ed6362a5d3c97833cc75652c502b46740986f2a4b5030b3e3"
+  }
+ },
+ "counter_check_2026_10_30": {
+  "utc": "2026-10-30T21:41:00+00:00",
+  "note": "GPUs 6 and 7 added to authorizedGpu (host-only; SASS instructions of all binaries unchanged). counter_check/ records use ncu 2025.3.1 application replay with clock control off.",
+  "files": {
+   "src/store_congest.cu": "c11a0fc7dd6da51bc240a5771d97b06df58880b27c85b709308a6c3261dbea2a",
+   "src/gpc_probe.cu": "32045c6b9edc651afc8758a53ae4fdd9a8496b6f42926d15a61d26feaf572fba",
+   "bin/store_congest": "d21e2ddefc1f8bca75f0dcf2537de23eb7f526b6a53e21385e474785bfea3843",
+   "bin/store_congest_tma": "979db6b1646d5ce614a094980dde1b35cee5a38d2deae6581db8e64c7f14007f",
+   "bin/store_congest_dest": "d5ce09462424dbe149f5ea4f36da19eaf980069b5681743708ef4f0cbef3b588",
+   "bin/gpc_probe": "e5b9333a99d8c3eb57c81b8edba74508eb784eff6cd4bb0057fcc2eba5493eb3",
+   "scripts/run_writer_counters.py": "fa8fc1db23dba74b121b0629397a40c1e34bc2c87058e7df451aabd4fe7d963e",
+   "scripts/analyze_writer_counters.py": "7e8c52e7e91e7480511367b61c968679966d5c16d86b192430f44b7016429ca8"
+  }
  }
 }

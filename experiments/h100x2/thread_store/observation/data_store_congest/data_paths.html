@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0">
+<title>Store Congestion Data Paths</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; each diagram sits in its own sideways-scrolling frame on narrow screens. SMs on top, HBM at the bottom. */
+:root { --bg:#f5f6f8; --fg:#1c2330; --muted:#5a6474; --panel:#fff; --panel-alt:#eceff4; --line:#b6bfcb; --copy:#23629f; --co:#b95f0d; --finish:#7b8594; --shared:#f2e4cc;
+  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#11151b; --fg:#e5e8ed; --muted:#9ba5b3; --panel:#1b2129; --panel-alt:#161b22; --line:#3b4553; --copy:#6ea8e6; --co:#eea255; --finish:#8e98a7; --shared:#3a2e1d; color-scheme:dark; } }
+:root[data-theme="dark"] { --bg:#11151b; --fg:#e5e8ed; --muted:#9ba5b3; --panel:#1b2129; --panel-alt:#161b22; --line:#3b4553; --copy:#6ea8e6; --co:#eea255; --finish:#8e98a7; --shared:#3a2e1d; color-scheme:dark; }
+body { background:var(--bg); color:var(--fg); font:15px/1.55 var(--sans); }
+.page { max-width:1040px; margin:0 auto; padding-block:32px 56px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); display:grid; gap:40px; }
+header { display:grid; gap:8px; }
+h1 { font-size:1.75rem; font-weight:600; margin:0; text-wrap:balance; }
+h2 { font-size:1.2rem; font-weight:600; margin:0; text-wrap:balance; }
+h3 { font-size:.95rem; font-weight:600; margin:0; }
+p { margin:0; max-width:68ch; }
+.lead { color:var(--muted); }
+section { display:grid; gap:14px; min-width:0; }
+.frame { overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px; }
+.frame svg { display:block; width:100%; min-width:760px; height:auto; }
+.legend { display:flex; flex-wrap:wrap; gap:10px 24px; font-size:.9rem; color:var(--muted); }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.swatch { width:28px; height:0; border-top:3px solid; display:inline-block; }
+.swatch.copy { border-color:var(--copy); } .swatch.co { border-color:var(--co); } .swatch.finish { border-top:2px dashed var(--finish); }
+.swatch.shared { height:14px; border:0; background:var(--shared); border-radius:3px; }
+.steps { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; counter-reset:step; }
+.steps li { counter-increment:step; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:.92rem; min-width:0; }
+.steps li::before { content:"Finish " counter(step); display:block; font:500 .72rem var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--finish); margin-bottom:4px; }
+.notes { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.notes div { display:grid; gap:6px; min-width:0; align-content:start; }
+.table-wrap { overflow-x:auto; }
+.facts { width:100%; border-collapse:collapse; font-size:.9rem; font-variant-numeric:tabular-nums; }
+.facts th,.facts td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+.facts th { font-weight:600; color:var(--muted); font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; }
+.gpu { fill:var(--panel-alt); stroke:var(--line); stroke-width:1; }
+.box { fill:var(--panel); stroke:var(--line); stroke-width:1.2; }
+.t { fill:var(--fg); font:500 14px var(--sans); }
+.ts { fill:var(--muted); font:12.5px var(--sans); }
+.head { fill:var(--fg); font:600 15px var(--sans); }
+.a-copy { stroke:var(--copy); stroke-width:2.4; fill:none; } .a-co { stroke:var(--co); stroke-width:2.4; fill:none; } .a-fin { stroke:var(--finish); stroke-width:1.8; stroke-dasharray:5 4; fill:none; }
+.mk-copy { fill:var(--copy); } .mk-co { fill:var(--co); } .mk-fin { fill:var(--finish); }
+.shared { fill:var(--shared); }
+.tag-copy { fill:var(--copy); font:600 12.5px var(--sans); } .tag-co { fill:var(--co); font:600 12.5px var(--sans); }
+</style>
+<div class="page">
+  <header>
+    <h1>Store Congestion Data Paths</h1>
+    <p class="lead">Where the bytes go when a store-only copy runs next to a local writer. The copy computes its values in registers and stores them to the destination GPU. The writer stores to a local 1 GiB buffer on its own SMs. Each diagram runs from the SMs at the top to HBM at the bottom.</p>
+    <div class="legend" aria-label="Legend">
+      <span><i class="swatch copy"></i>Copy data</span>
+      <span><i class="swatch co"></i>Writer data</span>
+      <span><i class="swatch finish"></i>Completion signals</span>
+      <span><i class="swatch shared"></i>Parts both flows use</span>
+    </div>
+  </header>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <marker id="m-copy" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-copy"/></marker>
+    <marker id="m-co" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-co"/></marker>
+    <marker id="m-fin" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-fin"/></marker>
+  </defs></svg>
+  <section aria-labelledby="src-title">
+    <h2 id="src-title">Writer on the source GPU (E7.3)</h2>
+    <p>Both flows leave SMs of the same GPU and enter its crossbar. There they split: peer stores go to the NVLink unit and local stores go to L2 and HBM. They use different GPCs here, so they can meet only in the crossbar.</p>
+    <div class="frame"><svg viewBox="0 0 960 510" role="img" aria-labelledby="src-svg"><title id="src-svg">Writer on the source GPU: copy and writer stores share the source crossbar, then the copy crosses NVLink into destination L2 and HBM while the writer goes to source L2 and HBM</title>
+<rect class="gpu" x="20" y="20" width="390" height="474" rx="10"/>
+<text class="head" x="40" y="48" text-anchor="start">Source GPU</text>
+<rect class="gpu" x="550" y="20" width="390" height="474" rx="10"/>
+<text class="head" x="570" y="48" text-anchor="start">Destination GPU</text>
+<rect class="shared" x="30" y="180" width="370" height="64" rx="8"/>
+<rect class="box" x="40" y="66" width="175" height="70" rx="6"/>
+<text class="t" x="127.5" y="88.0" text-anchor="middle">Writer SMs</text>
+<text class="ts" x="127.5" y="106.0" text-anchor="middle">64 CTAs × 1024 threads/CTA</text>
+<text class="ts" x="127.5" y="124.0" text-anchor="middle">16-byte stores, not in G6</text>
+<rect class="box" x="235" y="66" width="155" height="70" rx="6"/>
+<text class="t" x="312.5" y="88.0" text-anchor="middle">Copy SMs</text>
+<text class="ts" x="312.5" y="106.0" text-anchor="middle">16 CTAs × 512 threads</text>
+<text class="ts" x="312.5" y="124.0" text-anchor="middle">4-byte stores, G6</text>
+<rect class="box" x="40" y="190" width="350" height="44" rx="6"/>
+<text class="t" x="190" y="217" text-anchor="middle">Crossbar</text>
+<rect class="box" x="40" y="270" width="240" height="44" rx="6"/>
+<text class="t" x="160.0" y="297.0" text-anchor="middle">L2 cache</text>
+<rect class="box" x="300" y="270" width="90" height="44" rx="6"/>
+<text class="t" x="345.0" y="288.0" text-anchor="middle">NVLink</text>
+<text class="t" x="345.0" y="306.0" text-anchor="middle">unit</text>
+<rect class="box" x="40" y="350" width="240" height="44" rx="6"/>
+<text class="t" x="160.0" y="377.0" text-anchor="middle">Memory controller</text>
+<rect class="box" x="40" y="430" width="240" height="44" rx="6"/>
+<text class="t" x="160.0" y="457.0" text-anchor="middle">HBM · writer buffer, 1 GiB</text>
+<rect class="box" x="570" y="66" width="155" height="70" rx="6"/>
+<text class="t" x="647.5" y="88.0" text-anchor="middle">Receiver CTA, 1 SM</text>
+<text class="ts" x="647.5" y="106.0" text-anchor="middle">reads "done" flags</text>
+<text class="ts" x="647.5" y="124.0" text-anchor="middle">one CTA only</text>
+<rect class="box" x="745" y="66" width="175" height="70" rx="6"/>
+<text class="t" x="832.5" y="97.0" text-anchor="middle">Other SMs</text>
+<text class="ts" x="832.5" y="115.0" text-anchor="middle">no work</text>
+<rect class="box" x="570" y="190" width="350" height="44" rx="6"/>
+<text class="t" x="800" y="217" text-anchor="middle">Crossbar</text>
+<rect class="box" x="570" y="270" width="90" height="44" rx="6"/>
+<text class="t" x="615.0" y="288.0" text-anchor="middle">NVLink</text>
+<text class="t" x="615.0" y="306.0" text-anchor="middle">unit</text>
+<rect class="box" x="680" y="270" width="240" height="44" rx="6"/>
+<text class="t" x="800.0" y="297.0" text-anchor="middle">L2 cache</text>
+<rect class="box" x="680" y="350" width="240" height="44" rx="6"/>
+<text class="t" x="800.0" y="377.0" text-anchor="middle">Memory controller</text>
+<rect class="box" x="680" y="430" width="240" height="44" rx="6"/>
+<text class="t" x="800.0" y="457.0" text-anchor="middle">HBM · copy data, 2048 MiB</text>
+<rect class="box" x="425" y="254" width="100" height="70" rx="6"/>
+<text class="t" x="475.0" y="285.0" text-anchor="middle">NVLink</text>
+<text class="t" x="475.0" y="303.0" text-anchor="middle">switch</text>
+<line class="a-copy" x1="345" y1="136" x2="345" y2="189" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="345" y1="234" x2="345" y2="269" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="390" y1="284" x2="424" y2="284" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="525" y1="284" x2="569" y2="284" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="615" y1="270" x2="615" y2="235" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="750" y1="234" x2="750" y2="269" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="750" y1="314" x2="750" y2="349" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="750" y1="394" x2="750" y2="429" marker-end="url(#m-copy)"/>
+<text class="tag-copy" x="337" y="168" text-anchor="end">peer stores</text>
+<text class="tag-copy" x="475" y="244" text-anchor="middle">stores</text>
+<line class="a-co" x1="130" y1="136" x2="130" y2="189" marker-end="url(#m-co)"/>
+<line class="a-co" x1="130" y1="234" x2="130" y2="269" marker-end="url(#m-co)"/>
+<line class="a-co" x1="130" y1="314" x2="130" y2="349" marker-end="url(#m-co)"/>
+<line class="a-co" x1="130" y1="394" x2="130" y2="429" marker-end="url(#m-co)"/>
+<text class="tag-co" x="142" y="168" text-anchor="start">local stores</text>
+<text class="ts" x="300" y="346" text-anchor="start">The copy uses</text>
+<text class="ts" x="300" y="362" text-anchor="start">no source</text>
+<text class="ts" x="300" y="378" text-anchor="start">memory for</text>
+<text class="ts" x="300" y="394" text-anchor="start">its data.</text>
+<text class="ts" x="572" y="346" text-anchor="start">Only the copy</text>
+<text class="ts" x="572" y="362" text-anchor="start">writes here.</text>
+<text class="ts" x="762" y="421" text-anchor="start">written back later</text>
+<line class="a-fin" x1="700" y1="270" x2="700" y2="137" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="590" y1="136" x2="590" y2="269" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="569" y1="304" x2="526" y2="304" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="424" y1="304" x2="391" y2="304" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="300" y1="304" x2="281" y2="304" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="255" y1="270" x2="255" y2="137" marker-end="url(#m-fin)"/>
+<text class="ts" x="708" y="162" text-anchor="start">flags</text>
+<text class="ts" x="475" y="342" text-anchor="middle">acknowledgement</text>
+<text class="ts" x="475" y="358" text-anchor="middle">comes back</text>
+</svg></div>
+  </section>
+  <section aria-labelledby="dst-title">
+    <h2 id="dst-title">Writer on the destination GPU (E7.7)</h2>
+    <p>The copy is unchanged. The writer moves to the same SM IDs on the destination GPU, so the incoming peer stores and the local stores are written into the same L2 and HBM. This is the only test in the plan where both flows need the same memory. The copy changed by at most 0.29%; at no limit the writer lost 10.3%.</p>
+    <div class="frame"><svg viewBox="0 0 960 510" role="img" aria-labelledby="dst-svg"><title id="dst-svg">Writer on the destination GPU: incoming copy stores and writer stores share the destination crossbar, L2, memory controller and HBM</title>
+<rect class="gpu" x="20" y="20" width="390" height="474" rx="10"/>
+<text class="head" x="40" y="48" text-anchor="start">Source GPU</text>
+<rect class="gpu" x="550" y="20" width="390" height="474" rx="10"/>
+<text class="head" x="570" y="48" text-anchor="start">Destination GPU</text>
+<rect class="shared" x="560" y="180" width="370" height="304" rx="8"/>
+<rect class="box" x="40" y="66" width="175" height="70" rx="6"/>
+<text class="t" x="127.5" y="97.0" text-anchor="middle">Other SMs</text>
+<text class="ts" x="127.5" y="115.0" text-anchor="middle">their CTAs exit at once</text>
+<rect class="box" x="235" y="66" width="155" height="70" rx="6"/>
+<text class="t" x="312.5" y="88.0" text-anchor="middle">Copy SMs</text>
+<text class="ts" x="312.5" y="106.0" text-anchor="middle">16 CTAs × 512 threads</text>
+<text class="ts" x="312.5" y="124.0" text-anchor="middle">4-byte stores, G6</text>
+<rect class="box" x="40" y="190" width="350" height="44" rx="6"/>
+<text class="t" x="190" y="217" text-anchor="middle">Crossbar</text>
+<rect class="box" x="40" y="270" width="240" height="44" rx="6"/>
+<text class="t" x="160.0" y="297.0" text-anchor="middle">L2 cache</text>
+<rect class="box" x="300" y="270" width="90" height="44" rx="6"/>
+<text class="t" x="345.0" y="288.0" text-anchor="middle">NVLink</text>
+<text class="t" x="345.0" y="306.0" text-anchor="middle">unit</text>
+<rect class="box" x="40" y="350" width="240" height="44" rx="6"/>
+<text class="t" x="160.0" y="377.0" text-anchor="middle">Memory controller</text>
+<rect class="box" x="40" y="430" width="240" height="44" rx="6"/>
+<text class="t" x="160.0" y="457.0" text-anchor="middle">HBM · no copy data</text>
+<rect class="box" x="570" y="66" width="155" height="70" rx="6"/>
+<text class="t" x="647.5" y="88.0" text-anchor="middle">Receiver CTA, 1 SM</text>
+<text class="ts" x="647.5" y="106.0" text-anchor="middle">reads "done" flags</text>
+<text class="ts" x="647.5" y="124.0" text-anchor="middle">G6</text>
+<rect class="box" x="745" y="66" width="175" height="70" rx="6"/>
+<text class="t" x="832.5" y="88.0" text-anchor="middle">Writer SMs</text>
+<text class="ts" x="832.5" y="106.0" text-anchor="middle">64 CTAs × 1024 threads/CTA</text>
+<text class="ts" x="832.5" y="124.0" text-anchor="middle">16-byte stores, not in G6</text>
+<rect class="box" x="570" y="190" width="350" height="44" rx="6"/>
+<text class="t" x="800" y="217" text-anchor="middle">Crossbar</text>
+<rect class="box" x="570" y="270" width="90" height="44" rx="6"/>
+<text class="t" x="615.0" y="288.0" text-anchor="middle">NVLink</text>
+<text class="t" x="615.0" y="306.0" text-anchor="middle">unit</text>
+<rect class="box" x="680" y="270" width="240" height="44" rx="6"/>
+<text class="t" x="800.0" y="297.0" text-anchor="middle">L2 cache</text>
+<rect class="box" x="680" y="350" width="240" height="44" rx="6"/>
+<text class="t" x="800.0" y="377.0" text-anchor="middle">Memory controller</text>
+<rect class="box" x="680" y="430" width="240" height="44" rx="6"/>
+<text class="t" x="800.0" y="457.0" text-anchor="middle">HBM · copy data + writer buffer</text>
+<rect class="box" x="425" y="254" width="100" height="70" rx="6"/>
+<text class="t" x="475.0" y="285.0" text-anchor="middle">NVLink</text>
+<text class="t" x="475.0" y="303.0" text-anchor="middle">switch</text>
+<line class="a-copy" x1="345" y1="136" x2="345" y2="189" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="345" y1="234" x2="345" y2="269" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="390" y1="284" x2="424" y2="284" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="525" y1="284" x2="569" y2="284" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="615" y1="270" x2="615" y2="235" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="750" y1="234" x2="750" y2="269" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="750" y1="314" x2="750" y2="349" marker-end="url(#m-copy)"/>
+<line class="a-copy" x1="750" y1="394" x2="750" y2="429" marker-end="url(#m-copy)"/>
+<text class="tag-copy" x="337" y="168" text-anchor="end">peer stores</text>
+<text class="tag-copy" x="475" y="244" text-anchor="middle">stores</text>
+<line class="a-co" x1="850" y1="136" x2="850" y2="189" marker-end="url(#m-co)"/>
+<line class="a-co" x1="850" y1="234" x2="850" y2="269" marker-end="url(#m-co)"/>
+<line class="a-co" x1="850" y1="314" x2="850" y2="349" marker-end="url(#m-co)"/>
+<line class="a-co" x1="850" y1="394" x2="850" y2="429" marker-end="url(#m-co)"/>
+<text class="tag-co" x="858" y="168" text-anchor="start">local stores</text>
+<text class="ts" x="572" y="346" text-anchor="start">Both flows need</text>
+<text class="ts" x="572" y="362" text-anchor="start">the same L2,</text>
+<text class="ts" x="572" y="378" text-anchor="start">memory controller</text>
+<text class="ts" x="572" y="394" text-anchor="start">and HBM.</text>
+<text class="ts" x="300" y="346" text-anchor="start">The copy uses</text>
+<text class="ts" x="300" y="362" text-anchor="start">no source</text>
+<text class="ts" x="300" y="378" text-anchor="start">memory for</text>
+<text class="ts" x="300" y="394" text-anchor="start">its data.</text>
+<text class="ts" x="762" y="340" text-anchor="start">copy</text>
+<text class="ts" x="862" y="340" text-anchor="start">writer</text>
+<line class="a-fin" x1="700" y1="270" x2="700" y2="137" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="590" y1="136" x2="590" y2="269" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="569" y1="304" x2="526" y2="304" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="424" y1="304" x2="391" y2="304" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="300" y1="304" x2="281" y2="304" marker-end="url(#m-fin)"/>
+<line class="a-fin" x1="255" y1="270" x2="255" y2="137" marker-end="url(#m-fin)"/>
+<text class="ts" x="708" y="162" text-anchor="start">flags</text>
+<text class="ts" x="475" y="342" text-anchor="middle">acknowledgement</text>
+<text class="ts" x="475" y="358" text-anchor="middle">comes back</text>
+</svg></div>
+  </section>
+  <section aria-labelledby="fin-title">
+    <h2 id="fin-title">How a transfer finishes</h2>
+    <ol class="steps" aria-label="How a transfer finishes">
+      <li>Every copy thread runs a system fence after its last store.</li>
+      <li>Each copy CTA writes a "done" flag into destination memory, on the same path as the stores.</li>
+      <li>The receiver CTA reads every flag, then writes an acknowledgement over NVLink into source memory.</li>
+      <li>Each copy CTA reads the acknowledgement and records its end time. In E7.7 the writers stop after the acknowledgement.</li>
+    </ol>
+  </section>
+  <section aria-labelledby="tests-title">
+    <h2 id="tests-title">What each test measured</h2>
+    <p>Copy: 16 CTAs × 512 threads/CTA, 2048 MiB. Change: copy throughput with the co-runner active against idle in the same run, median of 3 runs at each level.</p>
+    <div class="table-wrap"><table class="facts">
+      <thead><tr><th>Test</th><th>Co-runner</th><th>Where the flows can meet</th><th>Copy change</th></tr></thead>
+      <tbody>
+        <tr><td>E7.3 separate GPCs</td><td>Source: 64 CTAs × 1024 threads/CTA, up to 3155 GB/s</td><td>Source crossbar</td><td>−0.08% to −0.27%</td></tr>
+        <tr><td>E7.4 shared GPCs</td><td>Same writer, up to 3156 GB/s</td><td>Source GPC connection and crossbar</td><td>+0.03% to +0.24%</td></tr>
+        <tr><td>E7.4b crowded GPCs</td><td>Same writer packed, up to 2749 GB/s</td><td>Source GPC connection and crossbar</td><td>−0.01% to +0.20%</td></tr>
+        <tr><td>E7.5 local reads</td><td>Source: TMA reads, 48 CTAs × 3 × 64 KiB, up to 3152 GB/s</td><td>Source crossbar, in opposite directions</td><td>−0.18% to +0.04%</td></tr>
+        <tr><td>E7.6 TMA stores</td><td>Source: TMA stores, 64 CTAs × 1 × 64 KiB, up to 3251 GB/s</td><td>Source crossbar</td><td>−0.12% to −0.31%</td></tr>
+        <tr><td>E7.7 destination writer</td><td>Destination: 64 CTAs × 1024 threads/CTA, up to 2828 GB/s during the copy (3155 GB/s alone)</td><td>Destination crossbar, L2, memory controller, HBM</td><td>−0.29% to +0.08%</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section aria-labelledby="read-title">
+    <h2 id="read-title">How to read these diagrams</h2>
+    <div class="notes">
+      <div><h3>Not shared</h3><p>SMs, their L1 caches and registers. Each role has its own SMs, one CTA per SM.</p></div>
+      <div><h3>Assumed, not measured</h3><p>NVIDIA does not document how NVLink traffic moves inside a GPU, or whether a peer store passes through local L2. The drawing shows the usual picture.</p></div>
+      <div><h3>Rates</h3><p>Write rates count requested bytes. With the writer alone, DRAM counters match them within about 0.2%; rates during the copy were not counted. L2 and HBM boxes stand for many slices and channels.</p></div>
+    </div>
+  </section>
+</div>
+</body></html>

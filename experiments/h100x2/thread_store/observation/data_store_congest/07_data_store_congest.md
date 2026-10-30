@@ -4,12 +4,14 @@ This plan covers the problem-matrix cell **thread-issued peer stores × shared-r
 
 **Common question.** When some SMs of the source GPU store data to the peer GPU over NVLink, and other SMs of the same GPU store data to local memory, do the two store flows slow each other down? Does it matter whether they share a GPC?
 
+**Destination question (E7.7).** Does the same copy slow down when the same writer runs on the destination GPU instead, so that the incoming peer stores and the local stores are written into the same L2 and HBM?
+
 Words used in this plan:
 
 | Word | Meaning |
 |---|---|
 | Copy | The communication kernel: CTAs on the source GPU store data into the destination GPU's memory through an NCCL LSA peer pointer |
-| Writer | The pressure workload: CTAs on the source GPU store data into a local 1 GiB buffer |
+| Writer | The pressure workload: CTAs on the source GPU (on the destination GPU in E7.7) store data into a local 1 GiB buffer |
 | GPC | A group of SMs that shares one connection into the GPU's on-chip network (crossbar). On H100 there are 8 on the full chip |
 | Store flow | Data moving from SMs into the crossbar. Peer stores then go to the NVLink unit; local stores go to L2 and HBM |
 
@@ -38,7 +40,7 @@ The plan-04 results stay valid; they answer a different question (a copy with lo
 |---|---|
 | GPUs | One allocated pair from physical GPUs 0, 1, 6, 7; each experiment stays on one pair; the pair is recorded in every raw record, not in configs |
 | Source GPU | Runs the copy CTAs, the writer CTAs, and idle CTAs |
-| Destination GPU | One receiver/control CTA; no pressure on the destination |
+| Destination GPU | One receiver/control CTA; no pressure on the destination, except in E7.7, where it also runs the writer |
 | Clocks and power | Unchanged; observed, not controlled |
 
 ### Store-only copy
@@ -322,6 +324,49 @@ None.
 |---|---|---|
 | A1, A3 | Similar to thread stores at the same rate if only the byte rate matters (hypothesis) | Request mechanism |
 
+## E7.7 · Local writes on the destination GPU
+
+### Motivation
+
+E7.3–E7.6 put the writer on the source GPU. There the store-only copy uses no source memory for its data, so the two flows can meet only up to the crossbar and split after it. This test moves the writer to the destination GPU and changes nothing else. Incoming peer stores and local stores are then written into the same L2 and HBM, so this is the first test in this plan where both flows need the same memory. Comparing it with E7.3 at the same write rates shows whether the endpoint that runs the writer matters.
+
+### Configuration
+
+| Knob | Role | Values |
+|---|---|---|
+| **Target write rate on the destination GPU** | **Independent variable** | **0 (idle writers), 20, 40, 60, 80% of HBM peak, and the writer's no-limit ceiling** |
+| **GPU that runs the writer** | **Independent variable** | **Destination (this test) versus source (E7.3 separate, repeated in the same session)** |
+| Copy | Constant | Setting from E7.1 (16 CTAs × 512 threads/CTA, 2048 MiB), packed into G6 of the source GPU, as in E7.3 |
+| Writer | Constant | Setting from E7.2 (64 CTAs × 1024 threads/CTA, 16-byte stores, own 1 GiB buffer on the destination GPU), on the same SM IDs as in E7.3: spread over the 7 GPCs other than G6 |
+| Receiver | Constant | 1 CTA in G6 of the destination GPU, so it shares no GPC with the writer |
+| Other SMs | Constant | Idle CTAs on both GPUs; one CTA per SM on both GPUs, so the destination GPU now has a full role table |
+| Pairs | Constant | 3 runs per level; each run alternates idle and writing transfers (6 + 6 measured) |
+
+### Procedure
+
+1. Extend the harness so the destination rank launches one CTA per SM, each taking its role from a destination role table. The source rank's code stays as it is.
+2. Order the writer around the transfer with signals, not timers, because the two GPUs' timers are not compared. In a writing transfer, the destination starts its writers before the receiver sends "destination ready", and stops them after the receiver has seen every "done" flag and sent the acknowledgement.
+3. Behaviour check: run the E7.3 separate setting with the new build and compare it with the recorded E7.3 runs.
+4. Run the opening reference (writers idle).
+5. At each level, run this test and E7.3 separate back to back, 3 rounds, rotating the level order between rounds.
+6. Run the closing reference.
+7. Writer side: at each level, writer alone on the same destination SMs, with no copy traffic. The receiver CTA on the destination times the window and stops the writers, because a timer on the source could not stop them; the window is matched to the writer's measured active time.
+
+### Privileged access
+
+None.
+
+### Metrics
+
+| Metric | Expected signature | Separates |
+|---|---|---|
+| A1 | Little change while the copy and the writer together stay below the HBM write ceiling; a slowdown that grows as they approach it (hypothesis) | From E7.3: same writer and rate, different GPU. A slowdown only here points to the destination's memory path |
+| A3 | Grows only if back-pressure from the destination reaches the source's issue loop across NVLink (hypothesis) | From A4 and A6 |
+| A4, A6 | Grow first if stores are accepted but finish late at the destination (hypothesis) | Cannot separate destination crossbar, L2 and HBM |
+| A8 | Read on the destination. Writers must be active from before "destination ready" until after the acknowledgement | Validity check |
+| A9 | Read on the destination. Writer rate falls when the copy runs, if the two compete for writes (hypothesis) | Mutual effect |
+| A10, A11 | Roles must match both role tables; every transfer and writer region must verify | Validity check |
+
 ## Order of work
 
 | Step | Work | GPU time (estimate) |
@@ -332,7 +377,8 @@ None.
 | 4 | E7.3 and E7.4, interleaved | About 30 min |
 | 5 | E7.5 direction contrast | About 15 min |
 | 6 | E7.6 if requested | About 30 min with calibration |
-| 7 | Analysis and report in `data_store_congest/README.md` | None |
+| 7 | E7.7: harness change, then the runs with E7.3 separate back to back | About 30 min |
+| 8 | Analysis and report in `data_store_congest/README.md` | None |
 
 ## Interpretation limits
 
@@ -340,6 +386,7 @@ None.
 - **The crossbar's structure is not documented.** A slowdown in E7.4 but not in E7.3 points to the GPC connection; a slowdown in both points to a shared part after it (crossbar, L2, or the store-completion path). It does not name a physical queue.
 - **The GPC map is measured, not documented.** If cluster launches cannot place clusters on every SM, the map may be incomplete; record any SM that never appears.
 - **Completion timers are not store latency.** The issue loop covers store issue and backpressure; ordering and acknowledgement wait cover the completion protocol, as in plan 04.
+- **E7.7 cannot name the part.** A slowdown there points to the destination's memory path, which includes its crossbar, L2 and HBM. Without counters it cannot say which one. L2 may also combine the writer's repeated stores, so requested bytes may overstate HBM writes.
 - **No slowdown is a result.** It means the tested store flows did not interfere at these rates and placements, not that they cannot interfere.
 
 ## Implementation notes (2026-10-29)
@@ -358,3 +405,5 @@ Added after implementing the harness and running E7.0. The design above is uncha
 10. **E7.3–E7.6 (2026-10-30).** GPUs 0 → 1, 3 runs per level (user's request), each run 6 idle + 6 active transfers. E7.3: copy packed into G6, writer spread over the other GPCs. E7.4: both spread over all GPCs (about 2 copy and 8 writer SMs per GPC). E7.4b: copy spread, writer packed into G6, G7, G1, G2 (plus 4 SMs of G3), so 8 copy CTAs sit in full writer GPCs. The writer side uses writer-alone runs on the same SMs with windows matched to the measured writer active time, at every level rather than only the highest.
 11. **E7.5 reader** uses 48 CTAs × 3 × 64 KiB at every level (24 CTAs stop at about 91% of peak in plan 04); read targets are the write rates achieved in E7.3. The E7.3 write runs were repeated in the same session, back to back with the reads.
 12. **E7.5/E7.6 build.** The TMA read co-runner (from plan 04) and a new TMA bulk-store writer are compiled into `bin/store_congest_tma` (`-DSTORE_CONGEST_TMA`, config key `writer_kind` 1 or 2, `chunks_in_flight`); `bin/store_congest` keeps the instructions of the E7.1–E7.4 build. The TMA writer stores one 64 KiB shared-memory chunk repeatedly with `cp.async.bulk`, bounding chunks whose writes are incomplete; it was calibrated alone (64 CTAs × 1 chunk selected) before the contrast.
+13. **E7.7 build (2026-10-30).** A third build, `bin/store_congest_dest` (`-DSTORE_CONGEST_DEST`), adds a role table on the destination GPU and the config keys `writer_rank` (0 source, 1 destination) and `receiver_gpcs`, plus the option `--destination-gpc-map`. Both arms of E7.7 use this binary. Its compiled copy loop has the same instructions in the same order as `bin/store_congest`, and the other two binaries kept their instructions.
+14. **Counter check (2026-10-30).** The writer alone was compared with `ncu` counters on GPUs 6 → 7, using application replay with clock control off. Requested bytes match `dram__bytes_write` within about 0.2%, so the first limit above ("requested bytes are not counted HBM bytes") and the note on L2 combining stores no longer apply to the writer alone. They still apply to the read co-runner and to the rates during the copy.

@@ -59,8 +59,8 @@ __global__ void recordClusterPlacement(ClusterRecord* records, unsigned resident
 }
 
 static bool authorizedGpu(int gpu) {
-  // User allocation for plan 07: physical GPUs 4 and 5 from 2026-10-29; GPUs 0 and 1 from 2026-10-30.
-  return gpu == 0 || gpu == 1 || gpu == 4 || gpu == 5;
+  // User allocation for plan 07: physical GPUs 4 and 5 from 2026-10-29; GPUs 0 and 1 from 2026-10-30; GPUs 6 and 7 for the counter check from 2026-10-30.
+  return gpu == 0 || gpu == 1 || gpu == 4 || gpu == 5 || gpu == 6 || gpu == 7;
 }
 
 static int maximumActiveClusters(int clusterSize, size_t sharedBytes) {

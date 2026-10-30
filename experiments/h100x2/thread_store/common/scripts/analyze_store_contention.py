@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plan 07 tables and figures for the copy next to a co-runner: thread-store writer in three
-placements (E7.3, E7.4, E7.4b), TMA bulk reads (E7.5) and TMA bulk stores (E7.6, with its
-calibration alone).
+placements (E7.3, E7.4, E7.4b), TMA bulk reads (E7.5), TMA bulk stores (E7.6, with its
+calibration alone) and the thread-store writer on the destination GPU (E7.7).
 
 Unit of repetition: one run. Each mixed run alternates 6 idle-writer and 6 writing transfers; the
 run's copy change is median(writing) / median(idle) - 1 over its own transfers, so each run carries
@@ -360,6 +360,26 @@ def tma_writer_calibration():
     return sweep, rate
 
 
+def destination_writer_figure(rows):
+    series = [row for row in rows if row['kind'] == 'destination']
+    figure, axis = plt.subplots(figsize=(6.4, 3.7))
+    positions = range(len(series))
+    axis.bar([index - .2 for index in positions], [row['co_runner_alone_gbps'] for row in series], .4, color=HEALTHY, label='writer alone (copy off)')
+    axis.bar([index + .2 for index in positions], [row['co_runner_with_copy_gbps'] for row in series], .4, color=PERTURBED, label='writer during the copy')
+    axis.set_xticks(list(positions))
+    axis.set_xticklabels([LEVEL_NAMES[row['level']] for row in series])
+    axis.set_xlabel('writer target (% of HBM peak)')
+    axis.set_ylabel('achieved write rate on the destination (GB/s)')
+    set_zero_based_y(axis, 3500)
+    style(axis)
+    axis.legend(fontsize=7, frameon=False, loc='upper left')
+    axis.set_title('Writer 64 CTAs × 1024 threads/CTA on the destination GPU, next to the incoming copy\n'
+                   f'copy 16 CTAs × 512 threads/CTA; HBM peak {PEAK_GBPS:.0f} GB/s; median of 3 runs', fontsize=8)
+    figure.tight_layout()
+    figure.savefig(FIGURES / 'destination_writer.png', dpi=150)
+    plt.close(figure)
+
+
 def main():
     FIGURES.mkdir(parents=True, exist_ok=True)
     rows, per_run = contention_table()
@@ -397,6 +417,17 @@ def main():
                          'tma': 'TMA bulk stores: 64 CTAs × 1 chunk of 64 KiB in flight'},
                         'mechanism_copy.png', 'Copy 16 CTAs × 512 threads/CTA in G6; writer in the other 7 GPCs; each point: median of 6 transfers of one run',
                         'writer idle', 'writer writing', 'writer target (top) and achieved write rate (bottom)')
+    destination_kinds = [('destination', 'mixed_destination_{level}', 'writer_destination_{level}'), ('source', 'mixed_source_{level}', None)]
+    destination_rows, destination_runs = contrast('destination', destination_kinds)
+    if destination_rows:
+        write_csv(RESULTS / 'destination_summary.csv', destination_rows)
+        contrast_figure(destination_rows, destination_runs, ['destination', 'source'],
+                        {'destination': 'writer on the destination GPU (E7.7)\n64 CTAs × 1024 threads/CTA, the 7 GPCs other than G6',
+                         'source': 'writer on the source GPU (E7.3 separate, repeated)\n64 CTAs × 1024 threads/CTA, the 7 GPCs other than G6'},
+                        'destination_copy.png', 'Copy 16 CTAs × 512 threads/CTA in G6 of the source GPU; each point: median of 6 transfers of one run',
+                        'writer idle', 'writer writing', 'writer target (top) and achieved write rate (bottom)')
+        if any(row['kind'] == 'destination' and row['co_runner_alone_gbps'] != '' for row in destination_rows):
+            destination_writer_figure(destination_rows)
     sweep_rows, rate_rows = tma_writer_calibration()
     if sweep_rows:
         write_csv(RESULTS / 'tma_writer_sweep_summary.csv', sweep_rows)

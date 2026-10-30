@@ -56,7 +56,15 @@ constexpr int writerBlockBytes = 64 * 1024;
 constexpr int writerBlockVectors = writerBlockBytes / 16;
 constexpr int allGpcs = 0xff;
 enum Role { roleIdle = 0, roleCopy = 1, roleWriter = 2 };
+#ifdef STORE_CONGEST_DEST
+// Plan 07 E7.7, built only into bin/store_congest_dest: both ranks launch one CTA per SM and take
+// roles from their own table, and the writer can run on the destination (writer_rank 1). The other
+// binaries keep their device code.
+constexpr int roleReceiver = 3;
+static const char* roleNames[] = {"idle", "copy", "writer", "receiver"};
+#else
 static const char* roleNames[] = {"idle", "copy", "writer"};
+#endif
 
 struct alignas(128) Signal { int value; };
 struct WindowControl {
@@ -112,6 +120,10 @@ struct Config {
   int writerKind = 0;               // co-runner: 0 thread stores, 1 TMA bulk reads (E7.5), 2 TMA bulk stores (E7.6)
   int chunksInFlight = 3;           // TMA kinds: 64 KiB chunks in flight per co-runner CTA
 #endif
+#ifdef STORE_CONGEST_DEST
+  int writerRank = 0;               // GPU that runs the writer: 0 source, 1 destination (E7.7)
+  int receiverGpcMask = allGpcs;    // GPCs allowed for the destination's receiver CTA
+#endif
 };
 struct KernelArguments {
   ncclWindow_t window;
@@ -129,6 +141,9 @@ struct KernelArguments {
 #ifdef STORE_CONGEST_TMA
   HbmReadSettings tmaSettings;      // TMA kinds: buffer, one slice per co-runner CTA, chunks in flight, rate
   unsigned long long* tmaChecksums; // kind 1: per co-runner CTA sum of the first word of every chunk read
+#endif
+#ifdef STORE_CONGEST_DEST
+  int localWriterCtas;              // writer CTAs on this GPU; 0 on the GPU without the writer
 #endif
 };
 
@@ -213,7 +228,11 @@ __global__ void verifyTmaWriterBuffer(const uint32_t* buffer, int writerCtas, si
 // The copy starts only after every writer CTA has started, so writing covers the whole copy.
 __device__ void waitForWriters(KernelArguments arguments) {
   if (threadIdx.x == 0) {
+#ifdef STORE_CONGEST_DEST
+    while (acquireSignal(&arguments.local->writersReady) != arguments.localWriterCtas) {
+#else
     while (acquireSignal(&arguments.local->writersReady) != arguments.config.writerCtas) {
+#endif
       __nanosleep(64);
     }
   }
@@ -306,6 +325,47 @@ __device__ void runReceiver(KernelArguments arguments) {
     record.endNs = readTimerNs();
   }
 }
+#ifdef STORE_CONGEST_DEST
+// E7.7: the destination orders its writers around the transfer with signals, because the two GPUs'
+// timers are not compared. Writers start before "destination ready" and stop after the
+// acknowledgement. publishEndNs marks the start of the window that writers must cover (A8).
+__device__ void runDestinationReceiver(KernelArguments arguments) {
+  WindowControl* localSignals = windowControl(arguments.window, arguments.config.payloadBytes, 1);
+  WindowControl* remoteSignals = windowControl(arguments.window, arguments.config.payloadBytes, 0);
+  if (threadIdx.x == 0) {
+    CtaRecord& record = arguments.records[blockIdx.x];
+    while (acquireSignal(&arguments.local->writersReady) != arguments.localWriterCtas) {
+      __nanosleep(64);
+    }
+    record.publishEndNs = readTimerNs();
+    releaseSignal(&remoteSignals->destinationReady.value, 1);
+    for (int copyIndex = 0; copyIndex < arguments.config.copyCtas; ++copyIndex) {
+      while (!acquireSignal(&localSignals->completion[copyIndex].value)) {
+        __nanosleep(64);
+      }
+    }
+    record.issueEndNs = readTimerNs();
+    releaseSignal(&remoteSignals->acknowledgement.value, 1);
+    record.endNs = readTimerNs();
+    releaseSignal(&arguments.local->stop, 1);
+  }
+}
+// E7.7 writer-alone runs: the receiver CTA times the window on the destination and stops the writers.
+__device__ void runDestinationTimer(KernelArguments arguments) {
+  if (threadIdx.x == 0) {
+    CtaRecord& record = arguments.records[blockIdx.x];
+    while (acquireSignal(&arguments.local->writersReady) != arguments.localWriterCtas) {
+      __nanosleep(64);
+    }
+    record.publishEndNs = readTimerNs();
+    while (readTimerNs() - record.publishEndNs < arguments.config.soloDurationNs) {
+      __nanosleep(128);
+    }
+    record.endNs = readTimerNs();
+    releaseSignal(&arguments.local->stop, 1);
+  }
+}
+#endif
 // Writer-alone runs: copy CTA 0 times a fixed window after all writers start, then stops them.
 __device__ void runSoloTimer(KernelArguments arguments) {
   waitForWriters(arguments);
@@ -495,12 +555,14 @@ __device__ void runTmaWriter(KernelArguments arguments, int writerIndex) {
 // Rank 0 runs one CTA per SM; each takes the role of its SM. Rank 1 runs only the receiver.
 __global__ void __launch_bounds__(maxThreadsPerCta, 1) storeCongest(KernelArguments arguments) {
   __shared__ int roleIndex;
+#ifndef STORE_CONGEST_DEST
   if (arguments.rank == 1) {
     if (arguments.config.communicationEnabled) {
       runReceiver(arguments);
     }
     return;
   }
+#endif
   CtaRecord& record = arguments.records[blockIdx.x];
   const int smId = readSmId();
   const int role = arguments.roleOfSm[smId];
@@ -519,6 +581,20 @@ __global__ void __launch_bounds__(maxThreadsPerCta, 1) storeCongest(KernelArgume
     record.roleIndex = roleIndex;
   }
   __syncthreads();
+#ifdef STORE_CONGEST_DEST
+  if (role == roleReceiver) {
+    if (arguments.config.communicationEnabled) {
+      runDestinationReceiver(arguments);
+    } else {
+      runDestinationTimer(arguments);
+    }
+    return;
+  }
+  // E7.7 writer-alone runs: the destination keeps the time, so every source copy CTA exits at once.
+  if (role == roleCopy && !arguments.config.communicationEnabled && arguments.config.writerRank == 1) {
+    return;
+  }
+#endif
 #ifdef STORE_CONGEST_TMA
   if (role == roleWriter && arguments.config.writerKind == 1) {
     runTmaReader(arguments, roleIndex);
@@ -565,9 +641,9 @@ struct Placement {
   std::vector<int> roleOfSm;
 };
 
-// User allocation for plan 07: physical GPUs 4 and 5 from 2026-10-29; GPUs 0 and 1 from 2026-10-30.
+// User allocation for plan 07: physical GPUs 4 and 5 from 2026-10-29; GPUs 0 and 1 from 2026-10-30; GPUs 6 and 7 for the counter check from 2026-10-30.
 static bool authorizedGpu(int gpu) {
-  return gpu == 0 || gpu == 1 || gpu == 4 || gpu == 5;
+  return gpu == 0 || gpu == 1 || gpu == 4 || gpu == 5 || gpu == 6 || gpu == 7;
 }
 
 static Config parseConfiguration(const char* path) {
@@ -631,6 +707,12 @@ static Config parseConfiguration(const char* path) {
     } else if (key == "chunks_in_flight") {
       config.chunksInFlight = value;
 #endif
+#ifdef STORE_CONGEST_DEST
+    } else if (key == "writer_rank") {
+      config.writerRank = value;
+    } else if (key == "receiver_gpcs") {
+      config.receiverGpcMask = value;
+#endif
     } else {
       fprintf(stderr, "Unknown config key %s\n", key.c_str());
       std::exit(1);
@@ -646,6 +728,9 @@ static void validateConfiguration(const Config& config) {
 #ifdef STORE_CONGEST_TMA
   // TMA kinds use threads 0 and 32 only; at least two warps per CTA.
   writerValid = writerValid && config.writerKind >= 0 && config.writerKind <= 2 && config.chunksInFlight >= 1 && config.chunksInFlight <= 8 && config.blockThreads >= 64;
+#endif
+#ifdef STORE_CONGEST_DEST
+  writerValid = writerValid && config.writerRank >= 0 && config.writerRank <= 1;
 #endif
   if (!copyValid || !writerValid || !alternationValid || !runValid) {
     fprintf(stderr, "Invalid configuration (copy %d, writer %d, alternation %d, run %d)\n", copyValid, writerValid, alternationValid, runValid);
@@ -742,24 +827,40 @@ static void assignRole(Placement& placement, int role, int count, int gpcMask, i
     placement.roleOfSm[chosen[index]] = role;
   }
 }
-static void buildRoleTable(Placement& placement, const Config& config, const cudaDeviceProp& properties) {
+static void buildRoleTable(Placement& placement, const Config& config, const cudaDeviceProp& properties, int rank) {
   loadGpcMap(placement);
   if (placement.mapUuid != uuidText(properties.uuid) || int(placement.gpcOfSm.size()) != properties.multiProcessorCount || properties.multiProcessorCount > maxSms) {
     fprintf(stderr, "GPC map %s does not belong to this GPU (%s, %d SMs)\n", placement.mapPath.c_str(), uuidText(properties.uuid).c_str(), properties.multiProcessorCount);
     std::exit(1);
   }
   placement.roleOfSm.assign(properties.multiProcessorCount, roleIdle);
+#ifdef STORE_CONGEST_DEST
+  // The writer's GPC mask gives the same SM IDs on either GPU; the maps of the pair are identical.
+  if (rank == 0) {
+    assignRole(placement, roleCopy, config.copyCtas, config.copyGpcMask, config.copyPlacement, config.useUnmapped);
+  } else {
+    assignRole(placement, roleReceiver, 1, config.receiverGpcMask, 0, 0);
+  }
+  if (rank == config.writerRank) {
+    assignRole(placement, roleWriter, config.writerCtas, config.writerGpcMask, config.writerPlacement, config.useUnmapped);
+  }
+#else
   assignRole(placement, roleCopy, config.copyCtas, config.copyGpcMask, config.copyPlacement, config.useUnmapped);
   assignRole(placement, roleWriter, config.writerCtas, config.writerGpcMask, config.writerPlacement, config.useUnmapped);
+#endif
 }
 
 static void setupRank(RankState& state, const Config& config, Placement& placement, int rank, ncclUniqueId identifier) {
   int device = rank == 0 ? config.sourceGpu : config.destinationGpu;
   CUDA_CHECK(cudaSetDevice(device));
   CUDA_CHECK(cudaGetDeviceProperties(&state.properties, device));
+#ifdef STORE_CONGEST_DEST
+  buildRoleTable(placement, config, state.properties, rank);
+#else
   if (rank == 0) {
-    buildRoleTable(placement, config, state.properties);
+    buildRoleTable(placement, config, state.properties, rank);
   }
+#endif
   NCCL_CHECK(ncclCommInitRank(&state.communicator, 2, identifier, rank));
   ncclCommProperties_t properties = NCCL_COMM_PROPERTIES_INITIALIZER;
   NCCL_CHECK(ncclCommQueryProperties(state.communicator, &properties));
@@ -772,7 +873,11 @@ static void setupRank(RankState& state, const Config& config, Placement& placeme
   NCCL_CHECK(ncclCommWindowRegister(state.communicator, state.windowMemory, windowBytes, &state.window, NCCL_WIN_COLL_SYMMETRIC));
   ncclDevCommRequirements requirements = NCCL_DEV_COMM_REQUIREMENTS_INITIALIZER;
   NCCL_CHECK(ncclDevCommCreate(state.communicator, &requirements, &state.deviceCommunicator));
+#ifdef STORE_CONGEST_DEST
+  state.gridCtas = state.properties.multiProcessorCount;
+#else
   state.gridCtas = rank == 0 ? state.properties.multiProcessorCount : 1;
+#endif
   CUDA_CHECK(cudaStreamCreateWithFlags(&state.stream, cudaStreamNonBlocking));
   CUDA_CHECK(cudaMalloc(&state.local, sizeof(LocalControl)));
   CUDA_CHECK(cudaMalloc(&state.deviceRecords, state.gridCtas * sizeof(CtaRecord)));
@@ -781,6 +886,13 @@ static void setupRank(RankState& state, const Config& config, Placement& placeme
   CUDA_CHECK(cudaMemset(state.roleOfSm, 0, maxSms * sizeof(int)));
   CUDA_CHECK(cudaMalloc(&state.writerBlocks, maxSms * sizeof(unsigned long long)));
   state.writerBuffer = nullptr;
+#ifdef STORE_CONGEST_DEST
+  CUDA_CHECK(cudaMemcpy(state.roleOfSm, placement.roleOfSm.data(), placement.roleOfSm.size() * sizeof(int), cudaMemcpyHostToDevice));
+  if (rank == config.writerRank && config.writerCtas) {
+    CUDA_CHECK(cudaMalloc(&state.writerBuffer, writerBufferBytes));
+    CUDA_CHECK(cudaMemset(state.writerBuffer, 0, writerBufferBytes));
+  }
+#else
   if (rank == 0) {
     CUDA_CHECK(cudaMemcpy(state.roleOfSm, placement.roleOfSm.data(), placement.roleOfSm.size() * sizeof(int), cudaMemcpyHostToDevice));
     if (config.writerCtas) {
@@ -788,6 +900,7 @@ static void setupRank(RankState& state, const Config& config, Placement& placeme
       CUDA_CHECK(cudaMemset(state.writerBuffer, 0, writerBufferBytes));
     }
   }
+#endif
 #ifdef STORE_CONGEST_TMA
   // E7.5 reads a buffer of byte 0x01, so every chunk's first word adds 0x01010101 to the checksum.
   if (rank == 0 && config.writerCtas && config.writerKind == 1) {
@@ -859,6 +972,47 @@ static void collectIteration(RankState& state, const Config& config, int rank, i
   const int writerIdle = launchIsIdle(config, iteration);
   std::vector<CtaRecord> records(state.gridCtas);
   CUDA_CHECK(cudaMemcpy(records.data(), state.deviceRecords, state.gridCtas * sizeof(CtaRecord), cudaMemcpyDeviceToHost));
+#ifdef STORE_CONGEST_DEST
+  // A10 on both GPUs: every SM once, roles as in this rank's table; A9/A11 on the writer's GPU.
+  {
+    std::set<int> usedSms;
+    std::set<int> copyIndexes;
+    std::set<int> writerIndexes;
+    int receivers = 0;
+    for (const auto& record : records) {
+      bool active = record.role == roleWriter || record.role == roleReceiver || (record.role == roleCopy && config.communicationEnabled);
+      if (!usedSms.insert(record.smId).second || (active && record.endNs <= record.startNs)) {
+        fprintf(stderr, "Invalid SM separation or CTA timing\n");
+        std::exit(1);
+      }
+      receivers += record.role == roleReceiver;
+      if (record.role == roleCopy) {
+        copyIndexes.insert(record.roleIndex);
+      }
+      if (record.role == roleWriter) {
+        writerIndexes.insert(record.roleIndex);
+        if (!writerIdle && record.workUnits == 0) {
+          fprintf(stderr, "Writer CTA wrote nothing\n");
+          std::exit(4);
+        }
+      }
+    }
+    int expectedWriters = rank == config.writerRank ? config.writerCtas : 0;
+    if (int(copyIndexes.size()) != (rank == 0 ? config.copyCtas : 0) || receivers != (rank == 1 ? 1 : 0) || int(writerIndexes.size()) != expectedWriters) {
+      fprintf(stderr, "Role counts differ from the role table\n");
+      std::exit(1);
+    }
+    if (expectedWriters && !writerIdle) {
+      size_t sliceBlocks = writerBufferBytes / writerBlockBytes / config.writerCtas;
+      verifyWriterBuffer<<<528, 256, 0, state.stream>>>(state.writerBuffer, config.writerCtas, sliceBlocks, state.writerBlocks, iteration, state.mismatches);
+      unsigned long long mismatches = readMismatches(state);
+      if (mismatches) {
+        fprintf(stderr, "WRITER CHECK FAILURE: %llu mismatching vectors\n", mismatches);
+        std::exit(4);
+      }
+    }
+  }
+#else
   if (rank == 0) {
     std::set<int> usedSms;
     std::set<int> copyIndexes;
@@ -916,6 +1070,7 @@ static void collectIteration(RankState& state, const Config& config, int rank, i
       }
     }
   }
+#endif
   if (rank == 1 && config.communicationEnabled) {
     verifyDestination<<<528, 256, 0, state.stream>>>(static_cast<uint32_t*>(state.windowMemory), config.payloadBytes / sizeof(uint32_t), iteration, state.mismatches);
     unsigned long long mismatches = readMismatches(state);
@@ -956,6 +1111,9 @@ static void runRank(RankState& state, Config config, Placement& placement, int r
     arguments.tmaSettings = HbmReadSettings{reinterpret_cast<const uint8_t*>(state.writerBuffer), writerBufferBytes, config.writerCtas, unsigned(writerBlockBytes), config.chunksInFlight, writerIntervalPs(config)};
     arguments.tmaChecksums = state.tmaChecksums;
 #endif
+#ifdef STORE_CONGEST_DEST
+    arguments.localWriterCtas = rank == config.writerRank ? config.writerCtas : 0;
+#endif
     void* kernelArguments[] = {&arguments};
     // Cooperative launch: every CTA is resident at once, so waits between roles cannot deadlock.
     CUDA_CHECK(cudaLaunchCooperativeKernel(reinterpret_cast<void*>(storeCongest), state.gridCtas, config.blockThreads, kernelArguments, state.dynamicSharedBytes, state.stream));
@@ -974,7 +1132,7 @@ static void writeIntegerList(FILE* output, const std::vector<int>& values) {
   }
   fputc(']', output);
 }
-static void writeJson(const char* path, const char* configPath, const Config& config, const Placement& placement, const std::array<RankState, 2>& states) {
+static void writeJson(const char* path, const char* configPath, const Config& config, const Placement& placement, const Placement& destinationPlacement, const std::array<RankState, 2>& states) {
   FILE* output = fopen(path, "w");
   if (!output) {
     perror(path);
@@ -995,6 +1153,13 @@ static void writeJson(const char* path, const char* configPath, const Config& co
 #ifdef STORE_CONGEST_TMA
   fprintf(output, ",\"writer_kind\":%d,\"chunks_in_flight\":%d", config.writerKind, config.chunksInFlight);
 #endif
+#ifdef STORE_CONGEST_DEST
+  // E7.7 keys: read by summarize() in run_store_congest.py.
+  fprintf(output, ",\"writer_rank\":%d,\"receiver_gpcs\":%d,\"destination_gpc_map\":\"%s\",\"destination_gpc_of_sm\":", config.writerRank, config.receiverGpcMask, destinationPlacement.mapPath.c_str());
+  writeIntegerList(output, destinationPlacement.gpcOfSm);
+  fprintf(output, ",\"destination_role_of_sm\":");
+  writeIntegerList(output, destinationPlacement.roleOfSm);
+#endif
   fprintf(output, ",\"role_of_sm\":");
   writeIntegerList(output, placement.roleOfSm);
   fprintf(output, ",\"ranks\":[");
@@ -1013,7 +1178,13 @@ static void writeJson(const char* path, const char* configPath, const Config& co
         const auto& record = state.records[iteration][recordIndex];
         // Idle CTAs only prove the SM was occupied; they are listed with their SM for A10.
         fprintf(output, "%s{\"cta\":%zu,\"role\":\"%s\",\"role_index\":%d,\"sm_id\":%d,\"start_ns\":%llu,\"issue_end_ns\":%llu,\"fence_end_ns\":%llu,\"publish_end_ns\":%llu,\"end_ns\":%llu,\"work_units\":%llu,\"checkpoints_ns\":[",
-                firstRecord ? "" : ",", recordIndex, rank == 0 ? roleNames[record.role] : "receiver", record.roleIndex, record.smId, record.startNs, record.issueEndNs, record.fenceEndNs, record.publishEndNs, record.endNs, record.workUnits);
+                firstRecord ? "" : ",", recordIndex,
+#ifdef STORE_CONGEST_DEST
+                roleNames[record.role],
+#else
+                rank == 0 ? roleNames[record.role] : "receiver",
+#endif
+                record.roleIndex, record.smId, record.startNs, record.issueEndNs, record.fenceEndNs, record.publishEndNs, record.endNs, record.workUnits);
         firstRecord = false;
         for (int checkpoint = 0; checkpoint < checkpointCount; ++checkpoint) {
           fprintf(output, "%s%llu", checkpoint ? "," : "", record.checkpointsNs[checkpoint]);
@@ -1037,12 +1208,17 @@ int main(int argumentCount, char** arguments) {
   }
   Config config = parseConfiguration(arguments[1]);
   Placement placement;
+  Placement destinationPlacement;
   for (int index = 3; index < argumentCount; ++index) {
     std::string option = arguments[index];
     if (option == "--gpus" && index + 1 < argumentCount && sscanf(arguments[index + 1], "%d,%d", &config.sourceGpu, &config.destinationGpu) == 2) {
       ++index;
     } else if (option == "--gpc-map" && index + 1 < argumentCount) {
       placement.mapPath = arguments[++index];
+#ifdef STORE_CONGEST_DEST
+    } else if (option == "--destination-gpc-map" && index + 1 < argumentCount) {
+      destinationPlacement.mapPath = arguments[++index];
+#endif
     } else {
       fprintf(stderr, "Unknown option %s\n", arguments[index]);
       return 1;
@@ -1053,17 +1229,27 @@ int main(int argumentCount, char** arguments) {
     fprintf(stderr, "Need --gpus with a pair inside the authorized allocation and --gpc-map\n");
     return 1;
   }
+#ifdef STORE_CONGEST_DEST
+  if (destinationPlacement.mapPath.empty()) {
+    fprintf(stderr, "Need --destination-gpc-map\n");
+    return 1;
+  }
+#endif
   ncclUniqueId identifier;
   NCCL_CHECK(ncclGetUniqueId(&identifier));
   pthread_barrier_t hostBarrier;
   pthread_barrier_init(&hostBarrier, nullptr, 2);
   std::array<RankState, 2> states;
-  // Rank 0 builds the role table during setup; rank 1 never reads it.
+  // Rank 0 builds the role table during setup; rank 1 never reads it (E7.7 build: each rank builds its own).
   std::thread sourceThread(runRank, std::ref(states[0]), config, std::ref(placement), 0, identifier, &hostBarrier);
+#ifdef STORE_CONGEST_DEST
+  std::thread destinationThread(runRank, std::ref(states[1]), config, std::ref(destinationPlacement), 1, identifier, &hostBarrier);
+#else
   std::thread destinationThread(runRank, std::ref(states[1]), config, std::ref(placement), 1, identifier, &hostBarrier);
+#endif
   sourceThread.join();
   destinationThread.join();
   pthread_barrier_destroy(&hostBarrier);
-  writeJson(arguments[2], arguments[1], config, placement, states);
+  writeJson(arguments[2], arguments[1], config, placement, destinationPlacement, states);
   return 0;
 }

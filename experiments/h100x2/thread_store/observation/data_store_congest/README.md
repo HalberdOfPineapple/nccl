@@ -1,12 +1,12 @@
 # Data-store congestion on the issuing GPU
 
-**Status (2026-10-30): all sub-experiments E7.0–E7.6 done.**
+**Status (2026-10-30): all sub-experiments E7.0–E7.7 done.**
 
-[Plan](07_data_store_congest.md) · [Common setup and metric ids](../00_common_setup.md) · [Related plan 04 and its results](../shared_resources/README.md) · [Harness](../../common/README.md#store-congestion-harness-plan-07) · [Run configurations](configs/)
+[Plan](07_data_store_congest.md) · [Common setup and metric ids](../00_common_setup.md) · [Related plan 04 and its results](../shared_resources/README.md) · [Harness](../../common/README.md#store-congestion-harness-plan-07) · [Run configurations](configs/) · [Data path figure](data_paths.html)
 
 **Question.** When some SMs of the source GPU store data to the peer GPU over NVLink while other SMs store data to local memory, do the two store flows slow each other down, and does it matter whether they share a GPC?
 
-**Answer.** **No.** Local stores on other SMs of the source GPU do not slow the copy in practice, and sharing GPCs does not make it worse. A copy of 16 CTAs × 512 threads/CTA (about 368 GB/s over NVLink) changed by −0.38% to +0.35% per run while 64 writer CTAs stored 670 to 3155 GB/s (20–94% of HBM peak) into local memory, whether the copy and the writer used **separate GPCs** (−0.08% to −0.27%), **shared every GPC** (+0.03% to +0.24%), or the writer **filled four GPCs** next to 8 of the 16 copy CTAs (−0.01% to +0.20%). These changes are about one interquartile range of the copy's own run-to-run variation. Local **reads** at the same rates (TMA bulk reads) and local **TMA bulk stores** (up to 3251 GB/s) gave the same result (−0.31% to +0.04%). The writer was not slowed by the copy either, except by 1.7% when it was packed into GPCs at their store limit. The calibration steps behind this: the SM-to-GPC map (124 of 132 SMs placed in 8 GPCs of 8, 16 and 18 SMs; the same on GPUs 0, 1, 4 and 5); the store-only copy reaches its plateau of about 371 GB/s with 16 CTAs, because one copy SM sends at most about 35 GB/s of 4-byte stores; the thread-store writer saturates HBM writes at about 3277 GB/s (98% of peak) with 64 SMs; a GPC full of writers carries only about 700–800 GB/s of stores, about twice what the copy needs. A planned copy knob, "stores in flight per thread", turned out to control only the stores per loop step, never helped, and was removed.
+**Answer.** **No, on either GPU.** With the writer on the **destination** GPU, where both flows need the same L2 and HBM, the copy changed by −0.29% to +0.08%. At no limit the **writer** gave way instead: 3155 GB/s alone, 2828 GB/s during the copy (−10.3%). Local stores on other SMs of the source GPU do not slow the copy in practice, and sharing GPCs does not make it worse. A copy of 16 CTAs × 512 threads/CTA (about 368 GB/s over NVLink) changed by −0.38% to +0.35% per run while 64 writer CTAs stored 670 to 3155 GB/s (20–94% of HBM peak) into local memory, whether the copy and the writer used **separate GPCs** (−0.08% to −0.27%), **shared every GPC** (+0.03% to +0.24%), or the writer **filled four GPCs** next to 8 of the 16 copy CTAs (−0.01% to +0.20%). These changes are about one interquartile range of the copy's own run-to-run variation. Local **reads** at the same rates (TMA bulk reads) and local **TMA bulk stores** (up to 3251 GB/s) gave the same result (−0.31% to +0.04%). The writer was not slowed by the copy either, except by 1.7% when it was packed into GPCs at their store limit. A hardware counter check shows the writer's requested bytes match counted DRAM writes within about 0.2%. The calibration steps behind this: the SM-to-GPC map (124 of 132 SMs placed in 8 GPCs of 8, 16 and 18 SMs; the same on GPUs 0, 1, 4, 5, 6 and 7); the store-only copy reaches its plateau of about 371 GB/s with 16 CTAs, because one copy SM sends at most about 35 GB/s of 4-byte stores; the thread-store writer saturates HBM writes at about 3277 GB/s (98% of peak) with 64 SMs; a GPC full of writers carries only about 700–800 GB/s of stores (the exact value varies by GPU), about twice what the copy needs. A planned copy knob, "stores in flight per thread", turned out to control only the stores per loop step, never helped, and was removed.
 
 | Word used in this report | Metric id ([common setup](../00_common_setup.md)) |
 |---|---|
@@ -18,18 +18,20 @@
 | Role and physical SM of each CTA | A10 |
 | Full destination check after every transfer; writer region check after every launch | A11 |
 | SM-to-GPC map | A12 |
+| DRAM writes and reads counted on the writer's GPU (counter check only) | C1 |
+| L2 sectors by source and hit fraction (counter check only) | C3 |
 
 ## Words and setup shared by all sections
 
 | Item | Setting |
 |---|---|
-| GPUs | Source → destination: **4 → 5** (2026-10-29) and **0 → 1** (2026-10-30). All four GPUs have the identical SM-to-GPC map (E7.0); at the user's request the two pairs are treated as the same hardware. Each raw record names its pair |
+| GPUs | Source → destination: **4 → 5** (2026-10-29) and **0 → 1** (2026-10-30, E7.1–E7.7), and **6 → 7** for the counter check only, because GPUs 0–3 were then in use by another tenant. All six GPUs have the identical SM-to-GPC map; at the user's request the pairs are treated as the same hardware. The counter check found one exception: the packed writer's ceiling differs by GPU (see below). Each raw record names its pair |
 | Copy | Store-only: each copy thread computes a value from the element index and stores it (4 bytes) into the destination GPU through the NCCL LSA peer pointer. No source loads. One store per thread per loop step. Payload 2048 MiB, CTA-local stride, each CTA's part aligned to 128 bytes. Completion: all writing threads fence, each CTA publishes "done", the destination acknowledges |
 | Writer | CTAs on the source GPU store 16-byte values into a local 1 GiB buffer, 64 KiB blocks, each CTA in its own slice. Optional rate limit: block *k* of a CTA may start only at start + *k* × interval |
 | Placement | One CTA per SM (cooperative launch, 132 CTAs). The host chooses each CTA's role by its SM: **spread** = one SM per GPC in turn; **packed** = all SMs of the largest GPC first. Other SMs hold idle CTAs. The 8 unmapped SMs are used only when a setting needs more than 124 role CTAs |
 | Repeats | Copy: 3 warm-ups + 12 measured transfers per run, run value = median of the 12. Writer: 2 warm-ups + 5 windows of 20 ms, run value = median of the 5. Settings in rotated order. 5 runs per setting until 2026-10-30, 3 after (user's request); tables give the run count |
 | Not controlled | Clocks and power unchanged (device snapshots before and after every run). Machine shared with other users; GPUs were idle when each run started (checked under a per-device lock) |
-| Not collected | Profiler passes (Tier B timeline, Tier C counters) were not run for E7.0–E7.2. Writer rates are logical store bytes, not measured DRAM bytes |
+| Counters | Profiler passes (Tier B timeline, Tier C counters) were not part of the runs reported here. Writer rates count requested store bytes; a [separate check](#hardware-counter-check-of-the-writer) of the writer alone shows that they match counted DRAM writes within about 0.2% |
 
 ## SM-to-GPC map
 
@@ -39,7 +41,7 @@ The later tests put copy CTAs and writer CTAs in the same GPC or in different GP
 
 ### Setup
 
-GPUs 4, 5 (2026-10-29) and 0, 1 (2026-10-30), one GPU at a time. Program `common/bin/gpc_probe`. Thread-block clusters of 2, 4, 8 and 16 CTAs; shared memory per CTA above half an SM, so each SM runs at most one CTA. 20 launches per cluster size, each launch 8 waves of the maximum number of clusters that fit at once; each CTA stays a random time (10–90 µs) and does not wait for its cluster.
+GPUs 4, 5 (2026-10-29), 0, 1 and 6, 7 (2026-10-30), one GPU at a time. Program `common/bin/gpc_probe`. Thread-block clusters of 2, 4, 8 and 16 CTAs; shared memory per CTA above half an SM, so each SM runs at most one CTA. 20 launches per cluster size, each launch 8 waves of the maximum number of clusters that fit at once; each CTA stays a random time (10–90 µs) and does not wait for its cluster.
 
 ### Method
 
@@ -47,9 +49,9 @@ CUDA runs all CTAs of a cluster inside one GPC. Each CTA records its cluster num
 
 ### Results
 
-![SM-to-GPC map on GPUs 0, 1, 4 and 5](results/2026-10-29/figures/gpc_map.png)
+![SM-to-GPC map on GPUs 0, 1, 4, 5, 6 and 7](results/2026-10-29/figures/gpc_map.png)
 
-*Each box is one SM (SM ID and GPC). Grey: unmapped. All four GPUs give the same map.*
+*Each box is one SM (SM ID and GPC). Grey: unmapped. All six GPUs give the same map.*
 
 | GPC | SMs | SM IDs |
 |---|---|---|
@@ -160,7 +162,7 @@ Full tables: [copy_sweep_summary.csv](results/2026-10-29/copy_sweep_summary.csv)
 - **The plateau is about 371 GB/s, the same as the plan-04 copy with loads.** Every setting with 32 or more CTAs lies between 368.6 and 372.1 GB/s. Removing the source loads did not raise the ceiling; it lowered the cost of reaching it: plan 04 needed 128 CTAs × 512 threads/CTA with 8 loads in flight per thread.
 - **The CTA count, not the thread count, decides whether the copy reaches the plateau.** Below 16 CTAs, throughput grows in proportion to the CTA count: one copy SM sends at most about 35 GB/s of 4-byte peer stores, reached at 512 threads/CTA; 1024 threads/CTA add nothing. 8 CTAs stop at 277 GB/s with any thread count. 16 CTAs is the fewest that reach the plateau.
 - **The per-SM limit depends on the compiled loop, not only on the hardware.** The earlier build ran the same source loop as the same 22 instructions per store in a different order: 37.7 GB/s per SM at 1024 threads/CTA (8% more), but only 14.2 GB/s at 128 threads/CTA (28% less than now). What limits one SM (instruction issue, waiting between dependent instructions, or the store path) was not measured; an Nsight Compute pass at 1 CTA would show it. The plateau and the 16-CTA knee were the same in both builds.
-- **Where the time goes changes, the total does not.** At 16–32 CTAs the issue loop lasts almost the whole transfer and the acknowledgement wait is short (15–70 µs). At 64 CTAs the issue loop ends about 750 µs earlier and the copy CTAs then wait about 750 µs for the acknowledgement. More CTAs let the stores leave the SMs earlier and queue further along the path; the time to deliver 2 GiB stays the same. The issue-loop time alone is therefore not a measure of copy progress.
+- **Where the time goes changes, the total does not.** At 16–32 CTAs the issue loop lasts almost the whole transfer and the acknowledgement wait is short (15–70 µs). At 64 CTAs the issue loop ends about 750 µs earlier and the copy CTAs then wait about 750 µs for the acknowledgement. The stores do not wait in the path for that long: 750 µs at 370 GB/s would be about 277 MB. The copy CTAs finish at different times (in one transfer at 64 × 512, from 4269 to 5782 µs of 5805 µs), and the wait is mostly early CTAs waiting for the slowest one. The time to deliver 2 GiB stays the same. A median issue-loop time alone is therefore not a measure of copy progress.
 - **Packing the copy into one GPC costs at most 0.8%.** 16 × 512 packed into G6 gives 368.2 GB/s against 367.8 spread (+0.1%); 16 × 256 loses 0.8%; 32 × 512 in two GPCs loses 0.1%. One GPC can carry the full copy.
 - **Selected copy reference: 16 CTAs × 512 threads/CTA (367.8 GB/s spread, 368.2 GB/s packed into G6).** It uses the fewest SMs on the plateau (0.9% below the plateau value), which leaves 108 mapped SMs for the writer. 512 rather than 256 threads/CTA was chosen for headroom: at 256 threads/CTA, 16 SMs can send at most about 460 GB/s (16 × 28.8), 24% above what the link delivers; at 512 threads/CTA, about 560 GB/s (16 × 34.9), 51% above. With more headroom, a slowdown of the copy SMs under pressure is less likely to show as lower copy throughput, so a copy slowdown points to the shared path, not to the copy's own SMs. Threads/CTA costs the writer nothing: the writer is limited by SMs, not by threads. 32 × 512 (370.7 GB/s; G6 and G7 when packed) is a second reference with more supply if needed.
 
@@ -253,10 +255,10 @@ Full tables: [writer_sweep_summary.csv](results/2026-10-29/writer_sweep_summary.
 
 ### Interpretation
 
-- **One writer SM stores about 50 GB/s, and HBM writes saturate at about 3277 GB/s (98% of peak).** The rate grows in proportion to the CTA count up to 48 CTAs and flattens from 64. This is close to peak for writes; it is a logical store rate, and a DRAM counter check (ncu, counters are open on this machine) has not been done.
+- **One writer SM stores about 50 GB/s, and HBM writes saturate at about 3277 GB/s (98% of peak).** The rate grows in proportion to the CTA count up to 48 CTAs and flattens from 64. This is close to peak for writes. It counts requested stores, and the [counter check](#hardware-counter-check-of-the-writer) confirms it: DRAM writes of 3276 GB/s at 96 × 1024.
 - **Selected writer setting: 64 CTAs × 1024 threads/CTA.** It is the fewest CTAs at 1024 threads/CTA within 95% of the ceiling (3194 GB/s; 48 CTAs give only 72%). Its CTAs run at equal rates (slowest ÷ fastest 0.99). 64 + 16 copy CTAs = 80 ≤ 124 mapped SMs.
 - **The rate limit gives exactly the requested rate** at 20–80% of peak when spread (within 0.01%), with all CTAs equal.
-- **Packed writers reach a lower ceiling: 2819 GB/s (84%) against 3194 GB/s (95%) spread, with the same 64 CTAs.** Inside a full GPC, each SM drops from 50 to 40–45 GB/s, while the 12 SMs used in G2 keep 50 GB/s. A full GPC delivers about 690–810 GB/s of stores. This supports the plan's hypothesis of a limit at each GPC's connection, although the GPCs do not share one exact cap, and the packed writer falls 0.8% short of the 80% target. The copy needs about 370 GB/s, about half of one GPC's limit, which agrees with the small cost of packing the copy.
+- **Packed writers reach a lower ceiling: 2819 GB/s (84%) against 3194 GB/s (95%) spread, with the same 64 CTAs.** Inside a full GPC, each SM drops from 50 to 40–45 GB/s, while the 12 SMs used in G2 keep 50 GB/s. A full GPC delivers about 690–810 GB/s of stores. This supports the plan's hypothesis of a limit at each GPC's connection, although the GPCs do not share one exact cap, and the packed writer falls 0.8% short of the 80% target. The limit varies by GPU: the same packed writer reaches 2920–2933 GB/s on GPU 6 ([counter check](#hardware-counter-check-of-the-writer)). The copy needs about 370 GB/s, about half of one GPC's limit, which agrees with the small cost of packing the copy.
 - **At saturation, HBM write bandwidth is shared per GPC, not per SM.** With 128 writer CTAs, every full GPC gets about 409 GB/s whether it has 16 or 18 writer SMs. This is a hint about how the crossbar arbitrates and matters for E7.3, where the copy's GPC competes with the writer's GPCs.
 
 ## Selected settings for the tests with a co-runner
@@ -275,7 +277,7 @@ Stored in [results/2026-10-29/selection.json](results/2026-10-29/selection.json)
 - **Pairs inside one run.** Every run alternates transfers with the co-runner idle and transfers with it active: 3 warm-ups, then 6 idle and 6 active transfers. Odd rounds start idle, even rounds start active. The idle co-runner CTAs are started and wait on the same SMs, so the two halves differ only in the co-runner's traffic. The run's **copy change** is median(active) ÷ median(idle) − 1. Tables give the median of the per-run changes over 3 runs, with min and max.
 - **Reference variability.** The interquartile range (IQR) of all idle transfers of one placement or co-runner (15 runs × 6 transfers). "Change ÷ idle IQR" is the change of the median in GB/s divided by that IQR. Transfers are nested in runs, so this is a guide to size, not a test.
 - **Opening and closing references.** One run with idle co-runners at the start and end of each test checks for drift.
-- **Co-runner side.** The co-runner's rate during the copy (active transfers) is compared with the same co-runner alone on the same SMs. In the alone runs, the copy CTAs are present but idle, and one copy CTA times windows equal to the co-runner's measured active time in the matching mixed run.
+- **Co-runner side.** The co-runner's rate during the copy (active transfers) is compared with the same co-runner alone on the same SMs. In the alone runs, the copy's SMs keep their copy role but do no copy work: one copy CTA times windows equal to the co-runner's measured active time in the matching mixed run.
 - **Order.** At each level, the variants being compared run back to back in one round, and the order is rotated between rounds. All runs: GPUs 0 → 1, 2026-10-30.
 - **Checks.** Every copy transfer is fully checked at the destination. Every writer launch is checked: thread stores word by word, TMA stores word by word for the chunks written, TMA reads by a checksum. Every co-runner CTA must cover the whole copy window.
 
@@ -395,7 +397,7 @@ Full tables: [contention_summary.csv](results/2026-10-29/contention_summary.csv)
 - **Local writes do not slow the copy in practice, at any rate or placement.** Every per-run change lies between −0.38% and +0.35%, within about one idle IQR. This holds up to 3155 GB/s of local writes (94% of HBM peak) next to the 368 GB/s copy, so about 3.5 TB/s of stores leave the SMs at once.
 - **Separate GPCs give a consistent but tiny slowdown; shared GPCs do not hurt more.** All 15 separate runs are negative (−0.05% to −0.38%), and the copy's issue loop grows by 7–18 µs out of 5800 µs. Shared and crowded GPCs give changes around zero or slightly positive (−0.13% to +0.35%). The plan's hypothesis that sharing a GPC's connection would slow the copy more is not supported at these settings. Why sharing gives a slightly positive change is not known; it is about one IQR.
 - **No local effect inside crowded GPCs.** Copy CTAs next to full writer GPCs and copy CTAs in GPCs without writers both shorten their issue loop by 0.1–0.6% when the writers write. (The 75 µs difference between the two groups exists with idle writers too, so it comes from SM position, not from writes.) The acknowledgement wait in crowded runs grows from about 50 to about 70 µs at 80% and no limit; that is 0.3% of the transfer and does not change throughput.
-- **The writer is not slowed either,** except in the crowded placement at no limit (−1.7%), where the packed writers are at the per-GPC limit found in E7.2 and share those GPCs with 8 copy CTAs. In the crowded placement the writer also cannot reach the 80% target (2599–2616 GB/s), as in E7.2.
+- **The writer is not slowed either,** except in the crowded placement at no limit (−1.7%), where the packed writers are at the per-GPC limit found in E7.2 and share those GPCs with 8 copy CTAs. In the crowded placement the writer also cannot reach the 80% target (2599–2616 GB/s), as in E7.2. These two rates apply to GPU 0; the packed writer's ceiling differs by GPU.
 - **The probe does not change the result.** Without the per-CTA timers, the copy's change is within the same range.
 - **What this does not show.** The copy is a 4-byte-store copy with spare issue capacity on its own SMs (E7.1). A copy that is limited by its own SMs, uses wider stores, or uses many more CTAs could react differently.
 
@@ -528,19 +530,179 @@ Idle-transfer IQR: thread stores 1.00 GB/s, TMA stores 1.12 GB/s. References wit
 - **The mechanism does not matter at these rates.** The TMA changes are slightly more negative at 40% (−0.31%, about one IQR), but the ranges overlap with thread stores, and there is no trend with rate.
 - **The TMA writer is not slowed by the copy** (within 0.04% of its rate alone).
 
+## Local writes on the destination GPU
+
+### Motivation
+
+E7.7 in the [plan](07_data_store_congest.md). On the source GPU the store-only copy uses no memory for its data, so the two flows can meet only up to the crossbar. With the writer on the destination GPU, incoming peer stores and local stores are written into the same L2 and HBM. The plan expected little change while the two flows together stay below the HBM write ceiling, and a slowdown that grows as they approach it.
+
+### Setup
+
+| Knob | Role | Values |
+|---|---|---|
+| **Writer target rate** | **Independent variable** | **Idle (reference half), 670, 1341, 2011, 2682 GB/s, no limit** |
+| **GPU that runs the writer** | **Independent variable** | **Destination** (E7.7) vs **source** (E7.3 separate, repeated back to back with the same binary) |
+| Copy | Constant | 16 CTAs × 512 threads/CTA, 2048 MiB, packed into G6 of the source GPU |
+| Writer | Constant | 64 CTAs × 1024 threads/CTA, 16-byte stores, own 1 GiB buffer, on the same SM IDs on either GPU: the 7 GPCs other than G6 |
+| Receiver | Constant | 1 CTA in G6 of the destination GPU, on both arms |
+| Binary | Constant | `bin/store_congest_dest`, on both arms |
+| Runs | Constant | 3 per GPU and level, back to back at each level, GPUs 0 → 1 |
+
+Configs: [configs/destination/](configs/destination/) (`mixed_{destination,source}_<level>_R<run>`, `writer_destination_<level>_R<run>` for the writer alone, `reference_destination_{open,close}`).
+
+### Method
+
+As in the shared method, with these changes. Both ranks launch one CTA per SM and take roles from their own table. The destination starts its writers before the receiver sends "destination ready" and stops them after the acknowledgement. These steps use signals, because the two GPUs' timers are not compared. Writer coverage is checked on the destination against the receiver's record. In writer-alone runs, the source's copy CTAs exit at once, and the receiver CTA times the window and stops the writers.
+
+The new binary's copy loop has the same instructions in the same order as the E7.3 build. Behaviour check, one run of the E7.3 setting at no limit: copy with idle writers 368.8 GB/s and writer 3154 GB/s, as in the recorded E7.3 runs (368.8 and 3155 GB/s).
+
+### Results
+
+![Copy throughput with the writer on the destination GPU and on the source GPU](results/2026-10-29/figures/destination_copy.png)
+
+*Each point: median of 6 transfers of one run; blue: writer idle, orange: writer writing, in the same run. Under each level: the write rate achieved during the copy.*
+
+| GPU that runs the writer | Writer target | Achieved write rate GB/s | Runs | Copy, writer idle GB/s | Copy, writer writing GB/s | Change (min to max) | Change ÷ idle IQR |
+|---|---|---|---|---|---|---|---|
+| destination | 20% | 670 | 3 | 367.7 | 367.5 | +0.08% (−0.05 to +0.09) | −0.26 |
+| destination | 40% | 1341 | 3 | 368.0 | 367.8 | −0.03% (−0.13 to +0.04) | −0.27 |
+| destination | 60% | 2011 | 3 | 367.7 | 367.5 | −0.09% (−0.11 to +0.02) | −0.27 |
+| destination | 80% | 2682 | 3 | 367.6 | 367.5 | −0.05% (−0.06 to +0.02) | −0.09 |
+| destination | no limit | 2828 | 3 | 368.0 | 367.0 | −0.29% (−0.29 to −0.15) | −1.41 |
+| source | 20% | 670 | 3 | 369.0 | 368.1 | −0.25% (−0.44 to −0.12) | −0.95 |
+| source | 40% | 1341 | 3 | 368.5 | 367.9 | −0.17% (−0.18 to −0.06) | −0.65 |
+| source | 60% | 2011 | 3 | 368.2 | 368.2 | −0.11% (−0.31 to +0.04) | −0.08 |
+| source | 80% | 2682 | 3 | 368.8 | 368.0 | −0.16% (−0.41 to −0.16) | −0.88 |
+| source | no limit | 3153 | 3 | 368.8 | 368.3 | −0.11% (−0.21 to −0.05) | −0.60 |
+
+The change is the median of per-run changes, and "change ÷ idle IQR" uses the medians over runs, so the two can differ in sign when the change is this small. Idle-transfer IQR: destination 0.70 GB/s, source 0.97 GB/s. References with idle writers on the destination: 367.7 GB/s (open) and 367.5 GB/s (close).
+
+Copy time phases (medians over CTAs and transfers, then over runs):
+
+| GPU that runs the writer | Writer target | Issue loop µs, idle → writing | Ordering µs | Acknowledgement wait µs |
+|---|---|---|---|---|
+| destination | 20% | 5817 → 5818 | 6.3 → 6.1 | 18 → 19 |
+| destination | 40% | 5810 → 5810 | 6.0 → 6.0 | 18 → 21 |
+| destination | 60% | 5812 → 5815 | 5.8 → 6.1 | 18 → 20 |
+| destination | 80% | 5816 → 5816 | 6.3 → 6.2 | 18 → 22 |
+| destination | no limit | 5809 → 5817 | 5.8 → 5.9 | 18 → 25 |
+| source | 20% | 5795 → 5809 | 6.0 → 5.8 | 18 → 18 |
+| source | 40% | 5800 → 5811 | 5.8 → 5.9 | 17 → 18 |
+| source | 60% | 5807 → 5810 | 5.9 → 5.9 | 18 → 17 |
+| source | 80% | 5801 → 5808 | 5.8 → 6.1 | 15 → 17 |
+| source | no limit | 5799 → 5806 | 5.8 → 6.1 | 17 → 18 |
+
+Writer on the destination during the copy against the writer alone on the same SMs:
+
+![Writer rate on the destination GPU, alone and during the copy](results/2026-10-29/figures/destination_writer.png)
+
+| Writer target | Writer alone GB/s | Writer during the copy GB/s | Change |
+|---|---|---|---|
+| 20% | 670 | 670 | 0.00% |
+| 40% | 1341 | 1341 | 0.00% |
+| 60% | 2011 | 2011 | +0.01% |
+| 80% | 2682 | 2682 | 0.00% |
+| no limit | 3155 | 2828 | −10.34% |
+
+Full table: [destination_summary.csv](results/2026-10-29/destination_summary.csv).
+
+### Interpretation
+
+- **The copy keeps its throughput even when both flows need the same memory.** Through 80% the change is within ±0.13% per run. At no limit it is the largest here, −0.29% (1.4 idle IQRs, all 3 runs negative), and still small in practice: 1 GB/s of 368 GB/s. The issue loop grows by 8 µs and the acknowledgement wait by 7 µs out of about 5840 µs.
+- **The writer gives way, not the copy.** At no limit the writer loses 327 GB/s, close to the copy's 367 GB/s, in all three runs (2816–2838 GB/s per transfer). Its slowest CTA runs at 0.75 of its fastest (0.99 for this setting spread over 8 GPCs on the source). Copy plus writer come to about 3195 GB/s (95% of HBM peak). That is 40 GB/s above the writer's 3155 GB/s alone and below the 3277 GB/s measured with more writer SMs.
+- **No slowdown until the memory path is full.** At 80% the two flows total about 3050 GB/s, and neither loses anything. The plan's expected signature for the copy, a slowdown that grows as the flows approach the ceiling, did not appear. Only one tested level is past the ceiling, so where the writer begins to give way between 2682 and 3155 GB/s was not measured.
+- **Same direction as plan 04, on a different setup.** There, reads on the destination at about 95% of peak lowered a copy with loads (128 CTAs × 512 threads/CTA) by 1.82%, while the reads lost 16.2%. The settings differ, so that copy is not a reference for this one.
+- **What this cannot say.** No counters were read during these runs, so the destination's crossbar, L2 and HBM cannot be told apart. The writer's requested rate matches counted DRAM writes when it runs alone ([counter check](#hardware-counter-check-of-the-writer)); during the copy it was not counted, and the 3195 GB/s total is a sum of requested rates. Why the incoming copy is favoured over local stores is not known; one possibility is that NVLink traffic takes a fixed share as one more requester, as each full GPC did with 128 writer CTAs in the writer calibration.
+
+## Hardware counter check of the writer
+
+### Motivation
+
+Every write rate in this report counts bytes the writer's threads requested, not bytes counted by hardware. The 98% of HBM peak ceiling looked high for writes, and L2 could in principle hide or combine traffic. This check compares requested bytes with DRAM and L2 hardware counters.
+
+### Setup
+
+| Knob | Role | Values |
+|---|---|---|
+| **Writer setting** | **Independent variable** | **Rate levels, CTA counts, packed and E7.3 layouts, 20 ms and 5.86 ms windows, TMA store writer (rows below)** |
+| Copy | Constant | Off; one copy CTA times the window |
+| Profiler | Constant | `ncu` 2025.3.1 on the source GPU, application replay, `--clock-control none`, `--cache-control none` |
+| Runs | Constant | GPUs 6 → 7; 3 runs per setting, 2 warm-ups and 3 measured launches per run, windows of 20 ms unless stated |
+
+Configs: [configs/counter_check/](configs/counter_check/). Scripts: `common/scripts/run_writer_counters.py`, `analyze_writer_counters.py`.
+
+### Method
+
+Application replay reruns the whole program for each counter pass, so kernel replay, which hung on this harness earlier, is not needed. Counters are per launch and GPU-wide on the source GPU. The harness record kept is that of the last pass, so a counter and a block count may come from different passes. That shows up as the wider ratio ranges at no limit, where the rate varies slightly between passes; at a rate target the block count hardly varies. L2 sectors are 32 bytes. The new GPUs have the same SM-to-GPC map; writer rates under the profiler match earlier runs without it (for example 3158 GB/s at 64 × 1024, no limit).
+
+### Results
+
+![DRAM writes counted against bytes requested, and L2 traffic by source](results/2026-10-29/figures/counter_check.png)
+
+*Left: each point is one writer setting. Right: L2 traffic split by source. Median over 9 launches of 3 runs.*
+
+| Writer: CTAs × threads/CTA | Requested GB per launch | DRAM writes GB | Counted ÷ requested (min to max) | Requested GB/s | Counted GB/s | Tool: % of DRAM peak | DRAM reads GB |
+|---|---|---|---|---|---|---|---|
+| 64 × 1024, 670 GB/s target, spread | 13.413 | 13.389 | 0.9982 (0.9982 to 0.9982) | 670 | 669 | 19.9 | 0.000 |
+| 64 × 1024, 1341 GB/s target, spread | 26.835 | 26.811 | 0.9991 (0.9991 to 0.9993) | 1341 | 1340 | 40.0 | 0.000 |
+| 64 × 1024, 2011 GB/s target, spread | 40.240 | 40.216 | 0.9994 (0.9994 to 0.9994) | 2011 | 2009 | 59.9 | 0.000 |
+| 64 × 1024, 2682 GB/s target, spread | 53.662 | 53.638 | 0.9995 (0.9995 to 0.9996) | 2682 | 2680 | 80.0 | 0.000 |
+| 64 × 1024, no limit, spread | 63.195 | 63.172 | 0.9996 (0.9985 to 1.0011) | 3158 | 3157 | 94.2 | 0.001 |
+| 16 × 1024, no limit, spread | 15.848 | 15.852 | 0.9998 (0.9967 to 1.0061) | 792 | 792 | 23.6 | 0.001 |
+| 32 × 1024, no limit, spread | 31.713 | 31.691 | 0.9992 (0.9979 to 1.0007) | 1585 | 1584 | 47.2 | 0.001 |
+| 64 × 512, no limit, spread | 65.572 | 65.484 | 0.9987 (0.9969 to 1.0034) | 3277 | 3272 | 97.6 | 0.001 |
+| 96 × 1024, no limit, spread | 65.610 | 65.562 | 0.9991 (0.9959 to 1.0009) | 3279 | 3276 | 97.7 | 0.001 |
+| 64 × 1024, no limit, packed into 4 GPCs | 58.598 | 58.616 | 0.9997 (0.9965 to 1.0027) | 2929 | 2929 | 87.4 | 0.000 |
+| 64 × 1024, no limit, 7 GPCs (E7.3 layout) | 63.120 | 63.094 | 0.9997 (0.9982 to 1.0005) | 3155 | 3153 | 94.0 | 0.000 |
+| 64 × 1024, no limit, 7 GPCs, 5.86 ms window | 18.498 | 18.471 | 0.9988 (0.9964 to 0.9996) | 3152 | 3146 | 93.8 | 0.000 |
+| 64 × 1024, 2011 GB/s target, 7 GPCs, 5.86 ms window | 11.803 | 11.778 | 0.9979 (0.9975 to 0.9979) | 2011 | 2006 | 59.8 | 0.000 |
+| TMA stores, 64 CTAs × 1 chunk, no limit, spread | 65.205 | 65.119 | 0.9995 (0.9986 to 1.0000) | 3259 | 3254 | 97.1 | 0.000 |
+
+| Writer: CTAs × threads/CTA | L2 from GPCs ÷ requested | L2 from fabric ÷ requested | All L2 ÷ requested | L2 write sectors GB | L2 read sectors GB | L2 sector hit fraction |
+|---|---|---|---|---|---|---|
+| 64 × 1024, 670 GB/s target, spread | 1.000 | 0.500 | 1.502 | 20.1 | 0.01 | 0.99997 |
+| 64 × 1024, 1341 GB/s target, spread | 1.000 | 0.500 | 1.501 | 40.3 | 0.01 | 0.99999 |
+| 64 × 1024, 2011 GB/s target, spread | 1.000 | 0.500 | 1.501 | 60.4 | 0.01 | 0.99999 |
+| 64 × 1024, 2682 GB/s target, spread | 1.000 | 0.500 | 1.502 | 80.5 | 0.01 | 0.99999 |
+| 64 × 1024, no limit, spread | 1.000 | 0.500 | 1.502 | 94.8 | 0.03 | 0.99999 |
+| 16 × 1024, no limit, spread | 1.002 | 0.500 | 1.504 | 23.8 | 0.01 | 0.99998 |
+| 32 × 1024, no limit, spread | 1.001 | 0.500 | 1.501 | 47.6 | 0.02 | 0.99999 |
+| 64 × 512, no limit, spread | 0.999 | 0.504 | 1.515 | 98.3 | 0.03 | 0.99999 |
+| 96 × 1024, no limit, spread | 1.000 | 0.509 | 1.546 | 98.4 | 0.02 | 0.99999 |
+| 64 × 1024, no limit, packed into 4 GPCs | 1.001 | 0.501 | 1.502 | 88.0 | 0.02 | 0.99999 |
+| 64 × 1024, no limit, 7 GPCs (E7.3 layout) | 1.000 | 0.501 | 1.504 | 94.7 | 0.03 | 0.99999 |
+| 64 × 1024, no limit, 7 GPCs, 5.86 ms window | 1.000 | 0.501 | 1.503 | 27.7 | 0.01 | 0.99999 |
+| 64 × 1024, 2011 GB/s target, 7 GPCs, 5.86 ms window | 1.000 | 0.500 | 1.501 | 17.7 | 0.00 | 0.99999 |
+| TMA stores, 64 CTAs × 1 chunk, no limit, spread | 0.999 | 0.501 | 1.503 | 97.7 | 0.03 | 0.99999 |
+
+Full table: [counter_check_summary.csv](results/2026-10-29/counter_check_summary.csv).
+
+### Interpretation
+
+- **The requested write rate is an accurate measure of HBM writes.** DRAM writes equal requested bytes within 0.21% at every median (single launches within 0.6%, because counters and block counts can come from different passes), and the ceiling of about 3278 GB/s is confirmed: the DRAM counter gives 3276 GB/s, and the tool's own figure is 97.7% of DRAM peak. At the rate targets the tool's percentages (19.9, 40.0, 59.9, 80.0%) match our percentages of the 3352 GB/s peak, so that peak is the right reference.
+- **Writes cause no HBM reads.** DRAM reads stay at or below 0.001 GB per launch, so full-line writes need no read-for-ownership.
+- **L2 does not combine the writer's stores.** The bytes reaching DRAM match the bytes requested, even though the buffer is rewritten many times per window. The earlier worry in the plan's limits, that L2 may combine repeated stores, does not apply to this writer.
+- **L2 holds about 24 MB when a kernel ends.** At rate targets, requested minus counted stays at 24–25 MB whatever the rate and window, so the ratio moves closer to 1 with more bytes. The likely reason is dirty data still in L2 at the end of the kernel. This was not checked directly.
+- **Read the L2 hit fraction with care.** Nearly every sector counts as a lookup hit (0.9999+), yet all bytes still reach DRAM. For full-line writes a hit does not mean HBM traffic was saved.
+- **L2 sees 1.5 times the requested bytes, and that is not extra memory traffic.** The sectors from GPCs equal the requested bytes (×1.000). Another ×0.50–0.51 comes from `srcunit_ltcfabric`, with very little else. One reading is that half of the stores land in the far part of L2 and are counted again when they cross between parts; NVIDIA does not document this. To read L2 traffic as demand, use the sectors from GPCs, not `lts__t_sectors`.
+- **TMA stores agree too:** 65.1 GB counted of 65.2 GB requested, with the same L2 split.
+- **GPUs are not identical in the packed case.** The packed writer gives 2929 GB/s on GPU 6 under the profiler and 2920–2933 GB/s without it (3 runs), against 2811–2819 GB/s on GPUs 0 and 4. By GPC, GPU 6 gives G1 about 730 and G7 about 800 GB/s, against 686 and 727 GB/s on GPU 0. Spread settings do not show this. So the per-GPC store limit in the writer section varies by GPU; the fact of a limit stands, and its 690–810 GB/s range is a measurement on one GPU.
+- **Not measured.** This is the writer alone. The copy-plus-writer total in E7.7 (about 3195 GB/s) is still a sum of requested rates, and the copy's route through L2 was not counted.
+
 ## Deviations from the plan
 
-1. **GPUs:** 4 → 5 and 0 → 1 instead of one pair from 0, 1, 6, 7 (user's allocation). All four GPUs have the same GPC map; the user asked to treat both pairs as the same.
+1. **GPUs:** 4 → 5, 0 → 1, and 6 → 7 for the counter check, instead of one pair (user's allocation). All six GPUs have the same GPC map, and the user asked to treat the pairs as the same. The counter check found that the packed writer's ceiling differs by GPU.
 2. **Unmapped SMs 124–131:** placement uses 124 mapped SMs; 128-CTA settings also use 4 unmapped SMs.
 3. **Copy floor grid added** (1–16 CTAs, 128–1024 threads/CTA), because the plan grid was flat from its first point.
 4. **3 runs per setting instead of 5** from 2026-10-30 (user's request). All copy results come from 3-run settings.
 5. **"Stores in flight per thread" removed** from the copy (user's request, 2026-10-30): it could only set the stores per loop step. The copy grid was remeasured with the build without it; see [Removed knob](#removed-knob-stores-per-loop-step).
-6. **Writer-alone runs use one copy-role CTA as the window timer;** the copy itself is off. In the tests with a co-runner, the alone runs keep all copy CTAs present but idle, so the co-runner uses the same SMs.
+6. **Writer-alone runs use one copy-role CTA as the window timer;** the copy itself is off. In the tests with a co-runner, the alone runs keep the copy's role table, so the co-runner uses the same SMs; those copy CTAs exit at once, except the one that times the window.
 7. **E7.3–E7.6: 3 runs per level instead of 5** (user's request); each run holds 6 + 6 paired transfers.
 8. **E7.4 and E7.4b placements** were realized as "both roles spread over all GPCs" and "writer packed into four GPCs next to 2 copy CTAs each" (details in that section).
 9. **E7.5 reader: 48 CTAs at every level** instead of 24, so that one reader setting reaches the top level (3155 GB/s).
 10. **E7.5 and E7.6 use a second build,** `bin/store_congest_tma` (same source with the TMA co-runners compiled in); `bin/store_congest` was checked to keep the instructions of the E7.1–E7.4 build.
-11. **No profiler passes** (Tier B timeline, Tier C counters) were run; write and read rates are logical bytes, not counted DRAM bytes.
+11. **E7.7 uses a third build,** `bin/store_congest_dest`, on both arms, with the receiver in G6. The E7.3 records had one receiver CTA on SM 0 (G0) and a one-CTA destination launch. The plan's 3-run count and levels were followed.
+12. **No profiler passes in the main runs.** Write and read rates count requested bytes. The thread-store and TMA store writers were checked against DRAM and L2 counters afterwards, alone, on GPUs 6 → 7, because GPUs 0–3 were then in use by another tenant. Read rates and rates during the copy were not checked with counters.
 
 ## Session log
 
@@ -552,5 +714,7 @@ Idle-transfer IQR: thread stores 1.00 GB/s, TMA stores 1.12 GB/s. References wit
 | 2026-10-30 | 0, 1 | `copy_batch` removed from the harness. Check runs (copy 16 × 512, 8 × 1024, 1 × 1024; writer 16 and 64 CTAs, spread and packed). Copy plan grid, floor grid and placement remeasured with the final build (34 settings + 3 packed, 3 runs each) | `refactor_check/raw/`, `session_no_knob.log`, `build_provenance.json` |
 | 2026-10-30 | 0, 1 | E7.3/E7.4/E7.4b: smoke runs, then 3 placements × 5 levels × 3 runs with matched writer-alone runs, references and probe-cost runs (first start stopped on a message bug after one reference run; the record was kept) | `contention/raw/`, `contention_smoke/raw/`, `session_contention.log` |
 | 2026-10-30 | 0, 1 | `bin/store_congest_tma` built (TMA read and store co-runners); smoke runs. E7.5: writes and reads × 5 levels × 3 runs with reader-alone runs and references. E7.6: TMA writer calibration (7 CTA counts × 3 chunk depths × 3 runs, then rate levels), then thread vs TMA stores × 5 levels × 3 runs with TMA-alone runs and references | `tma_smoke/raw/`, `direction/raw/`, `tma_writer_alone/raw/`, `mechanism/raw/`, `session_e75.log`, `session_e76.log` |
+| 2026-10-30 | 0, 1 | `bin/store_congest_dest` built. Behaviour check and smoke runs. E7.7: destination and source × 5 levels × 3 runs with writer-alone runs on the destination and references | `destination_check/raw/`, `destination/raw/`, `session_e77.log`, `build_provenance.json` |
+| 2026-10-30 | 6, 7 | GPUs 6, 7 allowed (host-only change, instructions checked) and GPC map probed (same map). Counter check: 14 writer settings × 3 runs under `ncu`; packed writer × 3 runs without it | `gpc_map/raw/`, `counter_check/raw/`, `counter_check_plain/raw/`, `session_counters.log`, `build_provenance.json` |
 
-Raw run records, device snapshots and logs are kept only in the local `results/2026-10-29/` directory (ignored by git); without them, rerun the phases. Reproduce: `make` in `common/`, then `python3 scripts/run_gpc_map.py --gpus S,D`, `build_gpc_map.py`, and `run_store_congest.py PHASE --gpus S,D` for `copy_sweep`, `copy_floor`, `writer_sweep`, `writer_rate`, `writer_placement`, `copy_placement`, `contention`, `read_contrast`, `tma_writer_sweep`, `tma_writer_rate`, `tma_store_contrast` (choices between phases in `selection.json`); then `analyze_store_congest.py` and `analyze_store_contention.py` with the plotting Python.
+Raw run records, device snapshots and logs are kept only in the local `results/2026-10-29/` directory (ignored by git); without them, rerun the phases. Reproduce: `make` in `common/`, then `python3 scripts/run_gpc_map.py --gpus S,D`, `build_gpc_map.py`, and `run_store_congest.py PHASE --gpus S,D` for `copy_sweep`, `copy_floor`, `writer_sweep`, `writer_rate`, `writer_placement`, `copy_placement`, `contention`, `read_contrast`, `tma_writer_sweep`, `tma_writer_rate`, `tma_store_contrast`, `destination` (choices between phases in `selection.json`); then `analyze_store_congest.py` and `analyze_store_contention.py` with the plotting Python.

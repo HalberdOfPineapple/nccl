@@ -23,6 +23,8 @@ Phases, in order:
   tma_writer_rate   E7.6 calibration: the selected TMA writer at 20/40/60/80% and no limit
   tma_store_contrast E7.6: TMA bulk-store writer next to the copy in separate GPCs, interleaved
                     with the thread-store writer at the same targets
+  destination       E7.7: the writer on the destination GPU, back to back with the writer on the
+                    source GPU (E7.3 separate), with the same new binary; writer alone on the destination
 Choices between phases are read from selection.json, written by hand after inspecting the
 previous phase. Configs carry no GPU numbers; the pair comes from --gpus and is recorded in every
 raw record, and the source GPU's SM-to-GPC map (E7.0) is passed with each run.
@@ -40,6 +42,7 @@ RESULTS = EXPERIMENT / 'results/2026-10-29'
 CONFIGS = EXPERIMENT / 'configs'
 BINARY = COMMON / 'bin/store_congest'
 TMA_BINARY = COMMON / 'bin/store_congest_tma'   # same harness plus TMA co-runners (writer_kind 1, 2)
+DEST_BINARY = COMMON / 'bin/store_congest_dest' # same harness with a role table on both GPUs (E7.7)
 TMA_READ_SHARED_BYTES = 196864                # 3 × 64 KiB chunks + barriers, as plan 04's read co-runner
 PEAK_GBPS = 3352.32                   # 2 × 2619 MHz × 5120 bits / 8
 MAPPED_SMS = 124                      # SMs 124-131 are not placed by cluster launches (E7.0)
@@ -87,9 +90,11 @@ def summarize(path):
     data = json.loads(path.read_text())
     rows = []
     idle_list = data['ranks'][0]['writer_idle_by_iteration']
+    writer_rank = data.get('writer_rank', 0)    # 1 only in E7.7; timers of that rank's GPU are compared with each other
     for index, records in enumerate(data['ranks'][0]['iterations']):
         copy = [record for record in records if record['role'] == 'copy']
-        writers = [record for record in records if record['role'] == 'writer']
+        writer_records = data['ranks'][writer_rank]['iterations'][index]
+        writers = [record for record in writer_records if record['role'] == 'writer']
         row = dict(run=path.stem, iteration=index, writer_idle=idle_list[index])
         if data['communication']:
             started = min(record['start_ns'] for record in copy)
@@ -102,9 +107,13 @@ def summarize(path):
                            ack_wait_us=statistics.median(record['end_ns'] - record['publish_end_ns'] for record in copy) / 1000,
                            issue_spread_us=(max(record['issue_end_ns'] for record in copy) - min(record['issue_end_ns'] for record in copy)) / 1000)
             window_start, window_end = started, completed
-        else:
+        elif not writer_rank:
             timer = [record for record in copy if record['role_index'] == 0][0]
             window_start, window_end = timer['start_ns'], timer['end_ns']
+        if writer_rank:
+            # A8 on the destination: from just before "destination ready" until after the acknowledgement.
+            receiver = [record for record in writer_records if record['role'] == 'receiver'][0]
+            window_start, window_end = receiver['publish_end_ns'], receiver['end_ns']
         if writers and not row['writer_idle']:
             writer_start = min(record['start_ns'] for record in writers)
             writer_end = max(record['end_ns'] for record in writers)
@@ -122,6 +131,7 @@ class Campaign:
         self.gpus = gpus
         self.source_gpu = int(gpus.split(',')[0])
         self.gpc_map = CONFIGS / 'gpc_map' / f'gpu{self.source_gpu}.json'
+        self.destination_gpc_map = CONFIGS / 'gpc_map' / f"gpu{gpus.split(',')[1]}.json"
 
     def run(self, group, label, binary=BINARY, **overrides):
         """Write or confirm one config, run it once under the guard, validate the record."""
@@ -140,11 +150,13 @@ class Campaign:
         config.write_text(content)
         output = RESULTS / group / 'raw' / f'{label}.json'
         if not output.exists():
+            extra = ['--destination-gpc-map', str(self.destination_gpc_map)] if binary == DEST_BINARY else []
             subprocess.run([sys.executable, str(COMMON / 'scripts/run_one.py'), str(config), str(output), '--binary', str(binary),
-                            '--gpus', self.gpus, '--gpc-map', str(self.gpc_map)], check=True)
+                            '--gpus', self.gpus, '--gpc-map', str(self.gpc_map)] + extra, check=True)
         data, rows = summarize(output)
         assert data['verified'] and len(rows) == values['iterations']
-        assert data['role_of_sm'].count(1) == values['copy_ctas'] and data['role_of_sm'].count(2) == values['writer_ctas']
+        writer_table = data['destination_role_of_sm'] if data.get('writer_rank') else data['role_of_sm']
+        assert data['role_of_sm'].count(1) == values['copy_ctas'] and writer_table.count(2) == values['writer_ctas']
         if values['writer_ctas']:
             assert all(row['minimum_overlap_fraction'] == 1 for row in rows if not row['writer_idle'])
         message = f'{group} {label}:'
@@ -205,7 +217,8 @@ def writer_active_ns(rows_path):
     """Median writer active interval over the writing transfers of one mixed run."""
     data = json.loads(rows_path.read_text())
     spans = []
-    for idle, records in zip(data['ranks'][0]['writer_idle_by_iteration'], data['ranks'][0]['iterations']):
+    writer_rank = data.get('writer_rank', 0)
+    for idle, records in zip(data['ranks'][0]['writer_idle_by_iteration'], data['ranks'][writer_rank]['iterations']):
         writers = [record for record in records if record['role'] == 'writer']
         if not idle:
             spans.append(max(record['end_ns'] for record in writers) - min(record['start_ns'] for record in writers))
@@ -314,6 +327,27 @@ def phase_tma_store_contrast(campaign):
     campaign.run(group, 'reference_tma_close', binary=TMA_BINARY, **mixed('separate', 0, 1, writer_alternate=0, writer_idle=1, **tma))
 
 
+def phase_destination(campaign):
+    group = 'destination'
+    # Receiver in G6 on both arms; the writer's mask excludes G6, so it uses the same SM IDs on either GPU.
+    on_destination = dict(writer_rank=1, receiver_gpcs=1 << 6)
+    on_source = dict(writer_rank=0, receiver_gpcs=1 << 6)
+    campaign.run(group, 'reference_destination_open', binary=DEST_BINARY, **mixed('separate', 0, 1, writer_alternate=0, writer_idle=1, **on_destination))
+    for repetition in range(1, ROUNDS + 1):
+        for level, target in rotated(rate_levels(), repetition):
+            for kind in rotated(['destination', 'source'], repetition):
+                label = f'mixed_{kind}_{level}_R{repetition}'
+                if kind == 'source':
+                    campaign.run(group, label, binary=DEST_BINARY, **mixed('separate', target, repetition, **on_source))
+                    continue
+                campaign.run(group, label, binary=DEST_BINARY, **mixed('separate', target, repetition, **on_destination))
+                window = writer_active_ns(RESULTS / group / 'raw' / f'{label}.json')
+                # Writer alone on the same destination SMs: source copy CTAs exit at once, the receiver CTA times the window.
+                campaign.run(group, f'writer_destination_{level}_R{repetition}', binary=DEST_BINARY,
+                             **mixed('separate', target, repetition, writer_alternate=0, communication=0, solo_ns=window, warmup=2, iterations=6, **on_destination))
+    campaign.run(group, 'reference_destination_close', binary=DEST_BINARY, **mixed('separate', 0, 1, writer_alternate=0, writer_idle=1, **on_destination))
+
+
 def phase_copy_sweep(campaign):
     grid = copy_grid()
     for repetition in range(1, ROUNDS + 1):
@@ -367,7 +401,7 @@ def phase_writer_placement(campaign):
 PHASES = dict(copy_sweep=phase_copy_sweep, copy_floor=phase_copy_floor, copy_placement=phase_copy_placement, writer_sweep=phase_writer_sweep,
               writer_rate=phase_writer_rate, writer_placement=phase_writer_placement, contention=phase_contention,
               read_contrast=phase_read_contrast, tma_writer_sweep=phase_tma_writer_sweep, tma_writer_rate=phase_tma_writer_rate,
-              tma_store_contrast=phase_tma_store_contrast)
+              tma_store_contrast=phase_tma_store_contrast, destination=phase_destination)
 
 
 def main():
