@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0">
+<title>Copy Transfer Timing Model</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column. The timing diagram is the page's centre and scrolls sideways inside its own frame on narrow screens. */
+:root { --bg:#f5f6f8; --fg:#1c2330; --muted:#5a6474; --panel:#fff; --band:#e8ecf2; --line:#b6bfcb; --data:#23629f; --signal:#b95f0d; --measure:#0f766e;
+  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#11151b; --fg:#e5e8ed; --muted:#9ba5b3; --panel:#1b2129; --band:#29313c; --line:#47525f; --data:#6ea8e6; --signal:#eea255; --measure:#4cc2b2; color-scheme:dark; } }
+:root[data-theme="dark"] { --bg:#11151b; --fg:#e5e8ed; --muted:#9ba5b3; --panel:#1b2129; --band:#29313c; --line:#47525f; --data:#6ea8e6; --signal:#eea255; --measure:#4cc2b2; color-scheme:dark; }
+body { background:var(--bg); color:var(--fg); font:15px/1.55 var(--sans); }
+.page { max-width:1180px; margin:0 auto; padding-block:32px 56px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); display:grid; gap:32px; }
+header, section { display:grid; gap:12px; min-width:0; }
+h1 { font-size:1.75rem; font-weight:600; margin:0; text-wrap:balance; }
+h2 { font-size:1.2rem; font-weight:600; margin:0; text-wrap:balance; }
+p { margin:0; max-width:72ch; }
+.lead { color:var(--muted); }
+code { font-family:var(--mono); font-size:.88em; }
+figure { margin:0; display:grid; gap:10px; min-width:0; }
+figcaption { color:var(--muted); font-size:.92rem; max-width:90ch; }
+.frame { overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px; }
+.frame svg { display:block; width:100%; min-width:980px; height:auto; }
+.table-wrap { overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+table { border-collapse:collapse; width:100%; font-size:.92rem; }
+th, td { text-align:left; vertical-align:top; padding:9px 12px; border-bottom:1px solid var(--line); }
+th { font-weight:600; white-space:nowrap; }
+tbody tr:last-child td { border-bottom:0; }
+td.num { font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; }
+tr.main td { font-weight:600; color:var(--measure); }
+tr.main td code { font-weight:500; }
+ul { margin:0; padding-left:20px; display:grid; gap:8px; max-width:80ch; }
+
+/* Diagram marks */
+.gpu-line { stroke:currentColor; stroke-width:1.5; }
+.band { fill:var(--band); stroke:var(--line); stroke-width:1; }
+.band.outside { fill:var(--panel); stroke-dasharray:4 3; }
+.band-text { font:11.5px var(--sans); fill:currentColor; text-anchor:middle; }
+.band-text.small { font-size:11px; }
+.gpu-name { font:600 14px var(--sans); fill:currentColor; }
+.gpu-note { font:11.5px var(--sans); fill:var(--muted); }
+.point { fill:var(--panel); stroke:currentColor; stroke-width:2; }
+.point-label { font:500 11.5px var(--mono); fill:currentColor; text-anchor:middle; }
+.guide { stroke:var(--line); stroke-width:1; stroke-dasharray:2 3; }
+.data { stroke:var(--data); stroke-width:1.25; fill:none; }
+.signal { stroke:var(--signal); stroke-width:2; fill:none; }
+.signal.other { stroke-dasharray:5 4; stroke-width:1.5; }
+.head-data { fill:var(--data); }
+.head-signal { fill:var(--signal); }
+.arrow-title { font:600 12px var(--mono); }
+.arrow-title.data-text { fill:var(--data); text-anchor:middle; }
+.arrow-title.signal-text { fill:var(--signal); }
+.arrow-note { font:11px var(--sans); fill:var(--muted); }
+.arrow-note.center { text-anchor:middle; }
+.label-ground { fill:var(--panel); }
+.bracket { stroke:var(--measure); stroke-width:1.5; fill:none; }
+.measure { font:500 12px var(--sans); fill:var(--measure); text-anchor:middle; }
+.measure.main { font-weight:600; font-size:13px; }
+.measure.quiet { font-weight:400; }
+.time-note { font:11.5px var(--sans); fill:var(--muted); }
+</style>
+
+<div class="page">
+  <header>
+    <h1>Copy Transfer Timing Model</h1>
+    <p class="lead">What each GPU does during one store-only copy transfer, what crosses between them, which timestamps are taken, and which measurements come from those timestamps.</p>
+  </header>
+
+  <section>
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 1200 540" role="img" aria-label="Timing model of one copy transfer. The destination tells the source it is ready. The source stores the payload across NVLink, fences, and publishes a completion signal. After all 16 CTAs have published, the destination sends an acknowledgement. Copy throughput is the payload divided by the time from the earliest source start to the latest source end." style="color:var(--fg)">
+          <defs>
+            <marker id="head-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-data" d="M0 0 L10 5 L0 10 Z"/></marker>
+            <marker id="head-signal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="head-signal" d="M0 0 L10 5 L0 10 Z"/></marker>
+          </defs>
+
+          <text class="time-note" x="16" y="30">Time runs left to right.</text>
+          <text class="time-note" x="16" y="46">Widths are not to scale.</text>
+
+          <!-- Measurements from source timestamps -->
+          <text class="measure main" x="682" y="24">Transfer time = latest endNs − earliest startNs, over all 16 CTAs &#8594; Copy throughput = payload bytes ÷ transfer time</text>
+          <path class="bracket" d="M300 40 V32 H1065 V40"/>
+          <text class="measure" x="495" y="72">Issue-loop time</text>
+          <text class="measure" x="740" y="72">Ordering</text>
+          <text class="measure" x="840" y="72">Publication</text>
+          <text class="measure" x="977" y="72">Acknowledgement wait</text>
+          <path class="bracket" d="M302 88 V80 H688 V88"/>
+          <path class="bracket" d="M692 88 V80 H788 V88"/>
+          <path class="bracket" d="M792 88 V80 H888 V88"/>
+          <path class="bracket" d="M892 88 V80 H1063 V88"/>
+
+          <!-- Guides from source timestamps up to the brackets -->
+          <path class="guide" d="M300 40 V112 M300 134 V163 M690 88 V112 M690 134 V163 M790 88 V112 M790 134 V163 M890 88 V112 M890 134 V163 M1065 40 V112 M1065 134 V163"/>
+
+          <text class="point-label" x="300" y="127">startNs</text>
+          <text class="point-label" x="690" y="127">issueEndNs</text>
+          <text class="point-label" x="790" y="127">fenceEndNs</text>
+          <text class="point-label" x="890" y="127">publishEndNs</text>
+          <text class="point-label" x="1065" y="127">endNs</text>
+
+          <!-- Source GPU -->
+          <text class="gpu-name" x="16" y="160">Source GPU</text>
+          <text class="gpu-note" x="16" y="176">rank 0: one copy CTA</text>
+          <text class="gpu-note" x="16" y="191">(1 of 16), timed by thread 0</text>
+          <line class="gpu-line" x1="165" y1="170" x2="1184" y2="170"/>
+          <rect class="band" x="172" y="152" width="128" height="36"/>
+          <text class="band-text small" x="236" y="167">wait for writers,</text>
+          <text class="band-text small" x="236" y="181">destination ready</text>
+          <rect class="band" x="300" y="152" width="390" height="36"/>
+          <text class="band-text" x="495" y="174">Issue: all 512 threads store 4-byte values, then the CTA syncs</text>
+          <rect class="band" x="690" y="152" width="100" height="36"/>
+          <text class="band-text small" x="740" y="167">system fence,</text>
+          <text class="band-text small" x="740" y="181">then CTA sync</text>
+          <rect class="band" x="790" y="152" width="100" height="36"/>
+          <text class="band-text small" x="840" y="167">release</text>
+          <text class="band-text small" x="840" y="181">completion[k]</text>
+          <rect class="band" x="890" y="152" width="175" height="36"/>
+          <text class="band-text" x="977" y="174">poll for acknowledgement</text>
+          <rect class="band outside" x="1065" y="152" width="119" height="36"/>
+          <text class="band-text small" x="1124" y="167">last CTA tells</text>
+          <text class="band-text small" x="1124" y="181">writers to stop</text>
+
+          <!-- Payload stores -->
+          <g class="data" marker-end="url(#head-data)">
+            <line x1="330" y1="190" x2="358" y2="365"/>
+            <line x1="370" y1="190" x2="398" y2="365"/>
+            <line x1="410" y1="190" x2="438" y2="365"/>
+            <line x1="450" y1="190" x2="478" y2="365"/>
+            <line x1="490" y1="190" x2="518" y2="365"/>
+            <line x1="530" y1="190" x2="558" y2="365"/>
+            <line x1="570" y1="190" x2="598" y2="365"/>
+            <line x1="610" y1="190" x2="638" y2="365"/>
+            <line x1="650" y1="190" x2="678" y2="365"/>
+          </g>
+          <rect class="label-ground" x="372" y="252" width="262" height="44"/>
+          <text class="arrow-title data-text" x="503" y="270">payload stores over NVLink</text>
+          <text class="arrow-note center" x="503" y="286">2048 MiB from all 16 CTAs; no reply per store</text>
+
+          <!-- Signals -->
+          <line class="signal" x1="215" y1="367" x2="285" y2="190" marker-end="url(#head-signal)"/>
+          <text class="arrow-title signal-text" x="232" y="262" text-anchor="end">destinationReady</text>
+          <text class="arrow-note" x="232" y="278" text-anchor="end">source may start</text>
+
+          <line class="signal" x1="845" y1="190" x2="905" y2="365" marker-end="url(#head-signal)"/>
+          <text class="arrow-title signal-text" x="861" y="262" text-anchor="end">completion[k]</text>
+          <text class="arrow-note" x="861" y="278" text-anchor="end">this CTA is done, after its fence</text>
+
+          <line class="signal other" x1="930" y1="190" x2="955" y2="365" marker-end="url(#head-signal)"/>
+          <text class="arrow-note" x="948" y="239">last CTA's</text>
+          <text class="arrow-note" x="951" y="254">completion</text>
+
+          <line class="signal" x1="990" y1="367" x2="1050" y2="190" marker-end="url(#head-signal)"/>
+          <text class="arrow-title signal-text" x="1048" y="262">acknowledgement</text>
+          <text class="arrow-note" x="1048" y="278">all 16 CTAs seen</text>
+
+          <!-- Timer boundary note -->
+          <text class="time-note" x="16" y="222">Timers from the two</text>
+          <text class="time-note" x="16" y="237">GPUs are never</text>
+          <text class="time-note" x="16" y="252">compared.</text>
+
+          <!-- Destination GPU -->
+          <text class="gpu-name" x="16" y="375">Destination GPU</text>
+          <text class="gpu-note" x="16" y="391">rank 1: receiver CTA,</text>
+          <text class="gpu-note" x="16" y="406">timed by thread 0</text>
+          <line class="gpu-line" x1="165" y1="385" x2="1184" y2="385"/>
+          <rect class="band" x="190" y="367" width="50" height="36"/>
+          <text class="band-text small" x="219" y="389">release</text>
+          <rect class="band" x="240" y="367" width="720" height="36"/>
+          <text class="band-text" x="600" y="389">poll completion[0], then [1], up to [15]; the payload lands in destination memory during this time</text>
+          <rect class="band" x="960" y="367" width="60" height="36"/>
+          <text class="band-text small" x="990" y="382">release</text>
+          <text class="band-text small" x="990" y="396">ack</text>
+          <rect class="band outside" x="1050" y="367" width="134" height="36"/>
+          <text class="band-text small" x="1117" y="382">data check, separate</text>
+          <text class="band-text small" x="1117" y="396">kernel, not timed</text>
+
+          <text class="point-label" x="190" y="428">startNs</text>
+          <text class="point-label" x="960" y="428">issueEndNs</text>
+          <text class="point-label" x="1020" y="444">endNs</text>
+          <path class="guide" d="M190 392 V416 M960 392 V416 M1020 392 V432 M190 434 V516 M960 434 V464 M1020 450 V516"/>
+
+          <!-- Measurements from destination timestamps -->
+          <path class="bracket" d="M192 464 V472 H958 V464"/>
+          <text class="measure quiet" x="575" y="488">Wait for all completions = issueEndNs − startNs</text>
+          <path class="bracket" d="M962 464 V472 H1018 V464"/>
+          <text class="measure quiet" x="990" y="488">Reply</text>
+          <path class="bracket" d="M190 508 V516 H1020 V508"/>
+          <text class="measure quiet" x="605" y="532">Receiver time = endNs − startNs (recorded in the raw data, not used in the report's tables)</text>
+
+          <!-- Timestamps drawn last, on top of the bands -->
+          <g class="point">
+            <circle cx="300" cy="170" r="6"/><circle cx="690" cy="170" r="6"/><circle cx="790" cy="170" r="6"/><circle cx="890" cy="170" r="6"/><circle cx="1065" cy="170" r="6"/>
+            <circle cx="190" cy="385" r="6"/><circle cx="960" cy="385" r="6"/><circle cx="1020" cy="385" r="6"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Circles are timestamps read from <code>%globaltimer</code>. Blue arrows are payload stores. Orange arrows are signals: one thread writes a value into the other GPU's memory, and the other GPU polls it. The source line shows one CTA; all 16 follow the same steps. Dashed boxes are outside the timed transfer.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Measurements, with one real transfer</h2>
+    <p>Values come from one transfer: copy 16 CTAs × 512 threads/CTA, writer 64 CTAs × 1024 threads/CTA present but idle, copy in its own GPC. Source: <code>mixed_separate_p20_R1</code>, retained transfer 1, GPUs 0 → 1.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Measurement</th><th>Calculation</th><th>Over the CTAs</th><th>Value</th><th>Range across CTAs</th></tr></thead>
+        <tbody>
+          <tr class="main"><td>Copy throughput (A1)</td><td>2,147,483,648 bytes ÷ transfer time</td><td>One value per transfer</td><td class="num" colspan="2">368.52 GB/s</td></tr>
+          <tr class="main"><td>Transfer time (A1)</td><td>latest <code>endNs</code> − earliest <code>startNs</code></td><td>One value per transfer</td><td class="num" colspan="2">5827.36 µs</td></tr>
+          <tr><td>Issue-loop time (A3)</td><td><code>issueEndNs − startNs</code></td><td>Median</td><td class="num">5804.82 µs</td><td class="num">4377.73 to 5818.18 µs</td></tr>
+          <tr><td>Ordering interval (A4)</td><td><code>fenceEndNs − issueEndNs</code></td><td>Median</td><td class="num">5.38 µs</td><td class="num">2.72 to 10.72 µs</td></tr>
+          <tr><td>Publication interval (A5)</td><td><code>publishEndNs − fenceEndNs</code></td><td>Median; not in the report's tables</td><td class="num">1.82 µs</td><td class="num">1.57 to 3.94 µs</td></tr>
+          <tr><td>Acknowledgement wait (A6)</td><td><code>endNs − publishEndNs</code></td><td>Median</td><td class="num">16.51 µs</td><td class="num">4.77 to 1439.30 µs</td></tr>
+          <tr><td>Destination: wait for all completions</td><td><code>issueEndNs − startNs</code> on the receiver</td><td>One receiver</td><td class="num" colspan="2">5838.66 µs</td></tr>
+          <tr><td>Destination: reply</td><td><code>endNs − issueEndNs</code> on the receiver</td><td>One receiver</td><td class="num" colspan="2">1.57 µs</td></tr>
+          <tr><td>Destination: receiver time (A6)</td><td><code>endNs − startNs</code> on the receiver</td><td>One receiver</td><td class="num" colspan="2">5840.22 µs</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to read the model</h2>
+    <ul>
+      <li><strong>Copy throughput depends only on the source timers.</strong> It starts at the first CTA's <code>startNs</code> and ends at the last CTA's <code>endNs</code>. The destination's timestamps are never part of it.</li>
+      <li><strong>The end time includes a round trip of signals.</strong> The last CTA's completion must reach the destination, and the acknowledgement must come back. Sending the reply takes the destination 1.57 µs here; its travel time is not measured separately.</li>
+      <li><strong>All CTAs end together.</strong> One acknowledgement releases all 16, so they end within 0.13 µs in this transfer. A CTA that finishes issuing early simply waits longer.</li>
+      <li><strong>A median can hide a group of CTAs.</strong> In this transfer 4 of the 16 CTAs finish issuing about 1400 µs early and then wait about 1430 µs. The same 4 SMs (44, 45, 88, 89) do this in all 12 transfers of all 3 runs at this setting, but not in the shared or crowded layouts at the same writer target. The cause was not studied.</li>
+      <li><strong><code>issueEndNs</code> on the destination has its own meaning.</strong> The field holds the time the receiver saw all 16 completions. Nothing is issued there.</li>
+      <li><strong>The timestamps do not show when a store arrives.</strong> Stores get no reply, so no timer marks their arrival. The destination data check confirms afterwards that all values arrived correctly.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Where this is in the code</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>Code in <code>common/src/store_congest.cu</code></th><th>Lines</th></tr></thead>
+        <tbody>
+          <tr><td>Destination starts and sends ready</td><td><code>runReceiver</code>: <code>startNs</code>, <code>releaseSignal(destinationReady)</code></td><td class="num">319–320</td></tr>
+          <tr><td>Source waits, then starts</td><td><code>runCopy</code>: <code>waitForWriters</code>, poll <code>destinationReady</code>, <code>startNs</code></td><td class="num">268–273</td></tr>
+          <tr><td>Payload stores</td><td><code>issueStoreOnlyCopy</code>, then <code>issueEndNs</code></td><td class="num">287–290</td></tr>
+          <tr><td>Ordering</td><td><code>__threadfence_system</code>, sync, <code>fenceEndNs</code></td><td class="num">294–299</td></tr>
+          <tr><td>Completion</td><td><code>releaseSignal(completion[copyIndex])</code>, <code>publishEndNs</code></td><td class="num">301–303</td></tr>
+          <tr><td>Destination sees all, then replies</td><td>Poll <code>completion[0..15]</code>, <code>issueEndNs</code>, <code>releaseSignal(acknowledgement)</code>, <code>endNs</code></td><td class="num">322–328</td></tr>
+          <tr><td>Source ends</td><td>Poll <code>acknowledgement</code>, <code>endNs</code>; last CTA releases <code>stop</code></td><td class="num">305–310</td></tr>
+          <tr><td>Data check</td><td><code>verifyDestination</code> kernel, after the transfer</td><td class="num">1078</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The calculations are in <code>common/scripts/run_store_congest.py</code>, lines 100–108, except the three destination measurements, which come directly from the receiver record.</p>
+  </section>
+</div>
+</body></html>

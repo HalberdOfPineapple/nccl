@@ -17,7 +17,8 @@ from run_store_congest import BINARY, CONFIGS, RESULTS, ROUNDS, TMA_BINARY, rate
 
 GROUP = 'counter_check'
 NCU = '/usr/local/cuda/bin/ncu'
-METRICS = ['dram__bytes_write.sum', 'dram__bytes_read.sum', 'dram__throughput.avg.pct_of_peak_sustained_elapsed', 'gpu__time_duration.sum',
+METRICS = ['dram__bytes_write.sum', 'dram__bytes_read.sum', 'dram__throughput.avg.pct_of_peak_sustained_elapsed', 
+           'gpu__time_duration.sum',
            'lts__t_sectors.sum', 'lts__t_sectors_op_write.sum', 'lts__t_sectors_op_read.sum', 'lts__t_sectors_srcnode_gpc.sum',
            'lts__t_sectors_srcunit_ltcfabric.sum', 'lts__t_sectors_srcunit_tex.sum', 'lts__t_sectors_srcunit_l1.sum',
            'lts__t_sectors_lookup_hit.sum', 'lts__t_sectors_lookup_miss.sum']

@@ -2,6 +2,8 @@
 
 This plan covers the problem-matrix cell **thread-issued peer stores × memory access and locality**. It tests an assumption that [plan 03](../memory_access/03_memory_access.md#repeated-writes-and-destination-caching) and [plan 07](../data_store_congest/07_data_store_congest.md) only state: that peer stores land in the destination GPU's L2.
 
+**Scope note (2026-10-31).** By request, only E8.0 sanity checks and E8.1 are reported. E8.2 to E8.4 runs stopped before analysis, and E8.5 did not run. The collection method that worked is `ncu --replay-mode application`, which this plan did not list. Differences from this plan are in the [report](README.md).
+
 **Common question.** When a thread on the source GPU stores to the destination GPU's memory through an NCCL LSA pointer over NVLink, does the data pass through the destination GPU's L2 cache on its way to HBM?
 
 "Passes through" can mean several things, so the plan separates three steps. Each sub-experiment answers one.

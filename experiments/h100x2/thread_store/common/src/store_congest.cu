@@ -273,6 +273,7 @@ __device__ void runCopy(KernelArguments arguments, int copyIndex) {
     record.startNs = readTimerNs();
   }
   __syncthreads();
+
   // CTA-local stride; lanes beyond the copy thread count issue nothing but join every barrier.
   // Part boundaries are rounded down to 32 elements (128 bytes): otherwise, for CTA counts such as
   // 48 or 96, every warp store crossed two 128-byte lines and the copy lost about 30% (first sweep).
@@ -288,9 +289,11 @@ __device__ void runCopy(KernelArguments arguments, int copyIndex) {
   if (arguments.config.detailed && threadIdx.x == 0) {
     record.issueEndNs = readTimerNs();
   }
+
   // Every writer orders its own peer writes; CTA sync precedes publication by lane 0.
   __threadfence_system();
   __syncthreads();
+
   if (threadIdx.x == 0) {
     if (arguments.config.detailed) {
       record.fenceEndNs = readTimerNs();

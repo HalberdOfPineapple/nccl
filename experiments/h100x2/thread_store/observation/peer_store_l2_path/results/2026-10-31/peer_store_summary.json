@@ -1,0 +1,482 @@
+{
+ "enter": {
+  "no_stores_evict_hbm_write_mib": 1.6746826171875,
+  "wrong_values": 0,
+  "cases": {
+   "peer_f256": {
+    "stored_mib": 256,
+    "runs": 3,
+    "throughput_gb_s": [
+     282.0,
+     284.8,
+     282.9
+    ],
+    "store_loop_gb_s": [
+     285.3,
+     288.2,
+     286.5
+    ],
+    "nvlink_receive_user_mib": 256.000244140625,
+    "l2_write_mib": 256.0572509765625,
+    "l2_gpc_all_operations_mib": 0.78369140625,
+    "l2_write_fabric_mib": 0.000244140625,
+    "hbm_read_main_mib": 0.008544921875,
+    "hbm_write_main_mib": 231.83544921875,
+    "hbm_write_quiet_after_mib": 0.057373046875,
+    "hbm_write_evict_mib": 23.061279296875,
+    "held_mib": 21.3865966796875,
+    "unaccounted_mib": 2.7205810546875
+   },
+   "peer_f512": {
+    "stored_mib": 512,
+    "runs": 3,
+    "throughput_gb_s": [
+     311.5,
+     311.0,
+     313.1
+    ],
+    "store_loop_gb_s": [
+     313.6,
+     312.9,
+     315.2
+    ],
+    "nvlink_receive_user_mib": 512.000244140625,
+    "l2_write_mib": 512.0567321777344,
+    "l2_gpc_all_operations_mib": 0.875274658203125,
+    "l2_write_fabric_mib": 0.000244140625,
+    "hbm_read_main_mib": 0.004150390625,
+    "hbm_write_main_mib": 487.793701171875,
+    "hbm_write_quiet_after_mib": 0.09765625,
+    "hbm_write_evict_mib": 23.032958984375,
+    "held_mib": 21.3582763671875,
+    "unaccounted_mib": 2.7503662109375
+   },
+   "peer_f1024": {
+    "stored_mib": 1024,
+    "runs": 3,
+    "throughput_gb_s": [
+     330.4,
+     330.2,
+     329.5
+    ],
+    "store_loop_gb_s": [
+     331.6,
+     331.4,
+     330.7
+    ],
+    "nvlink_receive_user_mib": 1024.000244140625,
+    "l2_write_mib": 1024.0696105957031,
+    "l2_gpc_all_operations_mib": 1.0584716796875,
+    "l2_write_fabric_mib": 0.000244140625,
+    "hbm_read_main_mib": 0.046142578125,
+    "hbm_write_main_mib": 999.811279296875,
+    "hbm_write_quiet_after_mib": 0.254150390625,
+    "hbm_write_evict_mib": 23.068603515625,
+    "held_mib": 21.3939208984375,
+    "unaccounted_mib": 2.5406494140625
+   },
+   "peer_f2048": {
+    "stored_mib": 2048,
+    "runs": 3,
+    "throughput_gb_s": [
+     337.6,
+     337.8,
+     338.0
+    ],
+    "store_loop_gb_s": [
+     338.3,
+     338.4,
+     338.6
+    ],
+    "nvlink_receive_user_mib": 2048.000244140625,
+    "l2_write_mib": 2048.2769470214844,
+    "l2_gpc_all_operations_mib": 1.4278564453125,
+    "l2_write_fabric_mib": 0.000152587890625,
+    "hbm_read_main_mib": 0.1103515625,
+    "hbm_write_main_mib": 2024.03662109375,
+    "hbm_write_quiet_after_mib": 0.01416015625,
+    "hbm_write_evict_mib": 23.091064453125,
+    "held_mib": 21.4163818359375,
+    "unaccounted_mib": 2.5328369140625
+   },
+   "local_f256": {
+    "stored_mib": 256,
+    "runs": 3,
+    "throughput_gb_s": [
+     959.4,
+     958.9,
+     966.0
+    ],
+    "store_loop_gb_s": [
+     969.0,
+     969.0,
+     976.3
+    ],
+    "nvlink_receive_user_mib": 0.0,
+    "l2_write_mib": 384.2210388183594,
+    "l2_gpc_all_operations_mib": 256.86083984375,
+    "l2_write_fabric_mib": 128.06216430664062,
+    "hbm_read_main_mib": 0.01806640625,
+    "hbm_write_main_mib": 232.791748046875,
+    "hbm_write_quiet_after_mib": 0.032470703125,
+    "hbm_write_evict_mib": 22.772216796875,
+    "held_mib": 21.0975341796875,
+    "unaccounted_mib": 2.0782470703125
+   },
+   "local_f512": {
+    "stored_mib": 512,
+    "runs": 3,
+    "throughput_gb_s": [
+     966.0,
+     973.4,
+     972.9
+    ],
+    "store_loop_gb_s": [
+     971.0,
+     978.3,
+     978.3
+    ],
+    "nvlink_receive_user_mib": 0.0,
+    "l2_write_mib": 768.2481689453125,
+    "l2_gpc_all_operations_mib": 512.8603515625,
+    "l2_write_fabric_mib": 256.06219482421875,
+    "hbm_read_main_mib": 0.015380859375,
+    "hbm_write_main_mib": 489.0205078125,
+    "hbm_write_quiet_after_mib": 0.09814453125,
+    "hbm_write_evict_mib": 22.662109375,
+    "held_mib": 20.9874267578125,
+    "unaccounted_mib": 1.8939208984375
+   },
+   "local_f1024": {
+    "stored_mib": 1024,
+    "runs": 3,
+    "throughput_gb_s": [
+     969.3,
+     976.3,
+     976.8
+    ],
+    "store_loop_gb_s": [
+     971.9,
+     978.9,
+     979.0
+    ],
+    "nvlink_receive_user_mib": 0.0,
+    "l2_write_mib": 1536.2513427734375,
+    "l2_gpc_all_operations_mib": 1024.8603515625,
+    "l2_write_fabric_mib": 512.06201171875,
+    "hbm_read_main_mib": 0.02294921875,
+    "hbm_write_main_mib": 1000.848876953125,
+    "hbm_write_quiet_after_mib": 0.00390625,
+    "hbm_write_evict_mib": 22.673828125,
+    "held_mib": 20.9991455078125,
+    "unaccounted_mib": 2.1480712890625
+   },
+   "local_f2048": {
+    "stored_mib": 2048,
+    "runs": 3,
+    "throughput_gb_s": [
+     970.8,
+     978.0,
+     978.3
+    ],
+    "store_loop_gb_s": [
+     972.0,
+     979.3,
+     979.4
+    ],
+    "nvlink_receive_user_mib": 0.0,
+    "l2_write_mib": 3072.2681579589844,
+    "l2_gpc_all_operations_mib": 2048.8603515625,
+    "l2_write_fabric_mib": 1024.0621337890625,
+    "hbm_read_main_mib": 0.048828125,
+    "hbm_write_main_mib": 2024.85107421875,
+    "hbm_write_quiet_after_mib": 0.03076171875,
+    "hbm_write_evict_mib": 22.6796875,
+    "held_mib": 21.0050048828125,
+    "unaccounted_mib": 2.1131591796875
+   }
+  },
+  "peer_l2_write_fit": {
+   "slope": 1.0001638688902923,
+   "intercept_mib": -0.019161058508757378,
+   "largest_distance_mib": 0.3163700711902493,
+   "points": 12
+  },
+  "local_l2_write_fit": {
+   "slope": 1.5000167863956395,
+   "intercept_mib": 0.22213833573960073,
+   "largest_distance_mib": 0.05723708885307133,
+   "points": 12
+  },
+  "source_peer_f1024": {
+   "throughput_gb_s": [
+    347.4,
+    347.7,
+    347.8
+   ],
+   "store_loop_gb_s": [
+    348.7,
+    349.0,
+    349.1
+   ],
+   "nvlink_send_user_mib": 1024.000244140625,
+   "l2_write_mib": 0.256561279296875,
+   "l2_peer_aperture_write_mib": 0.0,
+   "hbm_write_mib": 0.000244140625
+  }
+ },
+ "validate": {
+  "local_f1024": {
+   "stored_mib": 1024.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.0037841796875,
+     "hbm_write_mib": 22.721435546875,
+     "hbm_read_mib": 256.03466796875
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.25048828125,
+     "hbm_write_mib": 0.25,
+     "hbm_read_mib": 0.09619140625
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 1536.2518005371094,
+     "hbm_write_mib": 1001.013916015625,
+     "hbm_read_mib": 0.020751953125
+    },
+    "phaseQuietAfter": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 2.2320556640625,
+     "hbm_write_mib": 0.50244140625,
+     "hbm_read_mib": 0.08447265625
+    },
+    "phaseEvict": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.055145263671875,
+     "hbm_write_mib": 22.5,
+     "hbm_read_mib": 256.014404296875
+    },
+    "phaseCheck": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.057891845703125,
+     "hbm_write_mib": 0.102294921875,
+     "hbm_read_mib": 1024.03564453125
+    }
+   }
+  },
+  "local_f4_evictinmain0": {
+   "stored_mib": 8192.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.058837890625,
+     "hbm_write_mib": 4.748046875,
+     "hbm_read_mib": 256.016845703125
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.0802001953125,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 0.02783203125
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 12288.495422363281,
+     "hbm_write_mib": 0.25,
+     "hbm_read_mib": 0.10888671875
+    },
+    "phaseEvict": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.0062255859375,
+     "hbm_write_mib": 5.394775390625,
+     "hbm_read_mib": 256.0029296875
+    },
+    "phaseCheck": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.00048828125,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 4.0009765625
+    }
+   }
+  },
+  "local_f4_evictinmain1": {
+   "stored_mib": 8192.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.003997802734375,
+     "hbm_write_mib": 4.7705078125,
+     "hbm_read_mib": 256.01171875
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.16070556640625,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 0.057861328125
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 12288.899810791016,
+     "hbm_write_mib": 5.1103515625,
+     "hbm_read_mib": 256.212890625
+    },
+    "phaseCheck": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.000732421875,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 4.001708984375
+    }
+   }
+  },
+  "none_window3ms": {
+   "stored_mib": 1024.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.05316162109375,
+     "hbm_write_mib": 22.7626953125,
+     "hbm_read_mib": 256.017333984375
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.433349609375,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 0.005615234375
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.2518310546875,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 0.003662109375
+    },
+    "phaseQuietAfter": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.070556640625,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 0.03759765625
+    },
+    "phaseEvict": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.051361083984375,
+     "hbm_write_mib": 1.861083984375,
+     "hbm_read_mib": 256.01416015625
+    }
+   }
+  },
+  "peer_f1024": {
+   "stored_mib": 1024.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.014739990234375,
+     "hbm_write_mib": 22.5615234375,
+     "hbm_read_mib": 256.01806640625
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.312469482421875,
+     "hbm_write_mib": 0.25,
+     "hbm_read_mib": 0.020751953125
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 1024.000244140625,
+     "l2_write_mib": 1024.0654602050781,
+     "hbm_write_mib": 999.770263671875,
+     "hbm_read_mib": 0.01708984375
+    },
+    "phaseQuietAfter": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.070281982421875,
+     "hbm_write_mib": 0.0146484375,
+     "hbm_read_mib": 0.005859375
+    },
+    "phaseEvict": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.054351806640625,
+     "hbm_write_mib": 23.1064453125,
+     "hbm_read_mib": 256.012451171875
+    },
+    "phaseCheck": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.3153076171875,
+     "hbm_write_mib": 0.6982421875,
+     "hbm_read_mib": 1024.062744140625
+    }
+   }
+  },
+  "peer_f4_evictinmain0": {
+   "stored_mib": 8192.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.058197021484375,
+     "hbm_write_mib": 4.949951171875,
+     "hbm_read_mib": 256.0166015625
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.31390380859375,
+     "hbm_write_mib": 0.25,
+     "hbm_read_mib": 0.041748046875
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 8192.000244140625,
+     "l2_write_mib": 8194.473876953125,
+     "hbm_write_mib": 0.5,
+     "hbm_read_mib": 0.240234375
+    },
+    "phaseEvict": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.0499267578125,
+     "hbm_write_mib": 5.32080078125,
+     "hbm_read_mib": 256.016357421875
+    },
+    "phaseCheck": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.00048828125,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 4.000732421875
+    }
+   }
+  },
+  "peer_f4_evictinmain1": {
+   "stored_mib": 8192.0,
+   "wrong_values": 0,
+   "phases": {
+    "phaseClean": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.054412841796875,
+     "hbm_write_mib": 4.767333984375,
+     "hbm_read_mib": 256.01611328125
+    },
+    "phaseQuietBefore": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.094818115234375,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 0.059326171875
+    },
+    "phaseMain": {
+     "nvlink_receive_user_mib": 8192.000244140625,
+     "l2_write_mib": 8193.37924194336,
+     "hbm_write_mib": 5.298095703125,
+     "hbm_read_mib": 256.279296875
+    },
+    "phaseCheck": {
+     "nvlink_receive_user_mib": 0.0,
+     "l2_write_mib": 0.00048828125,
+     "hbm_write_mib": 0.0,
+     "hbm_read_mib": 4.0
+    }
+   }
+  }
+ }
+}

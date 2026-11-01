@@ -61,7 +61,7 @@ Tier A records are produced by the harness. Tier B/C are separate acquisition pa
 | C6 | Peer-store/ordering-path waiting | Source-correlated samples at peer stores and fence instructions | May reflect either endpoint; no individual remote-store latency |
 | C7 | Arithmetic activity and generated instructions | Supported instruction/compute metrics plus SASS and compiler register/spill report | Generated SASS proves retained instructions; aggregate issue metrics mix roles |
 | C8 | Profiling validity and acquisition metadata | Versions, selected metrics, replay/cache/clock policy, overlap/correctness checks, timeout/error log | Invalid or incomplete profiler runs are not usable counter evidence |
-| C9 | NVLink bytes per phase | Planned for plan 08, not validated: `nvltx__bytes_packet_*` on the source and `nvlrx__bytes_packet_*` on the destination, by user data and protocol data, in harness phase windows | GPU-wide; finer in time than B3, which only gives whole-run totals; not per-flow |
+| C9 | NVLink bytes per phase | Collected in [plan 08](peer_store_l2_path/README.md) with `ncu` application replay and checked against known traffic (user bytes only; the meaning of protocol bytes is not known): `nvltx__bytes_packet_*` on the source and `nvlrx__bytes_packet_*` on the destination, by user data and protocol data, in harness phase windows | GPU-wide; finer in time than B3, which only gives whole-run totals; not per-flow |
 
 ## Run and analysis protocol
 

@@ -2,7 +2,7 @@ NCCL_HOME ?= $(abspath ../../../../build)
 CUDA_HOME ?= /usr/local/cuda
 NVCC ?= $(CUDA_HOME)/bin/nvcc
 TARGET ?= bin/push_harness
-all: $(TARGET) bin/gpc_probe bin/store_congest bin/store_congest_tma bin/store_congest_dest
+all: $(TARGET) bin/gpc_probe bin/store_congest bin/store_congest_tma bin/store_congest_dest bin/peer_store_path
 $(TARGET): src/push_harness.cu ../../../h100x1/memory_co_runner/common/include/hbm_read_pressure.cuh
 	mkdir -p bin
 	$(NVCC) -O3 -std=c++17 -arch=sm_90 -lineinfo --expt-relaxed-constexpr -Xcompiler -pthread -Xptxas=-v -I$(NCCL_HOME)/include -I../../../h100x1/memory_co_runner/common/include $< -o $@ -L$(NCCL_HOME)/lib -lnccl -Xlinker -rpath=$(NCCL_HOME)/lib
@@ -21,4 +21,8 @@ bin/store_congest_tma: src/store_congest.cu ../../../h100x1/memory_co_runner/com
 bin/store_congest_dest: src/store_congest.cu
 	mkdir -p bin
 	$(NVCC) -O3 -std=c++17 -arch=sm_90 -lineinfo --expt-relaxed-constexpr -Xcompiler -pthread -Xptxas=-v -DSTORE_CONGEST_DEST -I$(NCCL_HOME)/include $< -o $@ -L$(NCCL_HOME)/lib -lnccl -Xlinker -rpath=$(NCCL_HOME)/lib
+# Plan 08: phases as separately named kernels, so ncu's per-launch counters separate them.
+bin/peer_store_path: src/peer_store_path.cu
+	mkdir -p bin
+	$(NVCC) -O3 -std=c++17 -arch=sm_90 -lineinfo --expt-relaxed-constexpr -Xcompiler -pthread -Xptxas=-v -I$(NCCL_HOME)/include $< -o $@ -L$(NCCL_HOME)/lib -lnccl -Xlinker -rpath=$(NCCL_HOME)/lib
 .PHONY: all
