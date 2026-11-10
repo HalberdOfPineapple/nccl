@@ -31,7 +31,7 @@ typedef struct ncclDevCommRequirements {
   /* attributes that users should never touch. */
   size_t size;
   unsigned int magic;
-  unsigned int version;
+  unsigned int ncclDevrCommCreateInternalversion;
 
   /* attributes that users are able to customize. */
   ncclDevResourceRequirements_t* resourceRequirementsList;

@@ -1,0 +1,44 @@
+[
+ {
+  "run": "e1_7_all_gather_R1",
+  "collective": "all_gather",
+  "return_code": 0,
+  "kernel_lines": 52,
+  "channel_values": [],
+  "size_bytes": 8589934592,
+  "out_of_place_algbw_gbps": 372.86,
+  "out_of_place_busbw_gbps": 279.65,
+  "out_of_place_wrong": 0,
+  "in_place_algbw_gbps": 373.11,
+  "in_place_busbw_gbps": 279.83,
+  "in_place_wrong": 0
+ },
+ {
+  "run": "e1_7_reduce_scatter_R1",
+  "collective": "reduce_scatter",
+  "return_code": 0,
+  "kernel_lines": 52,
+  "channel_values": [],
+  "size_bytes": 8589934592,
+  "out_of_place_algbw_gbps": 355.3,
+  "out_of_place_busbw_gbps": 266.48,
+  "out_of_place_wrong": 0,
+  "in_place_algbw_gbps": 355.29,
+  "in_place_busbw_gbps": 266.46,
+  "in_place_wrong": 0
+ },
+ {
+  "run": "e1_7_all_reduce_R1",
+  "collective": "all_reduce",
+  "return_code": 0,
+  "kernel_lines": 52,
+  "channel_values": [],
+  "size_bytes": 8589934592,
+  "out_of_place_algbw_gbps": 250.58,
+  "out_of_place_busbw_gbps": 375.87,
+  "out_of_place_wrong": 0,
+  "in_place_algbw_gbps": 251.31,
+  "in_place_busbw_gbps": 376.96,
+  "in_place_wrong": 0
+ }
+]

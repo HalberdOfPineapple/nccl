@@ -1,0 +1,1082 @@
+[
+ {
+  "run": "e1_4_multicast_g01_R1",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 180.13170433805197,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 540.3951130141559,
+    "window_min_gbps": 180.12301089837354,
+    "window_max_gbps": 180.14740718752682,
+    "cta_chunk_ratio_max_over_min": 5.76775956284153,
+    "gpu_rates_gbps": [
+     179.9818351352376,
+     180.28391492319986
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   302.20898056030273,
+   302.6669912338257,
+   0.0,
+   9.5367431640625e-07
+  ],
+  "link_gib_rx": [
+   604.8759765625,
+   604.8759746551514,
+   604.8759746551514,
+   604.8759765625
+  ],
+  "link_tx_gbps_estimate": [
+   180.27467889777776,
+   180.54789290666668,
+   0.0,
+   5.688888888888889e-07
+  ],
+  "link_rx_gbps_estimate": [
+   360.82257464888886,
+   360.8225735111111,
+   360.8225735111111,
+   360.82257464888886
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 231.19,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_multicast_g01_R2",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 180.12636439210598,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 540.379093176318,
+    "window_min_gbps": 180.09763724588123,
+    "window_max_gbps": 180.1550659777948,
+    "cta_chunk_ratio_max_over_min": 5.752043596730245,
+    "gpu_rates_gbps": [
+     180.01308854360562,
+     180.23964024060635
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   302.2373046875,
+   302.6455087661743,
+   0.0,
+   0.0
+  ],
+  "link_gib_rx": [
+   604.8828134536743,
+   604.8828134536743,
+   604.8828115463257,
+   604.8828115463257
+  ],
+  "link_tx_gbps_estimate": [
+   180.2915748977778,
+   180.53507811555556,
+   0.0,
+   0.0
+  ],
+  "link_rx_gbps_estimate": [
+   360.8266530133333,
+   360.8266530133333,
+   360.82665187555557,
+   360.82665187555557
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 232.47,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_multicast_g01_R3",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 180.1270920533541,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 540.3812761600623,
+    "window_min_gbps": 180.09550770288286,
+    "window_max_gbps": 180.14717700723966,
+    "cta_chunk_ratio_max_over_min": 5.76775956284153,
+    "gpu_rates_gbps": [
+     180.02361219161662,
+     180.23757103414815
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   302.2441415786743,
+   302.62597370147705,
+   9.5367431640625e-07,
+   0.0
+  ],
+  "link_gib_rx": [
+   604.8701171875,
+   604.870120048523,
+   604.8701171875,
+   604.8701171875
+  ],
+  "link_tx_gbps_estimate": [
+   180.2956532622222,
+   180.52342499555556,
+   5.688888888888889e-07,
+   0.0
+  ],
+  "link_rx_gbps_estimate": [
+   360.81907939555555,
+   360.81908110222224,
+   360.81907939555555,
+   360.81907939555555
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 232.28,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_multicast_g01_R4",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 180.1104257245284,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 540.3312771735852,
+    "window_min_gbps": 180.0712856944177,
+    "window_max_gbps": 180.1911469327689,
+    "cta_chunk_ratio_max_over_min": 5.759890859481582,
+    "gpu_rates_gbps": [
+     180.02750388465427,
+     180.23495997466938
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   302.2197275161743,
+   302.61621284484863,
+   0.0,
+   0.0
+  ],
+  "link_gib_rx": [
+   604.8359384536743,
+   604.8359375,
+   604.8359394073486,
+   604.8359375
+  ],
+  "link_tx_gbps_estimate": [
+   180.28108970666668,
+   180.51760241777777,
+   0.0,
+   0.0
+  ],
+  "link_rx_gbps_estimate": [
+   360.79869098666666,
+   360.7986904177778,
+   360.7986915555556,
+   360.7986904177778
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 232.12,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_multicast_g01_R5",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 180.1368692664665,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 540.4106077993995,
+    "window_min_gbps": 180.1303433057564,
+    "window_max_gbps": 180.17078597339355,
+    "cta_chunk_ratio_max_over_min": 5.759890859481582,
+    "gpu_rates_gbps": [
+     180.01981620416325,
+     180.27174783131605
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   302.2441415786743,
+   302.642578125,
+   0.0,
+   0.0
+  ],
+  "link_gib_rx": [
+   604.88671875,
+   604.88671875,
+   604.886721611023,
+   604.8867206573486
+  ],
+  "link_tx_gbps_estimate": [
+   180.2956532622222,
+   180.53332992,
+   0.0,
+   0.0
+  ],
+  "link_rx_gbps_estimate": [
+   360.8289826133334,
+   360.8289826133334,
+   360.82898431999996,
+   360.8289837511111
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 232.44,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_multicast_g01_R6",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 180.12567415261924,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 540.3770224578577,
+    "window_min_gbps": 180.06304126640418,
+    "window_max_gbps": 180.14638435199208,
+    "cta_chunk_ratio_max_over_min": 5.762619372442019,
+    "gpu_rates_gbps": [
+     180.0231332950377,
+     180.23265744865694
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   302.22168159484863,
+   302.5986328125,
+   0.0,
+   9.5367431640625e-07
+  ],
+  "link_gib_rx": [
+   604.8203115463257,
+   604.820309638977,
+   604.8203125,
+   604.8203144073486
+  ],
+  "link_tx_gbps_estimate": [
+   180.28225536000002,
+   180.50711551999999,
+   0.0,
+   5.688888888888889e-07
+  ],
+  "link_rx_gbps_estimate": [
+   360.78936917333334,
+   360.7893680355556,
+   360.78936974222216,
+   360.78937088
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 231.61,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_reduce_g23_R1",
+  "threads": 512,
+  "role_a": "reduce",
+  "ctas_a": 32,
+  "rank_mask_a": 12,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 152.1704117190512,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 456.5112351571536,
+    "window_min_gbps": 152.15353874366508,
+    "window_max_gbps": 152.173693897874,
+    "cta_chunk_ratio_max_over_min": 1.0066371681415929,
+    "gpu_rates_gbps": [
+     152.3248140869653,
+     152.01340716030174
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   511.125,
+   511.12500190734863,
+   511.125,
+   511.1249990463257
+  ],
+  "link_gib_rx": [
+   9.5367431640625e-07,
+   0.0,
+   255.82910346984863,
+   255.2958984375
+  ],
+  "link_tx_gbps_estimate": [
+   304.89793877333335,
+   304.8979399111111,
+   304.89793877333335,
+   304.8979382044445
+  ],
+  "link_rx_gbps_estimate": [
+   5.688888888888889e-07,
+   0.0,
+   152.60800455111112,
+   152.28993536
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 232.31,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_reduce_g23_R2",
+  "threads": 512,
+  "role_a": "reduce",
+  "ctas_a": 32,
+  "rank_mask_a": 12,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 152.16696405220262,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 456.50089215660785,
+    "window_min_gbps": 152.15721156213948,
+    "window_max_gbps": 152.17313524454204,
+    "cta_chunk_ratio_max_over_min": 1.0073746312684366,
+    "gpu_rates_gbps": [
+     152.3244067223144,
+     152.0156586607842
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   511.11816596984863,
+   511.1181650161743,
+   511.1181640625,
+   511.1181650161743
+  ],
+  "link_gib_rx": [
+   0.0,
+   0.0,
+   255.81933307647705,
+   255.298828125
+  ],
+  "link_tx_gbps_estimate": [
+   304.8938621155555,
+   304.89386154666664,
+   304.89386097777776,
+   304.89386154666664
+  ],
+  "link_rx_gbps_estimate": [
+   0.0,
+   0.0,
+   152.60217628444445,
+   152.29168298666664
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 231.08,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_reduce_g23_R3",
+  "threads": 512,
+  "role_a": "reduce",
+  "ctas_a": 32,
+  "rank_mask_a": 12,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 152.16620945085555,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 456.49862835256664,
+    "window_min_gbps": 152.15852576429967,
+    "window_max_gbps": 152.17260307383737,
+    "cta_chunk_ratio_max_over_min": 1.0073746312684366,
+    "gpu_rates_gbps": [
+     152.331041631466,
+     152.0002989331981
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   511.1250009536743,
+   511.12500190734863,
+   511.12499809265137,
+   511.1249990463257
+  ],
+  "link_gib_rx": [
+   0.0,
+   0.0,
+   255.8359375,
+   255.28906345367432
+  ],
+  "link_tx_gbps_estimate": [
+   304.89793934222223,
+   304.8979399111111,
+   304.89793763555554,
+   304.8979382044445
+  ],
+  "link_rx_gbps_estimate": [
+   0.0,
+   0.0,
+   152.61208120888887,
+   152.28585813333333
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 231.38,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_reduce_g23_R4",
+  "threads": 512,
+  "role_a": "reduce",
+  "ctas_a": 32,
+  "rank_mask_a": 12,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 152.17474642343575,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 456.52423927030725,
+    "window_min_gbps": 152.167949590396,
+    "window_max_gbps": 152.1783339528144,
+    "cta_chunk_ratio_max_over_min": 1.0066322770817981,
+    "gpu_rates_gbps": [
+     152.33077131491834,
+     152.01702534499287
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   511.1416015625,
+   511.1416025161743,
+   511.1416025161743,
+   511.14160442352295
+  ],
+  "link_gib_rx": [
+   0.0,
+   0.0,
+   255.83495903015137,
+   255.30663871765137
+  ],
+  "link_tx_gbps_estimate": [
+   304.90784199111107,
+   304.90784256,
+   304.90784256,
+   304.90784369777776
+  ],
+  "link_rx_gbps_estimate": [
+   0.0,
+   0.0,
+   152.6114975288889,
+   152.29634218666666
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 230.95,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_reduce_g23_R5",
+  "threads": 512,
+  "role_a": "reduce",
+  "ctas_a": 32,
+  "rank_mask_a": 12,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 152.1761669193661,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 456.5285007580983,
+    "window_min_gbps": 152.16999310833847,
+    "window_max_gbps": 152.1859308349309,
+    "cta_chunk_ratio_max_over_min": 1.0066371681415929,
+    "gpu_rates_gbps": [
+     152.33320042820648,
+     152.01957697767526
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   511.13769245147705,
+   511.1376943588257,
+   511.13769340515137,
+   511.1376953125
+  ],
+  "link_gib_rx": [
+   0.0,
+   0.0,
+   255.82812404632568,
+   255.30957126617432
+  ],
+  "link_tx_gbps_estimate": [
+   304.90551011555556,
+   304.9055112533334,
+   304.90551068444444,
+   304.9055118222222
+  ],
+  "link_rx_gbps_estimate": [
+   0.0,
+   0.0,
+   152.6074203022222,
+   152.29809152
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 230.96,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_reduce_g23_R6",
+  "threads": 512,
+  "role_a": "reduce",
+  "ctas_a": 32,
+  "rank_mask_a": 12,
+  "role_b": "idle",
+  "ctas_b": 0,
+  "rank_mask_b": 15,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 152.1721018586345,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 456.5163055759035,
+    "window_min_gbps": 152.16347069982385,
+    "window_max_gbps": 152.18527824152497,
+    "cta_chunk_ratio_max_over_min": 1.0073746312684366,
+    "gpu_rates_gbps": [
+     152.3380580130327,
+     152.00204410497162
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   511.1259756088257,
+   511.12597846984863,
+   511.12597846984863,
+   511.12597465515137
+  ],
+  "link_gib_rx": [
+   0.0,
+   0.0,
+   255.83203125,
+   255.29394435882568
+  ],
+  "link_tx_gbps_estimate": [
+   304.89852074666663,
+   304.8985224533333,
+   304.8985224533333,
+   304.89852017777775
+  ],
+  "link_rx_gbps_estimate": [
+   0.0,
+   0.0,
+   152.60975104000002,
+   152.28876970666667
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 230.71,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_split_mix_R1",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "reduce",
+  "ctas_b": 32,
+  "rank_mask_b": 12,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 63.96528156863134,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 191.89584470589404,
+    "window_min_gbps": 63.715776193004004,
+    "window_max_gbps": 64.10768805713813,
+    "cta_chunk_ratio_max_over_min": 5.765625,
+    "gpu_rates_gbps": [
+     63.2093306511533,
+     64.73832623408626
+    ]
+   },
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 146.5820832901149,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 439.7462498703447,
+    "window_min_gbps": 146.52980040111095,
+    "window_max_gbps": 146.73641214108372,
+    "cta_chunk_ratio_max_over_min": 1.0084291187739463,
+    "gpu_rates_gbps": [
+     146.01372852715295,
+     147.16830829884185
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   598.7314472198486,
+   601.3408203125,
+   492.50097846984863,
+   492.50097846984863
+  ],
+  "link_gib_rx": [
+   215.07031345367432,
+   215.07031440734863,
+   460.4111337661743,
+   462.23046875
+  ],
+  "link_tx_gbps_estimate": [
+   357.1572201244444,
+   358.71377180444443,
+   293.7882771911111,
+   293.7882771911111
+  ],
+  "link_rx_gbps_estimate": [
+   128.29443925333334,
+   128.29443982222222,
+   274.6459392,
+   275.7312147911111
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 240.25,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_split_mix_R2",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "reduce",
+  "ctas_b": 32,
+  "rank_mask_b": 12,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 64.14676875766501,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 192.44030627299503,
+    "window_min_gbps": 63.84108295798616,
+    "window_max_gbps": 64.37857854357986,
+    "cta_chunk_ratio_max_over_min": 5.741312741312742,
+    "gpu_rates_gbps": [
+     63.359916746767624,
+     64.92215316528869
+    ]
+   },
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 146.59645653563567,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 439.78936960690703,
+    "window_min_gbps": 146.34888057608123,
+    "window_max_gbps": 146.6241368126743,
+    "cta_chunk_ratio_max_over_min": 1.0084033613445378,
+    "gpu_rates_gbps": [
+     146.2195313928789,
+     146.86655409739276
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   598.6669931411743,
+   601.331051826477,
+   492.2548828125,
+   492.25488090515137
+  ],
+  "link_gib_rx": [
+   215.48827934265137,
+   215.48828029632568,
+   461.05664443969727,
+   462.1748056411743
+  ],
+  "link_tx_gbps_estimate": [
+   357.1187717688889,
+   358.70794467555555,
+   293.64147541333335,
+   293.64147427555554
+  ],
+  "link_rx_gbps_estimate": [
+   128.54376561777778,
+   128.54376618666666,
+   275.03100131555556,
+   275.6980104533333
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 239.89,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_split_mix_R3",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "reduce",
+  "ctas_b": 32,
+  "rank_mask_b": 12,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 64.19550654057038,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 192.58651962171115,
+    "window_min_gbps": 63.92098775922187,
+    "window_max_gbps": 64.3091510043499,
+    "cta_chunk_ratio_max_over_min": 5.745173745173745,
+    "gpu_rates_gbps": [
+     63.43438107084606,
+     64.96472170634263
+    ]
+   },
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 146.58602169863846,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 439.7580650959154,
+    "window_min_gbps": 146.5573631861937,
+    "window_max_gbps": 146.655441776261,
+    "cta_chunk_ratio_max_over_min": 1.0084420567920185,
+    "gpu_rates_gbps": [
+     146.06429234846303,
+     147.0504340239244
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   599.0449199676514,
+   601.7060565948486,
+   492.4619140625,
+   492.4619150161743
+  ],
+  "link_gib_rx": [
+   215.8271484375,
+   215.8271484375,
+   461.2470703125,
+   462.8691415786743
+  ],
+  "link_tx_gbps_estimate": [
+   357.34421390222224,
+   358.9316437333333,
+   293.7649743644444,
+   293.7649749333333
+  ],
+  "link_rx_gbps_estimate": [
+   128.74590890666667,
+   128.74590890666667,
+   275.1445947733333,
+   276.1121979733333
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 239.62,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_split_mix_R4",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "reduce",
+  "ctas_b": 32,
+  "rank_mask_b": 12,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 64.17420894180619,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 192.52262682541857,
+    "window_min_gbps": 63.9149727533713,
+    "window_max_gbps": 64.20227825435194,
+    "cta_chunk_ratio_max_over_min": 5.737451737451737,
+    "gpu_rates_gbps": [
+     63.395685543587796,
+     64.95273234002458
+    ]
+   },
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 146.60272218935688,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 439.80816656807065,
+    "window_min_gbps": 146.54538742569667,
+    "window_max_gbps": 146.75206623349558,
+    "cta_chunk_ratio_max_over_min": 1.008455034588778,
+    "gpu_rates_gbps": [
+     146.0368065975954,
+     147.2889979396851
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   599.0117197036743,
+   601.6650381088257,
+   492.5117197036743,
+   492.51171684265137
+  ],
+  "link_gib_rx": [
+   215.65332126617432,
+   215.65331935882568,
+   460.8896484375,
+   462.9287109375
+  ],
+  "link_tx_gbps_estimate": [
+   357.3244091733333,
+   358.9071752533333,
+   293.7946845866667,
+   293.79468288
+  ],
+  "link_rx_gbps_estimate": [
+   128.64221695999998,
+   128.64221582222223,
+   274.93138432,
+   276.14773248
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 239.91,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_split_mix_R5",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "reduce",
+  "ctas_b": 32,
+  "rank_mask_b": 12,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 64.1900879053762,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 192.5702637161286,
+    "window_min_gbps": 64.13066397526882,
+    "window_max_gbps": 64.22498795759768,
+    "cta_chunk_ratio_max_over_min": 5.741312741312742,
+    "gpu_rates_gbps": [
+     63.385318641820774,
+     64.99485716893165
+    ]
+   },
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 146.5724932717613,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 439.71747981528387,
+    "window_min_gbps": 146.5405854088146,
+    "window_max_gbps": 146.68116038394095,
+    "cta_chunk_ratio_max_over_min": 1.0076804915514592,
+    "gpu_rates_gbps": [
+     145.9757979441942,
+     147.23611563274304
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   598.9609384536743,
+   601.6621074676514,
+   492.4111337661743,
+   492.4111337661743
+  ],
+  "link_gib_rx": [
+   215.80078220367432,
+   215.80078125,
+   460.9990234375,
+   463.013671875
+  ],
+  "link_tx_gbps_estimate": [
+   357.2941169777778,
+   358.9054270577778,
+   293.73468273777775,
+   293.73468273777775
+  ],
+  "link_rx_gbps_estimate": [
+   128.73018083555556,
+   128.73018026666665,
+   274.9966290488889,
+   276.1984136533333
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 240.05,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ },
+ {
+  "run": "e1_4_split_mix_R6",
+  "threads": 512,
+  "role_a": "multicast",
+  "ctas_a": 32,
+  "rank_mask_a": 3,
+  "role_b": "reduce",
+  "ctas_b": 32,
+  "rank_mask_b": 12,
+  "rank_offset": 0,
+  "mismatches": 0,
+  "roles": {
+   "multicast": {
+    "rate_per_issuing_gpu_gbps": 64.24870897385522,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 192.74612692156563,
+    "window_min_gbps": 63.77186615343702,
+    "window_max_gbps": 64.26456478102227,
+    "cta_chunk_ratio_max_over_min": 5.745173745173745,
+    "gpu_rates_gbps": [
+     63.40441009262271,
+     65.04593523811225
+    ]
+   },
+   "reduce": {
+    "rate_per_issuing_gpu_gbps": 146.5918985991513,
+    "ranks_issuing": 2,
+    "bus_bw_gbps": 439.7756957974539,
+    "window_min_gbps": 146.49160858790532,
+    "window_max_gbps": 146.716629819562,
+    "cta_chunk_ratio_max_over_min": 1.0084420567920185,
+    "gpu_rates_gbps": [
+     145.97224763420203,
+     147.15452246996642
+    ]
+   }
+  },
+  "overlap_min": null,
+  "link_gib_tx": [
+   598.9169921875,
+   601.5986328125,
+   492.4726552963257,
+   492.4726552963257
+  ],
+  "link_gib_rx": [
+   215.57031345367432,
+   215.57031154632568,
+   460.79784965515137,
+   462.81542682647705
+  ],
+  "link_tx_gbps_estimate": [
+   357.2679020088889,
+   358.86756295111115,
+   293.77138176,
+   293.77138176
+  ],
+  "link_rx_gbps_estimate": [
+   128.5927008711111,
+   128.59269973333335,
+   274.87662421333334,
+   276.08015587555553
+  ],
+  "sm_clock_mhz": 1980.0,
+  "power_max_w": 240.38,
+  "clock_reasons": [
+   "0x0000000000000000"
+  ]
+ }
+]

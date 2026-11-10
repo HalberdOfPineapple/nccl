@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multimem Setup Guide</title>
+<style>
+:root {
+  --bg: #ffffff; --fg: #1d2330; --muted: #5b6475; --line: #d9dee7; --panel: #f5f7fa; --code: #f0f2f6;
+  --blue: #2563eb; --orange: #d97706; --green: #15803d; --purple: #7c3aed; --red: #b91c1c;
+  --blue-soft: #e8f0ff; --orange-soft: #fff4e5; --green-soft: #e9f7ee; --purple-soft: #f3edff; --red-soft: #fdecec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --fg: #e4e8ef; --muted: #9aa3b2; --line: #2c333f; --panel: #1a1f27; --code: #1f2530;
+    --blue: #6ea0ff; --orange: #f2a33a; --green: #4cc27a; --purple: #a98bff; --red: #f07171;
+    --blue-soft: #1a2640; --orange-soft: #33270f; --green-soft: #13301f; --purple-soft: #261f3d; --red-soft: #3a1a1a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151b; --fg: #e4e8ef; --muted: #9aa3b2; --line: #2c333f; --panel: #1a1f27; --code: #1f2530;
+  --blue: #6ea0ff; --orange: #f2a33a; --green: #4cc27a; --purple: #a98bff; --red: #f07171;
+  --blue-soft: #1a2640; --orange-soft: #33270f; --green-soft: #13301f; --purple-soft: #261f3d; --red-soft: #3a1a1a;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 80px; }
+h1 { font-size: 1.7rem; margin: 0 0 4px; }
+h2 { font-size: 1.3rem; margin: 44px 0 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; margin: 26px 0 8px; }
+p, li { max-width: 78ch; }
+.sub { color: var(--muted); margin: 0 0 18px; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86em; }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code); padding: 12px 14px; border-radius: 8px; overflow-x: auto; line-height: 1.5; border: 1px solid var(--line); }
+pre code { background: none; padding: 0; }
+.ref { color: var(--muted); font-size: 0.85em; }
+a { color: var(--blue); }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 0.9rem; }
+.tbl { overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: var(--panel); }
+td code, td .ref { overflow-wrap: anywhere; }
+.box { border-left: 4px solid var(--blue); background: var(--blue-soft); padding: 10px 14px; border-radius: 6px; margin: 14px 0; }
+.box.warn { border-color: var(--orange); background: var(--orange-soft); }
+.box.green { border-color: var(--green); background: var(--green-soft); }
+.box.purple { border-color: var(--purple); background: var(--purple-soft); }
+.tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0 7px; border-radius: 10px; white-space: nowrap; }
+.tag.shared { background: var(--green-soft); color: var(--green); border: 1px solid var(--green); }
+.tag.local { background: var(--orange-soft); color: var(--orange); border: 1px solid var(--orange); }
+.tag.agreed { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple); }
+nav.toc { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 16px; margin: 16px 0 8px; }
+nav.toc ol { margin: 4px 0; padding-left: 20px; }
+figure { margin: 16px 0; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
+.step { border: 1px solid var(--line); border-radius: 8px; padding: 4px 14px 8px; margin: 12px 0; background: var(--panel); }
+.step h4 { margin: 8px 0 4px; font-size: 1rem; }
+svg text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>How multimem is set up and used in NCCL</h1>
+<p class="sub">NCCL 2.32.3 (in-tree), device API with symmetric windows, followed through our own harness <code>experiments/h100x4/nvls/common/src/mm_mix.cu</code>. Every name below is a real variable or call in that code.</p>
+
+<nav class="toc"><strong>Contents</strong>
+<ol>
+<li><a href="#answer">Short answer: which addresses, which handles</a></li>
+<li><a href="#cast">Every name, what it holds, and whether ranks share it</a></li>
+<li><a href="#map">Address map of one GPU (rank 2)</a></li>
+<li><a href="#setup">Setup, step by step, in <code>mm_mix.cu</code></a></li>
+<li><a href="#sharing">When each thing becomes shared</a></li>
+<li><a href="#run">Run time: one <code>multimem.st</code> from the kernel to four GPUs</a></li>
+<li><a href="#reduce">Run time: one <code>multimem.ld_reduce</code></a></li>
+<li><a href="#pitfalls">Things that are easy to mix up</a></li>
+<li><a href="#check">How to see the real values on our machine</a></li>
+</ol></nav>
+
+<h2 id="answer">1. Short answer: which addresses, which handles</h2>
+
+<p>Earlier I said each GPU has "a normal address and a multicast address" for its buffer. In the code there are actually <strong>three kinds of address</strong> for one window on one rank, plus <strong>two kinds of handle</strong>:</p>
+
+<div class="tbl"><table>
+<tr><th>Kind</th><th>Name in code</th><th>What the GPU's page table maps it to</th><th>Where it is created</th></tr>
+<tr><td>Address 1: the user's own pointer</td><td><code>state.windowMemory</code> (in NCCL: <code>userPtr</code>, <code>mem-&gt;primaryAddr</code>)</td><td>This GPU's own physical pages</td><td><code>ncclMemAlloc</code>: <code>cuMemCreate</code> + <code>cuMemAddressReserve</code> + <code>cuMemMap</code> <span class="ref">allocator.cc:62-89</span></td></tr>
+<tr><td>Address 2: the LSA (unicast) slots, one per rank</td><td><code>devr-&gt;lsaFlatBase + r*bigSize + bigOffset</code>, for r = 0..3</td><td>Slot r maps rank r's physical pages over NVLink. The slot for my own rank maps my own pages again (a second alias of address 1)</td><td><code>symMemoryMapLsaTeam</code> <span class="ref">dev_runtime.cc:397, 345, 331</span></td></tr>
+<tr><td>Address 3: the multicast (MC) address</td><td><code>mcBasePtr + bigOffset</code></td><td>No memory. It maps the <strong>multicast object</strong> at offset <code>bigOffset</code></td><td><code>symTeamObtain</code>: <code>cuMemAddressReserve</code> + <code>cuMemMap(mcAddr, bigSize, 0, mcHandle, 0)</code> <span class="ref">dev_runtime.cc:515-519</span></td></tr>
+<tr><td>Handle A: physical memory</td><td><code>CUmemGenericAllocationHandle memHandles[]</code></td><td>(not an address) names this GPU's physical pages</td><td><code>cuMemCreate</code> in <code>ncclMemAlloc</code>; retrieved again with <code>cuMemRetainAllocationHandle</code> <span class="ref">dev_runtime.cc:1200</span></td></tr>
+<tr><td>Handle B: the multicast object</td><td><code>CUmemGenericAllocationHandle mcHandle</code> (stored as <code>t-&gt;mcHandle</code>)</td><td>(not an address) names the multicast object</td><td><code>cuMulticastCreate</code> on team rank 0, imported by the others <span class="ref">multicast.cc:27, 54-60</span></td></tr>
+</table></div>
+
+<p>So, concretely:</p>
+<ul>
+<li><strong><code>mcHandle</code></strong> is an integer handle, valid only inside this process, that names one driver object: the multicast object. It works like a file descriptor. Each rank holds its own number, but all four numbers refer to the same object.</li>
+<li><strong>The multicast object</strong> is what <code>cuMulticastCreate</code> creates. It has a size (<code>bigSize</code>), a fixed list of member GPUs (filled by <code>cuMulticastAddDevice</code>) and, for each offset range, the physical pages each member bound there (filled by <code>cuMulticastBindAddr</code>). The NVSwitch uses that list to deliver or gather data.</li>
+<li><strong><code>mcBasePtr</code></strong> is an ordinary virtual address in this GPU's address space, the start of a <code>bigSize</code>-long range that <code>cuMemMap</code> pointed at the multicast object instead of at memory. It is per rank: each rank reserves its own range, so the number can differ between GPUs.</li>
+<li><strong>The multimem pointer</strong> that a kernel uses is <code>mcBasePtr + bigOffset + offset</code>.</li>
+</ul>
+
+<h2 id="cast">2. Every name, what it holds, and whether ranks share it</h2>
+
+<p>Three labels are used: <span class="tag shared">shared object</span> one thing that all ranks refer to; <span class="tag agreed">same value</span> each rank holds its own copy, but every rank computes the same number; <span class="tag local">per rank</span> each rank has its own value, and the values can differ.</p>
+
+<div class="tbl"><table>
+<tr><th>Name</th><th>C type / where it lives</th><th>What it holds</th><th>Shared?</th><th>Set at</th></tr>
+<tr><td><code>devr-&gt;lsaSize</code>, <code>devr-&gt;lsaSelf</code></td><td><code>int</code>, host, <code>comm-&gt;devrState</code></td><td>Number of ranks in the LSA team (4 here) and my index in it (<code>rank % lsaSize</code>)</td><td><span class="tag agreed">same value</span> for <code>lsaSize</code>, <span class="tag local">per rank</span> for <code>lsaSelf</code></td><td><span class="ref">dev_runtime.cc:168-169</span></td></tr>
+<tr><td><code>devr-&gt;bigSize</code></td><td><code>size_t</code>, host</td><td>Size of every rank's "slot" in the symmetric space. Default: the largest GPU memory among all ranks, rounded up to 4 GiB (80 GiB on an H100 80 GB). Override with <code>NCCL_WIN_STRIDE</code></td><td><span class="tag agreed">same value</span>: computed locally from <code>comm-&gt;peerInfo[r].totalGlobalMem</code>, which every rank received at <code>ncclCommInitRank</code></td><td><span class="ref">dev_runtime.cc:193-200</span></td></tr>
+<tr><td><code>devr-&gt;bigSpace</code></td><td>host allocator</td><td>Bookkeeping for which offsets in <code>[0, bigSize)</code> are already used by windows</td><td><span class="tag agreed">same state</span> as long as all ranks register the same windows in the same order</td><td><span class="ref">dev_runtime.cc:203</span></td></tr>
+<tr><td><code>mem-&gt;bigOffset</code></td><td><code>int64_t</code>, host, per window memory</td><td>Where this window sits inside <code>[0, bigSize)</code></td><td><span class="tag agreed">same value</span>. It is <strong>never sent</strong>. Every rank runs <code>ncclSpaceAlloc</code> with the same inputs (sizes were all-gathered just before) and gets the same answer</td><td><span class="ref">dev_runtime.cc:814</span></td></tr>
+<tr><td><code>memHandles[]</code></td><td><code>CUmemGenericAllocationHandle</code></td><td>My physical pages</td><td><span class="tag local">per rank</span>. Exported as a shareable handle and all-gathered, so each peer can import and map my pages</td><td><span class="ref">dev_runtime.cc:1200, 389</span></td></tr>
+<tr><td><code>devr-&gt;lsaFlatBase</code></td><td><code>void*</code>, host</td><td>Start of a reserved range of <code>lsaSize * bigSize</code> bytes (320 GiB here) holding one slot per rank</td><td><span class="tag local">per rank</span> virtual address</td><td><span class="ref">dev_runtime.cc:397</span></td></tr>
+<tr><td>multicast object</td><td>driver / NVSwitch state</td><td>Size <code>bigSize</code>, members G0..G3, and for each bound offset range the members' physical pages</td><td><span class="tag shared">shared object</span></td><td>created <span class="ref">multicast.cc:27</span>, members <span class="ref">dev_runtime.cc:514</span>, pages <span class="ref">dev_runtime.cc:432</span></td></tr>
+<tr><td><code>mcHandle</code> (<code>t-&gt;mcHandle</code>)</td><td><code>CUmemGenericAllocationHandle</code></td><td>My process's handle to the multicast object</td><td><span class="tag local">per rank</span> number, naming the <span class="tag shared">shared object</span></td><td><span class="ref">dev_runtime.cc:503-511, 527</span></td></tr>
+<tr><td><code>mcBasePtr</code> (<code>t-&gt;mcBasePtr</code>, <code>devComm.lsaMultimem.mcBasePtr</code>)</td><td><code>void*</code>, copied into the device communicator</td><td>Start of my <code>bigSize</code> range mapped to the multicast object</td><td><span class="tag local">per rank</span> virtual address</td><td><span class="ref">dev_runtime.cc:515-528, 1516</span></td></tr>
+<tr><td><code>ncclWindow_t</code></td><td>device pointer to a <code>struct ncclWindow_vidmem</code> in GPU memory</td><td>The small record a kernel uses to compute pointers (next row)</td><td><span class="tag local">per rank</span></td><td><code>symWindowCreate</code> <span class="ref">dev_runtime.cc:1000-1031</span></td></tr>
+<tr><td><code>ncclWindow_vidmem</code> fields</td><td>GPU memory <span class="ref">core__types.h:30-44</span></td><td><code>lsaFlatBase</code> = <code>devr-&gt;lsaFlatBase + bigOffset</code> (already shifted to this window); <code>stride4G</code> = <code>bigSize &gt;&gt; 32</code>; <code>mcOffset4K</code> = <code>bigOffset &gt;&gt; 12</code>; <code>lsaRank</code> = <code>lsaSelf</code></td><td><code>stride4G</code>, <code>mcOffset4K</code>: <span class="tag agreed">same value</span>; <code>lsaFlatBase</code>, <code>lsaRank</code>: <span class="tag local">per rank</span></td><td><span class="ref">dev_runtime.cc:1026-1030</span></td></tr>
+<tr><td><code>ncclDevComm</code></td><td>struct passed to the kernel by value</td><td>Among other things, <code>lsaMultimem.mcBasePtr</code></td><td><span class="tag local">per rank</span></td><td><code>ncclDevCommCreate</code> <span class="ref">dev_runtime.cc:1977, 1516</span></td></tr>
+</table></div>
+
+<div class="box purple"><strong>What all ranks agree on.</strong> Only two things are truly shared: the multicast object, and each rank's physical pages (which peers import). Everything else that must match (<code>bigSize</code>, <code>bigOffset</code>, so <code>stride4G</code> and <code>mcOffset4K</code>) matches because every rank computes it the same way. That is why window registration is a collective call that every rank must make with the same sequence of windows.</div>
+
+<h2 id="map">3. Address map of one GPU (rank 2)</h2>
+
+<p>The numbers are illustrative but follow the code's formulas: <code>bigSize</code> = 80 GiB = <code>0x14_0000_0000</code>, and our window sits at <code>bigOffset</code> = <code>0x4000_0000</code> (1 GiB). NCCL's own internal window, created first, occupies the space below it. The virtual base addresses (<code>0x7d80…</code>, <code>0x7e00…</code>, <code>0x7f2a…</code>) are made up; the driver chooses them.</p>
+
+<figure>
+<svg viewBox="0 0 960 500" role="img" aria-label="Rank 2 virtual address map: user pointer, four LSA slots, multicast range, the multicast object and the physical memory of four GPUs">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--orange)"/></marker>
+    <marker id="ahb" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--blue)"/></marker>
+    <marker id="ahg" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--green)"/></marker>
+  </defs>
+  <text x="10" y="20" font-size="14" font-weight="700" fill="var(--fg)">GPU 2's virtual addresses (its page table)</text>
+  <text x="870" y="20" font-size="14" font-weight="700" text-anchor="middle" fill="var(--fg)">Physical memory</text>
+  <text x="10" y="50" font-size="12" fill="var(--fg)">Address 1: user pointer</text>
+  <rect x="10" y="58" width="330" height="28" rx="4" fill="var(--orange-soft)" stroke="var(--orange)"/>
+  <text x="175" y="77" font-size="11" text-anchor="middle" fill="var(--fg)">windowMemory = 0x7f2a_0000_0000 (16 GiB)</text>
+  <path d="M340,72 L950,72 L950,217 L944,217" fill="none" stroke="var(--orange)" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="10" y="112" font-size="12" fill="var(--fg)">Address 2: LSA slots, devr-&gt;lsaFlatBase = 0x7e00_0000_0000, one bigSize slot per rank</text>
+  <rect x="10" y="122" width="460" height="30" fill="var(--panel)" stroke="var(--line)"/>
+  <text x="22" y="142" font-size="11" fill="var(--fg)">slot r=0: window at 0x7e00_4000_0000</text>
+  <line x1="470" y1="137" x2="794" y2="137" stroke="var(--green)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#ahg)"/>
+  <rect x="800" y="122" width="140" height="30" rx="4" fill="var(--green-soft)" stroke="var(--green)"/>
+  <text x="870" y="142" font-size="12" text-anchor="middle" fill="var(--fg)">P0 (GPU 0)</text>
+  <rect x="10" y="162" width="460" height="30" fill="var(--panel)" stroke="var(--line)"/>
+  <text x="22" y="182" font-size="11" fill="var(--fg)">slot r=1: window at 0x7e14_4000_0000</text>
+  <line x1="470" y1="177" x2="794" y2="177" stroke="var(--green)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#ahg)"/>
+  <rect x="800" y="162" width="140" height="30" rx="4" fill="var(--green-soft)" stroke="var(--green)"/>
+  <text x="870" y="182" font-size="12" text-anchor="middle" fill="var(--fg)">P1 (GPU 1)</text>
+  <rect x="10" y="202" width="460" height="30" fill="var(--orange-soft)" stroke="var(--orange)"/>
+  <text x="22" y="222" font-size="11" fill="var(--fg)">slot r=2 (me): window at 0x7e28_4000_0000</text>
+  <line x1="470" y1="217" x2="794" y2="217" stroke="var(--orange)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+  <rect x="800" y="202" width="140" height="30" rx="4" fill="var(--orange-soft)" stroke="var(--orange)"/>
+  <text x="870" y="222" font-size="12" text-anchor="middle" fill="var(--fg)">P2 (GPU 2, mine)</text>
+  <rect x="10" y="242" width="460" height="30" fill="var(--panel)" stroke="var(--line)"/>
+  <text x="22" y="262" font-size="11" fill="var(--fg)">slot r=3: window at 0x7e3c_4000_0000</text>
+  <line x1="470" y1="257" x2="794" y2="257" stroke="var(--green)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#ahg)"/>
+  <rect x="800" y="242" width="140" height="30" rx="4" fill="var(--green-soft)" stroke="var(--green)"/>
+  <text x="870" y="262" font-size="12" text-anchor="middle" fill="var(--fg)">P3 (GPU 3)</text>
+  <text x="10" y="312" font-size="12" fill="var(--fg)">Address 3: mcBasePtr = 0x7d80_0000_0000 (bigSize range, mapped to the object)</text>
+  <rect x="10" y="322" width="460" height="36" fill="var(--blue-soft)" stroke="var(--blue)"/>
+  <text x="55" y="344" font-size="10" text-anchor="middle" fill="var(--muted)">NCCL</text>
+  <rect x="100" y="327" width="250" height="26" fill="var(--bg)" stroke="var(--blue)" stroke-width="2"/>
+  <text x="225" y="344" font-size="11" text-anchor="middle" fill="var(--fg)">our window: 0x7d80_4000_0000</text>
+  <text x="410" y="344" font-size="10" text-anchor="middle" fill="var(--muted)">unbound</text>
+  <path d="M225,353 L225,398 L514,398" fill="none" stroke="var(--blue)" stroke-width="2" marker-end="url(#ahb)"/>
+  <rect x="520" y="352" width="250" height="92" rx="8" fill="var(--panel)" stroke="var(--blue)" stroke-width="2"/>
+  <text x="645" y="374" font-size="13" font-weight="700" text-anchor="middle" fill="var(--blue)">multicast object</text>
+  <text x="645" y="392" font-size="11" text-anchor="middle" fill="var(--fg)">named by mcHandle (all 4 ranks)</text>
+  <text x="645" y="409" font-size="11" text-anchor="middle" fill="var(--fg)">size bigSize, members G0..G3</text>
+  <text x="645" y="426" font-size="11" text-anchor="middle" fill="var(--fg)">0x4000_0000.. → P0, P1, P2, P3</text>
+  <line x1="690" y1="352" x2="796" y2="146" stroke="var(--blue)" stroke-width="2" marker-end="url(#ahb)"/>
+  <line x1="715" y1="352" x2="796" y2="186" stroke="var(--blue)" stroke-width="2" marker-end="url(#ahb)"/>
+  <line x1="740" y1="352" x2="796" y2="226" stroke="var(--blue)" stroke-width="2" marker-end="url(#ahb)"/>
+  <line x1="765" y1="352" x2="796" y2="266" stroke="var(--blue)" stroke-width="2" marker-end="url(#ahb)"/>
+  <text x="10" y="472" font-size="11" fill="var(--muted)">Dashed: an LSA slot maps one rank's pages directly (unicast). Orange: my own pages, reached by Address 1 and by my LSA slot.</text>
+  <text x="10" y="489" font-size="11" fill="var(--muted)">Blue: the MC range has no pages of its own; it maps the multicast object, which reaches every member's pages at the same offset.</text>
+</svg>
+<figcaption>Rank 2's page table holds three ranges for the same window. Only the blue range goes through the multicast object.</figcaption>
+</figure>
+
+<p>GPU 0 has the same picture with different base numbers, for example <code>mcBasePtr</code> = <code>0x7c40_0000_0000</code>. Its multicast address for our window is then <code>0x7c40_4000_0000</code>: a different number, but the same offset <code>0x4000_0000</code> into the same object, so it reaches the same four sets of pages.</p>
+
+<h2 id="setup">4. Setup, step by step, in <code>mm_mix.cu</code></h2>
+
+<p>The harness's <code>setupRank</code> (<span class="ref">mm_mix.cu:590-618</span>) makes four calls on each rank:</p>
+<pre><code>ncclCommInitRank(&amp;state.communicator, rankCount, shared.identifier, rank);           // step 1
+ncclMemAlloc(&amp;state.windowMemory, windowBytes);                                       // step 2, 16 GiB + control
+ncclCommWindowRegister(state.communicator, state.windowMemory, windowBytes,
+                       &amp;state.window, NCCL_WIN_COLL_SYMMETRIC);                       // step 3
+requirements.lsaMultimem = true;
+ncclDevCommCreate(state.communicator, &amp;requirements, &amp;state.deviceCommunicator);     // step 4</code></pre>
+<p>Each step below lists what is created and what crosses between ranks. "Bootstrap" is NCCL's host-side messaging between processes (sockets), used only during setup.</p>
+
+<div class="step">
+<h4>Step 1: <code>ncclCommInitRank</code></h4>
+<ul>
+<li>Ranks find each other and all-gather <code>peerInfo</code>, which includes each GPU's <code>totalGlobalMem</code>. That is the input for <code>bigSize</code> later.</li>
+<li>No symmetric or multicast state exists yet.</li>
+</ul>
+</div>
+
+<div class="step">
+<h4>Step 2: <code>ncclMemAlloc(&amp;windowMemory, size)</code> <span class="ref">allocator.cc:17-89</span></h4>
+<ul>
+<li><code>cuMemCreate(&amp;handle, size, ...)</code>: allocates physical pages P2 on this GPU and returns handle A.</li>
+<li><code>cuMemAddressReserve</code> + <code>cuMemMap</code> + <code>cuMemSetAccess</code>: picks a virtual range and maps it to P2. That range is <code>windowMemory</code> (address 1).</li>
+<li>Purely local. Nothing is shared. The reason to use <code>ncclMemAlloc</code> instead of <code>cudaMalloc</code> is that this memory has a handle that can be exported and bound to a multicast object.</li>
+</ul>
+</div>
+
+<div class="step">
+<h4>Step 3: <code>ncclCommWindowRegister</code> <span class="ref">dev_runtime.cc:1800 → ncclDevrWindowRegisterInGroup 1149</span></h4>
+<p><strong>3a. First symmetric window: NCCL builds its own internal setup</strong> (<code>ncclSymkInitOnce</code>, <span class="ref">dev_runtime.cc:1177 → sym_kernels.cc:185</span>)</p>
+<ul>
+<li><code>ncclDevrInitOnce</code> computes <code>lsaSize</code>, <code>lsaSelf</code> and <code>bigSize</code> = max <code>totalGlobalMem</code>, rounded up to 4 GiB <span class="ref">dev_runtime.cc:160-200</span>. Every rank gets the same <code>bigSize</code> without sending anything.</li>
+<li>NCCL then creates an internal device communicator for its own symmetric kernels with <code>lsaMultimem = true</code> (when NVLS is available and the team has more than 2 ranks) <span class="ref">sym_kernels.cc:194-196, 254</span>. That call reaches <code>symTeamObtain(comm, lsa, multimem=true, ...)</code>, and <strong>this is where the multicast object is created</strong>:</li>
+</ul>
+<pre><code>// dev_runtime.cc:495-528  (inside symTeamObtain)
+mcProp.numDevices = team.nRanks;          // 4
+mcProp.size       = devr-&gt;bigSize;        // 80 GiB
+if (team.rank == 0) {
+  ncclMcCreate(comm, &amp;mcProp, ..., &amp;mcHandle, shareableHandle);   // cuMulticastCreate   (multicast.cc:27)
+  bootstrapIntraNodeBroadcast(..., shareableHandle, ...);          // send a reference to the others
+} else {
+  bootstrapIntraNodeBroadcast(..., shareableHandle, ...);          // receive it
+  ncclMcImport(comm, shareableHandle, rank0, &amp;mcHandle);           // get my own handle to the same object
+}
+cuMulticastAddDevice(mcHandle, comm-&gt;cudaDev);                     // join: this GPU becomes a member
+cuMemAddressReserve(&amp;mcAddr, devr-&gt;bigSize, ...);                  // pick a virtual range on this GPU
+cuMemMap(mcAddr, devr-&gt;bigSize, 0, mcHandle, 0);                   // point that range at the object
+t-&gt;mcHandle  = mcHandle;
+t-&gt;mcBasePtr = (void*)mcAddr;                                      // address 3's base</code></pre>
+<ul>
+<li>On this machine the handle type is <code>CU_MEM_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR</code> (<span class="ref">cudawrap.cc:19</span>). Rank 0 broadcasts its handle value, and each other rank asks rank 0's proxy thread for a file descriptor (<code>ncclProxyClientGetFdBlocking</code>) and turns it into its own handle with <code>cuMemImportFromShareableHandle</code> <span class="ref">multicast.cc:54-56</span>.</li>
+<li>The internal setup also registers a small NCCL resource window (barriers and similar). It takes the first piece of the <code>bigSize</code> space, which is why our window does not start at offset 0.</li>
+</ul>
+
+<p><strong>3b. Our window: agree on an offset and share the pages</strong> (<code>symMemoryObtain</code>, <span class="ref">dev_runtime.cc:1207 → 698</span>)</p>
+<pre><code>cuMemRetainAllocationHandle(&amp;memHandles[0], windowMemory);       // get handle A back from the pointer (1200)
+bootstrapAllGather(globalSegmentInfo);                            // every rank learns every rank's size and flags (753)
+mem-&gt;lsaMaxSize = max(size over ranks);  mem-&gt;lsaMinSize = min(...);  // (808-809)
+ncclSpaceAlloc(&amp;devr-&gt;bigSpace, bigSize, lsaMaxSize, granularity, &amp;bigOffset);   // (814) same answer on every rank
+mem-&gt;bigOffset = bigOffset;</code></pre>
+<p>Then <code>symMemoryMapLsaTeam</code> builds the unicast slots (address 2):</p>
+<pre><code>symMemoryExportSegmentHandle(...);                  // turn handle A into something shareable
+bootstrapIntraNodeAllGather(messages);               // every rank receives every rank's page handle   (389)
+cuMemAddressReserve(&amp;lsaFlatBase, lsaSize*bigSize);  // first time only                                (397)
+for r in 0..3:
+  addr = lsaFlatBase + r*bigSize + bigOffset;        //                                                (345)
+  import rank r's handle;  cuMemMap(addr, size, 0, handle_r, 0);   // slot r → P_r                     (331)
+bootstrapIntraNodeBarrier(...);</code></pre>
+<p>Then every existing team with a multicast object binds this window into it (<span class="ref">dev_runtime.cc:853-855 → symBindTeamMemory 422</span>):</p>
+<pre><code>cuMulticastBindAddr(tm-&gt;mcHandle,          // the shared object
+                    mem-&gt;bigOffset,        // where in the object (same on all ranks)
+                    mem-&gt;primaryAddr,      // = windowMemory: MY pages
+                    mem-&gt;lsaMinSize, 0);   // how much (smallest window size among ranks)</code></pre>
+<p>Each rank binds only its own pages. After all four have run this line, the object holds "offset <code>bigOffset</code> → P0, P1, P2, P3".</p>
+
+<p><strong>3c. Build the device record</strong> (<code>symWindowCreate</code>, <span class="ref">dev_runtime.cc:1214 → 1000</span>)</p>
+<pre><code>winDevHost-&gt;lsaFlatBase = devr-&gt;lsaFlatBase + win-&gt;bigOffset;   // 0x7e00_4000_0000 on rank 2
+winDevHost-&gt;mcOffset4K  = win-&gt;bigOffset &gt;&gt; 12;                  // 0x40000
+winDevHost-&gt;stride4G    = devr-&gt;bigSize  &gt;&gt; 32;                  // 0x14 (= 20, i.e. 80 GiB)
+winDevHost-&gt;lsaRank     = devr-&gt;lsaSelf;                         // 2
+cudaMemcpyAsync(winDev, winDevHost, sizeof(ncclWindow_vidmem), H2D);
+*outWinDev = winDev;                                              // this is state.window (ncclWindow_t)</code></pre>
+<p>Finally <code>bootstrapBarrier</code> (<span class="ref">1222</span>): no rank returns until all have finished binding.</p>
+</div>
+
+<div class="step">
+<h4>Step 4: <code>ncclDevCommCreate(..., lsaMultimem = true)</code> <span class="ref">dev_runtime.cc:1977 → ncclDevrCommCreateInternal 1399</span></h4>
+<ul>
+<li><code>symTeamObtain(comm, lsa, lsaMultimem=true, ...)</code> <span class="ref">1513</span> finds the LSA team from step 3a, which already has <code>mcBasePtr != nullptr</code> (<span class="ref">473</span>), so it creates nothing new.</li>
+<li><code>outDevComm-&gt;lsaMultimem.mcBasePtr = tmLsa-&gt;mcBasePtr;</code> <span class="ref">1516</span>: copies this rank's base address into the struct the kernel will receive.</li>
+<li>It also registers its own small resource window (barriers), the same way as step 3b.</li>
+</ul>
+<p>If no symmetric window had been registered before this call, the multicast object would be created here instead. Any window registered later would then be bound at <span class="ref">855</span>; any window registered earlier is bound at <span class="ref">532</span>. Either order ends in the same state.</p>
+</div>
+
+<h2 id="sharing">5. When each thing becomes shared</h2>
+
+<div class="tbl"><table>
+<tr><th>Moment</th><th>Bootstrap exchange</th><th>What becomes common to all ranks</th></tr>
+<tr><td><code>ncclCommInitRank</code></td><td>all-gather of <code>peerInfo</code></td><td>Each GPU's memory size, so every rank can compute the same <code>bigSize</code></td></tr>
+<tr><td>first symmetric registration (<code>ncclSymkInitOnce</code>) or first <code>ncclDevCommCreate</code> with <code>lsaMultimem</code></td><td>broadcast of the multicast handle from team rank 0, then per-rank fd fetch</td><td>The <strong>multicast object</strong>: all ranks now hold a handle to it, have joined (<code>cuMulticastAddDevice</code>) and mapped it (<code>mcBasePtr</code>)</td></tr>
+<tr><td>each <code>ncclCommWindowRegister</code></td><td>all-gather of sizes and flags</td><td><code>bigOffset</code> (computed identically), <code>lsaMinSize</code>, <code>lsaMaxSize</code></td></tr>
+<tr><td>same call, <code>symMemoryMapLsaTeam</code></td><td>intra-node all-gather of page handles, then barrier</td><td>Each rank's <strong>physical pages</strong>, mapped into every rank's LSA slots</td></tr>
+<tr><td>same call, <code>symBindTeamMemory</code></td><td>none (each rank binds its own pages), then the final <code>bootstrapBarrier</code></td><td>The object's table for this window's offset range: P0..P3</td></tr>
+<tr><td>kernel run time</td><td>none</td><td>Nothing is exchanged by the host. Kernels only compute addresses from <code>ncclWindow_vidmem</code> and <code>ncclDevComm</code></td></tr>
+</table></div>
+
+<h2 id="run">6. Run time: one <code>multimem.st</code> from the kernel to four GPUs</h2>
+
+<p>In the multicast role, rank 2 writes its 2 GiB part of the output region of the window (<span class="ref">mm_mix.cu:314-325</span>):</p>
+<pre><code>const size_t part = rankPartOffset(arguments.rank);                 // 2 * 2 GiB = 0x1_0000_0000
+const uintptr_t output = (uintptr_t)ncclGetLsaMultimemPointer(
+    arguments.window, regionBytes + part, arguments.deviceCommunicator);   // offset 0x3_0000_0000 into the window
+...
+storeMulticastPack(output + offset, value);                          // per 16 bytes</code></pre>
+
+<p><strong>Pointer arithmetic</strong> (<span class="ref">core__funcs.h:176-186</span>), with rank 2's illustrative values:</p>
+<pre><code>ncclGetLsaMultimemPointer(w, off, comm) = ncclGetMultimemPointer(w, off, comm.lsaMultimem)
+  ptr  = mm.mcBasePtr                       // 0x7d80_0000_0000   (devComm, per rank)
+  ptr += w-&gt;mcOffset4K * 4096               // + 0x4000_0000      (window record: bigOffset)
+  ptr += off                                // + 0x3_0000_0000    (offset inside the window)
+                                            // = 0x7d83_4000_0000</code></pre>
+
+<p><strong>The instruction</strong> (<span class="ref">mm_mix.cu:148-152</span>):</p>
+<pre><code>multimem.st.global.v4.f32 [0x7d83_4000_0000], {x, y, z, w};</code></pre>
+
+<p><strong>What happens to it:</strong></p>
+<ol>
+<li>GPU 2 translates <code>0x7d83_4000_0000</code> through its page table. Because <code>cuMemMap(mcAddr, …, mcHandle)</code> mapped that range to the multicast object, the translation gives "multicast object, offset <code>0x3_4000_0000</code>", not a physical page.</li>
+<li>The 16 bytes go out once on GPU 2's NVLink, to the NVSwitch.</li>
+<li>The switch looks up that offset in the object. The offset falls in our window (<code>0x4000_0000 … +16 GiB</code>), which all four ranks bound, so it finds P0, P1, P2 and P3.</li>
+<li>It writes the 16 bytes into each of them at window offset <code>0x3_0000_0000</code>, which is each rank's <code>windowMemory + 0x3_0000_0000</code>. GPU 2's own copy also comes back in over GPU 2's link.</li>
+<li>Nobody is notified. A rank that wants to read the result must first synchronize, for example with a barrier through the device communicator.</li>
+</ol>
+
+<p>For comparison, the plain-store role (<span class="ref">mm_mix.cu:338-341</span>) uses an LSA slot instead:</p>
+<pre><code>ncclGetLsaPointer(w, off, peer=3) = w-&gt;lsaFlatBase + 3 * (stride4G &lt;&lt; 32) + off
+                                  = 0x7e00_4000_0000 + 3*0x14_0000_0000 + off   // slot 3 → P3 only</code></pre>
+<p>That address translates directly to P3, so the switch routes the store to GPU 3 alone.</p>
+
+<h2 id="reduce">7. Run time: one <code>multimem.ld_reduce</code></h2>
+
+<pre><code>input = ncclGetLsaMultimemPointer(arguments.window, part, arguments.deviceCommunicator);  // mm_mix.cu:330
+multimem.ld_reduce.global.add.v4.f32 {a, b, c, d}, [input + offset];                      // mm_mix.cu:142</code></pre>
+<ol>
+<li>Same translation: the address means "multicast object, offset X".</li>
+<li>GPU 2 sends one read request to the switch.</li>
+<li>The switch reads the 16 bytes at offset X from P0, P1, P2 and P3, so each GPU's outgoing link carries one copy.</li>
+<li>The switch adds the four <code>float4</code> values and returns one reply, the sum, to GPU 2.</li>
+</ol>
+
+<h2 id="pitfalls">8. Things that are easy to mix up</h2>
+
+<div class="tbl"><table>
+<tr><th>Confusion</th><th>What the code actually does</th></tr>
+<tr><td>Two fields named <code>lsaFlatBase</code></td><td><code>devr-&gt;lsaFlatBase</code> (host) is the start of the whole 4-slot range. <code>ncclWindow_vidmem::lsaFlatBase</code> (device) is already shifted by this window's <code>bigOffset</code> <span class="ref">dev_runtime.cc:1026</span>. The window record has no separate <code>bigOffset</code> for unicast; it is baked into this field.</td></tr>
+<tr><td><code>mcHandle</code> vs <code>mcBasePtr</code></td><td><code>mcHandle</code> names the object and is only used by host driver calls (<code>AddDevice</code>, <code>cuMemMap</code>, <code>BindAddr</code>). <code>mcBasePtr</code> is a GPU virtual address and the only thing a kernel sees.</td></tr>
+<tr><td>Is the multicast object "memory"?</td><td>No. It holds no data. Data lives only in P0..P3. The object is a size, a member list and a table of bound pages.</td></tr>
+<tr><td><code>windowMemory</code> vs <code>ncclGetLocalPointer</code></td><td>Both reach my pages P2. <code>ncclGetLocalPointer</code> returns my LSA slot (<code>lsaFlatBase + lsaRank·stride</code>), which is a second mapping of the same pages, not the <code>windowMemory</code> number.</td></tr>
+<tr><td>How do ranks agree on <code>bigOffset</code>?</td><td>They don't send it. All ranks run the same allocator on the same inputs in the same order. If ranks registered different windows or in a different order, the offsets would disagree and the setup would be wrong, so registration must be collective.</td></tr>
+<tr><td>Is the whole <code>bigSize</code> range usable?</td><td>No. Only offset ranges that every member has bound, which means only registered windows, and only up to <code>lsaMinSize</code> of each.</td></tr>
+<tr><td>Can a multimem op target only some GPUs?</td><td>No. It always reaches every member of the object. A subset needs a separate team with its own multicast object.</td></tr>
+</table></div>
+
+<h2 id="check">9. How to see the real values on our machine</h2>
+
+<p>The numbers in sections 3 and 6 are illustrative. NCCL prints the real ones when run with:</p>
+<pre><code>NCCL_DEBUG=INFO NCCL_DEBUG_SUBSYS=INIT,NVLS,ALLOC</code></pre>
+<p>The lines to look for:</p>
+<ul>
+<li><code>Symmetric VA size=80GB</code>: <code>bigSize</code> <span class="ref">dev_runtime.cc:201</span></li>
+<li><code>NVLS Creating Multicast group nranks 4 size …</code>: the object being created on team rank 0 <span class="ref">multicast.cc:26</span></li>
+<li><code>Binding multicast memory at big=… size=… to team {4 x 1}</code>: each window's <code>bigOffset</code> and bound size <span class="ref">dev_runtime.cc:430</span></li>
+</ul>
+<p>Printing <code>mcBasePtr</code> and <code>ncclGetLsaMultimemPointer</code> from a kernel would also show that the base differs between ranks while the offset is the same. None of this has been run yet, because it needs the GPUs.</p>
+
+</div>
+</body>
+</html>

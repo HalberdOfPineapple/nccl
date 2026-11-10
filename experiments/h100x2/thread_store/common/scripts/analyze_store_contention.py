@@ -360,6 +360,39 @@ def tma_writer_calibration():
     return sweep, rate
 
 
+def reader_calibration():
+    """E7.5 reader alone: TMA bulk reads, 48 CTAs × 3 chunks, in the separate layout and windows matched to the
+    mixed runs. The CTA count and chunks in flight come from plan 04; these runs check the rate levels."""
+    rows = []
+    for level, _ in rate_levels():
+        found = runs(f'reader_alone_{level}', 'direction')
+        if not found:
+            continue
+        data = found[0][0]
+        values = [statistics.median(row['writer_gbps'] for row in run_rows) for _, run_rows in found]
+        rows.append(dict(reader_ctas=data['writer_ctas'], chunks_in_flight=data['chunks_in_flight'], level=level, target_gbps=data['target_gbps'], runs=len(values),
+                         window_ms=data['solo_ns'] / 1e6, median=statistics.median(values), minimum=min(values), maximum=max(values),
+                         percent_of_peak=100 * statistics.median(values) / PEAK_GBPS, achieved_over_target=statistics.median(values) / data['target_gbps'],
+                         reader_slowest_to_fastest=min(min(row['writer_slowest_to_fastest'] for row in run_rows) for _, run_rows in found)))
+    if not rows:
+        return rows
+    figure, axis = plt.subplots(figsize=(4.8, 3.7))
+    axis.plot([100 * row['target_gbps'] / PEAK_GBPS for row in rows], [100 * row['median'] / PEAK_GBPS for row in rows], marker='o', markersize=4, linewidth=1, color='#3a923a', label='achieved')
+    axis.plot([0, 100], [0, 100], color='#888888', linestyle='--', linewidth=.6, label='achieved = target')
+    axis.set_xlim(0, 100)
+    axis.set_ylim(0, 100)
+    axis.set_xlabel('target read rate (% of HBM peak)')
+    axis.set_ylabel('achieved read rate (% of HBM peak)')
+    axis.legend(fontsize=7, frameon=False)
+    style(axis)
+    axis.set_title(f"TMA reader alone: {rows[0]['reader_ctas']} CTAs × {rows[0]['chunks_in_flight']} × 64 KiB in flight,\n"
+                   'the 7 GPCs other than G6; median of 3 runs', fontsize=8)
+    figure.tight_layout()
+    figure.savefig(FIGURES / 'reader_alone.png', dpi=150)
+    plt.close(figure)
+    return rows
+
+
 def destination_writer_figure(rows):
     series = [row for row in rows if row['kind'] == 'destination']
     figure, axis = plt.subplots(figsize=(6.4, 3.7))
@@ -433,6 +466,9 @@ def main():
         write_csv(RESULTS / 'tma_writer_sweep_summary.csv', sweep_rows)
     if rate_rows:
         write_csv(RESULTS / 'tma_writer_rate_summary.csv', rate_rows)
+    reader_rows = reader_calibration()
+    if reader_rows:
+        write_csv(RESULTS / 'reader_alone_summary.csv', reader_rows)
     print(f'{len(rows)} placement-level rows, {len(reference_rows)} references, {len(probe_rows)} probe runs, {len(cta_rows)} per-CTA rows')
 
 

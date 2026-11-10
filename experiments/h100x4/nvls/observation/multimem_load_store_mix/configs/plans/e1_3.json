@@ -1,0 +1,29 @@
+{
+ "arms": {
+  "e1_3_plain_load": {
+   "role_a": "plain_load",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_3_plain_store": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_3_plain_mix": {
+   "role_a": "plain_load",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "plain_store",
+   "ctas_b": 32
+  }
+ },
+ "rounds": 6,
+ "rotate": true
+}

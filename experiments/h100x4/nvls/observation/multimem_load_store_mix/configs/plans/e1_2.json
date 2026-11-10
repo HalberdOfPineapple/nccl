@@ -1,0 +1,36 @@
+{
+ "arms": {
+  "e1_2_single_multicast": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_2_single_reduce": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_2_mix_separate": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 32
+  },
+  "e1_2_mix_same": {
+   "role_a": "allreduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  }
+ },
+ "rounds": 6,
+ "rotate": true
+}

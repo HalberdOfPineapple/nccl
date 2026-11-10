@@ -183,13 +183,42 @@ Copy throughput in GB/s with the earlier build (spread, median of 3–5 runs):
 
 Over all 136 earlier settings, N > 1 never raised throughput by more than 0.3% and lowered it by up to 41% (2 CTAs × 512 threads/CTA, N = 2). All rows: [copy_loop_step_summary.csv](results/2026-10-29/copy_loop_step_summary.csv).
 
-## Writer alone
+## Co-runners alone
 
-### Motivation
+Every co-runner was first run alone, without copy traffic, to find its ceiling and to check that each rate target gives the requested rate. There are three co-runners. They use different paths out of the SM and control their traffic in different ways:
 
-The pressure must be known before it is applied: how fast the writer can store to local HBM, how many SMs it needs, whether the rate limit gives the requested rate, and whether packing the writer into few GPCs lowers its ceiling (the plan's hypothesis of a limit at each GPC's connection into the crossbar).
+| Co-runner | Used in | Binary | Issuing threads per CTA | One request | Limit on requests in flight | Rate control |
+|---|---|---|---|---|---|---|
+| Thread-store writer | E7.3, E7.4, E7.4b; the write arms of E7.5 and E7.6; E7.7 | `bin/store_congest`, `bin/store_congest_dest` | 1024 | 16-byte store per thread | None in the code; set by the hardware | Block *k* (64 KiB) of a CTA starts no earlier than start + *k* × interval |
+| TMA store writer | E7.6 | `bin/store_congest_tma` | 1 (thread 0) | 64 KiB bulk store from shared memory | *K* chunks per CTA (`cp.async.bulk.wait_group`) | The same, per 64 KiB chunk |
+| TMA read co-runner | E7.5 | `bin/store_congest_tma` | 1 (thread 0) | 64 KiB bulk read into shared memory | *K* chunks per CTA (one shared-memory slot and barrier per chunk) | The same, per 64 KiB chunk |
 
-### Setup
+The interval is 64 KiB × CTAs ÷ target rate, so all CTAs together meet the target. A late block or chunk starts at once, so a CTA catches up after a delay; a TMA CTA can catch up only as far as its *K* chunks in flight allow. Every rate counts requested bytes over the co-runner's active time; the [counter check](#hardware-counter-check-of-the-writer) confirms this for both store writers.
+
+Each calibration has two steps. First, the CTA count and threads/CTA (or chunks in flight) are swept with no limit (interval 0): this finds the ceiling, the highest rate a setting can reach. Second, the selected setting runs at each rate target, with the interval computed from the target and not tuned. A target below the ceiling can be met only if one CTA's time for a 64 KiB block or chunk at full speed is shorter than the interval; the margin left is what the second step checks.
+
+| Selected co-runner | Time per 64 KiB at full speed, alone | Interval at 670 GB/s | 1341 GB/s | 2011 GB/s | 2682 GB/s | 3155 GB/s |
+|---|---|---|---|---|---|---|
+| Thread-store writer, 64 CTAs × 1024 threads/CTA, spread | 1.31 µs (3194 GB/s ÷ 64) | 6.26 µs | 3.13 µs | 2.09 µs | 1.56 µs | — (no limit used) |
+| Thread-store writer, same, packed into 4 GPCs | 1.49 µs on average (2819 GB/s ÷ 64); slowest CTA longer | 6.26 µs | 3.13 µs | 2.09 µs | 1.56 µs | — |
+| TMA store writer, 64 CTAs × 1 chunk, spread | 1.29 µs (3257 GB/s ÷ 64) | 6.26 µs | 3.13 µs | 2.09 µs | 1.56 µs | — (no limit used) |
+| TMA read co-runner, 48 CTAs × 3 chunks | not measured | 4.70 µs | 2.35 µs | 1.56 µs | 1.17 µs | 1.00 µs |
+
+The interval is set in picoseconds (for example 1,563,871 ps at 2682 GB/s with 64 CTAs) by `writerIntervalPs` in `common/src/store_congest.cu`. The packed writer misses the 80% target (2660 GB/s) because its average margin is small (1.49 against 1.56 µs) and its slowest CTAs need more than the interval.
+
+| Co-runner | Calibrated | Selected setting | Rate alone with no limit | Rate targets |
+|---|---|---|---|---|
+| [Thread-store writer](#thread-store-writer) | CTAs 4–128 × threads/CTA 256–1024; rate levels; spread and packed | 64 CTAs × 1024 threads/CTA | 3194 GB/s spread (95%); 2819 GB/s packed into 4 GPCs | Within 0.01% spread |
+| [TMA store writer](#tma-store-writer) | CTAs 4–64 × 1, 2, 4 chunks in flight; rate levels; spread | 64 CTAs × 1 chunk | 3257 GB/s (97%) | Within 0.03% |
+| [TMA read co-runner](#tma-read-co-runner) | Rate levels only, in its E7.5 layout; setting from plan 04 | 48 CTAs × 3 chunks | Not measured | Within 0.08% |
+
+### Thread-store writer
+
+#### Motivation
+
+The pressure must be known before it is applied: how fast the thread-store writer can store to local HBM, how many SMs it needs, whether the rate limit gives the requested rate, and whether packing the writer into few GPCs lowers its ceiling (the plan's hypothesis of a limit at each GPC's connection into the crossbar).
+
+#### Setup
 
 | Knob | Role | Values |
 |---|---|---|
@@ -200,11 +229,11 @@ The pressure must be known before it is applied: how fast the writer can store t
 
 Configs: [configs/writer_alone/](configs/writer_alone/), named `writer_w<CTAs>_t<threads/CTA>_<rate>_<placement>_R<run>.cfg`.
 
-### Method
+#### Method
 
 Step 1 on GPUs 4 → 5 (5 runs). Steps 2 and 3 on GPUs 0 → 1 (3 runs; the no-limit spread point reuses step 1). These runs used the build that still had the copy knob; the writer code was not changed. One run each with the final build gave 794 GB/s (16 CTAs, −1.1%), 3158 GB/s (64 CTAs spread, −1.1%), 2811 GB/s (64 packed, no limit, −0.3%) and 2656 GB/s (64 packed, 80% target, −0.2%), so the writer results stand; E7.3 measures its own writer-alone controls. The selection rule was set before step 2: the fewest writer CTAs at 1024 threads/CTA within 95% of the no-limit ceiling (as in the plan-04 read calibration). The write rate counts logical store bytes over the writer's active interval; all writer CTAs covered the whole measured window in every run.
 
-### Results
+#### Results
 
 ![Writer rate against writer CTAs and threads per CTA](results/2026-10-29/figures/writer_sweep.png)
 
@@ -253,7 +282,7 @@ Write rate per GPC (sum of per-CTA rates, median over windows and runs), no limi
 
 Full tables: [writer_sweep_summary.csv](results/2026-10-29/writer_sweep_summary.csv), [writer_rate_summary.csv](results/2026-10-29/writer_rate_summary.csv).
 
-### Interpretation
+#### Interpretation
 
 - **One writer SM stores about 50 GB/s, and HBM writes saturate at about 3277 GB/s (98% of peak).** The rate grows in proportion to the CTA count up to 48 CTAs and flattens from 64. This is close to peak for writes. It counts requested stores, and the [counter check](#hardware-counter-check-of-the-writer) confirms it: DRAM writes of 3276 GB/s at 96 × 1024.
 - **Selected writer setting: 64 CTAs × 1024 threads/CTA.** It is the fewest CTAs at 1024 threads/CTA within 95% of the ceiling (3194 GB/s; 48 CTAs give only 72%). Its CTAs run at equal rates (slowest ÷ fastest 0.99). 64 + 16 copy CTAs = 80 ≤ 124 mapped SMs.
@@ -261,14 +290,111 @@ Full tables: [writer_sweep_summary.csv](results/2026-10-29/writer_sweep_summary.
 - **Packed writers reach a lower ceiling: 2819 GB/s (84%) against 3194 GB/s (95%) spread, with the same 64 CTAs.** Inside a full GPC, each SM drops from 50 to 40–45 GB/s, while the 12 SMs used in G2 keep 50 GB/s. A full GPC delivers about 690–810 GB/s of stores. This supports the plan's hypothesis of a limit at each GPC's connection, although the GPCs do not share one exact cap, and the packed writer falls 0.8% short of the 80% target. The limit varies by GPU: the same packed writer reaches 2920–2933 GB/s on GPU 6 ([counter check](#hardware-counter-check-of-the-writer)). The copy needs about 370 GB/s, about half of one GPC's limit, which agrees with the small cost of packing the copy.
 - **At saturation, HBM write bandwidth is shared per GPC, not per SM.** With 128 writer CTAs, every full GPC gets about 409 GB/s whether it has 16 or 18 writer SMs. This is a hint about how the crossbar arbitrates and matters for E7.3, where the copy's GPC competes with the writer's GPCs.
 
+### TMA store writer
+
+#### Motivation
+
+The mechanism contrast (E7.6) needs a writer that stores with TMA bulk copies at the same rate levels as the thread-store writer. How many CTAs and how many chunks in flight per CTA reach the HBM write ceiling was not known.
+
+#### Setup
+
+| Knob | Role | Values |
+|---|---|---|
+| **TMA writer CTAs** | **Independent variable** | **4, 8, 16, 24, 32, 48, 64** |
+| **Chunks in flight per CTA** | **Independent variable** | **1, 2, 4** (64 KiB each) |
+| **Target rate** | **Independent variable (selected setting)** | **20, 40, 60, 80% of HBM peak, no limit** |
+| Copy | Constant | Off (copy CTA 0 times five 20 ms windows) |
+| Placement | Constant | Spread over all 8 GPCs; default shared memory |
+| Binary, runs | Constant | `bin/store_congest_tma`; 3 runs per setting, GPUs 0 → 1 |
+
+Configs: [configs/tma_writer_alone/](configs/tma_writer_alone/).
+
+#### Method
+
+Each TMA writer CTA fills one 64 KiB block of shared memory with a launch-specific word once, then thread 0 stores it again and again with `cp.async.bulk.global.shared::cta` into its slice of the 1 GiB buffer and waits until at most (chunks in flight − 1) earlier chunks are still being written (`cp.async.bulk.wait_group`). The end time is taken after all writes have completed. After each launch, every word of the chunks written is checked. Selection rule, as for the thread-store writer: the fewest CTAs within 95% of the ceiling (about 3285 GB/s); 1 chunk in flight keeps the CTAs even (0.98) and gives the same CTA count as the thread-store writer.
+
+#### Results
+
+![TMA store writer alone: rate against CTAs and chunks in flight, and achieved against target](results/2026-10-29/figures/tma_writer.png)
+
+*Left: no rate limit; the 2- and 4-chunk lines lie on top of each other. Right: selected setting. Median of 3 runs.*
+
+Write rate in GB/s (median of 3 runs; % of HBM peak); "CTAs 0.60" marks a slowest ÷ fastest CTA ratio below 0.95:
+
+| TMA writer CTAs | 1 chunk in flight GB/s (% of peak) | 2 chunks | 4 chunks |
+|---|---|---|---|
+| 4 | 205 (6.1%) | 255 (7.6%) | 255 (7.6%) |
+| 8 | 411 (12.3%) | 510 (15.2%) | 510 (15.2%) |
+| 16 | 815 (24.3%) | 1020 (30.4%) | 1020 (30.4%) |
+| 24 | 1232 (36.8%) | 1530 (45.6%) | 1530 (45.6%) |
+| 32 | 1643 (49.0%) | 2039 (60.8%) | 2039 (60.8%) |
+| 48 | 2464 (73.5%) | 3056 (91.2%) | 3055 (91.1%) |
+| 64 | 3257 (97.1%) | 3283 (97.9%), CTAs 0.60 | 3285 (98.0%), CTAs 0.60 |
+
+Selected setting, **64 CTAs × 1 chunk in flight**: achieved 670, 1341, 2011, 2682 GB/s at the 20–80% targets (within 0.03%) and 3257 GB/s (97.1%) with no limit.
+
+Tables: [tma_writer_sweep_summary.csv](results/2026-10-29/tma_writer_sweep_summary.csv), [tma_writer_rate_summary.csv](results/2026-10-29/tma_writer_rate_summary.csv).
+
+#### Interpretation
+
+- **One TMA store CTA writes about 51 GB/s with 1 chunk in flight and 63.7 GB/s with 2 or more** — more than a thread-store CTA (50 GB/s) with only one issuing thread. More than 2 chunks do not help, so one CTA's bulk stores are limited at about 64 GB/s.
+- **The ceiling is the same HBM write ceiling** as with thread stores (about 3285 GB/s, 98% of peak).
+- **Selected TMA store writer: 64 CTAs × 1 chunk in flight.** It is within 95% of the ceiling, keeps its CTAs even, and uses the same number of SMs (64) as the thread-store writer.
+
+### TMA read co-runner
+
+#### Motivation
+
+The direction contrast (E7.5) needs local reads at the same byte rates as the local writes of E7.3, including the 3155 GB/s the writer reached with no limit. The reader must reach each target alone before its effect on the copy can be read.
+
+#### Setup
+
+| Knob | Role | Values |
+|---|---|---|
+| **Target read rate** | **Independent variable** | **670, 1341, 2011, 2682, 3155 GB/s**: the write rates the thread-store writer achieved in E7.3 |
+| Reader CTAs × chunks in flight | Constant | 48 CTAs × 3 chunks of 64 KiB; thread 0 starts the bulk reads into shared memory, thread 32 watches the stop flag |
+| Placement | Constant | The 7 GPCs other than G6 (the separate layout of E7.3), so the reader uses the same SMs as in its contrast runs |
+| Copy | Constant | Off; one copy-role CTA times windows equal to the copy's measured transfer time (about 5.83 ms) |
+| Binary, shared memory | Constant | `bin/store_congest_tma`, 196,864 bytes of shared memory per CTA |
+| Runs | Constant | 3 per level, 2 warm-ups and 6 windows per run, GPUs 0 → 1, in the same session as the E7.5 contrast |
+
+Configs: [configs/direction/](configs/direction/) (`reader_alone_<level>_R<run>`).
+
+#### Method
+
+This plan did not sweep the reader's CTA count or chunks in flight. The setting comes from plan 04's reader calibration, where 24 reader CTAs stopped at about 91% of HBM peak. 48 CTAs are used here so that one setting covers the top level (94% of peak). These runs are the reader-alone half of the E7.5 comparison. The reader's rate counts the 64 KiB chunks that arrived (requested bytes), and each CTA's reads are checked by a checksum.
+
+#### Results
+
+![TMA reader alone: achieved against target read rate](results/2026-10-29/figures/reader_alone.png)
+
+*48 reader CTAs × 3 chunks in flight, the 7 GPCs other than G6. Points: median of 3 runs; dashed: achieved = target.*
+
+| Target GB/s (% of peak) | Runs | Window ms | Achieved GB/s (min–max) | % of peak | Achieved ÷ target | Slowest ÷ fastest CTA |
+|---|---|---|---|---|---|---|
+| 670 (20%) | 3 | 5.84 | 670.0 (669.8–670.1) | 20.0 | 100.00% | 1.00 |
+| 1341 (40%) | 3 | 5.83 | 1340.6 (1340.6–1340.6) | 40.0 | 99.97% | 1.00 |
+| 2011 (60%) | 3 | 5.84 | 2010.1 (2009.9–2010.1) | 60.0 | 99.95% | 1.00 |
+| 2682 (80%) | 3 | 5.83 | 2680.5 (2680.2–2680.5) | 80.0 | 99.94% | 1.00 |
+| 3155 (94%) | 3 | 5.83 | 3152.4 (3152.1–3152.5) | 94.0 | 99.92% | 0.99 |
+
+Full table: [reader_alone_summary.csv](results/2026-10-29/reader_alone_summary.csv).
+
+#### Interpretation
+
+- **The reader reaches every target within 0.08%, with even CTAs.** The read rates in E7.5 therefore match the write rates they are compared with.
+- **Its ceiling was not measured in this plan.** The highest level is a target, not a run with no limit. The CTA count and chunks in flight rest on plan 04's calibration.
+- **Different layout from the two store writers.** Both writers were calibrated spread over all 8 GPCs; the reader was calibrated only in the layout it was used in.
+- **Not checked with counters.** The read rate counts requested bytes; the counter check covered only the two store writers.
+
 ## Selected settings for the tests with a co-runner
 
 | Role | Setting | Alone |
 |---|---|---|
 | Copy | 16 CTAs × 512 threads/CTA, 2048 MiB | 367.8 GB/s spread, 368.2 GB/s packed into G6 |
 | Thread-store writer | 64 CTAs × 1024 threads/CTA; rate levels 670, 1341, 2011, 2682 GB/s (20–80% of HBM peak) and no limit | exact rates at 20–80%; no limit 3194 GB/s spread over 8 GPCs |
-| TMA read co-runner (E7.5) | 48 CTAs × 3 × 64 KiB in flight, 196,864 bytes of shared memory | targets met within 0.01% (this section) |
-| TMA store writer (E7.6) | 64 CTAs × 1 × 64 KiB in flight | calibrated below |
+| TMA read co-runner (E7.5) | 48 CTAs × 3 × 64 KiB in flight, 196,864 bytes of shared memory | targets met within 0.08% in its layout ([calibration](#tma-read-co-runner)) |
+| TMA store writer (E7.6) | 64 CTAs × 1 × 64 KiB in flight | targets met within 0.03%; no limit 3257 GB/s spread ([calibration](#tma-store-writer)) |
 
 Stored in [results/2026-10-29/selection.json](results/2026-10-29/selection.json).
 
@@ -285,7 +411,7 @@ Stored in [results/2026-10-29/selection.json](results/2026-10-29/selection.json)
 
 ### Motivation
 
-This is the main test (E7.3 and E7.4 in the [plan](07_data_store_congest.md)). A fused kernel may write its results to local memory while other SMs push data to the peer GPU. Both flows leave the SMs as stores and pass through the GPC's connection into the crossbar; then the local stores go to L2 and HBM and the peer stores go to the NVLink unit. The plan expected little or no slowdown when copy and writer use different GPCs, unless a part after the GPC is shared, and a larger slowdown when they share GPCs, if the GPC's connection is a bottleneck. E7.2 showed that a GPC full of writers is already limited to about 700–800 GB/s of stores.
+This is the main test (E7.3 and E7.4 in the [plan](07_data_store_congest.md)). A fused kernel may write its results to local memory while other SMs push data to the peer GPU. Both flows leave the SMs as stores and pass through the GPC's connection into the crossbar; then the local stores go to L2 and HBM and the peer stores go to the NVLink unit. The plan expected little or no slowdown when copy and writer use different GPCs, unless a part after the GPC is shared, and a larger slowdown when they share GPCs, if the GPC's connection is a bottleneck. The [thread-store writer calibration](#thread-store-writer) showed that a GPC full of writers is already limited to about 700–800 GB/s of stores.
 
 ### Setup
 
@@ -397,7 +523,7 @@ Full tables: [contention_summary.csv](results/2026-10-29/contention_summary.csv)
 - **Local writes do not slow the copy in practice, at any rate or placement.** Every per-run change lies between −0.38% and +0.35%, within about one idle IQR. This holds up to 3155 GB/s of local writes (94% of HBM peak) next to the 368 GB/s copy, so about 3.5 TB/s of stores leave the SMs at once.
 - **Separate GPCs give a consistent but tiny slowdown; shared GPCs do not hurt more.** All 15 separate runs are negative (−0.05% to −0.38%), and the copy's issue loop grows by 7–18 µs out of 5800 µs. Shared and crowded GPCs give changes around zero or slightly positive (−0.13% to +0.35%). The plan's hypothesis that sharing a GPC's connection would slow the copy more is not supported at these settings. Why sharing gives a slightly positive change is not known; it is about one IQR.
 - **No local effect inside crowded GPCs.** Copy CTAs next to full writer GPCs and copy CTAs in GPCs without writers both shorten their issue loop by 0.1–0.6% when the writers write. (The 75 µs difference between the two groups exists with idle writers too, so it comes from SM position, not from writes.) The acknowledgement wait in crowded runs grows from about 50 to about 70 µs at 80% and no limit; that is 0.3% of the transfer and does not change throughput.
-- **The writer is not slowed either,** except in the crowded placement at no limit (−1.7%), where the packed writers are at the per-GPC limit found in E7.2 and share those GPCs with 8 copy CTAs. In the crowded placement the writer also cannot reach the 80% target (2599–2616 GB/s), as in E7.2. These two rates apply to GPU 0; the packed writer's ceiling differs by GPU.
+- **The writer is not slowed either,** except in the crowded placement at no limit (−1.7%), where the packed writers are at the per-GPC limit found in the [thread-store writer calibration](#thread-store-writer) and share those GPCs with 8 copy CTAs. In the crowded placement the writer also cannot reach the 80% target (2599–2616 GB/s), as in E7.2. These two rates apply to GPU 0; the packed writer's ceiling differs by GPU.
 - **The probe does not change the result.** Without the per-CTA timers, the copy's change is within the same range.
 - **What this does not show.** The copy is a 4-byte-store copy with spare issue capacity on its own SMs (E7.1). A copy that is limited by its own SMs, uses wider stores, or uses many more CTAs could react differently.
 
@@ -422,7 +548,7 @@ Configs: [configs/direction/](configs/direction/).
 
 ### Method
 
-As in the shared method. The reader uses 48 CTAs at every level, because plan 04 found that 24 reader CTAs stop at about 91% of peak and the top level here is 94%. Each reader CTA uses thread 0 to start the bulk copies and thread 32 to watch the stop flag. The write runs repeat the E7.3 separate setting in the same session.
+As in the shared method. The reader uses 48 CTAs at every level, because plan 04 found that 24 reader CTAs stop at about 91% of peak and the top level here is 94%; its rates alone are in its [calibration](#tma-read-co-runner). Each reader CTA uses thread 0 to start the bulk copies and thread 32 to watch the stop flag. The write runs repeat the E7.3 separate setting in the same session.
 
 ### Results
 
@@ -459,40 +585,7 @@ Idle-transfer IQR: writes 0.86 GB/s, reads 0.94 GB/s. References with idle reade
 
 E7.6 in the plan. A fused kernel on Hopper may write its output with TMA bulk stores (shared memory → global memory). They reach high write rates with one issuing thread per CTA and go through a different request path from the SM. If only the byte rate matters, the copy should react the same way as to thread stores.
 
-### Calibration of the TMA store writer alone
-
-| Knob | Role | Values |
-|---|---|---|
-| **TMA writer CTAs** | **Independent variable** | **4, 8, 16, 24, 32, 48, 64** |
-| **Chunks in flight per CTA** | **Independent variable** | **1, 2, 4** (64 KiB each) |
-| **Target rate** | **Independent variable (selected setting)** | **20, 40, 60, 80% of HBM peak, no limit** |
-| Copy | Constant | Off (copy CTA 0 times five 20 ms windows) |
-| Placement | Constant | Spread over all 8 GPCs; default shared memory |
-
-Each TMA writer CTA fills one 64 KiB block of shared memory with a launch-specific word once, then thread 0 stores it again and again with `cp.async.bulk.global.shared::cta` into its slice of the 1 GiB buffer and waits until at most (chunks in flight − 1) earlier chunks are still being written (`cp.async.bulk.wait_group`). The end time is taken after all writes have completed. After each launch, every word of the chunks written is checked.
-
-![TMA store writer alone: rate against CTAs and chunks in flight, and achieved against target](results/2026-10-29/figures/tma_writer.png)
-
-*Left: no rate limit; the 2- and 4-chunk lines lie on top of each other. Right: selected setting. Median of 3 runs.*
-
-Write rate in GB/s (median of 3 runs; % of HBM peak); "CTAs 0.60" marks a slowest ÷ fastest CTA ratio below 0.95:
-
-| TMA writer CTAs | 1 chunk in flight GB/s (% of peak) | 2 chunks | 4 chunks |
-|---|---|---|---|
-| 4 | 205 (6.1%) | 255 (7.6%) | 255 (7.6%) |
-| 8 | 411 (12.3%) | 510 (15.2%) | 510 (15.2%) |
-| 16 | 815 (24.3%) | 1020 (30.4%) | 1020 (30.4%) |
-| 24 | 1232 (36.8%) | 1530 (45.6%) | 1530 (45.6%) |
-| 32 | 1643 (49.0%) | 2039 (60.8%) | 2039 (60.8%) |
-| 48 | 2464 (73.5%) | 3056 (91.2%) | 3055 (91.1%) |
-| 64 | 3257 (97.1%) | 3283 (97.9%), CTAs 0.60 | 3285 (98.0%), CTAs 0.60 |
-
-Selected setting, **64 CTAs × 1 chunk in flight**: achieved 670, 1341, 2011, 2682 GB/s at the 20–80% targets (within 0.03%) and 3257 GB/s (97.1%) with no limit. Rule as for the thread-store writer: the fewest CTAs within 95% of the ceiling (about 3285 GB/s); 1 chunk in flight keeps the CTAs even (0.98) and gives the same CTA count as the thread-store writer. Tables: [tma_writer_sweep_summary.csv](results/2026-10-29/tma_writer_sweep_summary.csv), [tma_writer_rate_summary.csv](results/2026-10-29/tma_writer_rate_summary.csv).
-
-- **One TMA store CTA writes about 51 GB/s with 1 chunk in flight and 63.7 GB/s with 2 or more** — more than a thread-store CTA (50 GB/s) with only one issuing thread. More than 2 chunks do not help, so one CTA's bulk stores are limited at about 64 GB/s.
-- **The ceiling is the same HBM write ceiling** as with thread stores (about 3285 GB/s, 98% of peak).
-
-### Setup of the contrast
+### Setup
 
 | Knob | Role | Values |
 |---|---|---|
@@ -502,6 +595,10 @@ Selected setting, **64 CTAs × 1 chunk in flight**: achieved 670, 1341, 2011, 26
 | Copy, runs | Constant | 16 CTAs × 512 threads/CTA; 3 runs per mechanism and level, back to back at each level |
 
 Configs: [configs/mechanism/](configs/mechanism/).
+
+### Method
+
+As in the shared method. The TMA store writer setting, 64 CTAs × 1 chunk in flight, comes from its [calibration alone](#tma-store-writer).
 
 ### Results
 
@@ -686,7 +783,7 @@ Full table: [counter_check_summary.csv](results/2026-10-29/counter_check_summary
 - **Read the L2 hit fraction with care.** Nearly every sector counts as a lookup hit (0.9999+), yet all bytes still reach DRAM. For full-line writes a hit does not mean HBM traffic was saved.
 - **L2 sees 1.5 times the requested bytes, and that is not extra memory traffic.** The sectors from GPCs equal the requested bytes (×1.000). Another ×0.50–0.51 comes from `srcunit_ltcfabric`, with very little else. One reading is that half of the stores land in the far part of L2 and are counted again when they cross between parts; NVIDIA does not document this. To read L2 traffic as demand, use the sectors from GPCs, not `lts__t_sectors`.
 - **TMA stores agree too:** 65.1 GB counted of 65.2 GB requested, with the same L2 split.
-- **GPUs are not identical in the packed case.** The packed writer gives 2929 GB/s on GPU 6 under the profiler and 2920–2933 GB/s without it (3 runs), against 2811–2819 GB/s on GPUs 0 and 4. By GPC, GPU 6 gives G1 about 730 and G7 about 800 GB/s, against 686 and 727 GB/s on GPU 0. Spread settings do not show this. So the per-GPC store limit in the writer section varies by GPU; the fact of a limit stands, and its 690–810 GB/s range is a measurement on one GPU.
+- **GPUs are not identical in the packed case.** The packed writer gives 2929 GB/s on GPU 6 under the profiler and 2920–2933 GB/s without it (3 runs), against 2811–2819 GB/s on GPUs 0 and 4. By GPC, GPU 6 gives G1 about 730 and G7 about 800 GB/s, against 686 and 727 GB/s on GPU 0. Spread settings do not show this. So the per-GPC store limit in the [thread-store writer calibration](#thread-store-writer) varies by GPU; the fact of a limit stands, and its 690–810 GB/s range is a measurement on one GPU.
 - **Not measured.** This is the writer alone. The copy-plus-writer total in E7.7 (about 3195 GB/s) is still a sum of requested rates, and the copy's route through L2 was not counted.
 
 ## Deviations from the plan

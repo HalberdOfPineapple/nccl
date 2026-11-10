@@ -1,0 +1,426 @@
+{
+ "rounds": 3,
+ "rotate": true,
+ "arms": {
+  "e1_1_multicast_c4_t256": {
+   "role_a": "multicast",
+   "ctas_a": 4,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c8_t256": {
+   "role_a": "multicast",
+   "ctas_a": 8,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c16_t256": {
+   "role_a": "multicast",
+   "ctas_a": 16,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c32_t256": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c48_t256": {
+   "role_a": "multicast",
+   "ctas_a": 48,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c64_t256": {
+   "role_a": "multicast",
+   "ctas_a": 64,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c4_t512": {
+   "role_a": "multicast",
+   "ctas_a": 4,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c8_t512": {
+   "role_a": "multicast",
+   "ctas_a": 8,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c16_t512": {
+   "role_a": "multicast",
+   "ctas_a": 16,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c32_t512": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c48_t512": {
+   "role_a": "multicast",
+   "ctas_a": 48,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_multicast_c64_t512": {
+   "role_a": "multicast",
+   "ctas_a": 64,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c4_t256": {
+   "role_a": "allreduce",
+   "ctas_a": 4,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c8_t256": {
+   "role_a": "allreduce",
+   "ctas_a": 8,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c16_t256": {
+   "role_a": "allreduce",
+   "ctas_a": 16,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c32_t256": {
+   "role_a": "allreduce",
+   "ctas_a": 32,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c48_t256": {
+   "role_a": "allreduce",
+   "ctas_a": 48,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c64_t256": {
+   "role_a": "allreduce",
+   "ctas_a": 64,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c4_t512": {
+   "role_a": "allreduce",
+   "ctas_a": 4,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c8_t512": {
+   "role_a": "allreduce",
+   "ctas_a": 8,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c16_t512": {
+   "role_a": "allreduce",
+   "ctas_a": 16,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c32_t512": {
+   "role_a": "allreduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c48_t512": {
+   "role_a": "allreduce",
+   "ctas_a": 48,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_allreduce_c64_t512": {
+   "role_a": "allreduce",
+   "ctas_a": 64,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c4_t256": {
+   "role_a": "plain_store",
+   "ctas_a": 4,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c8_t256": {
+   "role_a": "plain_store",
+   "ctas_a": 8,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c16_t256": {
+   "role_a": "plain_store",
+   "ctas_a": 16,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c32_t256": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c48_t256": {
+   "role_a": "plain_store",
+   "ctas_a": 48,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c64_t256": {
+   "role_a": "plain_store",
+   "ctas_a": 64,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c4_t512": {
+   "role_a": "plain_store",
+   "ctas_a": 4,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c8_t512": {
+   "role_a": "plain_store",
+   "ctas_a": 8,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c16_t512": {
+   "role_a": "plain_store",
+   "ctas_a": 16,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c32_t512": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c48_t512": {
+   "role_a": "plain_store",
+   "ctas_a": 48,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_store_c64_t512": {
+   "role_a": "plain_store",
+   "ctas_a": 64,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c4_t256": {
+   "role_b": "reduce",
+   "ctas_b": 4,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c8_t256": {
+   "role_b": "reduce",
+   "ctas_b": 8,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c16_t256": {
+   "role_b": "reduce",
+   "ctas_b": 16,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c32_t256": {
+   "role_b": "reduce",
+   "ctas_b": 32,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c48_t256": {
+   "role_b": "reduce",
+   "ctas_b": 48,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c64_t256": {
+   "role_b": "reduce",
+   "ctas_b": 64,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c4_t512": {
+   "role_b": "reduce",
+   "ctas_b": 4,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c8_t512": {
+   "role_b": "reduce",
+   "ctas_b": 8,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c16_t512": {
+   "role_b": "reduce",
+   "ctas_b": 16,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c32_t512": {
+   "role_b": "reduce",
+   "ctas_b": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c48_t512": {
+   "role_b": "reduce",
+   "ctas_b": 48,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_reduce_c64_t512": {
+   "role_b": "reduce",
+   "ctas_b": 64,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c4_t256": {
+   "role_b": "plain_load",
+   "ctas_b": 4,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c8_t256": {
+   "role_b": "plain_load",
+   "ctas_b": 8,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c16_t256": {
+   "role_b": "plain_load",
+   "ctas_b": 16,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c32_t256": {
+   "role_b": "plain_load",
+   "ctas_b": 32,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c48_t256": {
+   "role_b": "plain_load",
+   "ctas_b": 48,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c64_t256": {
+   "role_b": "plain_load",
+   "ctas_b": 64,
+   "threads": 256,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c4_t512": {
+   "role_b": "plain_load",
+   "ctas_b": 4,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c8_t512": {
+   "role_b": "plain_load",
+   "ctas_b": 8,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c16_t512": {
+   "role_b": "plain_load",
+   "ctas_b": 16,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c32_t512": {
+   "role_b": "plain_load",
+   "ctas_b": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c48_t512": {
+   "role_b": "plain_load",
+   "ctas_b": 48,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_1_plain_load_c64_t512": {
+   "role_b": "plain_load",
+   "ctas_b": 64,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  }
+ }
+}
