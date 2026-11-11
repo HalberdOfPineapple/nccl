@@ -1,0 +1,21 @@
+{
+  "writer": {
+    "ctas": 64,
+    "chunks": 1,
+    "reason": "E1.2 writer_sweep: only 64 CTAs reach 95% of the 3279 GB/s ceiling; 1 chunk gives 3255 GB/s (97.1% of peak) with slowest/fastest CTA 0.947; 2 chunks add 0.7% with CTAs 0.65; same as plan 07"
+  },
+  "copy": {
+    "ctas": 16,
+    "threads": 512,
+    "chunk_kib": 64,
+    "slots": 2,
+    "reason": "E1.1 copy_sweep: plateau 374-375 GB/s from 12 CTAs (12 x 2 slots 374.4, 16 x 2 slots 375.1, 24-48 CTAs 374.2-374.5); 16 chosen over 12 because it is equally on the plateau and uses the same 16 G6 SMs as plan 07's copy; 2 slots needed below the plateau (1 slot: 35.8 GB/s per CTA, 2 slots: 51.1)"
+  },
+  "copy_chunk_sweep": {
+    "ctas": 4,
+    "slots": 2,
+    "reason": "chunk size and fill threads matter only where one CTA limits throughput (4 CTAs = 204 GB/s, below the plateau); not run on the plateau"
+  },
+  "colocated_ceiling_gbps": 749,
+  "colocated_ceiling_reason": "E1.2 colocated_rate: one TMA store writer in each of the 16 copy CTAs (G6), copy off, no limit; run medians [748.6, 749.7, 745.0] GB/s; 16 spread SMs gave 834 GB/s in the smoke run, so G6's store capacity likely sets this ceiling"
+}

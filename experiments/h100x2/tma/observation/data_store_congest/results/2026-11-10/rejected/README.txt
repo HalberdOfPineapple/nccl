@@ -1,0 +1,3 @@
+copy_chunk started while copy_sweep held GPUs 0,1; the guard refused the first run before launch; no record was made
+other_tenant_gpu0_1/: during E1.6 on GPUs 0,1 (2026-11-10, about 15:31 UTC) another tenant started a workload (529 MiB, then 52.7 GB, about 45% utilization; no process visible from this container). mixed_writes_p40_R2 ended with that memory present, so it may have overlapped and is excluded. The guard then refused the next run. Earlier runs began and ended with both GPUs empty. E1.6 was finished on GPUs 4,5.
+alone_writes_p40_R2_never_run.cfg: written by the excluded mixed run; its window came from that run; it was never run.
