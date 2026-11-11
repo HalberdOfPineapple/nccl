@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#23629f"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b95f0d"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="250" fill="#ffffff"/>
+  <text x="450" y="24" font-size="14" font-weight="bold" text-anchor="middle" fill="#1c2330">Three possible paths, and what each predicts when 8192 MiB is stored to the same 4 MiB</text>
+  <!-- panel 1: bypass -->
+  <g transform="translate(15,40)">
+    <rect x="0" y="0" width="280" height="200" rx="10" fill="#eef1f5" stroke="#b6bfcb"/>
+    <text x="14" y="24" font-size="14" font-weight="bold" fill="#1c2330">Bypass</text>
+    <text x="14" y="42" font-size="11.5" fill="#5a6474">Data skips L2 and goes to HBM</text>
+    <rect x="12" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="48" y="124" font-size="12" text-anchor="middle">NVLink</text>
+    <rect x="104" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#d5dae2" stroke-dasharray="4 3"/><text x="140" y="124" font-size="12" text-anchor="middle" fill="#9aa3b0">L2</text>
+    <rect x="196" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="232" y="124" font-size="12" text-anchor="middle">HBM</text>
+    <path d="M48,100 C48,62 232,62 232,98" fill="none" stroke="#23629f" stroke-width="2.4" marker-end="url(#a)"/>
+    <text x="140" y="58" font-size="12" font-weight="bold" text-anchor="middle" fill="#23629f">8192 MiB</text>
+    <text x="14" y="168" font-size="12" fill="#1c2330">L2 writes: about 0</text>
+    <text x="14" y="186" font-size="12" fill="#1c2330">HBM writes: about 8192 MiB</text>
+  </g>
+  <!-- panel 2: write-through -->
+  <g transform="translate(310,40)">
+    <rect x="0" y="0" width="280" height="200" rx="10" fill="#eef1f5" stroke="#b6bfcb"/>
+    <text x="14" y="24" font-size="14" font-weight="bold" fill="#1c2330">Write-through</text>
+    <text x="14" y="42" font-size="11.5" fill="#5a6474">Data goes through L2 and on to HBM</text>
+    <rect x="12" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="48" y="124" font-size="12" text-anchor="middle">NVLink</text>
+    <rect x="104" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="140" y="124" font-size="12" text-anchor="middle">L2</text>
+    <rect x="196" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="232" y="124" font-size="12" text-anchor="middle">HBM</text>
+    <line x1="84" y1="120" x2="102" y2="120" stroke="#23629f" stroke-width="2.4" marker-end="url(#a)"/>
+    <line x1="176" y1="120" x2="194" y2="120" stroke="#b95f0d" stroke-width="2.4" marker-end="url(#b)"/>
+    <text x="93" y="92" font-size="11" font-weight="bold" text-anchor="middle" fill="#23629f">8192</text>
+    <text x="185" y="92" font-size="11" font-weight="bold" text-anchor="middle" fill="#b95f0d">8192</text>
+    <text x="14" y="168" font-size="12" fill="#1c2330">L2 writes: about 8192 MiB</text>
+    <text x="14" y="186" font-size="12" fill="#1c2330">HBM writes: about 8192 MiB</text>
+  </g>
+  <!-- panel 3: write-back -->
+  <g transform="translate(605,40)">
+    <rect x="0" y="0" width="280" height="200" rx="10" fill="#fbf3e6" stroke="#b95f0d" stroke-width="1.5"/>
+    <text x="14" y="24" font-size="14" font-weight="bold" fill="#1c2330">Write-back  ✓ what we saw</text>
+    <text x="14" y="42" font-size="11.5" fill="#5a6474">Data stops in L2; HBM gets it later</text>
+    <rect x="12" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="48" y="124" font-size="12" text-anchor="middle">NVLink</text>
+    <rect x="104" y="100" width="72" height="40" rx="5" fill="#f2e4cc" stroke="#b6bfcb"/><text x="140" y="124" font-size="12" text-anchor="middle">L2</text>
+    <rect x="196" y="100" width="72" height="40" rx="5" fill="#fff" stroke="#b6bfcb"/><text x="232" y="124" font-size="12" text-anchor="middle">HBM</text>
+    <line x1="84" y1="120" x2="102" y2="120" stroke="#23629f" stroke-width="2.4" marker-end="url(#a)"/>
+    <line x1="176" y1="120" x2="194" y2="120" stroke="#b95f0d" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#b)"/>
+    <text x="93" y="92" font-size="11" font-weight="bold" text-anchor="middle" fill="#23629f">8192</text>
+    <text x="185" y="92" font-size="11" font-weight="bold" text-anchor="middle" fill="#b95f0d">~4</text>
+    <text x="14" y="168" font-size="12" fill="#1c2330">L2 writes: about 8192 MiB</text>
+    <text x="14" y="186" font-size="12" fill="#1c2330">HBM writes: about 4 MiB (the 4 MiB area)</text>
+  </g>
+</svg>

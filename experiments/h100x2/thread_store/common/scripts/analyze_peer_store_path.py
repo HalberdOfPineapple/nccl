@@ -185,51 +185,60 @@ def figure_bytes_follow_stored(destination, output):
     plt.close(figure)
 
 
-def figure_where_writes_come_from(destination, source, output):
-    """Left: who sends the L2 writes on the destination. Right: which GPU sees the peer stores."""
-    figure, (left, right) = plt.subplots(1, 2, figsize=(11, 3.8), sharey=True)
-    positions = [0, 1]
-    gpc_values = []
-    fabric_values = []
-    other_values = []
+def figure_l2_write_sender(destination, output):
+    """Who sends the L2 writes on the destination: peer stores against local stores, 1024 MiB each."""
+    figure, axis = plt.subplots(figsize=(7, 3.9))
+    bars = []
     for label in ('peer_f1024', 'local_f1024'):
         runs = destination[label]
-        total = median_of_runs(runs, lambda run: sector_bytes(run, 'phaseMain', L2_WRITE_SECTORS)) / GIBIBYTE
-        fabric = median_of_runs(runs, lambda run: sector_bytes(run, 'phaseMain', FABRIC_WRITE_SECTORS)) / GIBIBYTE
-        gpc = median_of_runs(runs, lambda run: sector_bytes(run, 'phaseMain', GPC_SECTORS)) / GIBIBYTE
-        gpc_values.append(gpc)
-        fabric_values.append(fabric)
-        other_values.append(total - gpc - fabric)
-    left.bar(positions, other_values, width=0.5, color=OTHER_SOURCE_COLOR, label='Neither GPC nor fabric')
-    left.bar(positions, gpc_values, width=0.5, bottom=other_values, color=GPC_SOURCE_COLOR, label='From a GPC')
-    left.bar(positions, fabric_values, width=0.5, bottom=[other + gpc for other, gpc in zip(other_values, gpc_values)], color=FABRIC_SOURCE_COLOR, label='From the L2 fabric')
-    left.set_xticks(positions)
-    left.set_xticklabels(['Peer stores from GPU 6', 'Local stores on GPU 7'])
-    left.set_title('L2 write sectors × 32 bytes on GPU 7, by who sent them', fontsize=10.5)
-    left.set_ylabel('GiB during the stores')
-    left.legend(frameon=False, fontsize=9, loc='upper left')
-    metrics = ['NVLink user bytes', 'L2 writes', 'HBM writes']
+        total = median_of_runs(runs, lambda run: sector_bytes(run, 'phaseMain', L2_WRITE_SECTORS)) / MEBIBYTE
+        fabric = median_of_runs(runs, lambda run: sector_bytes(run, 'phaseMain', FABRIC_WRITE_SECTORS)) / MEBIBYTE
+        gpc = median_of_runs(runs, lambda run: sector_bytes(run, 'phaseMain', GPC_SECTORS)) / MEBIBYTE
+        bars.append((total - gpc - fabric, gpc, fabric))
+    positions = [0, 1]
+    other = [bar[0] for bar in bars]
+    gpc = [bar[1] for bar in bars]
+    fabric = [bar[2] for bar in bars]
+    axis.bar(positions, other, width=0.5, color=OTHER_SOURCE_COLOR, label='Sender: neither of the two below')
+    axis.bar(positions, gpc, width=0.5, bottom=other, color=GPC_SOURCE_COLOR, label="Sender: this GPU's own SMs (GPC)")
+    axis.bar(positions, fabric, width=0.5, bottom=[a + b for a, b in zip(other, gpc)], color=FABRIC_SOURCE_COLOR, label="Sender: the L2's internal fabric")
+    for position, bar in zip(positions, bars):
+        axis.text(position, sum(bar) + 30, f'{sum(bar):.0f} MiB', ha='center', fontsize=9)
+    axis.set_xticks(positions)
+    axis.set_xticklabels(['Peer stores from GPU 6', 'Local stores on GPU 7'])
+    axis.set_ylabel('L2 writes on GPU 7 (MiB)')
+    axis.set_title(f'1024 MiB stored once. Median of 3 runs.\n{WORKLOAD_CAPTION}', fontsize=9.5)
+    axis.legend(frameon=False, fontsize=8.5, loc='upper left')
+    axis.grid(axis='y', linewidth=0.4, alpha=0.5)
+    set_zero_based_y(axis, 2000)
+    figure.tight_layout()
+    figure.savefig(output, dpi=160)
+    plt.close(figure)
+
+
+def figure_source_against_destination(destination, source, output):
+    """Peer stores of 1024 MiB: the same three counters read on GPU 6 and on GPU 7."""
+    figure, axis = plt.subplots(figsize=(7.5, 3.9))
     source_runs = source['peer_f1024']
     destination_runs = destination['peer_f1024']
-    source_values = [median_of_runs(source_runs, lambda run: phase_value(run, 'phaseMain', NVLINK_SEND_USER)) / GIBIBYTE,
-                     median_of_runs(source_runs, lambda run: sector_bytes(run, 'phaseMain', L2_WRITE_SECTORS)) / GIBIBYTE,
-                     median_of_runs(source_runs, lambda run: phase_value(run, 'phaseMain', HBM_WRITE)) / GIBIBYTE]
-    destination_values = [median_of_runs(destination_runs, lambda run: phase_value(run, 'phaseMain', NVLINK_RECEIVE_USER)) / GIBIBYTE,
-                          median_of_runs(destination_runs, lambda run: sector_bytes(run, 'phaseMain', L2_WRITE_SECTORS)) / GIBIBYTE,
-                          median_of_runs(destination_runs, lambda run: phase_value(run, 'phaseMain', HBM_WRITE)) / GIBIBYTE]
-    for index, (source_value, destination_value) in enumerate(zip(source_values, destination_values)):
-        right.bar(index - 0.19, source_value, width=0.34, color=NO_STORES_COLOR, label='Read on source GPU 6' if index == 0 else None)
-        right.bar(index + 0.19, destination_value, width=0.34, color=PEER_COLOR, label='Read on destination GPU 7' if index == 0 else None)
-        right.text(index - 0.19, source_value + 0.02, f'{source_value:.3f}' if source_value > 0.5 else f'{source_value:.4f}', ha='center', fontsize=8.5)
-        right.text(index + 0.19, destination_value + 0.02, f'{destination_value:.3f}', ha='center', fontsize=8.5)
-    right.set_xticks(range(len(metrics)))
-    right.set_xticklabels(metrics)
-    right.set_title('Peer stores, 1 GiB: what each GPU counted', fontsize=10.5)
-    right.legend(frameon=False, fontsize=9, loc='upper right', bbox_to_anchor=(1.0, 0.86))
-    for axis in (left, right):
-        axis.grid(axis='y', linewidth=0.4, alpha=0.5)
-        set_zero_based_y(axis, 2)
-    figure.suptitle(f'{WORKLOAD_CAPTION}. Medians of 3 runs. NVLink: bytes sent on GPU 6, bytes received on GPU 7', fontsize=10)
+    pairs = [('NVLink data bytes\n(sent on GPU 6, received on GPU 7)', NVLINK_SEND_USER, NVLINK_RECEIVE_USER, False),
+             ('L2 writes', L2_WRITE_SECTORS, L2_WRITE_SECTORS, True),
+             ('HBM writes', HBM_WRITE, HBM_WRITE, False)]
+    for index, (name, source_metric, destination_metric, in_sectors) in enumerate(pairs):
+        read = (lambda metric: (lambda run: sector_bytes(run, 'phaseMain', metric))) if in_sectors else (lambda metric: (lambda run: phase_value(run, 'phaseMain', metric)))
+        source_value = median_of_runs(source_runs, read(source_metric)) / MEBIBYTE
+        destination_value = median_of_runs(destination_runs, read(destination_metric)) / MEBIBYTE
+        axis.bar(index - 0.19, source_value, width=0.34, color=NO_STORES_COLOR, label='Read on GPU 6 (source)' if index == 0 else None)
+        axis.bar(index + 0.19, destination_value, width=0.34, color=PEER_COLOR, label='Read on GPU 7 (destination)' if index == 0 else None)
+        axis.text(index - 0.19, source_value + 20, f'{source_value:.1f}', ha='center', fontsize=8.5)
+        axis.text(index + 0.19, destination_value + 20, f'{destination_value:.1f}', ha='center', fontsize=8.5)
+    axis.set_xticks(range(len(pairs)))
+    axis.set_xticklabels([name for name, _, _, _ in pairs], fontsize=9)
+    axis.set_ylabel('MiB during the stores')
+    axis.set_title(f'Peer stores, 1024 MiB stored once. Median of 3 runs on each GPU.\n{WORKLOAD_CAPTION}', fontsize=9.5)
+    axis.legend(frameon=False, fontsize=9, loc='upper right')
+    axis.grid(axis='y', linewidth=0.4, alpha=0.5)
+    set_zero_based_y(axis, 1400)
     figure.tight_layout()
     figure.savefig(output, dpi=160)
     plt.close(figure)
@@ -262,26 +271,26 @@ def figure_held_until_eviction(destination, output):
     plt.close(figure)
 
 
-def figure_launch_boundary(validate, output):
-    """8192 MiB stored over a 4 MiB footprint: how much of it reaches HBM, by phase."""
-    cases = [('peer_f4_evictinmain0', 'Peer stores,\nevict in next launch'), ('peer_f4_evictinmain1', 'Peer stores,\nevict in same launch'),
-             ('local_f4_evictinmain0', 'Local stores,\nevict in next launch'), ('local_f4_evictinmain1', 'Local stores,\nevict in same launch')]
+def figure_repeated_stores(validate, output):
+    """8192 MiB stored to the same 4 MiB: HBM writes while storing, and later when eviction reads push L2 out."""
+    cases = [('peer_f4_evictinmain0', 'Peer stores from GPU 6', PEER_COLOR), ('local_f4_evictinmain0', 'Local stores on GPU 7', LOCAL_COLOR)]
+    no_stores_mib = phase_value(validate['none_window3ms'][0], 'phaseEvict', HBM_WRITE) / MEBIBYTE
     figure, axis = plt.subplots(figsize=(8.5, 3.9))
-    for index, (label, _) in enumerate(cases):
+    width = 0.36
+    for index, (label, name, color) in enumerate(cases):
         run = validate[label][0]
-        main_mib = phase_value(run, 'phaseMain', HBM_WRITE) / MEBIBYTE
-        evict_mib = phase_value(run, 'phaseEvict', HBM_WRITE) / MEBIBYTE
-        color = PEER_COLOR if label.startswith('peer') else LOCAL_COLOR
-        axis.bar(index, main_mib, width=0.5, color=color)
-        axis.bar(index, evict_mib, width=0.5, bottom=main_mib, color=color, alpha=0.45)
-        axis.text(index, main_mib + evict_mib + 0.2, f'{main_mib + evict_mib:.1f}', ha='center', fontsize=9)
-    axis.set_xticks(range(len(cases)))
-    axis.set_xticklabels([name for _, name in cases], fontsize=9)
+        during_mib = phase_value(run, 'phaseMain', HBM_WRITE) / MEBIBYTE
+        later_mib = phase_value(run, 'phaseEvict', HBM_WRITE) / MEBIBYTE
+        axis.bar(index - width / 2, during_mib, width=width * 0.92, color=color)
+        axis.bar(index + width / 2, later_mib, width=width * 0.92, color=color, alpha=0.45)
+        axis.text(index - width / 2, during_mib + 0.15, f'{during_mib:.1f}\nwhile storing', ha='center', fontsize=8.5)
+        axis.text(index + width / 2, later_mib + 0.15, f'{later_mib:.1f}\nlater, on eviction', ha='center', fontsize=8.5)
+    axis.bar(len(cases) + width / 2, no_stores_mib, width=width * 0.92, color=NO_STORES_COLOR, alpha=0.45)
+    axis.text(len(cases) + width / 2, no_stores_mib + 0.15, f'{no_stores_mib:.1f}\non eviction', ha='center', fontsize=8.5)
+    axis.set_xticks([0, 1, len(cases) + width / 2])
+    axis.set_xticklabels([name for _, name, _ in cases] + ['Nothing stored'])
     axis.set_ylabel('HBM bytes written on GPU 7 (MiB)')
-    axis.set_title(f'8192 MiB stored over a 4 MiB footprint, one run per case.\n{WORKLOAD_CAPTION}', fontsize=9.5)
-    axis.bar([0], [0], color=NO_STORES_COLOR, label='In the launch that has the stores')
-    axis.bar([0], [0], color=NO_STORES_COLOR, alpha=0.45, label='In the next launch (eviction reads)')
-    axis.legend(frameon=False, fontsize=9, loc='upper right')
+    axis.set_title(f'8192 MiB stored, all to the same 4 MiB (2048 passes). One run per case.\n{WORKLOAD_CAPTION}', fontsize=9.5)
     axis.grid(axis='y', linewidth=0.4, alpha=0.5)
     set_zero_based_y(axis, 8)
     figure.tight_layout()
@@ -298,9 +307,10 @@ def main():
     figures.mkdir(exist_ok=True)
     summary = {'enter': summarize_enter(destination, source), 'validate': summarize_validate(validate)}
     (results / 'peer_store_summary.json').write_text(json.dumps(summary, indent=1) + '\n')
-    figure_launch_boundary(validate, figures / 'validate_launch_boundary.png')
+    figure_repeated_stores(validate, figures / 'validate_repeated_stores.png')
     figure_bytes_follow_stored(destination, figures / 'enter_bytes_follow_stored.png')
-    figure_where_writes_come_from(destination, source, figures / 'enter_who_counts_the_stores.png')
+    figure_l2_write_sender(destination, figures / 'enter_l2_write_sender.png')
+    figure_source_against_destination(destination, source, figures / 'source_against_destination.png')
     figure_held_until_eviction(destination, figures / 'enter_held_until_eviction.png')
     print(json.dumps(summary, indent=1))
 

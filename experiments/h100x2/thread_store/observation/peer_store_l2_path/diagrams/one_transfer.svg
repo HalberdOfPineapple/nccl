@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 280" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="280" fill="#ffffff"/>
+  <text x="20" y="26" font-size="14" font-weight="bold" fill="#1c2330">One transfer: the steps run one after another (time goes left to right, not to scale)</text>
+  <text x="20" y="74" font-size="13" font-weight="bold" fill="#1c2330">GPU 7</text>
+  <text x="20" y="134" font-size="13" font-weight="bold" fill="#1c2330">GPU 6</text>
+  <!-- GPU 7 row, y 50..90 -->
+  <rect x="80" y="50" width="100" height="40" rx="5" fill="#e3e6eb" stroke="#b6bfcb" stroke-dasharray="4 3"/>
+  <text x="130" y="67" font-size="11.5" text-anchor="middle" fill="#1c2330">Fill memory</text><text x="130" y="82" font-size="11.5" text-anchor="middle" fill="#1c2330">with 0xff</text>
+  <rect x="186" y="50" width="100" height="40" rx="5" fill="#dfe8f2" stroke="#7a98bb"/>
+  <text x="236" y="67" font-size="11.5" text-anchor="middle">Clean:</text><text x="236" y="82" font-size="11.5" text-anchor="middle">read 256 MiB</text>
+  <rect x="292" y="50" width="90" height="40" rx="5" fill="#f4f5f7" stroke="#b6bfcb"/>
+  <text x="337" y="67" font-size="11.5" text-anchor="middle">Wait</text><text x="337" y="82" font-size="11.5" text-anchor="middle">5 ms</text>
+  <rect x="388" y="50" width="190" height="40" rx="5" fill="#ffffff" stroke="#23629f" stroke-width="1.5"/>
+  <text x="483" y="67" font-size="11.5" text-anchor="middle">Receiver: says "ready",</text><text x="483" y="82" font-size="11.5" text-anchor="middle">waits for "done", replies</text>
+  <rect x="584" y="50" width="90" height="40" rx="5" fill="#f4f5f7" stroke="#b6bfcb"/>
+  <text x="629" y="67" font-size="11.5" text-anchor="middle">Wait</text><text x="629" y="82" font-size="11.5" text-anchor="middle">5 ms</text>
+  <rect x="680" y="50" width="100" height="40" rx="5" fill="#dfe8f2" stroke="#7a98bb"/>
+  <text x="730" y="67" font-size="11.5" text-anchor="middle">Evict:</text><text x="730" y="82" font-size="11.5" text-anchor="middle">read 256 MiB</text>
+  <rect x="786" y="50" width="94" height="40" rx="5" fill="#f4f5f7" stroke="#b6bfcb"/>
+  <text x="833" y="67" font-size="11.5" text-anchor="middle">Check every</text><text x="833" y="82" font-size="11.5" text-anchor="middle">value</text>
+  <!-- GPU 6 row -->
+  <rect x="388" y="112" width="190" height="40" rx="5" fill="#23629f"/>
+  <text x="483" y="129" font-size="11.5" text-anchor="middle" fill="#ffffff">STORES to GPU 7's memory</text><text x="483" y="144" font-size="11.5" text-anchor="middle" fill="#ffffff">start after "ready"</text>
+  <!-- why row -->
+  <text x="130" y="182" font-size="11" text-anchor="middle" fill="#5a6474">lets the check</text><text x="130" y="196" font-size="11" text-anchor="middle" fill="#5a6474">spot missing data</text>
+  <text x="236" y="182" font-size="11" text-anchor="middle" fill="#5a6474">pushes old data</text><text x="236" y="196" font-size="11" text-anchor="middle" fill="#5a6474">out of L2</text>
+  <text x="337" y="182" font-size="11" text-anchor="middle" fill="#5a6474">let traffic</text><text x="337" y="196" font-size="11" text-anchor="middle" fill="#5a6474">settle</text>
+  <text x="483" y="182" font-size="11" text-anchor="middle" fill="#23629f" font-weight="bold">the step we measure</text>
+  <text x="629" y="182" font-size="11" text-anchor="middle" fill="#5a6474">does L2 empty</text><text x="629" y="196" font-size="11" text-anchor="middle" fill="#5a6474">by itself?</text>
+  <text x="730" y="182" font-size="11" text-anchor="middle" fill="#b95f0d" font-weight="bold">HBM writes here =</text><text x="730" y="196" font-size="11" text-anchor="middle" fill="#b95f0d" font-weight="bold">data L2 still held</text>
+  <text x="833" y="182" font-size="11" text-anchor="middle" fill="#5a6474">data must</text><text x="833" y="196" font-size="11" text-anchor="middle" fill="#5a6474">be correct</text>
+  <line x1="80" y1="216" x2="880" y2="216" stroke="#b6bfcb"/>
+  <text x="130" y="238" font-size="11" text-anchor="middle" fill="#5a6474">not counted</text>
+  <text x="533" y="238" font-size="11.5" text-anchor="middle" fill="#1c2330">Each box after the first is a separate GPU kernel. The profiler gives one set of counter values per kernel,</text>
+  <text x="533" y="256" font-size="11.5" text-anchor="middle" fill="#1c2330">so we know which step each byte belongs to.</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#23629f"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="330" fill="#ffffff"/>
+  <!-- GPU 6 -->
+  <rect x="20" y="20" width="290" height="290" rx="10" fill="#eef1f5" stroke="#b6bfcb"/>
+  <text x="36" y="44" font-size="15" font-weight="bold" fill="#1c2330">GPU 6 (source)</text>
+  <rect x="40" y="62" width="250" height="58" rx="6" fill="#ffffff" stroke="#b6bfcb"/>
+  <text x="165" y="86" font-size="13" text-anchor="middle" fill="#1c2330">Threads that do the stores</text>
+  <text x="165" y="104" font-size="12" text-anchor="middle" fill="#5a6474">16 CTAs × 512 threads/CTA</text>
+  <rect x="40" y="150" width="115" height="50" rx="6" fill="#ffffff" stroke="#b6bfcb"/>
+  <text x="97" y="180" font-size="13" text-anchor="middle" fill="#1c2330">L2 cache</text>
+  <rect x="175" y="150" width="115" height="50" rx="6" fill="#ffffff" stroke="#b6bfcb"/>
+  <text x="232" y="180" font-size="13" text-anchor="middle" fill="#1c2330">HBM</text>
+  <circle cx="44" cy="150" r="11" fill="#7b8594"/><text x="44" y="155" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">D</text>
+  <circle cx="179" cy="150" r="11" fill="#7b8594"/><text x="179" y="155" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">E</text>
+  <text x="36" y="232" font-size="12" fill="#1c2330">D = L2 writes on GPU 6</text>
+  <text x="36" y="250" font-size="12" fill="#1c2330">E = HBM writes on GPU 6</text>
+  <text x="36" y="280" font-size="11.5" fill="#5a6474">If the stores passed through GPU 6's</text>
+  <text x="36" y="296" font-size="11.5" fill="#5a6474">memory, D or E would go up.</text>
+  <!-- GPU 7 -->
+  <rect x="350" y="20" width="530" height="290" rx="10" fill="#eef1f5" stroke="#b6bfcb"/>
+  <text x="366" y="44" font-size="15" font-weight="bold" fill="#1c2330">GPU 7 (destination)</text>
+  <rect x="380" y="62" width="140" height="58" rx="6" fill="#ffffff" stroke="#b6bfcb"/>
+  <text x="450" y="88" font-size="13" text-anchor="middle" fill="#1c2330">NVLink</text>
+  <text x="450" y="105" font-size="13" text-anchor="middle" fill="#1c2330">receive</text>
+  <rect x="570" y="62" width="130" height="58" rx="6" fill="#ffffff" stroke="#b6bfcb"/>
+  <text x="635" y="96" font-size="13" text-anchor="middle" fill="#1c2330">L2 cache</text>
+  <rect x="750" y="62" width="110" height="58" rx="6" fill="#ffffff" stroke="#b6bfcb"/>
+  <text x="805" y="96" font-size="13" text-anchor="middle" fill="#1c2330">HBM</text>
+  <circle cx="384" cy="62" r="11" fill="#23629f"/><text x="384" y="67" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">A</text>
+  <circle cx="574" cy="62" r="11" fill="#23629f"/><text x="574" y="67" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">B</text>
+  <circle cx="754" cy="62" r="11" fill="#23629f"/><text x="754" y="67" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">C</text>
+  <line x1="520" y1="91" x2="568" y2="91" stroke="#23629f" stroke-width="2.4" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <text x="544" y="84" font-size="13" font-weight="bold" text-anchor="middle" fill="#23629f">?</text>
+  <line x1="700" y1="91" x2="748" y2="91" stroke="#23629f" stroke-width="2.4" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <text x="724" y="84" font-size="13" font-weight="bold" text-anchor="middle" fill="#23629f">?</text>
+  <text x="366" y="160" font-size="13" font-weight="bold" fill="#1c2330">What each counter tells us</text>
+  <text x="366" y="184" font-size="12" fill="#1c2330">A = bytes that arrived over NVLink</text>
+  <text x="366" y="202" font-size="12" fill="#1c2330">B = bytes written into the L2 cache</text>
+  <text x="366" y="220" font-size="12" fill="#1c2330">C = bytes written into HBM (main memory)</text>
+  <text x="366" y="256" font-size="11.5" fill="#5a6474">The dashed arrows are the question: does the data go</text>
+  <text x="366" y="272" font-size="11.5" fill="#5a6474">through B on its way to C, and does it stop there?</text>
+  <text x="366" y="296" font-size="11.5" fill="#5a6474">A counter is a running total kept by the GPU hardware.</text>
+  <!-- link -->
+  <line x1="290" y1="91" x2="378" y2="91" stroke="#23629f" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="334" y="80" font-size="12" font-weight="bold" text-anchor="middle" fill="#23629f">NVLink</text>
+</svg>
