@@ -321,10 +321,14 @@ __device__ void issueBulkCopy(KernelArguments arguments, uint8_t* destination, u
   const unsigned long long loopStartCycles = clock64();
   #pragma unroll 1
   for (size_t chunk = 0; chunk < chunkCount; ++chunk) {
+    // chunk % slotCount marks the index of the slot in SMEM (ring-based) to be written to
+    // `slots` is the pointer to the start of this area. TMA will read data from this area as a buffer
+    // `slot` then becomes the new pointer to the slot to be written to.
     uint8_t* slot = slots + size_t(chunk % slotCount) * chunkBytes;
     unsigned long long slotFreeCycles = 0;
     if (threadIdx.x == 0) {
       unsigned long long waitStartCycles = clock64();
+      // Wait for the bulk store of the slot that will be overwritten next to finish reading it.
       waitForBulkSourceReads(slotCount - 1);
       slotFreeCycles = clock64();
       slotWaitCycles += slotFreeCycles - waitStartCycles;

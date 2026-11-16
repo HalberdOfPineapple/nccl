@@ -1,0 +1,1230 @@
+<title>TMA Congestion Procedure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, the same look as plan 07's data_paths.html; each diagram sits in its own sideways-scrolling frame. Copy = blue, co-runner = orange, as in every figure of the series. */
+:root {
+  --bg:#f5f6f8; --fg:#1c2330; --muted:#5a6474; --panel:#ffffff; --panel-alt:#eceff4; --line:#b6bfcb;
+  --copy:#23629f; --copy-soft:#cfe0f1; --co:#b95f0d; --co-soft:#f6dcc2; --recv:#5b6b2f; --recv-soft:#e1e8c9;
+  --idle:#dde2e9; --wait:#9aa4b2; --hit:#b3261e; --hit-soft:#f6d6d3; --ok:#2f6b46; --ok-soft:#d5eadb;
+  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#11151b; --fg:#e5e8ed; --muted:#9ba5b3; --panel:#1b2129; --panel-alt:#161b22; --line:#3b4553;
+  --copy:#6ea8e6; --copy-soft:#1d3550; --co:#eea255; --co-soft:#4a3218; --recv:#b5c77a; --recv-soft:#2f3720;
+  --idle:#2a313b; --wait:#6c7685; --hit:#f08b83; --hit-soft:#4a211e; --ok:#7fc79a; --ok-soft:#1d3a28; color-scheme:dark; } }
+:root[data-theme="dark"] {
+  --bg:#11151b; --fg:#e5e8ed; --muted:#9ba5b3; --panel:#1b2129; --panel-alt:#161b22; --line:#3b4553;
+  --copy:#6ea8e6; --copy-soft:#1d3550; --co:#eea255; --co-soft:#4a3218; --recv:#b5c77a; --recv-soft:#2f3720;
+  --idle:#2a313b; --wait:#6c7685; --hit:#f08b83; --hit-soft:#4a211e; --ok:#7fc79a; --ok-soft:#1d3a28; color-scheme:dark; }
+body { background:var(--bg); color:var(--fg); font:15px/1.55 var(--sans); }
+.page { max-width:1060px; margin:0 auto; padding-block:32px 64px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); display:grid; gap:44px; }
+header { display:grid; gap:10px; }
+h1 { font-size:1.8rem; font-weight:600; margin:0; text-wrap:balance; }
+h2 { font-size:1.25rem; font-weight:600; margin:0; text-wrap:balance; }
+h3 { font-size:1rem; font-weight:600; margin:0; }
+p { margin:0; max-width:70ch; }
+.lead { color:var(--muted); }
+.eyebrow { font:500 .75rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+section { display:grid; gap:14px; min-width:0; }
+nav { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:.9rem; }
+nav a { color:var(--copy); text-decoration:none; border-bottom:1px solid transparent; }
+nav a:hover, nav a:focus-visible { border-bottom-color:var(--copy); outline:none; }
+.frame { overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; }
+.frame svg { display:block; width:100%; min-width:780px; height:auto; }
+.note { font-size:.88rem; color:var(--muted); }
+ul.facts { margin:0; padding-left:1.1em; display:grid; gap:4px; max-width:75ch; }
+table { border-collapse:collapse; font-size:.9rem; font-variant-numeric:tabular-nums; min-width:640px; width:100%; }
+th, td { text-align:left; padding:6px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { font-weight:600; color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+.tablewrap { overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:8px; }
+.pill { display:inline-block; padding:1px 8px; border-radius:999px; font:500 .8rem/1.6 var(--mono); }
+.pill.hit { background:var(--hit-soft); color:var(--hit); }
+.pill.ok { background:var(--ok-soft); color:var(--ok); }
+.pill.co { background:var(--co-soft); color:var(--co); }
+code, .mono { font-family:var(--mono); font-size:.86em; }
+/* SVG text and shapes take theme tokens */
+svg text { fill:var(--fg); font-family:var(--sans); font-size:12px; }
+svg .small { font-size:10.5px; fill:var(--muted); }
+svg .mono { font-family:var(--mono); font-size:10.5px; }
+svg .title { font-weight:600; font-size:13px; }
+svg .box { fill:var(--panel-alt); stroke:var(--line); stroke-width:1; }
+svg .gpu { fill:none; stroke:var(--line); stroke-width:1.2; stroke-dasharray:5 4; }
+svg .copybox { fill:var(--copy-soft); stroke:var(--copy); stroke-width:1.2; }
+svg .cobox { fill:var(--co-soft); stroke:var(--co); stroke-width:1.2; }
+svg .codash { fill:var(--co-soft); stroke:var(--co); stroke-width:1.2; stroke-dasharray:4 3; }
+svg .recvbox { fill:var(--recv-soft); stroke:var(--recv); stroke-width:1.2; }
+svg .copyline { stroke:var(--copy); stroke-width:4; fill:none; }
+svg .coline { stroke:var(--co); stroke-width:3; fill:none; }
+svg .coread { stroke:var(--co); stroke-width:2.5; fill:none; stroke-dasharray:6 4; }
+svg .sigline { stroke:var(--muted); stroke-width:1.2; fill:none; stroke-dasharray:3 3; }
+svg .axis { stroke:var(--line); stroke-width:1; }
+svg .waitbar { fill:var(--wait); }
+svg .fillbar { fill:var(--copy); }
+svg .readA { fill:var(--copy-soft); stroke:var(--copy); stroke-width:1; }
+svg .readB { fill:var(--panel); stroke:var(--copy); stroke-width:1; stroke-dasharray:3 2; }
+svg .fly { stroke:var(--copy); stroke-width:2; }
+svg .hitbox { fill:var(--hit-soft); stroke:var(--hit); stroke-width:1; }
+svg .hittext { fill:var(--hit); font-weight:600; }
+svg .oktext { fill:var(--ok); font-weight:600; }
+svg .idlebox { fill:var(--idle); stroke:var(--line); stroke-width:1; }
+svg .bracket { stroke:var(--fg); stroke-width:1; fill:none; }
+/* Run structure chips */
+.runrow { display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+.chip { width:30px; height:30px; border-radius:4px; display:grid; place-items:center; font:500 .78rem/1 var(--mono); }
+.chip.w { background:var(--idle); color:var(--muted); }
+.chip.i { background:var(--copy-soft); color:var(--copy); border:1.5px solid var(--copy); }
+.chip.a { background:var(--co-soft); color:var(--co); border:1.5px solid var(--co); }
+.runlabel { width:150px; font-size:.85rem; color:var(--muted); }
+.rungrid { display:grid; gap:8px; }
+.rungrid > div { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+/* SM map */
+.tabs { display:flex; flex-wrap:wrap; gap:6px; }
+.tabs button { font:500 .85rem/1.2 var(--sans); padding:7px 12px; border-radius:6px; border:1px solid var(--line); background:var(--panel); color:var(--fg); cursor:pointer; }
+.tabs button[aria-selected="true"] { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+.tabs button:focus-visible { outline:2px solid var(--copy); outline-offset:2px; }
+.gpus { display:grid; gap:16px; }
+.gpuname { font-weight:600; font-size:.95rem; margin-bottom:6px; }
+.gpcs { display:grid; grid-template-columns:repeat(9, minmax(64px, 1fr)); gap:6px; min-width:640px; }
+.gpc { background:var(--panel-alt); border:1px solid var(--line); border-radius:6px; padding:6px; display:grid; gap:5px; align-content:start; }
+.gpc .name { font:500 .72rem/1 var(--mono); color:var(--muted); }
+.sms { display:grid; grid-template-columns:repeat(4, 1fr); gap:3px; }
+.sm { aspect-ratio:1; border-radius:2px; background:var(--idle); max-width:100%; }
+.sm.copy { background:var(--copy); }
+.sm.writer { background:var(--co); }
+.sm.receiver { background:var(--recv); }
+.sm.both { background:linear-gradient(135deg, var(--copy) 0 55%, var(--co) 55% 100%); }
+.maplegend { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:.85rem; color:var(--muted); }
+.maplegend span { display:inline-flex; gap:6px; align-items:center; }
+.maplegend i { width:12px; height:12px; border-radius:2px; display:inline-block; }
+/* Schedule lanes */
+.lanes { display:grid; gap:10px; min-width:760px; }
+.lane { display:grid; grid-template-columns:110px 1fr; gap:10px; align-items:center; }
+.lane .who { font:500 .85rem/1.2 var(--mono); }
+.blocks { display:flex; gap:4px; flex-wrap:nowrap; }
+.blk { padding:6px 8px; border-radius:4px; font-size:.78rem; line-height:1.25; white-space:nowrap; border:1px solid var(--line); background:var(--panel-alt); }
+.blk.cal { background:var(--copy-soft); border-color:var(--copy); }
+.blk.test { background:var(--co-soft); border-color:var(--co); }
+.blk.bad { background:var(--hit-soft); border-color:var(--hit); color:var(--hit); }
+.blk.gap { background:transparent; border-style:dashed; color:var(--muted); }
+.sessionbreak { font:500 .75rem/1 var(--mono); color:var(--muted); padding:6px 4px; }
+/* Per-experiment data-path cards (section 1, generated by draw_procedure_paths.py) */
+.expcard { display:grid; gap:10px; padding-top:18px; border-top:1px solid var(--line); min-width:0; }
+.expcard h3 { font-size:1.08rem; }
+.expcard h4 { font-size:.9rem; font-weight:600; margin:6px 0 0; color:var(--muted); }
+.question { font-style:italic; color:var(--muted); }
+table.runs { min-width:560px; }
+table.runs th { width:110px; text-transform:none; letter-spacing:0; font-size:.85rem; color:var(--fg); }
+.pathlegend { display:flex; flex-wrap:wrap; gap:8px 20px; font-size:.86rem; color:var(--muted); }
+.pathlegend span { display:inline-flex; gap:8px; align-items:center; }
+.lg { display:inline-block; width:26px; height:0; }
+.lg.copy { border-top:4px solid var(--copy); }
+.lg.co { border-top:3px solid var(--co); }
+.lg.coread { border-top:3px dashed var(--co); }
+.lg.shared { height:12px; border:2px dashed var(--hit); border-radius:3px; width:22px; }
+.lg.idle { height:12px; background:var(--idle); opacity:.6; border-radius:2px; width:22px; }
+.expindex { font-size:.85rem; }
+svg .end { text-anchor:end; }
+svg .faded { opacity:.5; }
+svg .markcopy { fill:var(--copy); }
+svg .markco { fill:var(--co); }
+svg .marksig { fill:var(--muted); }
+svg .sharedmark { fill:none; stroke:var(--hit); stroke-width:2; stroke-dasharray:6 3; }
+svg .sharedtext { fill:var(--hit); font-size:10px; font-weight:600; }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+
+<div class="page">
+<header>
+  <span class="eyebrow">h100x2 · tma · observation · plan 01 · 2026-11-10</span>
+  <h1>TMA push next to TMA memory co-runners: how the experiment works</h1>
+  <p class="lead">This page shows what runs where, how one copy CTA moves data, which timers measure what, how runs are paired, and how SMs, shared memory and GPUs were shared out. Numbers come from the <a href="README.md">report</a>; the SM maps are drawn from real run records.</p>
+  <nav aria-label="Sections">
+    <a href="#path">Data path</a><a href="#cta">One copy CTA</a><a href="#pipeline">Chunk pipeline</a><a href="#transfer">Transfer timers</a><a href="#runs">Run structure</a><a href="#sms">SM layout</a><a href="#gpus">GPU schedule</a><a href="#results">Results</a>
+  </nav>
+</header>
+
+<!-- data-path diagrams: generated by common/scripts/draw_procedure_paths.py -->
+<section id="path">
+  <span class="eyebrow">1 · Data paths, one per experiment</span>
+  <h2>What each experiment runs, and where its bytes go</h2>
+  <p>Every diagram has the same layout: SMs at the top, HBM at the bottom, source GPU on the left, destination on the right. Only the roles that run in that experiment are drawn in color; other SMs hold idle CTAs. A red dashed outline marks a part that both flows pass through in that experiment.</p>
+  <div class="pathlegend"><span><i class="lg copy"></i>Copy bytes</span><span><i class="lg co"></i>Co-runner writes</span><span><i class="lg coread"></i>Co-runner reads</span><span><i class="lg shared"></i>Part both flows use</span><span><i class="lg idle"></i>Idle CTAs</span></div>
+  <nav class="expindex" aria-label="Experiments"><a href="#e11">E1.1</a> <a href="#e12">E1.2</a> <a href="#e13">E1.3</a> <a href="#e15">E1.5</a> <a href="#follow">Follow-up</a> <a href="#e16">E1.6</a> <a href="#e17">E1.7</a> <a href="#e18">E1.8</a></nav>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><marker id="arrowCopy" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="markcopy" d="M0,0 L10,5 L0,10 z"/></marker><marker id="arrowCo" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="markco" d="M0,0 L10,5 L0,10 z"/></marker><marker id="arrowSig" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="marksig" d="M0,0 L10,5 L0,10 z"/></marker></defs></svg>
+<article class="expcard" id="e11">
+  <h3>E1.1 · TMA push alone</h3>
+  <p class="question">How fast can the TMA push go, and how many CTAs does it need?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>1–48 CTAs × 1–3 slots × 16–64 KiB chunks × 128–1024 fill threads/CTA, packed from G6</td></tr><tr><th scope="row">Co-runner</th><td>None; every other SM holds an idle CTA</td></tr><tr><th scope="row">Varied</th><td>Copy CTAs, slots, chunk size, fill threads</td></tr><tr><th scope="row">GPUs</th><td>0 → 1</td></tr></tbody></table></div>
+  <div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="TMA push alone: copy path from G6 over NVLink to destination HBM; other SMs idle">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="idlebox faded" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Other SMs: idle CTAs</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (not used)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="24" y="398">Plateau ≈ 375 GB/s from 12 CTAs; one CTA ≈ 51 GB/s</text>
+    <text class="small" x="24" y="414">Selected: 16 CTAs × 2 slots × 64 KiB × 512 fill threads/CTA (375.1 GB/s)</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="e12">
+  <h3>E1.2 · Co-runners alone</h3>
+  <p class="question">How fast can each co-runner go, and does its rate limit hold?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>Off; copy CTA 0 only times six 20 ms windows</td></tr><tr><th scope="row">Co-runners</th><td>TMA store writer, TMA reader, and a writer on the copy&#x27;s SMs, each in its own runs</td></tr><tr><th scope="row">Varied</th><td>Writer CTAs 4–64 × 1–2 chunks; target rate 20–80% of HBM peak and no limit</td></tr><tr><th scope="row">GPUs</th><td>4 → 5</td></tr></tbody></table></div>
+  <h4>TMA store writer</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="TMA store writer alone writing to source HBM">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="idlebox faded" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">G6 SMs: idle CTAs</text>
+    <rect class="cobox" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">TMA store writer × 64 CTAs</text>
+    <text class="small" x="332" y="81">spread over the 7 GPCs other than G6</text>
+    <rect class="box" x="332" y="88" width="211" height="56" rx="4"/>
+    <text x="342" y="108">Thread 0: one 64 KiB chunk, 1 in flight</text>
+    <text class="small" x="342" y="125">stores it again and again into</text>
+    <text class="small" x="342" y="139">its slice of a local 1 GiB buffer</text>
+    <rect class="box" x="332" y="168" width="211" height="18" rx="3"/>
+    <text class="small" x="340" y="181">TMA unit / SM&#x27;s way out</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="idlebox faded" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">idle in these runs</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (not used)</text>
+    <path class="coline" d="M437,144 L437,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,186 L437,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,240 L437,252" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,280 L470,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,318 L470,328" marker-end="url(#arrowCo)"/>
+    <text class="title" x="24" y="398">Ceiling 3255 GB/s (97% of HBM peak); targets met within 0.02%</text>
+    <text class="small" x="24" y="414"></text>
+  </svg>
+  </div>
+  <h4>TMA read co-runner</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="TMA reader alone reading from source HBM">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="idlebox faded" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">G6 SMs: idle CTAs</text>
+    <rect class="cobox" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">TMA reader × 48 CTAs</text>
+    <text class="small" x="332" y="81">spread over the 7 GPCs other than G6</text>
+    <rect class="box" x="332" y="88" width="211" height="56" rx="4"/>
+    <text x="342" y="108">Thread 0: reads 64 KiB chunks</text>
+    <text class="small" x="342" y="125">into shared memory, 3 in flight</text>
+    <text class="small" x="342" y="139">from a local 1 GiB buffer</text>
+    <rect class="box" x="332" y="168" width="211" height="18" rx="3"/>
+    <text class="small" x="340" y="181">TMA unit / SM&#x27;s way out</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (reader buffer, 1 GiB)</text>
+    <rect class="idlebox faded" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">idle in these runs</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (not used)</text>
+    <path class="coread" d="M400,328 L400,320" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,292 L400,282" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,252 L400,242" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,212 L400,188" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,166 L400,146" marker-end="url(#arrowCo)"/>
+    <text class="title" x="24" y="398">No-limit rate 3177 GB/s; targets met within 0.02%</text>
+    <text class="small" x="24" y="414"></text>
+  </svg>
+  </div>
+  <h4>Writer on the copy&#x27;s SMs</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="TMA writer in the last two warps of the 16 copy CTAs, copy off">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="box" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6), copy off</text>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <rect class="idlebox faded" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Other SMs: idle CTAs</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="idlebox faded" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">idle in these runs</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (not used)</text>
+    <rect class="codash" x="40" y="126" width="104" height="32" rx="4"/>
+    <text x="46" y="140">TMA writer</text>
+    <text class="small" x="46" y="153">last 2 warps</text>
+    <path class="coline" d="M144,142 L156,142" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,156 L250,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,186 L250,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,240 L250,287 L505,287 L505,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M505,318 L505,328" marker-end="url(#arrowCo)"/>
+    <text class="title" x="24" y="398">Ceiling 749 GB/s (≈ 47 GB/s per SM)</text>
+    <text class="small" x="24" y="414">Levels of E1.5 are 25, 50, 75% of this ceiling</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="e13">
+  <h3>E1.3 · TMA writes on other SMs of the source GPU</h3>
+  <p class="question">Does a TMA writer on other SMs slow the TMA push?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>16 CTAs × 2 slots, G6</td></tr><tr><th scope="row">Co-runner</th><td>TMA store writer, 64 CTAs × 1 chunk, the 7 GPCs other than G6</td></tr><tr><th scope="row">Varied</th><td>Writer target: idle, 670, 1341, 2011, 2682 GB/s, no limit</td></tr><tr><th scope="row">GPUs</th><td>0 → 1</td></tr></tbody></table></div>
+  <div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Copy from G6 over NVLink and TMA writer from other SMs into source HBM; they share the crossbar">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="cobox" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">TMA store writer × 64 CTAs</text>
+    <text class="small" x="332" y="81">spread over the 7 GPCs other than G6</text>
+    <rect class="box" x="332" y="88" width="211" height="56" rx="4"/>
+    <text x="342" y="108">Thread 0: one 64 KiB chunk, 1 in flight</text>
+    <text class="small" x="342" y="125">stores it again and again into</text>
+    <text class="small" x="342" y="139">its slice of a local 1 GiB buffer</text>
+    <rect class="box" x="332" y="168" width="211" height="18" rx="3"/>
+    <text class="small" x="340" y="181">TMA unit / SM&#x27;s way out</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <path class="coline" d="M437,144 L437,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,186 L437,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,240 L437,252" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,280 L470,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,318 L470,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="oktext" x="24" y="398">Copy +0.02% to +0.14%: no change</text>
+    <text class="small" x="24" y="414">Writer not slowed either (0.0% to −0.1%)</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="e15">
+  <h3>E1.5 · TMA writes from the same SMs as the push</h3>
+  <p class="question">Does a TMA writer slow the push more when it shares the push&#x27;s SMs?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>16 CTAs × 2 slots, G6</td></tr><tr><th scope="row">Arm A</th><td>One TMA store writer in the last two warps of each copy CTA</td></tr><tr><th scope="row">Arm B</th><td>16 TMA store writer CTAs on the 7 GPCs other than G6</td></tr><tr><th scope="row">Varied</th><td>Writer target: idle, 187, 374, 562 GB/s (25–75% of 749 GB/s), no limit</td></tr><tr><th scope="row">GPUs</th><td>4 → 5</td></tr></tbody></table></div>
+  <h4>Arm A · writer on the same SMs</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Copy and TMA writer in the same 16 SMs share the TMA unit, the SM way out, G6 and the crossbar">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="idlebox faded" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Other SMs: idle CTAs</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <rect class="codash" x="40" y="126" width="104" height="32" rx="4"/>
+    <text x="46" y="140">TMA writer</text>
+    <text class="small" x="46" y="153">last 2 warps</text>
+    <path class="coline" d="M144,142 L156,142" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,156 L250,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,186 L250,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,240 L250,287 L505,287 L505,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M505,318 L505,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="155" y="125" width="130" height="34" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="37" y="165" width="252" height="24" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="25" y="211" width="276" height="32" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="hittext" x="24" y="398">Copy −6.1% to −6.3% at every level</text>
+    <text class="small" x="24" y="414">Writer capped at ≈ 237 GB/s during the copy (−68% at no limit)</text>
+  </svg>
+  </div>
+  <h4>Arm B · writer on 16 other SMs</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Copy in G6 and 16 TMA writer CTAs in other GPCs share only the crossbar">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="cobox" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">TMA store writer × 16 CTAs</text>
+    <text class="small" x="332" y="81">spread over the 7 GPCs other than G6</text>
+    <rect class="box" x="332" y="88" width="211" height="56" rx="4"/>
+    <text x="342" y="108">Thread 0: one 64 KiB chunk, 1 in flight</text>
+    <text class="small" x="342" y="125">stores it again and again into</text>
+    <text class="small" x="342" y="139">its slice of a local 1 GiB buffer</text>
+    <rect class="box" x="332" y="168" width="211" height="18" rx="3"/>
+    <text class="small" x="340" y="181">TMA unit / SM&#x27;s way out</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <path class="coline" d="M437,144 L437,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,186 L437,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,240 L437,252" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,280 L470,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,318 L470,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="oktext" x="24" y="398">Copy +0.01% to +0.05%: no change</text>
+    <text class="small" x="24" y="414">Writer not slowed</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="follow">
+  <h3>Follow-up · same SMs, low rates, TMA vs thread stores</h3>
+  <p class="question">Does the same-SM loss start with the first bytes, and does it need the TMA unit?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>16 CTAs × 2 slots, G6</td></tr><tr><th scope="row">Arm A</th><td>TMA store writer in the last two warps (as E1.5 arm A)</td></tr><tr><th scope="row">Arm B</th><td>Thread-store writer: all 64 threads of the last two warps, 16-byte stores, no TMA</td></tr><tr><th scope="row">Varied</th><td>Writer target: idle, 7, 37, 75, 187 GB/s, no limit</td></tr><tr><th scope="row">GPUs</th><td>4 → 5</td></tr></tbody></table></div>
+  <h4>Arm A · TMA writer on the same SMs</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="TMA writer on the copy SMs, same layout as E1.5 arm A">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="idlebox faded" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Other SMs: idle CTAs</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <rect class="codash" x="40" y="126" width="104" height="32" rx="4"/>
+    <text x="46" y="140">TMA writer</text>
+    <text class="small" x="46" y="153">last 2 warps</text>
+    <path class="coline" d="M144,142 L156,142" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,156 L250,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,186 L250,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M250,240 L250,287 L505,287 L505,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M505,318 L505,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="155" y="125" width="130" height="34" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="37" y="165" width="252" height="24" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="25" y="211" width="276" height="32" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="hittext" x="24" y="398">Copy −0.19% at 7 GB/s → −6.4% at 187 GB/s</text>
+    <text class="small" x="24" y="414">Grows with the writer&#x27;s bytes until the writer is capped</text>
+  </svg>
+  </div>
+  <h4>Arm B · thread stores on the same SMs (TMA unit not used by the writer)</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Thread-store writer on the copy SMs bypasses the TMA unit but shares the SM way out, G6 and the crossbar">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="idlebox faded" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Other SMs: idle CTAs</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <rect class="codash" x="40" y="126" width="104" height="32" rx="4"/>
+    <text x="46" y="140">Thread stores</text>
+    <text class="small" x="46" y="153">2 warps, 64 thr.</text>
+    <path class="coline" d="M124,158 L124,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M124,186 L124,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M124,240 L124,287 L505,287 L505,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M505,318 L505,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="37" y="165" width="252" height="24" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="25" y="211" width="276" height="32" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="hittext" x="24" y="398">Copy −0.14% at 7 GB/s → −18.0% with no limit</text>
+    <text class="small" x="24" y="414">So the TMA unit is not needed: the shared part is on the SM&#x27;s way out or after it</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="e16">
+  <h3>E1.6 · TMA reads instead of TMA writes</h3>
+  <p class="question">Does the direction of local traffic matter?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>16 CTAs × 2 slots, G6</td></tr><tr><th scope="row">Arm A</th><td>TMA read co-runner, 48 CTAs × 3 chunks, other 7 GPCs</td></tr><tr><th scope="row">Arm B</th><td>TMA store writer, as E1.3 (diagram above)</td></tr><tr><th scope="row">Varied</th><td>Target: idle, 671–3267 GB/s (the write rates E1.3 achieved)</td></tr><tr><th scope="row">GPUs</th><td>0 → 1, then 4 → 5</td></tr></tbody></table></div>
+  <h4>Arm A · reads (arm B is the E1.3 layout)</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Copy in G6 and TMA reads into other SMs from source HBM; they meet only in the crossbar, in opposite directions">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="cobox" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">TMA reader × 48 CTAs</text>
+    <text class="small" x="332" y="81">spread over the 7 GPCs other than G6</text>
+    <rect class="box" x="332" y="88" width="211" height="56" rx="4"/>
+    <text x="342" y="108">Thread 0: reads 64 KiB chunks</text>
+    <text class="small" x="342" y="125">into shared memory, 3 in flight</text>
+    <text class="small" x="342" y="139">from a local 1 GiB buffer</text>
+    <rect class="box" x="332" y="168" width="211" height="18" rx="3"/>
+    <text class="small" x="340" y="181">TMA unit / SM&#x27;s way out</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (reader buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <path class="coread" d="M400,328 L400,320" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,292 L400,282" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,252 L400,242" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,212 L400,188" marker-end="url(#arrowCo)"/>
+    <path class="coread" d="M400,166 L400,146" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="oktext" x="24" y="398">Reads: copy −0.00% to +0.07%; writes: +0.08% to +0.12%</text>
+    <text class="small" x="24" y="414">No change in either direction</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="e17">
+  <h3>E1.7 · TMA writes on the destination GPU</h3>
+  <p class="question">Does a writer on the destination, sharing L2 and HBM with the incoming push, slow the push?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>16 CTAs × 2 slots, G6 of the source</td></tr><tr><th scope="row">Arm A</th><td>TMA store writer, 64 CTAs × 1 chunk, on the destination&#x27;s 7 GPCs other than G6</td></tr><tr><th scope="row">Arm B</th><td>The same writer on the source, as E1.3 (diagram above)</td></tr><tr><th scope="row">Varied</th><td>Writer target: idle, 670–2682 GB/s, no limit</td></tr><tr><th scope="row">GPUs</th><td>4 → 5</td></tr></tbody></table></div>
+  <h4>Arm A · writer on the destination (arm B is the E1.3 layout)</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Copy into destination HBM and a TMA writer on the destination share the destination crossbar, L2 and HBM">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="idlebox faded" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Other SMs: idle CTAs</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (not used)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">in G6; orders the writer</text>
+    <rect class="cobox" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Destination writer</text>
+    <text class="small" x="816" y="82">64 CTAs, other 7 GPCs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (window + writer buffer)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <path class="coline" d="M892,98 L892,252" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M892,280 L892,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M892,318 L892,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="653" y="251" width="328" height="32" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="653" y="291" width="328" height="30" rx="6"><title>shared</title></rect>
+    <rect class="sharedmark" x="653" y="327" width="328" height="36" rx="6"><title>shared</title></rect>
+    <text class="oktext" x="24" y="398">Copy −0.03% to −0.20%</text>
+    <text class="small" x="24" y="414">The writer gives way instead: −11.2% at no limit</text>
+  </svg>
+  </div>
+</article>
+<article class="expcard" id="e18">
+  <h3>E1.8 · Thread-store writer instead of TMA writer</h3>
+  <p class="question">Does the writer&#x27;s request mechanism matter when it runs on other SMs?</p>
+  <div class="tablewrap"><table class="runs"><tbody><tr><th scope="row">Copy</th><td>16 CTAs × 2 slots, G6</td></tr><tr><th scope="row">Arm A</th><td>Thread-store writer, 64 CTAs × 1024 threads/CTA, 16-byte stores, other 7 GPCs</td></tr><tr><th scope="row">Arm B</th><td>TMA store writer, as E1.3 (diagram above)</td></tr><tr><th scope="row">Varied</th><td>Writer target: idle, 670–2682 GB/s, no limit</td></tr><tr><th scope="row">GPUs</th><td>0 → 1</td></tr></tbody></table></div>
+  <h4>Arm A · thread stores (arm B is the E1.3 layout)</h4><div class="frame">
+  <svg viewBox="0 0 1000 424" role="img" aria-label="Copy in G6 and a thread-store writer on other SMs share only the crossbar">
+    <rect class="gpu" x="10" y="12" width="565" height="358" rx="10"/>
+    <text class="title" x="24" y="32">Source GPU (I)</text>
+    <rect class="gpu" x="640" y="12" width="350" height="358" rx="10"/>
+    <text class="title" x="654" y="32">Destination GPU (D)</text>
+    <rect class="copybox" x="28" y="46" width="270" height="154" rx="8"/>
+    <text class="title" x="40" y="66">Copy SMs × 16 (G6)</text>
+    <rect class="box" x="40" y="78" width="100" height="40" rx="4"/>
+    <text x="48" y="96">Fill threads</text>
+    <text class="small" x="48" y="111">0–511</text>
+    <rect class="box" x="158" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="166" y="102">slot 0</text>
+    <rect class="box" x="222" y="78" width="60" height="40" rx="3"/>
+    <text class="mono" x="230" y="102">slot 1</text>
+    <path class="copyline" d="M140,98 L156,98" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,118 L220,126" marker-end="url(#arrowCopy)"/>
+    <rect class="box" x="158" y="128" width="124" height="28" rx="4"/>
+    <text x="166" y="147">TMA unit</text>
+    <rect class="box" x="40" y="168" width="246" height="18" rx="3"/>
+    <text class="small" x="48" y="181">SM&#x27;s way out</text>
+    <path class="copyline" d="M220,156 L220,166" marker-end="url(#arrowCopy)"/>
+    <rect class="cobox" x="320" y="46" width="235" height="154" rx="8"/>
+    <text class="title" x="332" y="66">Thread-store writer × 64 CTAs</text>
+    <text class="small" x="332" y="81">spread over the 7 GPCs other than G6</text>
+    <rect class="box" x="332" y="88" width="211" height="56" rx="4"/>
+    <text x="342" y="108">All 1024 threads: 16-byte stores</text>
+    <text class="small" x="342" y="125">64 KiB block per step, into its slice</text>
+    <text class="small" x="342" y="139">of a local 1 GiB buffer</text>
+    <rect class="box" x="332" y="168" width="211" height="18" rx="3"/>
+    <text class="small" x="340" y="181">SM&#x27;s way out (no TMA)</text>
+    <rect class="box" x="28" y="214" width="270" height="26" rx="4"/>
+    <text x="40" y="232">GPC G6 connection</text>
+    <rect class="box" x="320" y="214" width="235" height="26" rx="4"/>
+    <text x="332" y="232">G0–G5, G7 connections</text>
+    <rect class="box" x="28" y="254" width="527" height="26" rx="4"/>
+    <text x="40" y="272">Crossbar</text>
+    <rect class="box" x="320" y="294" width="235" height="24" rx="4"/>
+    <text x="332" y="311">L2</text>
+    <rect class="box" x="320" y="330" width="235" height="30" rx="4"/>
+    <text x="332" y="349">HBM (co-runner buffer, 1 GiB)</text>
+    <rect class="recvbox" x="656" y="46" width="140" height="52" rx="8"/>
+    <text class="title" x="666" y="66">Receiver CTA</text>
+    <text class="small" x="666" y="82">signals only</text>
+    <rect class="idlebox faded" x="806" y="46" width="172" height="52" rx="8"/>
+    <text class="title" x="816" y="66">Other SMs: idle</text>
+    <text class="small" x="816" y="82">idle CTAs</text>
+    <rect class="box" x="656" y="254" width="322" height="26" rx="4"/>
+    <text x="668" y="272">Crossbar</text>
+    <rect class="box" x="656" y="294" width="322" height="24" rx="4"/>
+    <text x="668" y="311">L2</text>
+    <rect class="box" x="656" y="330" width="322" height="30" rx="4"/>
+    <text x="668" y="349">HBM (2048 MiB window)</text>
+    <path class="copyline" d="M220,186 L220,212" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,240 L220,252" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M220,267 L654,267" marker-end="url(#arrowCopy)"/>
+    <text class="title" x="566" y="258">NVLink</text>
+    <path class="copyline" d="M700,280 L700,292" marker-end="url(#arrowCopy)"/>
+    <path class="copyline" d="M700,318 L700,328" marker-end="url(#arrowCopy)"/>
+    <path class="coline" d="M437,144 L437,166" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,186 L437,212" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M437,240 L437,252" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,280 L470,292" marker-end="url(#arrowCo)"/>
+    <path class="coline" d="M470,318 L470,328" marker-end="url(#arrowCo)"/>
+    <rect class="sharedmark" x="25" y="251" width="533" height="32" rx="6"><title>shared</title></rect>
+    <text class="oktext" x="24" y="398">Thread stores: copy −0.04% to +0.10%; TMA: +0.06% to +0.08%</text>
+    <text class="small" x="24" y="414">No change with either mechanism</text>
+  </svg>
+  </div>
+</article>
+</section>
+<!-- end of generated data-path diagrams -->
+
+<!-- 2. One copy CTA -->
+<section id="cta">
+  <span class="eyebrow">2 · Inside one copy CTA</span>
+  <h2>Threads and shared memory of one copy CTA</h2>
+  <p>Every CTA has 1024 threads and 196,864 bytes of shared memory. Copy threads and co-runner threads use separate named barriers, so in the same-SM tests neither group waits for the other.</p>
+  <div class="frame">
+  <svg viewBox="0 0 1000 250" role="img" aria-label="Thread and shared memory layout of one copy CTA">
+    <text class="title" x="40" y="26">Threads (1024 per CTA)</text>
+    <rect class="copybox" x="40" y="36" width="460" height="38" rx="3"/>
+    <text x="52" y="60">Fill threads 0–511 · named barrier 1</text>
+    <rect class="idlebox" x="500" y="36" width="402" height="38" rx="3"/>
+    <text x="512" y="60">512–959: no role, return at once</text>
+    <rect class="codash" x="902" y="36" width="58" height="38" rx="3"/>
+    <text class="small" x="906" y="58" style="fill:var(--co)">960–1023</text>
+    <path class="bracket" d="M40,80 L40,88 L46,88"/>
+    <text class="small" x="50" y="94">thread 0 also waits for slots and starts each bulk store</text>
+    <text class="small" x="700" y="94" style="fill:var(--co)">same-SM writer (2 warps) · named barrier 2</text>
+
+    <text class="title" x="40" y="134">Shared memory (196,864 bytes per CTA, the same in every run)</text>
+    <rect class="copybox" x="40" y="146" width="306" height="40" rx="3"/><text class="mono" x="52" y="171">slot 0 · 64 KiB</text>
+    <rect class="copybox" x="346" y="146" width="306" height="40" rx="3"/><text class="mono" x="358" y="171">slot 1 · 64 KiB</text>
+    <rect class="codash" x="652" y="146" width="306" height="40" rx="3"/><text class="mono" x="664" y="171" style="fill:var(--co)">same-SM writer chunk · 64 KiB</text>
+    <rect class="idlebox" x="958" y="146" width="4" height="40"/>
+    <text class="small" x="40" y="208">More than half an SM's shared memory per CTA, so the GPU can place only one CTA on each SM. All arms, idle references and copy-alone runs use the same reservation, so L1 size never differs between them.</text>
+    <text class="small" x="40" y="226">On co-runner SMs the same 196,864 bytes hold the TMA writer's 64 KiB chunk, or the reader's 3 × 64 KiB slots plus their barriers.</text>
+  </svg>
+  </div>
+</section>
+
+<!-- 3. Chunk pipeline -->
+<section id="pipeline">
+  <span class="eyebrow">3 · Timing model, per chunk</span>
+  <h2>How two staging slots keep the TMA unit busy</h2>
+  <p>Chunk <span class="mono">j</span> goes into slot <span class="mono">j mod 2</span>. Before filling it, thread 0 waits until the TMA unit has finished <em>reading</em> the chunk that used that slot before (<span class="mono">cp.async.bulk.wait_group.read 1</span>). That wait is the <strong>slot wait</strong>. The fill and its two barriers make up the <strong>fill share</strong>.</p>
+  <div class="frame">
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Pipeline timeline: thread 0 waits and issues, copy threads fill, TMA unit reads slots, writes travel over NVLink">
+    <!-- lanes -->
+    <text x="16" y="52">Thread 0</text>
+    <text x="16" y="102">Copy threads</text>
+    <text x="16" y="152">TMA reads slot</text>
+    <text x="16" y="202">Write on the way</text>
+    <line class="axis" x1="150" y1="240" x2="960" y2="240"/>
+    <text class="small" x="150" y="258">time →  (illustrative, not to scale)</text>
+    <!-- scale: x = 150 + 1.2*t ; F=50, R=140 -->
+    <!-- thread 0 waits -->
+    <rect class="waitbar" x="270" y="38" width="108" height="20" rx="2"/>
+    <rect class="waitbar" x="438" y="38" width="108" height="20" rx="2"/>
+    <rect class="waitbar" x="606" y="38" width="108" height="20" rx="2"/>
+    <rect class="waitbar" x="774" y="38" width="108" height="20" rx="2"/>
+    <text class="small" x="282" y="31">slot wait (A15)</text>
+    <!-- issue ticks -->
+    <g style="stroke:var(--fg);stroke-width:2">
+      <line x1="210" y1="34" x2="210" y2="62"/><line x1="270" y1="34" x2="270" y2="62"/><line x1="438" y1="34" x2="438" y2="62"/><line x1="606" y1="34" x2="606" y2="62"/><line x1="774" y1="34" x2="774" y2="62"/><line x1="942" y1="34" x2="942" y2="62"/>
+    </g>
+    <text class="small" x="186" y="76">start bulk store</text>
+    <!-- fills -->
+    <rect class="fillbar" x="150" y="88" width="60" height="20" rx="2"/><text class="small" x="156" y="122">c0</text>
+    <rect class="fillbar" x="210" y="88" width="60" height="20" rx="2"/><text class="small" x="216" y="122">c1</text>
+    <rect class="fillbar" x="378" y="88" width="60" height="20" rx="2"/><text class="small" x="384" y="122">c2</text>
+    <rect class="fillbar" x="546" y="88" width="60" height="20" rx="2"/><text class="small" x="552" y="122">c3</text>
+    <rect class="fillbar" x="714" y="88" width="60" height="20" rx="2"/><text class="small" x="720" y="122">c4</text>
+    <rect class="fillbar" x="882" y="88" width="60" height="20" rx="2"/><text class="small" x="888" y="122">c5</text>
+    <text class="small" x="440" y="84" style="fill:var(--copy)">fill + 2 barriers (A16)</text>
+    <!-- TMA reads -->
+    <rect class="readA" x="210" y="138" width="168" height="22" rx="2"/><text class="mono" x="218" y="153">c0 · slot 0</text>
+    <rect class="readB" x="378" y="138" width="168" height="22" rx="2"/><text class="mono" x="386" y="153">c1 · slot 1</text>
+    <rect class="readA" x="546" y="138" width="168" height="22" rx="2"/><text class="mono" x="554" y="153">c2 · slot 0</text>
+    <rect class="readB" x="714" y="138" width="168" height="22" rx="2"/><text class="mono" x="722" y="153">c3 · slot 1</text>
+    <!-- slot frees -> wait ends -->
+    <g class="sigline"><line x1="378" y1="138" x2="378" y2="60"/><line x1="546" y1="138" x2="546" y2="60"/><line x1="714" y1="138" x2="714" y2="60"/><line x1="882" y1="138" x2="882" y2="60"/></g>
+    <!-- writes in flight -->
+    <line class="fly" x1="222" y1="198" x2="410" y2="198"/><line class="fly" x1="390" y1="206" x2="578" y2="206"/><line class="fly" x1="558" y1="198" x2="746" y2="198"/><line class="fly" x1="726" y1="206" x2="914" y2="206"/>
+    <text class="small" x="430" y="226">reading a slot ends before its write is done; writes are not bounded by the slot count</text>
+  </svg>
+  </div>
+  <ul class="facts">
+    <li><strong>Below the plateau</strong> (1–8 copy CTAs), one CTA sends about 51 GB/s; slot wait is about 39% of thread 0's loop.</li>
+    <li><strong>On the plateau</strong> (12+ CTAs), NVLink is full, the TMA unit reads slots out more slowly, and slot wait grows: 63% at 12 CTAs, 72% at 16, 89% at 48.</li>
+    <li><strong>One slot</strong> leaves no overlap between fill and read-out: 35.8 GB/s per CTA. A third slot adds nothing.</li>
+    <li>Code: <span class="mono">issueBulkCopy</span> in <a href="../../common/src/tma_congest.cu">tma_congest.cu</a> (ring index, <span class="mono">waitForBulkSourceReads</span>, fill, <span class="mono">startBulkStore</span>).</li>
+  </ul>
+</section>
+
+<!-- 4. Transfer timers -->
+<section id="transfer">
+  <span class="eyebrow">4 · Timing model, per transfer</span>
+  <h2>What each timer of one transfer covers</h2>
+  <p>Every timer runs on one GPU's clock. Source and destination timers are never compared with each other; the two GPUs coordinate only through signals.</p>
+  <div class="frame">
+  <svg viewBox="0 0 1000 270" role="img" aria-label="Transfer timeline with copy CTA phases on the source, receiver on the destination, and co-runner coverage">
+    <text x="16" y="56">Copy CTA (I)</text>
+    <text x="16" y="116">Receiver (D)</text>
+    <text x="16" y="176">Co-runner</text>
+    <!-- copy CTA phases -->
+    <rect class="idlebox" x="140" y="40" width="60" height="26" rx="2"/><text class="small" x="144" y="80">wait to start</text>
+    <rect class="copybox" x="200" y="40" width="470" height="26" rx="2"/><text x="210" y="58">issue loop (A3) ≈ 5.7 ms: slot wait + fill + issue</text>
+    <rect x="670" y="40" width="70" height="26" rx="2" style="fill:var(--copy);opacity:.75"/><text class="small" x="672" y="80">bulk wait A17</text><text class="small" x="672" y="92">≈ 2.8 µs</text>
+    <rect class="box" x="740" y="40" width="50" height="26" rx="2"/><text class="small" x="744" y="80">fence A4</text>
+    <rect class="box" x="790" y="40" width="30" height="26" rx="2"/><text class="small" x="788" y="92">A5</text>
+    <rect class="idlebox" x="820" y="40" width="80" height="26" rx="2"/><text class="small" x="826" y="80">ack wait A6</text>
+    <!-- receiver -->
+    <rect class="recvbox" x="130" y="100" width="14" height="26" rx="2"/>
+    <text class="small" x="150" y="118">"destination ready" (after all co-runners on D have started)</text>
+    <rect class="recvbox" x="800" y="100" width="96" height="26" rx="2"/>
+    <text class="small" x="700" y="144">waits for "done" from all 16 copy CTAs, then acknowledges</text>
+    <!-- signals -->
+    <path class="sigline" d="M144,113 L178,66" marker-end="url(#arrowSig)"/>
+    <path class="sigline" d="M820,66 L840,100" marker-end="url(#arrowSig)"/>
+    <path class="sigline" d="M890,100 L900,66" marker-end="url(#arrowSig)"/>
+    <!-- co-runner -->
+    <rect class="cobox" x="100" y="162" width="840" height="24" rx="2"/>
+    <text x="110" y="179">active from before the copy starts until after the last acknowledgement — coverage must be complete (A8)</text>
+    <!-- A1 bracket -->
+    <path class="bracket" d="M200,206 L200,214 L900,214 L900,206"/>
+    <text x="420" y="234">A1: 2048 MiB ÷ (last CTA end − first CTA start)</text>
+    <text class="small" x="140" y="258">Durations are medians of the 16 copy CTAs, copy alone, 16 CTAs × 2 slots. Phase medians do not add up to the transfer time.</text>
+  </svg>
+  </div>
+  <ul class="facts">
+    <li><strong>Bulk completion wait (A17)</strong> runs from the last bulk store started until <span class="mono">cp.async.bulk.wait_group 0</span> returns: the writes of this CTA have completed. It grew from about 2.4 to 4.1 µs with a TMA writer on the same SMs.</li>
+    <li><strong>Ordering (A4)</strong> is <span class="mono">fence.proxy.async.global</span> plus a system fence; only thread 0 fences, because only it wrote to the peer.</li>
+    <li>A thread-store writer on the same SMs shows up in the <strong>fill share</strong> instead (19% → 37%), and slot wait falls.</li>
+  </ul>
+</section>
+
+<!-- 5. Run structure -->
+<section id="runs">
+  <span class="eyebrow">5 · Run structure</span>
+  <h2>How one comparison is paired</h2>
+  <p>A <strong>run</strong> is one harness invocation. A run with a co-runner alternates transfers with the co-runner idle and active, so each run carries its own reference. The copy change of a run is median(active) ÷ median(idle) − 1.</p>
+  <div class="rungrid">
+    <div><span class="runlabel">Odd round</span><span class="runrow"><span class="chip w">w</span><span class="chip w">w</span><span class="chip w">w</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span></span></div>
+    <div><span class="runlabel">Even round</span><span class="runrow"><span class="chip w">w</span><span class="chip w">w</span><span class="chip w">w</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span><span class="chip a">A</span><span class="chip i">I</span></span></div>
+  </div>
+  <p class="note">w = warm-up (not kept) · I = co-runner idle (its CTAs start and wait on the same SMs) · A = co-runner active. Each chip is one 2048 MiB transfer.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Step</th><th>What runs</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Opening reference</td><td>One run with idle co-runners, per arm</td><td>Drift check</td></tr>
+      <tr><td>Mixed run</td><td>6 idle + 6 active transfers, as above</td><td>Copy change, paired inside the run</td></tr>
+      <tr><td>Co-runner alone</td><td>Same SMs, copy off; 2 warm-ups + 6 windows, each as long as the co-runner's active time in the mixed run</td><td>Co-runner rate without the copy</td></tr>
+      <tr><td>Arms back to back</td><td>At each level, every arm (for example same SM, other SMs) runs in turn</td><td>Same machine state for compared arms</td></tr>
+      <tr><td>Rotation</td><td>3 rounds; level and arm order rotate between rounds</td><td>No level always runs first</td></tr>
+      <tr><td>Closing reference</td><td>One run with idle co-runners, per arm</td><td>Drift check</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 6. SM layout -->
+<section id="sms">
+  <span class="eyebrow">6 · Resource management: SMs</span>
+  <h2>Which SM does what</h2>
+  <p>Both GPUs launch one CTA on every SM (cooperative launch). Each CTA reads its SM ID and takes the role the host's role table gives that SM. The tables come from plan 07's measured SM-to-GPC map; the maps below are copied from three real run records.</p>
+  <div class="tabs" role="tablist" aria-label="Placement">
+    <button role="tab" id="tab-other" aria-selected="true" aria-controls="map">Other SMs (E1.3, E1.6, E1.8)</button>
+    <button role="tab" id="tab-same" aria-selected="false" aria-controls="map">Same SMs (E1.5, follow-up)</button>
+    <button role="tab" id="tab-dest" aria-selected="false" aria-controls="map">Destination GPU (E1.7)</button>
+  </div>
+  <p class="note" id="mapcaption"></p>
+  <div class="frame" id="map" role="tabpanel"><div class="gpus" id="gpus"></div></div>
+  <div class="maplegend">
+    <span><i style="background:var(--copy)"></i>Copy CTA</span>
+    <span><i style="background:var(--co)"></i>Co-runner CTA</span>
+    <span><i style="background:linear-gradient(135deg,var(--copy) 0 55%,var(--co) 55% 100%)"></i>Copy CTA hosting a co-runner</span>
+    <span><i style="background:var(--recv)"></i>Receiver CTA</span>
+    <span><i style="background:var(--idle);border:1px solid var(--line)"></i>Idle CTA (holds the SM)</span>
+  </div>
+  <ul class="facts">
+    <li><strong>One CTA per SM</strong> is enforced three ways: 196,864 bytes of shared memory per CTA (more than half an SM), an occupancy check that must return 1, and a check that no two CTAs report the same SM ID.</li>
+    <li><strong>SM budget:</strong> 16 copy + 64 co-runner CTAs ≤ the 124 SMs the map places in GPCs. SMs 124–131 were never placed by cluster launches and stay idle.</li>
+    <li><strong>G6 has 18 SMs:</strong> the copy takes 16; the other 2 stay idle.</li>
+  </ul>
+</section>
+
+<!-- 7. GPU schedule -->
+<section id="gpus">
+  <span class="eyebrow">7 · Resource management: GPUs</span>
+  <h2>What ran on which GPU pair</h2>
+  <p>The user allowed GPUs 0, 1, 4 and 5. Each pair ran one phase at a time. The two pairs ran at the same time when one of them used only local memory or the phases sent NVLink traffic only within their own pair. Order only; block widths are not to scale.</p>
+  <div class="frame">
+    <div class="lanes">
+      <div class="lane"><span class="who">0 → 1</span><div class="blocks">
+        <span class="blk">Build check</span><span class="blk cal">Copy sweep</span><span class="blk cal">Chunk × fill</span><span class="blk gap">idle: queued start waited on itself</span><span class="blk test">E1.3 other SMs</span><span class="blk test">E1.6 round 1</span><span class="blk bad">other tenant: 1 run excluded</span><span class="sessionbreak">│ reset │</span><span class="blk test">E1.8 thread-store writer</span>
+      </div></div>
+      <div class="lane"><span class="who">4 → 5</span><div class="blocks">
+        <span class="blk cal">Writer sweep</span><span class="blk cal">Reader rates</span><span class="blk cal">Writer rates</span><span class="blk cal">Same-SM ceiling</span><span class="blk test">E1.5 same SM</span><span class="blk test">E1.7 destination</span><span class="blk test">E1.6 rounds 2–3</span><span class="sessionbreak">│ reset │</span><span class="blk test">Same-SM follow-up</span>
+      </div></div>
+    </div>
+  </div>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Guard</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Per-device lock</td><td>Taken before the idle check; a second phase on the same GPU is refused (this refused one queued chunk-sweep start)</td></tr>
+      <tr><td>Idle check</td><td>Both GPUs must show no memory or utilization in use before a run; this stopped E1.6 on 0 → 1 when another tenant arrived</td></tr>
+      <tr><td>Snapshots</td><td>Device state and NVLink counters before and after every run; telemetry sampled during it</td></tr>
+      <tr><td>Exclusion</td><td>A run whose after-snapshot shows someone else's memory is moved to <span class="mono">results/2026-11-10/rejected/</span></td></tr>
+      <tr><td>No overwrite</td><td>An existing raw record is never rerun; a changed config is refused</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 8. Results -->
+<section id="results">
+  <span class="eyebrow">8 · Results at a glance</span>
+  <h2>What each placement did to the copy</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Test</th><th>Co-runner and where</th><th>Co-runner rate</th><th>Copy change</th><th>Co-runner change</th></tr></thead>
+    <tbody>
+      <tr><td>E1.5 + follow-up</td><td>TMA store writer, same SMs</td><td>7 → 237 GB/s (capped)</td><td><span class="pill hit">−0.2% → −6.3%</span></td><td>0% → −68%</td></tr>
+      <tr><td>Follow-up</td><td>Thread-store writer, same SMs</td><td>7 → 375 GB/s</td><td><span class="pill hit">−0.1% → −18.0%</span></td><td>0% → −51%</td></tr>
+      <tr><td>E1.5</td><td>TMA store writer, 16 other SMs</td><td>187 → 834 GB/s</td><td><span class="pill ok">+0.01% to +0.05%</span></td><td>0%</td></tr>
+      <tr><td>E1.3</td><td>TMA store writer, 64 other SMs</td><td>670 → 3270 GB/s</td><td><span class="pill ok">+0.02% to +0.14%</span></td><td>0% to −0.1%</td></tr>
+      <tr><td>E1.8</td><td>Thread-store writer, 64 other SMs</td><td>670 → 3124 GB/s</td><td><span class="pill ok">−0.04% to +0.10%</span></td><td>0%</td></tr>
+      <tr><td>E1.6</td><td>TMA reader, 48 other SMs</td><td>671 → 3159 GB/s</td><td><span class="pill ok">−0.00% to +0.07%</span></td><td>0%</td></tr>
+      <tr><td>E1.7</td><td>TMA store writer, destination GPU</td><td>670 → 3276 GB/s</td><td><span class="pill ok">−0.03% to −0.20%</span></td><td><span class="pill co">0% → −11.2%</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Copy: 16 CTAs × 512 fill threads/CTA × 2 slots × 64 KiB, in G6, 2048 MiB; about 375 GB/s alone. Median of 3 runs per level. Full tables, figures and deviations: <a href="README.md">README.md</a>.</p>
+</section>
+</div>
+
+<script>
+// Role tables copied from real run records (results/2026-11-10): role 0 idle, 1 copy, 2 writer, 3 receiver.
+// gpc_of_sm is plan 07's measured map (identical on GPUs 0, 1, 4, 5); -1 = not placed by cluster launches.
+const gpcOfSm = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,1,1,2,2,3,3,4,4,5,5,6,6,7,7,1,1,2,2,3,3,4,4,5,5,6,6,7,7,1,1,2,2,3,3,4,4,5,5,6,6,7,7,1,1,2,2,3,3,4,4,5,5,6,6,7,7,6,6,7,7,-1,-1,-1,-1,-1,-1,-1,-1];
+const copyOnly = [0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const otherSms = [2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,0,2,0,2,0,1,1,2,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const receiverAt = (sm) => Array.from({length:132}, (_, index) => index === sm ? 3 : 0);
+const destinationWriter = [2,2,2,2,2,2,2,2,2,2,2,2,3,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,2,2,0,2,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const placements = {
+  other: { caption: "E1.3 run mixed_separate_p20_R1 (GPUs 0 → 1): 16 copy CTAs in G6, 64 TMA writer CTAs spread over the other 7 GPCs. E1.6 and E1.8 use the same layout.",
+           source: otherSms, colocated: false, destination: receiverAt(0) },
+  same:  { caption: "E1.5 run mixed_same_sm_c25_R1 (GPUs 4 → 5): no co-runner CTAs of their own; each of the 16 copy CTAs hosts one writer in its last two warps.",
+           source: copyOnly, colocated: true, destination: receiverAt(0) },
+  dest:  { caption: "E1.7 run mixed_destination_p20_R1 (GPUs 4 → 5): the 64 writer CTAs run on the destination, on the same SM IDs as in E1.3; the receiver sits in G6.",
+           source: copyOnly, colocated: false, destination: destinationWriter },
+};
+const roleClass = ['', 'copy', 'writer', 'receiver'];
+
+// Draws one GPU as 8 GPC boxes plus the unmapped SMs, each SM a square colored by its role.
+function drawGpu(name, roles, colocated) {
+  const wrapper = document.createElement('div');
+  const title = document.createElement('div');
+  title.className = 'gpuname';
+  title.textContent = name;
+  wrapper.appendChild(title);
+  const grid = document.createElement('div');
+  grid.className = 'gpcs';
+  for (const gpc of [0, 1, 2, 3, 4, 5, 6, 7, -1]) {
+    const sms = gpcOfSm.map((owner, sm) => owner === gpc ? sm : -1).filter((sm) => sm >= 0);
+    const box = document.createElement('div');
+    box.className = 'gpc';
+    const label = document.createElement('div');
+    label.className = 'name';
+    label.textContent = gpc < 0 ? `unmapped · ${sms.length}` : `G${gpc} · ${sms.length} SMs`;
+    box.appendChild(label);
+    const cells = document.createElement('div');
+    cells.className = 'sms';
+    for (const sm of sms) {
+      const cell = document.createElement('div');
+      const role = roles[sm];
+      cell.className = 'sm ' + (role === 1 && colocated ? 'both' : roleClass[role]);
+      cell.title = `SM ${sm}: ${['idle', 'copy', 'co-runner', 'receiver'][role]}${role === 1 && colocated ? ' + co-runner' : ''}`;
+      cells.appendChild(cell);
+    }
+    box.appendChild(cells);
+    grid.appendChild(box);
+  }
+  wrapper.appendChild(grid);
+  return wrapper;
+}
+
+function show(key) {
+  const placement = placements[key];
+  const container = document.getElementById('gpus');
+  container.replaceChildren(drawGpu('Source GPU', placement.source, placement.colocated), drawGpu('Destination GPU', placement.destination, false));
+  document.getElementById('mapcaption').textContent = placement.caption;
+  for (const button of document.querySelectorAll('.tabs button')) {
+    button.setAttribute('aria-selected', String(button.id === 'tab-' + key));
+  }
+}
+for (const button of document.querySelectorAll('.tabs button')) {
+  button.addEventListener('click', () => show(button.id.replace('tab-', '')));
+}
+show('other');
+</script>

@@ -372,7 +372,13 @@ None.
 
 ## Order of work
 
-Status 2026-11-10: all steps done, including E1.8. Added after E1.5 (not planned above): same-SM writers at 1–25% of ceiling, as TMA bulk stores and as thread stores from the same two warps. It showed that the same-SM loss grows with the writer's bytes and does not need the TMA unit; E1.5's expected signature "slots wait behind the writer's chunks" holds only for the TMA writer. Results and deviations are in the [report](README.md).
+Status 2026-11-10 (details in the [report](README.md)):
+
+- All steps done, including E1.8.
+- Added after E1.5, not planned above: same-SM writers at 1–25% of ceiling, as TMA bulk stores and as thread stores.
+- The same-SM loss grows with the writer's bytes and does not need the TMA unit.
+- E1.5's expected signature ("slots wait behind the writer's chunks") holds only for the TMA writer.
+- E1.7b, added 2026-11-13 at the user's request: E1.7 at no limit with more requests in flight (destination writer 64 × 1, 64 × 2, 64 × 4, 105 × 2; copy 16 × 2, 16 × 3, 48 × 2 CTAs × slots). The split of the destination's full HBM did not change.
 
 | Step | Work | GPU time (estimate) |
 |---|---|---|

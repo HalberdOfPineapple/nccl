@@ -19,6 +19,8 @@ Phases, in order (E-numbers from observation/data_store_congest/01_data_store_co
   read_contrast     E1.6: TMA reads instead of TMA stores, separate GPCs, targets matched to E1.3
   destination       E1.7: TMA store writer on the destination GPU, back to back with E1.3 separate
   thread_writer     E1.8 (optional): the plan-07 thread-store writer next to the TMA push
+  destination_inflight  E1.7b (2026-11-13): writer on the destination at no limit, with more requests
+                    outstanding on either side: writer CTAs x chunks in flight, copy CTAs x slots
   colocated_followup  Follow-up to E1.5 (2026-11-10): writer on the copy's SMs at very low rates
                     (1, 5, 10% of the same-SM ceiling) and at 25% / no limit, as TMA bulk stores
                     and as thread stores from the same two warps, back to back
@@ -367,6 +369,43 @@ def phase_colocated_followup(campaign):
     references(campaign, group, chosen, placements, co_runners, 'close')
 
 
+# E1.7b: requests outstanding on each side, at the only E1.7 level where the destination HBM is full.
+INFLIGHT_WRITERS = [(64, 1), (64, 2), (64, 4), (105, 2)]   # destination writer CTAs x chunks in flight; 105 of the 106 mapped non-G6 SMs
+INFLIGHT_COPIES = [(16, 2), (16, 3), (48, 2)]               # copy CTAs x staging slots (64 KiB chunks, 512 fill threads)
+
+
+def inflight_kind(writer, copy):
+    return f'w{writer[0]}k{writer[1]}_c{copy[0]}s{copy[1]}'
+
+
+def phase_destination_inflight(campaign):
+    """Does the destination's split of a full HBM between the incoming push and a local TMA writer depend on how
+    many requests each side keeps outstanding? Writer on the destination (E1.7 layout), no rate limit only.
+    Each cell is one mixed run per round. The writer-alone run does not depend on the copy (the copy is off),
+    so it runs once per writer setting per round, with the window of that round's 16 x 2 cell."""
+    group = 'destination_inflight'
+    chosen = campaign.selection()
+    placement = dict(PLACEMENTS['separate'], writer_rank=1, receiver_gpcs=1 << 6, writer_kind=TMA_STORE)
+
+    def cell(writer, copy, repetition, **overrides):
+        values = dict(copy_settings(chosen), copy_ctas=copy[0], copy_chunks_in_flight=copy[1], target_gbps=0,
+                      writer_alternate=1 if repetition % 2 else 2, writer_ctas=writer[0], chunks_in_flight=writer[1])
+        values.update(placement)
+        values.update(overrides)
+        return values
+
+    for copy in INFLIGHT_COPIES:
+        campaign.run(group, f'reference_c{copy[0]}s{copy[1]}_open', **cell(INFLIGHT_WRITERS[0], copy, 1, writer_alternate=0, writer_idle=1))
+    for repetition in range(1, ROUNDS + 1):
+        for writer in rotated(INFLIGHT_WRITERS, repetition):
+            for copy in rotated(INFLIGHT_COPIES, repetition):
+                campaign.run(group, f'mixed_{inflight_kind(writer, copy)}_unlimited_R{repetition}', **cell(writer, copy, repetition))
+            matched = campaign.results / group / 'raw' / f'mixed_{inflight_kind(writer, INFLIGHT_COPIES[0])}_unlimited_R{repetition}.json'
+            campaign.run(group, f'alone_w{writer[0]}k{writer[1]}_unlimited_R{repetition}', **alone(cell(writer, INFLIGHT_COPIES[0], repetition), matched))
+    for copy in INFLIGHT_COPIES:
+        campaign.run(group, f'reference_c{copy[0]}s{copy[1]}_close', **cell(INFLIGHT_WRITERS[0], copy, 1, writer_alternate=0, writer_idle=1))
+
+
 def matched_levels(campaign):
     """E1.6/E1.8 targets: the write rates the TMA store writer achieved during the copy in E1.3 (separate GPCs)."""
     import csv
@@ -411,7 +450,7 @@ def phase_thread_writer(campaign):
 PHASES = dict(smoke=phase_smoke, copy_sweep=phase_copy_sweep, copy_chunk=phase_copy_chunk,
               writer_sweep=phase_writer_sweep, writer_rate=phase_writer_rate, reader_rate=phase_reader_rate, colocated_rate=phase_colocated_rate,
               contention=phase_contention, colocated=phase_colocated, read_contrast=phase_read_contrast, destination=phase_destination,
-              thread_writer=phase_thread_writer, colocated_followup=phase_colocated_followup)
+              thread_writer=phase_thread_writer, colocated_followup=phase_colocated_followup, destination_inflight=phase_destination_inflight)
 
 
 def main():

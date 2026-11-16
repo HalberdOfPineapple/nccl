@@ -21,7 +21,7 @@ PERTURBED_COLOR = '#e07b22'
 PERTURBED_SECOND_COLOR = '#f3b77e'
 SECOND_SERIES_COLOR = '#7f7f7f'
 CTA_COUNTS = [4, 8, 16, 32, 48, 64]
-ROLE_TITLES = {'multicast': 'st_multicast', 'reduce': 'ld_reduce', 'allreduce': 'AllReduce (same CTAs)', 'plain_load': 'Plain load, ring', 'plain_store': 'Plain store, ring'}
+ROLE_TITLES = {'multicast': 'NVLS AllGather (st_multicast)', 'reduce': 'NVLS ReduceScatter (ld_reduce)', 'allreduce': 'NVLS AllReduce (same CTAs)', 'plain_load': 'Plain load, ring', 'plain_store': 'Plain store, ring'}
 BASE_CONFIG = '32 CTAs × 512 threads/CTA'
 
 
@@ -162,12 +162,12 @@ def label_bars(axis, positions, heights):
 
 def legend_for_reference_and_mix(axis):
     handles = [plt.Rectangle((0, 0), 1, 1, color=REFERENCE_COLOR), plt.Rectangle((0, 0), 1, 1, color=PERTURBED_COLOR)]
-    axis.legend(handles, ['One operation (reference)', 'Mixed'], frameon=False, fontsize=8, loc='upper right')
+    axis.legend(handles, ['Reference', 'Mixed'], frameon=False, fontsize=8, loc='upper right')
 
 
 def figure_multimem(arms, output):
     """E1.2: link-model busBW, role byte rate and busiest measured link direction."""
-    labels = ['st_multicast\nalone', 'ld_reduce\nalone', 'Both,\nseparate CTAs', 'Both,\nsame CTAs']
+    labels = ['NVLS\nAllGather', 'NVLS\nReduceScatter', 'AG + RS,\nseparate\nCTAs', 'NVLS\nAllReduce,\nsame CTAs']
     single_multicast = arms['e1_2_single_multicast']
     single_reduce = arms['e1_2_single_reduce']
     separate = arms['e1_2_mix_separate']
@@ -180,7 +180,7 @@ def figure_multimem(arms, output):
     set_zero_based_y(axes[0], 500, 'Link-model busBW, GB/s')
     axes[0].set_title('Link-model busBW', fontsize=10)
     legend_for_reference_and_mix(axes[0])
-    rate_labels = ['st_multicast\nalone', 'st_multicast\nmixed', 'ld_reduce\nalone', 'ld_reduce\nmixed', 'AllReduce']
+    rate_labels = ['st_multicast\nin AG', 'st_multicast\nAG + RS', 'ld_reduce\nin RS', 'ld_reduce\nAG + RS', 'NVLS\nAllReduce']
     rates = [single_multicast['roles']['multicast']['rate_median_gbps'], separate['roles']['multicast']['rate_median_gbps'], single_reduce['roles']['reduce']['rate_median_gbps'], separate['roles']['reduce']['rate_median_gbps'], same['roles']['allreduce']['rate_median_gbps']]
     draw_bars(axes[1], rate_labels, rates, [REFERENCE_COLOR, PERTURBED_COLOR, REFERENCE_COLOR, PERTURBED_COLOR, PERTURBED_COLOR])
     axes[1].tick_params(axis='x', labelsize=6.5)
@@ -194,7 +194,7 @@ def figure_multimem(arms, output):
     axes[2].axhline(478, color='#555555', linewidth=0.8, linestyle='--')
     axes[2].text(3.4, 482, 'link speed 478', ha='right', va='bottom', fontsize=7)
     axes[2].set_title('Busiest measured link direction', fontsize=10)
-    figure.suptitle(f'Multimem arms, each role {BASE_CONFIG}, 4 GPUs, medians of 6 rounds', fontsize=11)
+    figure.suptitle(f'Multimem arms, each role {BASE_CONFIG}, 4 GPUs, medians of 6 rounds. AG = AllGather, RS = ReduceScatter', fontsize=11)
     figure.tight_layout()
     figure.savefig(output, dpi=150)
     plt.close(figure)
@@ -222,14 +222,14 @@ def figure_plain(arms, output):
 
 def figure_split(arms, output):
     """E1.4: each role's rate alone and next to the other role on the other two GPUs."""
-    labels = ['st_multicast on\nGPUs 0, 1, alone', 'st_multicast on\nGPUs 0, 1, split mix', 'ld_reduce on\nGPUs 2, 3, alone', 'ld_reduce on\nGPUs 2, 3, split mix']
+    labels = ['Multicast from\nranks 0, 1, alone', 'Multicast from\nranks 0, 1, split mix', 'Reduce by\nranks 2, 3, alone', 'Reduce by\nranks 2, 3, split mix']
     rates = [arms['e1_4_multicast_g01']['roles']['multicast']['rate_median_gbps'], arms['e1_4_split_mix']['roles']['multicast']['rate_median_gbps'], arms['e1_4_reduce_g23']['roles']['reduce']['rate_median_gbps'], arms['e1_4_split_mix']['roles']['reduce']['rate_median_gbps']]
     figure, axis = plt.subplots(figsize=(7, 3.8))
     draw_bars(axis, labels, rates, [REFERENCE_COLOR, PERTURBED_COLOR, REFERENCE_COLOR, PERTURBED_COLOR])
     label_bars(axis, range(4), rates)
     set_zero_based_y(axis, 250, 'Rate per issuing GPU, GB/s')
     legend_for_reference_and_mix(axis)
-    axis.set_title(f'Different GPUs issue each operation, multicast group of all 4 GPUs,\neach role {BASE_CONFIG}, medians of 6 rounds', fontsize=10)
+    axis.set_title(f'Different GPUs issue each half, multicast group of all 4 GPUs,\neach role {BASE_CONFIG}, medians of 6 rounds', fontsize=10)
     figure.tight_layout()
     figure.savefig(output, dpi=150)
     plt.close(figure)
@@ -237,7 +237,7 @@ def figure_split(arms, output):
 
 def figure_nccl(harness, nccl, output):
     """E1.7: link-model busBW of NCCL collectives next to the harness role loops."""
-    labels = ['AllGather /\nst_multicast', 'ReduceScatter /\nld_reduce', 'AllReduce /\nsame CTAs']
+    labels = ['AllGather', 'ReduceScatter', 'AllReduce']
     figure, axis = plt.subplots(figsize=(6.4, 3.8))
     positions = range(3)
     width = 0.36
@@ -257,7 +257,7 @@ def figure_nccl(harness, nccl, output):
 
 def figure_links(arms, output):
     """Measured link data per GPU in each direction, for the arms where all GPUs issue the same work."""
-    selected = [('e1_2_single_multicast', 'st_multicast\nalone'), ('e1_2_single_reduce', 'ld_reduce\nalone'), ('e1_2_mix_separate', 'Both,\nseparate CTAs'), ('e1_2_mix_same', 'Both,\nsame CTAs'), ('e1_3_plain_load', 'Plain load\nalone'), ('e1_3_plain_store', 'Plain store\nalone'), ('e1_3_plain_mix', 'Plain load\n+ plain store')]
+    selected = [('e1_2_single_multicast', 'NVLS\nAllGather'), ('e1_2_single_reduce', 'NVLS\nReduceScatter'), ('e1_2_mix_separate', 'AG + RS,\nseparate CTAs'), ('e1_2_mix_same', 'NVLS AllReduce,\nsame CTAs'), ('e1_3_plain_load', 'Plain load\nalone'), ('e1_3_plain_store', 'Plain store\nalone'), ('e1_3_plain_mix', 'Plain load\n+ plain store')]
     received = [statistics.fmean(arms[name]['link_rx_gbps_per_gpu']) for name, _ in selected]
     sent = [statistics.fmean(arms[name]['link_tx_gbps_per_gpu']) for name, _ in selected]
     figure, axis = plt.subplots(figsize=(9.5, 3.8))
