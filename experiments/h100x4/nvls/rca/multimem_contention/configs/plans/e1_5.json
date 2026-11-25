@@ -1,0 +1,154 @@
+{
+ "arms": {
+  "e1_5_multicast_b16_contiguous": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "contiguous"
+  },
+  "e1_5_multicast_b16_thread_contiguous": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_multicast_b8_contiguous": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 8,
+   "pattern": "contiguous"
+  },
+  "e1_5_multicast_b8_thread_contiguous": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 8,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_multicast_b4_contiguous": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 4,
+   "pattern": "contiguous"
+  },
+  "e1_5_multicast_b4_thread_contiguous": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 4,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_reduce_b16_contiguous": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "contiguous"
+  },
+  "e1_5_reduce_b16_thread_contiguous": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_reduce_b8_contiguous": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 8,
+   "pattern": "contiguous"
+  },
+  "e1_5_reduce_b8_thread_contiguous": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 8,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_reduce_b4_contiguous": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 4,
+   "pattern": "contiguous"
+  },
+  "e1_5_reduce_b4_thread_contiguous": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 4,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_plain_load_b16_contiguous": {
+   "role_a": "plain_load",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "contiguous"
+  },
+  "e1_5_plain_load_b16_thread_contiguous": {
+   "role_a": "plain_load",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "thread_contiguous"
+  },
+  "e1_5_plain_store_b16_contiguous": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "contiguous"
+  },
+  "e1_5_plain_store_b16_thread_contiguous": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "access_bytes": 16,
+   "pattern": "thread_contiguous"
+  }
+ },
+ "rounds": 3,
+ "rotate": true,
+ "nsys": {
+  "metrics_file": "nsys/nvlink_packets.config",
+  "frequency": 10000
+ }
+}

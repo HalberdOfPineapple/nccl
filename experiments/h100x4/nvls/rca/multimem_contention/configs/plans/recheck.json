@@ -1,0 +1,27 @@
+{
+ "arms": {
+  "recheck_allgather": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "recheck_reducescatter": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "recheck_allreduce": {
+   "role_a": "allreduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  }
+ },
+ "rounds": 2,
+ "rotate": true
+}

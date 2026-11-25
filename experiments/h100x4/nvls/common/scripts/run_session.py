@@ -55,15 +55,36 @@ def ensure_idle():
 
 
 def snapshot():
+    # Snapshot keys are an interface: 'link' is the data counter (metric B3, read by mm_summary.py);
+    # 'link_raw' is the raw counter (payload plus protocol, metrics R9 and R10), added 2026-11-18.
+    # Both are read-only driver counters.
     return {
         'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'gpu': capture(['nvidia-smi', '-i', DEVICES, '-q', '-x']),
         'link': capture(['nvidia-smi', 'nvlink', '-i', DEVICES, '-gt', 'd']),
+        'link_raw': capture(['nvidia-smi', 'nvlink', '-i', DEVICES, '-gt', 'r']),
     }
 
 
-def run_one(config_path, output):
-    """One guarded invocation: snapshots, telemetry, log, raw JSON. Returns False on a failed run."""
+def profiler_prefix(output, nsys_settings):
+    """Nsight Systems wrapper for RCA plan 01 E1.3 onward (metrics R1-R5), or [] for an ordinary run.
+
+    It samples GPU metrics on the authorized devices only and traces CUDA, so the parser can keep the
+    samples inside the mmMix kernel intervals. The report and its SQLite export sit beside the run record.
+    """
+    if not nsys_settings:
+        return []
+    metrics_file = (COMMON / nsys_settings['metrics_file']).resolve()
+    return [
+        'nsys', 'profile', '--trace=cuda', '--sample=none', '--cpuctxsw=none',
+        f'--gpu-metrics-devices={DEVICES}', f'--gpu-metrics-set=file:{metrics_file}',
+        f"--gpu-metrics-frequency={nsys_settings.get('frequency', 10000)}",
+        '--export=sqlite', '--force-overwrite=false', '-o', str(output.with_suffix('')) + '_nsys',
+    ]
+
+
+def run_one(config_path, output, nsys_settings=None):
+    """One guarded invocation: snapshots, telemetry, log, raw JSON. Returns the exit code (0 = success)."""
     locks = []
     for device in DEVICES.split(','):
         handle = open(f'/tmp/nccl_thread_store_gpu_{device}.lock', 'a')
@@ -89,7 +110,9 @@ def run_one(config_path, output):
     environment.pop('CUDA_VISIBLE_DEVICES', None)
     try:
         with output.with_suffix('.log').open('w') as log:
-            result = subprocess.run([str(BINARY), str(config_path), str(output), str(GPC_MAPS)], stdout=log, stderr=log, timeout=RUN_TIMEOUT_SECONDS, env=environment)
+            command = profiler_prefix(output, nsys_settings) + [str(BINARY), str(config_path), str(output), str(GPC_MAPS)]
+            timeout = RUN_TIMEOUT_SECONDS * (3 if nsys_settings else 1)
+            result = subprocess.run(command, stdout=log, stderr=log, timeout=timeout, env=environment)
         return_code = result.returncode
     except subprocess.TimeoutExpired:
         return_code = -1
@@ -115,19 +138,23 @@ def main():
     plan = json.loads(arguments.plan.read_text())
     labels = list(plan['arms'])
     for label in labels:
-        write_config(arguments.configs / f'{label}.cfg', plan['arms'][label])
+        write_config(arguments.configs / f'{label}.cfg', {key: value for key, value in plan['arms'][label].items() if key != 'nsys'})
     order_log = arguments.raw / 'order.jsonl'
     arguments.raw.mkdir(parents=True, exist_ok=True)
     failures = 0
     try:
         for round_index in range(plan['rounds']):
-            shift = round_index % len(labels) if plan.get('rotate', True) else 0
+            # rotate_step 2 keeps a long run and its short partner next to each other in every round.
+            shift = (round_index * plan.get('rotate_step', 1)) % len(labels) if plan.get('rotate', True) else 0
             for label in labels[shift:] + labels[:shift]:
                 output = arguments.raw / f'{label}_R{round_index + 1}.json'
                 if output.exists():
                     continue
                 started = time.time()
-                return_code = run_one(arguments.configs / f'{label}.cfg', output)
+                # "nsys" may be set for the whole plan or per arm ("nsys": null turns it off for one arm).
+                arm_settings = plan['arms'][label]
+                nsys_settings = arm_settings.get('nsys', plan.get('nsys')) if isinstance(arm_settings, dict) else plan.get('nsys')
+                return_code = run_one(arguments.configs / f'{label}.cfg', output, nsys_settings)
                 with order_log.open('a') as log:
                     log.write(json.dumps({'label': label, 'round': round_index + 1, 'return_code': return_code, 'start_unix': started, 'seconds': time.time() - started}) + '\n')
                 print(f'{label} R{round_index + 1} exit={return_code} {time.time() - started:.1f}s', flush=True)

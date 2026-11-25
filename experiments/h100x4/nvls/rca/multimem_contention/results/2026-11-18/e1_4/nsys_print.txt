@@ -1,0 +1,8 @@
+e1_4_multicast                               received R1=1.000 R2=0.125 R3=0.000 R4=0.009 user/model=1.000 user/driver=1.000 total/raw=0.999
+e1_4_multicast                               sent     R1=0.250 R2=0.031 R3=0.000 R4=0.125 user/model=1.000 user/driver=1.000 total/raw=0.425
+e1_4_plain_load                              received R1=0.000 R2=0.031 R3=0.250 R4=0.031 user/model=1.000 user/driver=1.000 total/raw=0.999
+e1_4_plain_load                              sent     R1=0.000 R2=0.031 R3=0.250 R4=0.031 user/model=1.000 user/driver=1.000 total/raw=0.999
+e1_4_plain_store                             received R1=0.250 R2=0.031 R3=0.000 R4=0.003 user/model=1.000 user/driver=1.000 total/raw=0.994
+e1_4_plain_store                             sent     R1=0.250 R2=0.031 R3=0.000 R4=0.003 user/model=1.000 user/driver=1.000 total/raw=0.995
+e1_4_reduce                                  received R1=0.000 R2=0.154 R3=0.250 R4=0.052 user/model=1.000 user/driver=1.000 total/raw=0.408
+e1_4_reduce                                  sent     R1=0.000 R2=0.062 R3=1.000 R4=0.125 user/model=1.000 user/driver=1.000 total/raw=0.998

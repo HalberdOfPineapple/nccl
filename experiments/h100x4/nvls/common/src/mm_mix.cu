@@ -48,8 +48,16 @@ constexpr size_t rankPartBytes = size_t(2048) << 20;
 constexpr size_t regionBytes = rankPartBytes * rankCount;
 constexpr size_t rankOffsetUnitBytes = size_t(32) << 20;  // NCCL's ncclSymkMcPerRankOffsetBytes
 constexpr int patternPeriodWords = 4096;
-enum RoleKind { kindIdle = 0, kindController = 1, kindMulticast = 2, kindReduce = 3, kindAllreduce = 4, kindPlainLoad = 5, kindPlainStore = 6 };
-static const char* roleNames[] = {"idle", "controller", "multicast", "reduce", "allreduce", "plain_load", "plain_store"};
+// Probe area (RCA plan 01 E1.8): after the control signals, one 4 KiB slot per rank, never touched by roles.
+constexpr size_t probeAreaOffset = regionBytes * 2 + 4096;
+constexpr size_t probeSlotBytes = 4096;
+constexpr unsigned probeCapacity = 1u << 20;   // latency samples per window and rank
+enum RoleKind { kindIdle = 0, kindController = 1, kindMulticast = 2, kindReduce = 3, kindAllreduce = 4, kindPlainLoad = 5, kindPlainStore = 6, kindProbe = 7 };
+static const char* roleNames[] = {"idle", "controller", "multicast", "reduce", "allreduce", "plain_load", "plain_store", "probe"};
+// Traffic roles take a slice of the rank's part; the controller and the probe do not.
+__host__ __device__ __forceinline__ bool isTrafficRole(int kind) {
+  return kind >= kindMulticast && kind <= kindPlainStore;
+}
 
 struct alignas(128) Signal { int value; };
 struct WindowControl {
@@ -84,6 +92,17 @@ struct Config {
   int iterations = 5;
   int warmup = 1;
   int rankOffset = 0;               // E1.6c: NCCL's per-rank start offset pattern
+  int accessBytes = 16;             // RCA E1.5: bytes per thread and access: 16, 8 or 4
+  int threadContiguous = 0;         // RCA E1.5: 0 warp-contiguous (NCCL), 1 thread-contiguous
+  int probeKind = kindIdle;         // RCA E1.8: kindIdle (none), kindReduce or kindMulticast
+};
+// R6: one probe thread per rank times single outstanding operations with clock64.
+struct ProbeState {
+  unsigned long long startNs;
+  unsigned long long endNs;
+  unsigned long long startCycles;
+  unsigned long long endCycles;
+  unsigned samples;
 };
 struct KernelArguments {
   ncclWindow_t window;
@@ -100,6 +119,11 @@ struct KernelArguments {
   int rank;
   unsigned long long windowNs;
   size_t partStartOffset;           // E1.6c: added to every role address inside the rank's part
+  int accessBytes;                  // RCA E1.5
+  int threadContiguous;             // RCA E1.5
+  int probeKind;                    // RCA E1.8
+  ProbeState* probe;                // RCA E1.8
+  unsigned* probeCycles;            // RCA E1.8: R6, cycles per operation
 };
 
 __host__ __device__ __forceinline__ size_t rankPartOffset(int rank) {
@@ -164,65 +188,135 @@ __device__ __forceinline__ void storePlainPack(uintptr_t address, float4 value) 
                : "memory");
 }
 
-// Addresses for one thread and one step inside a chunk. Each warp covers 8 × 32 × 16 bytes without
-// gaps and lanes are 16 bytes apart, as in NCCL's deep loops, so stores can merge the same way.
-template <typename Step>
+// Narrower forms of the same four operations, for the access-width experiment (RCA plan 01 E1.5).
+// AccessOps<16> uses the 16-byte functions above unchanged, so the default arms keep their code.
+template <int AccessBytes> struct AccessOps;
+template <> struct AccessOps<16> {
+  using Value = float4;
+  static __device__ __forceinline__ Value loadReduce(uintptr_t address) { return loadReducePack(address); }
+  static __device__ __forceinline__ void storeMulticast(uintptr_t address, Value value) { storeMulticastPack(address, value); }
+  static __device__ __forceinline__ Value loadPlain(uintptr_t address) { return loadPlainPack(address); }
+  static __device__ __forceinline__ void storePlain(uintptr_t address, Value value) { storePlainPack(address, value); }
+};
+template <> struct AccessOps<8> {
+  using Value = float2;
+  static __device__ __forceinline__ Value loadReduce(uintptr_t address) {
+    Value value;
+    asm volatile("multimem.ld_reduce.global.add.v2.f32 {%0, %1}, [%2];" : "=f"(value.x), "=f"(value.y) : "l"(address) : "memory");
+    return value;
+  }
+  static __device__ __forceinline__ void storeMulticast(uintptr_t address, Value value) {
+    asm volatile("multimem.st.global.v2.f32 [%0], {%1, %2};" :: "l"(address), "f"(value.x), "f"(value.y) : "memory");
+  }
+  static __device__ __forceinline__ Value loadPlain(uintptr_t address) {
+    Value value;
+    asm volatile("ld.global.v2.f32 {%0, %1}, [%2];" : "=f"(value.x), "=f"(value.y) : "l"(address) : "memory");
+    return value;
+  }
+  static __device__ __forceinline__ void storePlain(uintptr_t address, Value value) {
+    asm volatile("st.global.v2.f32 [%0], {%1, %2};" :: "l"(address), "f"(value.x), "f"(value.y) : "memory");
+  }
+};
+template <> struct AccessOps<4> {
+  using Value = float;
+  static __device__ __forceinline__ Value loadReduce(uintptr_t address) {
+    Value value;
+    asm volatile("multimem.ld_reduce.global.add.f32 %0, [%1];" : "=f"(value) : "l"(address) : "memory");
+    return value;
+  }
+  static __device__ __forceinline__ void storeMulticast(uintptr_t address, Value value) {
+    asm volatile("multimem.st.global.f32 [%0], %1;" :: "l"(address), "f"(value) : "memory");
+  }
+  static __device__ __forceinline__ Value loadPlain(uintptr_t address) {
+    Value value;
+    asm volatile("ld.global.f32 %0, [%1];" : "=f"(value) : "l"(address) : "memory");
+    return value;
+  }
+  static __device__ __forceinline__ void storePlain(uintptr_t address, Value value) {
+    asm volatile("st.global.f32 [%0], %1;" :: "l"(address), "f"(value) : "memory");
+  }
+};
+
+// Addresses for one thread and one step inside a chunk; a warp step covers 8 × 32 × AccessBytes bytes
+// without gaps in both patterns, so every byte of a chunk is moved once and the check is unchanged.
+// Warp-contiguous (default): lanes are AccessBytes apart and one instruction of a warp touches
+// 32 × AccessBytes contiguous bytes, as in NCCL's deep loops. Thread-contiguous (E1.5): each thread
+// owns 8 × AccessBytes contiguous bytes, so the lanes of one instruction are 8 × AccessBytes apart:
+// one access per 128-byte line at 16 B, per 64 bytes at 8 B, per 32-byte sector at 4 B.
+template <int AccessBytes, bool ThreadContiguous, typename Step>
 __device__ __forceinline__ void runChunk(size_t chunkOffset, Step const& step) {
-  const size_t threadStepBytes = size_t(packsPerStep) * packBytes;
+  const size_t threadStepBytes = size_t(packsPerStep) * AccessBytes;
   const size_t stepsInChunk = chunkBytes / (threadStepBytes * blockDim.x);
   const size_t warp = threadIdx.x / warpThreads;
   const size_t lane = threadIdx.x % warpThreads;
   const size_t warpStepBytes = threadStepBytes * warpThreads;
-  const size_t threadBase = chunkOffset + warp * warpStepBytes + lane * packBytes;
+  const size_t threadBase = chunkOffset + warp * warpStepBytes + lane * (ThreadContiguous ? threadStepBytes : AccessBytes);
   const size_t stepStride = warpStepBytes * (blockDim.x / warpThreads);
   #pragma unroll 1
   for (size_t stepIndex = 0; stepIndex < stepsInChunk; ++stepIndex) {
     step(threadBase + stepIndex * stepStride);
   }
 }
+// Distance between the packs of one thread inside a step, for each address pattern.
+template <int AccessBytes, bool ThreadContiguous>
+__device__ __forceinline__ constexpr size_t packStrideBytes() {
+  return ThreadContiguous ? size_t(AccessBytes) : size_t(warpThreads) * AccessBytes;
+}
 // Loads run before stores in every role, as NCCL's kernels do; 8 packs are in flight per thread.
+template <int AccessBytes, bool ThreadContiguous>
 __device__ __forceinline__ void stepMulticast(uintptr_t sourceBase, uintptr_t multimemBase, size_t offset) {
-  float4 values[packsPerStep];
+  using Ops = AccessOps<AccessBytes>;
+  constexpr size_t stride = packStrideBytes<AccessBytes, ThreadContiguous>();
+  typename Ops::Value values[packsPerStep];
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    values[pack] = loadPlainPack(sourceBase + offset + size_t(pack) * warpThreads * packBytes);
+    values[pack] = Ops::loadPlain(sourceBase + offset + size_t(pack) * stride);
   }
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    storeMulticastPack(multimemBase + offset + size_t(pack) * warpThreads * packBytes, values[pack]);
+    Ops::storeMulticast(multimemBase + offset + size_t(pack) * stride, values[pack]);
   }
 }
+template <int AccessBytes, bool ThreadContiguous>
 __device__ __forceinline__ void stepReduce(uintptr_t multimemBase, uintptr_t destinationBase, size_t offset) {
-  float4 values[packsPerStep];
+  using Ops = AccessOps<AccessBytes>;
+  constexpr size_t stride = packStrideBytes<AccessBytes, ThreadContiguous>();
+  typename Ops::Value values[packsPerStep];
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    values[pack] = loadReducePack(multimemBase + offset + size_t(pack) * warpThreads * packBytes);
+    values[pack] = Ops::loadReduce(multimemBase + offset + size_t(pack) * stride);
   }
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    storePlainPack(destinationBase + offset + size_t(pack) * warpThreads * packBytes, values[pack]);
+    Ops::storePlain(destinationBase + offset + size_t(pack) * stride, values[pack]);
   }
 }
+template <int AccessBytes, bool ThreadContiguous>
 __device__ __forceinline__ void stepAllreduce(uintptr_t inputBase, uintptr_t outputBase, size_t offset) {
-  float4 values[packsPerStep];
+  using Ops = AccessOps<AccessBytes>;
+  constexpr size_t stride = packStrideBytes<AccessBytes, ThreadContiguous>();
+  typename Ops::Value values[packsPerStep];
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    values[pack] = loadReducePack(inputBase + offset + size_t(pack) * warpThreads * packBytes);
+    values[pack] = Ops::loadReduce(inputBase + offset + size_t(pack) * stride);
   }
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    storeMulticastPack(outputBase + offset + size_t(pack) * warpThreads * packBytes, values[pack]);
+    Ops::storeMulticast(outputBase + offset + size_t(pack) * stride, values[pack]);
   }
 }
+template <int AccessBytes, bool ThreadContiguous>
 __device__ __forceinline__ void stepPlainCopy(uintptr_t sourceBase, uintptr_t destinationBase, size_t offset) {
-  float4 values[packsPerStep];
+  using Ops = AccessOps<AccessBytes>;
+  constexpr size_t stride = packStrideBytes<AccessBytes, ThreadContiguous>();
+  typename Ops::Value values[packsPerStep];
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    values[pack] = loadPlainPack(sourceBase + offset + size_t(pack) * warpThreads * packBytes);
+    values[pack] = Ops::loadPlain(sourceBase + offset + size_t(pack) * stride);
   }
   #pragma unroll
   for (int pack = 0; pack < packsPerStep; ++pack) {
-    storePlainPack(destinationBase + offset + size_t(pack) * warpThreads * packBytes, values[pack]);
+    Ops::storePlain(destinationBase + offset + size_t(pack) * stride, values[pack]);
   }
 }
 
@@ -269,7 +363,7 @@ __device__ void runController(KernelArguments const& arguments) {
 // passes the value through shared memory one chunk later (two slots, so a slot is never rewritten
 // while a slower warp may still read it). Thread 0 checks once per chunk, so the check costs no
 // memory round trip per pack. A CTA stops at most two chunks after the stop flag.
-template <typename Step>
+template <int AccessBytes, bool ThreadContiguous, typename Step>
 __device__ void runRoleLoop(KernelArguments const& arguments, int ctasInRole, int roleIndex, Step const& step) {
   __shared__ int stopSlots[2];
   CtaRecord& record = arguments.records[blockIdx.x];
@@ -297,7 +391,7 @@ __device__ void runRoleLoop(KernelArguments const& arguments, int ctasInRole, in
       pendingStop = *reinterpret_cast<volatile int*>(&arguments.local->stopFlag);
     }
     size_t chunkOffset = (sliceBase + (chunks % sliceChunks) * chunkBytes + arguments.partStartOffset) % rankPartBytes;
-    runChunk(chunkOffset, step);
+    runChunk<AccessBytes, ThreadContiguous>(chunkOffset, step);
   }
   // Posted stores count only after they are ordered, so the end time follows the system fence.
   __threadfence_system();
@@ -310,37 +404,81 @@ __device__ void runRoleLoop(KernelArguments const& arguments, int ctasInRole, in
 }
 
 // Every role reads and writes only inside the issuing rank's part, so ranks never share an address.
-__device__ void runRole(KernelArguments const& arguments, int kind, int startNsctasInRole, int roleIndex) {
+template <int AccessBytes, bool ThreadContiguous>
+__device__ void runRoleWith(KernelArguments const& arguments, int kind, int ctasInRole, int roleIndex) {
   const size_t part = rankPartOffset(arguments.rank);
   const int nextRank = (arguments.rank + 1) % rankCount;
   const uintptr_t localSource = reinterpret_cast<uintptr_t>(arguments.localInput);
   const uintptr_t localDestination = reinterpret_cast<uintptr_t>(arguments.localOutput);
   if (kind == kindMulticast) {
-    const uintptr_t output = reinterpret_cast<uintptr_t>(
-      ncclGetLsaMultimemPointer(arguments.window, regionBytes + part, arguments.deviceCommunicator)
-    );
-    
-    runRoleLoop(
-      arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { 
-        stepMulticast(localSource, output, offset); 
-      }
-    );
+    const uintptr_t output = reinterpret_cast<uintptr_t>(ncclGetLsaMultimemPointer(arguments.window, regionBytes + part, arguments.deviceCommunicator));
+    runRoleLoop<AccessBytes, ThreadContiguous>(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepMulticast<AccessBytes, ThreadContiguous>(localSource, output, offset); });
   } else if (kind == kindReduce) {
-    const uintptr_t input = reinterpret_cast<uintptr_t>(
-      ncclGetLsaMultimemPointer(arguments.window, part, arguments.deviceCommunicator)
-    );
-    runRoleLoop(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepReduce(input, localDestination, offset); });
+    const uintptr_t input = reinterpret_cast<uintptr_t>(ncclGetLsaMultimemPointer(arguments.window, part, arguments.deviceCommunicator));
+    runRoleLoop<AccessBytes, ThreadContiguous>(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepReduce<AccessBytes, ThreadContiguous>(input, localDestination, offset); });
   } else if (kind == kindAllreduce) {
     const uintptr_t input = reinterpret_cast<uintptr_t>(ncclGetLsaMultimemPointer(arguments.window, part, arguments.deviceCommunicator));
     const uintptr_t output = reinterpret_cast<uintptr_t>(ncclGetLsaMultimemPointer(arguments.window, regionBytes + part, arguments.deviceCommunicator));
-    runRoleLoop(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepAllreduce(input, output, offset); });
+    runRoleLoop<AccessBytes, ThreadContiguous>(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepAllreduce<AccessBytes, ThreadContiguous>(input, output, offset); });
   } else if (kind == kindPlainLoad) {
     const uintptr_t peerInput = reinterpret_cast<uintptr_t>(ncclGetLsaPointer(arguments.window, part, nextRank));
-    runRoleLoop(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepPlainCopy(peerInput, localDestination, offset); });
+    runRoleLoop<AccessBytes, ThreadContiguous>(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepPlainCopy<AccessBytes, ThreadContiguous>(peerInput, localDestination, offset); });
   } else if (kind == kindPlainStore) {
     const uintptr_t peerOutput = reinterpret_cast<uintptr_t>(ncclGetLsaPointer(arguments.window, regionBytes + part, nextRank));
-    runRoleLoop(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepPlainCopy(localSource, peerOutput, offset); });
+    runRoleLoop<AccessBytes, ThreadContiguous>(arguments, ctasInRole, roleIndex, [=] __device__(size_t offset) { stepPlainCopy<AccessBytes, ThreadContiguous>(localSource, peerOutput, offset); });
   }
+}
+// Access width and address pattern are template parameters, so the 16-byte warp-contiguous loop is
+// compiled exactly as before the E1.5 addition; the other five forms exist only for E1.5.
+__device__ void runRole(KernelArguments const& arguments, int kind, int ctasInRole, int roleIndex) {
+  if (arguments.accessBytes == 16 && !arguments.threadContiguous) {
+    runRoleWith<16, false>(arguments, kind, ctasInRole, roleIndex);
+  } else if (arguments.accessBytes == 16) {
+    runRoleWith<16, true>(arguments, kind, ctasInRole, roleIndex);
+  } else if (arguments.accessBytes == 8 && !arguments.threadContiguous) {
+    runRoleWith<8, false>(arguments, kind, ctasInRole, roleIndex);
+  } else if (arguments.accessBytes == 8) {
+    runRoleWith<8, true>(arguments, kind, ctasInRole, roleIndex);
+  } else if (!arguments.threadContiguous) {
+    runRoleWith<4, false>(arguments, kind, ctasInRole, roleIndex);
+  } else {
+    runRoleWith<4, true>(arguments, kind, ctasInRole, roleIndex);
+  }
+}
+
+// Probe CTA (R6): thread 0 issues one 16-byte operation at a time on its own slot and times it with
+// clock64. The add on the loaded value makes the second clock read wait for the reply; for stores the
+// system fence waits until the multicast store is acknowledged. The stop flag is read outside the
+// timed interval. Cycles are converted to ns on the host with the globaltimer over the whole loop.
+__device__ void runProbe(KernelArguments const& arguments) {
+  if (threadIdx.x != 0) {
+    return;
+  }
+  const uintptr_t target = reinterpret_cast<uintptr_t>(ncclGetLsaMultimemPointer(arguments.window, probeAreaOffset + size_t(arguments.rank) * probeSlotBytes, arguments.deviceCommunicator));
+  while (!acquireSignal(&arguments.local->startFlag)) {
+    __nanosleep(64);
+  }
+  ProbeState& state = *arguments.probe;
+  state.startNs = readTimerNs();
+  state.startCycles = clock64();
+  float4 sink = make_float4(0.f, 0.f, 0.f, 0.f);
+  unsigned samples = 0;
+  while (samples < probeCapacity && !*reinterpret_cast<volatile int*>(&arguments.local->stopFlag)) {
+    const long long beforeCycles = clock64();
+    if (arguments.probeKind == kindReduce) {
+      float4 value = loadReducePack(target);
+      asm volatile("add.f32 %0, %0, %1;" : "+f"(sink.x) : "f"(value.x));
+    } else {
+      storeMulticastPack(target, sink);
+      asm volatile("fence.acq_rel.sys;" ::: "memory");
+    }
+    const long long afterCycles = clock64();
+    arguments.probeCycles[samples] = unsigned(afterCycles - beforeCycles);
+    ++samples;
+  }
+  state.endCycles = clock64();
+  state.endNs = readTimerNs();
+  state.samples = samples;
 }
 
 __global__ void __launch_bounds__(maxThreadsPerCta, 1) mmMix(KernelArguments arguments) {
@@ -352,14 +490,16 @@ __global__ void __launch_bounds__(maxThreadsPerCta, 1) mmMix(KernelArguments arg
     CtaRecord& record = arguments.records[blockIdx.x];
     record.smId = smId;
     record.kind = kind;
-    sharedRoleIndex = kind >= kindMulticast ? atomicAdd(&arguments.local->registered[slot], 1) : -1;
+    sharedRoleIndex = isTrafficRole(kind) ? atomicAdd(&arguments.local->registered[slot], 1) : -1;
     record.roleIndex = sharedRoleIndex;
   }
   __syncthreads();
 
   if (kind == kindController) {
     runController(arguments);
-  } else if (kind >= kindMulticast) {
+  } else if (kind == kindProbe) {
+    runProbe(arguments);
+  } else if (isTrafficRole(kind)) {
     runRole(arguments, kind, slot == 0 ? arguments.ctasA : arguments.ctasB, sharedRoleIndex);
   }
 }
@@ -397,8 +537,18 @@ __global__ void verifyPart(const float* part, const unsigned long long* chunksOf
   }
 }
 
+struct ProbeSummary {
+  unsigned samples = 0;
+  double nsPerCycle = 0;
+  double minNs = 0;
+  double medianNs = 0;
+  double p90Ns = 0;
+  double p99Ns = 0;
+  double meanNs = 0;
+};
 struct WindowResult {
   std::vector<CtaRecord> records;
+  ProbeSummary probe;
   std::vector<unsigned long long> chunksA;
   std::vector<unsigned long long> chunksB;
   unsigned long long mismatches = 0;
@@ -416,6 +566,8 @@ struct RankState {
   CtaRecord* deviceRecords;
   unsigned long long* deviceChunks;
   unsigned long long* mismatches;
+  ProbeState* probe;
+  unsigned* probeCycles;
   cudaStream_t stream;
   int gridCtas;
   size_t dynamicSharedBytes;
@@ -486,6 +638,16 @@ static Config parseConfiguration(const char* path) {
       config.warmup = std::stoi(value);
     } else if (key == "rank_offset") {
       config.rankOffset = std::stoi(value);
+    } else if (key == "access_bytes") {
+      config.accessBytes = std::stoi(value);
+    } else if (key == "pattern") {
+      if (value != "contiguous" && value != "thread_contiguous") {
+        fprintf(stderr, "Unknown pattern %s\n", value.c_str());
+        std::exit(1);
+      }
+      config.threadContiguous = value == "thread_contiguous";
+    } else if (key == "probe") {
+      config.probeKind = value == "none" ? kindIdle : parseKind(value);
     } else {
       fprintf(stderr, "Unknown config key %s\n", key.c_str());
       std::exit(1);
@@ -494,10 +656,13 @@ static Config parseConfiguration(const char* path) {
   return config;
 }
 static void validateConfiguration(const Config& config) {
-  bool threadsValid = config.threads >= 32 && config.threads % 32 == 0 && config.threads <= maxThreadsPerCta && chunkBytes % (size_t(packsPerStep) * packBytes * config.threads) == 0;
-  // Slot A and slot B take turns over the SMs, so each role can have at most 64 CTAs.
-  bool ctasValid = config.ctasA >= 0 && config.ctasA <= 64 && config.ctasB >= 0 && config.ctasB <= 64 && config.ctasA + config.ctasB >= 1;
-  bool kindsValid = (config.ctasA == 0 || config.kindA >= kindMulticast) && (config.ctasB == 0 || config.kindB >= kindMulticast);
+  bool accessValid = config.accessBytes == 16 || config.accessBytes == 8 || config.accessBytes == 4;
+  bool threadsValid = accessValid && config.threads >= 32 && config.threads % 32 == 0 && config.threads <= maxThreadsPerCta && chunkBytes % (size_t(packsPerStep) * config.accessBytes * config.threads) == 0;
+  bool probeValid = config.probeKind == kindIdle || config.probeKind == kindReduce || config.probeKind == kindMulticast;
+  // Slot A and slot B take turns over the SMs, so each role can have at most 64 CTAs. A probe-only
+  // run (background "none" in E1.8) has no role CTAs.
+  bool ctasValid = config.ctasA >= 0 && config.ctasA <= 64 && config.ctasB >= 0 && config.ctasB <= 64 && (config.ctasA + config.ctasB >= 1 || config.probeKind != kindIdle);
+  bool kindsValid = probeValid && (config.ctasA == 0 || isTrafficRole(config.kindA)) && (config.ctasB == 0 || isTrafficRole(config.kindB));
   bool runValid = config.iterations >= 1 && config.warmup >= 0 && config.windowNs > 0;
   bool gpusValid = true;
   for (int rank = 0; rank < rankCount; ++rank) {
@@ -580,6 +745,10 @@ static void buildRoleTable(RankState& state, const Config& config, int rank) {
     state.slotTable[order[2 + 2 * index]] = 1;
   }
   state.activeCtas = localCtasA + localCtasB;
+  // The probe takes the last SM in the order, which no role reaches (at most 1 + 2 × 64 positions).
+  if (config.probeKind != kindIdle) {
+    state.kindTable[order.back()] = kindProbe;
+  }
 }
 // Runs fillPattern over one region on this rank's stream.
 static void fillRegion(RankState& state, float* region, size_t bytes, size_t firstWord, int rank, int blockThreads) {
@@ -609,7 +778,8 @@ static void setupRank(Shared& shared, int rank) {
   }
 
   // Window: input region, output region, then control signals.
-  const size_t windowBytes = regionBytes * 2 + sizeof(WindowControl);
+  static_assert(sizeof(WindowControl) <= probeAreaOffset - regionBytes * 2, "control signals overlap the probe area");
+  const size_t windowBytes = probeAreaOffset + rankCount * probeSlotBytes;
   NCCL_CHECK(ncclMemAlloc(&state.windowMemory, windowBytes));
   NCCL_CHECK(ncclCommWindowRegister(state.communicator, state.windowMemory, windowBytes, &state.window, NCCL_WIN_COLL_SYMMETRIC));
   
@@ -624,6 +794,8 @@ static void setupRank(Shared& shared, int rank) {
   CUDA_CHECK(cudaMalloc(&state.deviceRecords, state.gridCtas * sizeof(CtaRecord)));
   CUDA_CHECK(cudaMalloc(&state.deviceChunks, maxSms * sizeof(unsigned long long)));
   CUDA_CHECK(cudaMalloc(&state.mismatches, sizeof(unsigned long long)));
+  CUDA_CHECK(cudaMalloc(&state.probe, sizeof(ProbeState)));
+  CUDA_CHECK(cudaMalloc(&state.probeCycles, (config.probeKind != kindIdle ? probeCapacity : 1) * sizeof(unsigned)));
   CUDA_CHECK(cudaMalloc(&state.kindOfSm, maxSms * sizeof(int)));
   CUDA_CHECK(cudaMalloc(&state.slotOfSm, maxSms * sizeof(int)));
   CUDA_CHECK(cudaMemcpy(state.kindOfSm, state.kindTable.data(), maxSms * sizeof(int), cudaMemcpyHostToDevice));
@@ -655,12 +827,13 @@ static void prepareWindow(RankState& state) {
   CUDA_CHECK(cudaMemsetAsync(state.local, 0, sizeof(LocalControl), state.stream));
   CUDA_CHECK(cudaMemsetAsync(state.deviceRecords, 0, state.gridCtas * sizeof(CtaRecord), state.stream));
   CUDA_CHECK(cudaMemsetAsync(state.mismatches, 0, sizeof(unsigned long long), state.stream));
+  CUDA_CHECK(cudaMemsetAsync(state.probe, 0, sizeof(ProbeState), state.stream));
   CUDA_CHECK(cudaStreamSynchronize(state.stream));
 }
 // CTA chunk counts of one role, ordered by slice index, as the check kernel needs them.
 static std::vector<unsigned long long> chunksByRoleIndex(const std::vector<CtaRecord>& records, int kind, int ctasInRole) {
   std::vector<unsigned long long> chunks(maxSms, 0);
-  if (kind < kindMulticast) {
+  if (!isTrafficRole(kind)) {
     return chunks;
   }
   std::set<int> indexes;
@@ -686,7 +859,7 @@ static void checkPlacement(const RankState& state, const std::vector<CtaRecord>&
       fprintf(stderr, "Role does not match the table\n");
       std::exit(4);
     }
-    if (record.kind >= kindMulticast && record.endNs <= record.startNs) {
+    if (isTrafficRole(record.kind) && record.endNs <= record.startNs) {
       fprintf(stderr, "Invalid CTA timing\n");
       std::exit(4);
     }
@@ -719,6 +892,32 @@ static void verifyLocalRole(Shared& shared, RankState& state, int rank, int kind
   size_t offset = startOffsetOfRank(rank, shared.config.rankOffset);
   runVerify(state, state.localOutput, chunksOfRank[rank], ctasInRole, offset, rankPartOffset(rank) / sizeof(float), kind == kindReduce, (rank + 1) % rankCount);
 }
+// R6: latency percentiles of one window. Cycles become ns with the globaltimer over the same loop,
+// so the SM clock does not have to be known.
+static ProbeSummary summarizeProbe(RankState& state) {
+  ProbeState probeState;
+  CUDA_CHECK(cudaMemcpy(&probeState, state.probe, sizeof(ProbeState), cudaMemcpyDeviceToHost));
+  ProbeSummary summary;
+  summary.samples = probeState.samples;
+  if (probeState.samples == 0 || probeState.endCycles <= probeState.startCycles) {
+    return summary;
+  }
+  std::vector<unsigned> cycles(probeState.samples);
+  CUDA_CHECK(cudaMemcpy(cycles.data(), state.probeCycles, cycles.size() * sizeof(unsigned), cudaMemcpyDeviceToHost));
+  std::sort(cycles.begin(), cycles.end());
+  summary.nsPerCycle = double(probeState.endNs - probeState.startNs) / double(probeState.endCycles - probeState.startCycles);
+  auto percentile = [&](double share) { return cycles[size_t(share * (cycles.size() - 1))] * summary.nsPerCycle; };
+  double totalCycles = 0;
+  for (unsigned value : cycles) {
+    totalCycles += value;
+  }
+  summary.minNs = cycles.front() * summary.nsPerCycle;
+  summary.medianNs = percentile(0.5);
+  summary.p90Ns = percentile(0.9);
+  summary.p99Ns = percentile(0.99);
+  summary.meanNs = totalCycles / cycles.size() * summary.nsPerCycle;
+  return summary;
+}
 // Each window: reset, launch, read records, exchange chunk counts between ranks, then check buffers.
 static void runWindow(Shared& shared, int rank, int iteration) {
   RankState& state = shared.ranks[rank];
@@ -731,7 +930,8 @@ static void runWindow(Shared& shared, int rank, int iteration) {
     state.window, state.deviceCommunicator, state.localInput, state.localOutput, 
     state.kindOfSm, state.slotOfSm, state.local, state.deviceRecords, 
     config.ctasA, config.ctasB, 
-    state.activeCtas, rank, config.windowNs, startOffsetOfRank(rank, config.rankOffset)
+    state.activeCtas, rank, config.windowNs, startOffsetOfRank(rank, config.rankOffset),
+    config.accessBytes, config.threadContiguous, config.probeKind, state.probe, state.probeCycles
   };
   mmMix<<<state.gridCtas, config.threads, state.dynamicSharedBytes, state.stream>>>(arguments);
   CUDA_CHECK(cudaGetLastError());
@@ -741,6 +941,9 @@ static void runWindow(Shared& shared, int rank, int iteration) {
   result.records.resize(state.gridCtas);
   CUDA_CHECK(cudaMemcpy(result.records.data(), state.deviceRecords, state.gridCtas * sizeof(CtaRecord), cudaMemcpyDeviceToHost));
   checkPlacement(state, result.records);
+  if (config.probeKind != kindIdle) {
+    result.probe = summarizeProbe(state);
+  }
 
   result.chunksA = chunksByRoleIndex(result.records, config.kindA, config.ctasA);
   result.chunksB = chunksByRoleIndex(result.records, config.kindB, config.ctasB);
@@ -782,15 +985,21 @@ static void writeRecords(const Shared& shared) {
   const Config& config = shared.config;
   output << "{\"schema\":\"mm_mix_v1\",\"role_a\":\"" << roleNames[config.kindA] << "\",\"ctas_a\":" << config.ctasA << ",\"rank_mask_a\":" << config.rankMaskA;
   output << ",\"role_b\":\"" << roleNames[config.kindB] << "\",\"ctas_b\":" << config.ctasB << ",\"rank_mask_b\":" << config.rankMaskB;
-  output << ",\"threads\":" << config.threads << ",\"window_ns\":" << config.windowNs << ",\"chunk_bytes\":" << chunkBytes << ",\"pack_bytes\":" << packBytes << ",\"packs_per_step\":" << packsPerStep << ",\"rank_offset\":" << config.rankOffset << ",\"warmup\":" << config.warmup << ",\"ranks\":[";
+  output << ",\"threads\":" << config.threads << ",\"window_ns\":" << config.windowNs << ",\"chunk_bytes\":" << chunkBytes << ",\"pack_bytes\":" << config.accessBytes << ",\"pattern\":\"" << (config.threadContiguous ? "thread_contiguous" : "contiguous") << "\",\"probe\":\"" << (config.probeKind == kindIdle ? "none" : roleNames[config.probeKind]) << "\"" << ",\"packs_per_step\":" << packsPerStep << ",\"rank_offset\":" << config.rankOffset << ",\"warmup\":" << config.warmup << ",\"ranks\":[";
   for (int rank = 0; rank < rankCount; ++rank) {
     const RankState& state = shared.ranks[rank];
     output << (rank ? "," : "") << "{\"rank\":" << rank << ",\"gpu\":" << config.gpus[rank] << ",\"uuid\":\"" << uuidText(state.properties.uuid) << "\",\"shared_bytes\":" << state.dynamicSharedBytes << ",\"windows\":[";
     for (size_t window = 0; window < state.windows.size(); ++window) {
-      output << (window ? "," : "") << "{\"mismatches\":" << state.windows[window].mismatches << ",\"ctas\":[";
+      output << (window ? "," : "") << "{\"mismatches\":" << state.windows[window].mismatches;
+      if (config.probeKind != kindIdle) {
+        const ProbeSummary& probe = state.windows[window].probe;
+        output << ",\"probe\":{\"samples\":" << probe.samples << ",\"ns_per_cycle\":" << probe.nsPerCycle << ",\"min_ns\":" << probe.minNs << ",\"median_ns\":" << probe.medianNs << ",\"p90_ns\":" << probe.p90Ns << ",\"p99_ns\":" << probe.p99Ns << ",\"mean_ns\":" << probe.meanNs << "}";
+      }
+      output << ",\"ctas\":[";
       bool first = true;
       for (const auto& record : state.windows[window].records) {
-        if (record.kind == kindIdle) {
+        // The probe is reported in the window's "probe" object, not as a traffic CTA.
+        if (record.kind == kindIdle || record.kind == kindProbe) {
           continue;
         }
         output << (first ? "" : ",") << "{\"role\":\"" << roleNames[record.kind] << "\",\"sm_id\":" << record.smId << ",\"role_index\":" << record.roleIndex << ",\"start_ns\":" << record.startNs << ",\"end_ns\":" << record.endNs << ",\"chunks\":" << record.chunks << "}";

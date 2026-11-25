@@ -1,0 +1,6 @@
+e1_3_allgather_sampled                       received R1=1.000 R2=0.125 R3=0.000 R4=0.009 user/model=1.000 user/driver=1.000 total/raw=0.999
+e1_3_allgather_sampled                       sent     R1=0.251 R2=0.031 R3=0.000 R4=0.125 user/model=1.000 user/driver=1.000 total/raw=0.426
+e1_3_plain_store_sampled                     received R1=0.250 R2=0.031 R3=0.000 R4=0.003 user/model=1.000 user/driver=1.000 total/raw=0.994
+e1_3_plain_store_sampled                     sent     R1=0.250 R2=0.031 R3=0.000 R4=0.003 user/model=1.000 user/driver=1.000 total/raw=0.995
+e1_3_reducescatter_sampled                   received R1=0.000 R2=0.154 R3=0.250 R4=0.052 user/model=1.000 user/driver=1.000 total/raw=0.408
+e1_3_reducescatter_sampled                   sent     R1=0.000 R2=0.062 R3=1.000 R4=0.125 user/model=1.000 user/driver=1.000 total/raw=0.998

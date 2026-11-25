@@ -1,0 +1,8 @@
+e1_6_allgather                               received R1=1.000 R2=0.125 R3=0.000 R4=0.009 user/model=1.000 user/driver=1.000 total/raw=0.999
+e1_6_allgather                               sent     R1=0.250 R2=0.031 R3=0.000 R4=0.125 user/model=1.000 user/driver=1.000 total/raw=0.424
+e1_6_allreduce_same_ctas                     received R1=1.000 R2=0.356 R3=0.250 R4=0.061 user/model=1.000 user/driver=1.000 total/raw=0.993
+e1_6_allreduce_same_ctas                     sent     R1=0.250 R2=0.094 R3=1.000 R4=0.250 user/model=1.000 user/driver=1.000 total/raw=0.954
+e1_6_reducescatter                           received R1=0.000 R2=0.154 R3=0.250 R4=0.052 user/model=1.000 user/driver=1.000 total/raw=0.408
+e1_6_reducescatter                           sent     R1=0.000 R2=0.062 R3=1.000 R4=0.125 user/model=1.000 user/driver=1.000 total/raw=0.998
+e1_6_separate_ctas                           received R1=0.947 R2=0.361 R3=0.267 R4=0.065 user/model=1.000 user/driver=1.000 total/raw=0.990
+e1_6_separate_ctas                           sent     R1=0.238 R2=0.096 R3=1.053 R4=0.250 user/model=1.000 user/driver=1.000 total/raw=0.989

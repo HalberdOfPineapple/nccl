@@ -1,0 +1,16 @@
+{
+ "arms": {
+  "nsys_test_allgather": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 2,
+   "warmup": 1
+  }
+ },
+ "rounds": 1,
+ "nsys": {
+  "metrics_file": "nsys/nvlink_packets.config",
+  "frequency": 10000
+ }
+}

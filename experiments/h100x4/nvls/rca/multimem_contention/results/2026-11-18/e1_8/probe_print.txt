@@ -1,0 +1,10 @@
+probe=multicast background=allgather     median=  15481 ns p90=  16928 ns rate=  93.6 GB/s in_flight=   1413 KiB
+probe=multicast background=allreduce     median=  20153 ns p90=  22032 ns rate=  63.3 GB/s in_flight=   1245 KiB
+probe=multicast background=none          median=   1635 ns p90=   1793 ns rate=   0.0 GB/s in_flight=      0 KiB
+probe=multicast background=plain_store   median=   3478 ns p90=   3755 ns rate= 371.3 GB/s in_flight=   1261 KiB
+probe=multicast background=reducescatter median=  27367 ns p90=  35796 ns rate=  89.2 GB/s in_flight=   2385 KiB
+probe=reduce    background=allgather     median=   4235 ns p90=   8199 ns rate=  93.4 GB/s in_flight=    397 KiB
+probe=reduce    background=allreduce     median=   7278 ns p90=  10538 ns rate=  63.2 GB/s in_flight=    449 KiB
+probe=reduce    background=none          median=    870 ns p90=    877 ns rate=   0.0 GB/s in_flight=      0 KiB
+probe=reduce    background=plain_store   median=   1619 ns p90=   2071 ns rate= 371.2 GB/s in_flight=    587 KiB
+probe=reduce    background=reducescatter median=   8165 ns p90=  17665 ns rate=  89.1 GB/s in_flight=    711 KiB

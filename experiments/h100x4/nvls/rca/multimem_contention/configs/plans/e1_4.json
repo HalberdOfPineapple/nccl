@@ -1,0 +1,38 @@
+{
+ "arms": {
+  "e1_4_multicast": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_4_reduce": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_4_plain_load": {
+   "role_a": "plain_load",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_4_plain_store": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  }
+ },
+ "rounds": 3,
+ "rotate": true,
+ "nsys": {
+  "metrics_file": "nsys/nvlink_packets.config",
+  "frequency": 10000
+ }
+}

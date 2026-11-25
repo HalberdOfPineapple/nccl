@@ -1,0 +1,18 @@
+{
+ "rounds": 1,
+ "cells": [
+  {
+   "id": "e1_9_test_allreduce_sym_multicast",
+   "collective": "allreduce",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 5,
+   "nsys": {
+    "metrics_file": "/root/nccl/experiments/h100x4/nvls/common/nsys/nvlink_packets.config",
+    "frequency": 10000
+   }
+  }
+ ]
+}

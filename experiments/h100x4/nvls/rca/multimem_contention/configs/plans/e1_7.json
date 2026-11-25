@@ -1,0 +1,105 @@
+{
+ "arms": {
+  "e1_7_multicast_c32_reduce_c0": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_7_multicast_c32_reduce_c4": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 4
+  },
+  "e1_7_multicast_c32_reduce_c8": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 8
+  },
+  "e1_7_multicast_c32_reduce_c16": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 16
+  },
+  "e1_7_multicast_c32_reduce_c32": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 32
+  },
+  "e1_7_multicast_c32_reduce_c64": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 64
+  },
+  "e1_7_multicast_c0_reduce_c32": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1
+  },
+  "e1_7_multicast_c4_reduce_c32": {
+   "role_a": "multicast",
+   "ctas_a": 4,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 32
+  },
+  "e1_7_multicast_c8_reduce_c32": {
+   "role_a": "multicast",
+   "ctas_a": 8,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 32
+  },
+  "e1_7_multicast_c16_reduce_c32": {
+   "role_a": "multicast",
+   "ctas_a": 16,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 32
+  },
+  "e1_7_multicast_c64_reduce_c32": {
+   "role_a": "multicast",
+   "ctas_a": 64,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "role_b": "reduce",
+   "ctas_b": 32
+  }
+ },
+ "rounds": 3,
+ "rotate": true,
+ "nsys": {
+  "metrics_file": "nsys/nvlink_packets.config",
+  "frequency": 10000
+ }
+}

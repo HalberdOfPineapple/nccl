@@ -1,0 +1,2 @@
+# Raw run records, snapshots, logs and profiler files stay local; derived CSVs, figures and reports are versioned.
+**/raw/

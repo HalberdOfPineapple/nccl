@@ -1,0 +1,86 @@
+{
+ "arms": {
+  "e1_8_probe_reduce_background_none": {
+   "role_a": "multicast",
+   "ctas_a": 0,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "reduce"
+  },
+  "e1_8_probe_reduce_background_allgather": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "reduce"
+  },
+  "e1_8_probe_reduce_background_reducescatter": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "reduce"
+  },
+  "e1_8_probe_reduce_background_allreduce": {
+   "role_a": "allreduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "reduce"
+  },
+  "e1_8_probe_reduce_background_plain_store": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "reduce"
+  },
+  "e1_8_probe_multicast_background_none": {
+   "role_a": "multicast",
+   "ctas_a": 0,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "multicast"
+  },
+  "e1_8_probe_multicast_background_allgather": {
+   "role_a": "multicast",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "multicast"
+  },
+  "e1_8_probe_multicast_background_reducescatter": {
+   "role_a": "reduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "multicast"
+  },
+  "e1_8_probe_multicast_background_allreduce": {
+   "role_a": "allreduce",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "multicast"
+  },
+  "e1_8_probe_multicast_background_plain_store": {
+   "role_a": "plain_store",
+   "ctas_a": 32,
+   "threads": 512,
+   "iterations": 5,
+   "warmup": 1,
+   "probe": "multicast"
+  }
+ },
+ "rounds": 3,
+ "rotate": true
+}

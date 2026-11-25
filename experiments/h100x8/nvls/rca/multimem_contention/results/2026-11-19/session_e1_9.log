@@ -1,0 +1,15 @@
+03:25:46
+e1_9_allgather_sym_multicast_r1: valid=True algbw_max=373.57 sel=['AllGather_STMC'] ch=[2] thr=[512] 51.0s
+e1_9_reducescatter_sym_multicast_r1: valid=True algbw_max=364.06 sel=['ReduceScatter_LDMC'] ch=[2] thr=[512] 53.2s
+e1_9_allreduce_sym_multicast_r1: valid=True algbw_max=276.27 sel=['AllReduce_RSxLDMC_AGxSTMC'] ch=[2] thr=[512] 54.9s
+e1_9_allreduce_ring_r1: valid=True algbw_max=208.09 sel=['RING/SIMPLE'] ch=['0..23'] thr=[] 60.3s
+e1_9_reducescatter_sym_multicast_r2: valid=True algbw_max=364.14 sel=['ReduceScatter_LDMC'] ch=[2] thr=[512] 52.6s
+e1_9_allreduce_sym_multicast_r2: valid=True algbw_max=276.22 sel=['AllReduce_RSxLDMC_AGxSTMC'] ch=[2] thr=[512] 57.5s
+e1_9_allreduce_ring_r2: valid=True algbw_max=208.37 sel=['RING/SIMPLE'] ch=['0..23'] thr=[] 62.5s
+e1_9_allgather_sym_multicast_r2: valid=True algbw_max=373.59 sel=['AllGather_STMC'] ch=[2] thr=[512] 52.1s
+e1_9_allreduce_sym_multicast_r3: valid=True algbw_max=276.26 sel=['AllReduce_RSxLDMC_AGxSTMC'] ch=[2] thr=[512] 55.6s
+e1_9_allreduce_ring_r3: valid=True algbw_max=207.76 sel=['RING/SIMPLE'] ch=['0..23'] thr=[] 61.6s
+e1_9_allgather_sym_multicast_r3: valid=True algbw_max=373.56 sel=['AllGather_STMC'] ch=[2] thr=[512] 52.3s
+e1_9_reducescatter_sym_multicast_r3: valid=True algbw_max=364.07 sel=['ReduceScatter_LDMC'] ch=[2] thr=[512] 52.2s
+exit 0
+03:37:27
