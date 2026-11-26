@@ -1,0 +1,7 @@
+{"run_id": "0000_e1_1_check_AR-MC_default_2G_r0_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 446.49, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 16}}
+{"run_id": "0001_e1_1_check_AR-Ring_default_2G_r0_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 443.26, "launches": {"RING/SIMPLE ctas=32": 16}}
+{"run_id": "0002_e1_1_check_AG-MC_default_2G_r0_single", "status": "kernel_mismatch", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 936.58, "launches": {}}
+{"run_id": "0003_e1_1_check_RS-MC_default_2G_r0_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 542.05, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 16}}
+{"run_id": "0004_e1_1_check_AR-NVLS_default_2G_r0_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 434.83, "launches": {"NVLS/SIMPLE ctas=24": 16}}
+{"run_id": "0005_e1_1_check_AR-LDST_default_2G_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 288.85, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 16}}
+{"run_id": "0006_e1_1_check_AR-TMA_default_2G_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 378.08, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 16}}

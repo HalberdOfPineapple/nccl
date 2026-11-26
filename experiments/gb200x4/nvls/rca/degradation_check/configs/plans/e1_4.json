@@ -1,0 +1,43 @@
+{
+  "name": "e1_4",
+  "description": "Plan 01 E1.4: NVLink data and raw counters (long minus short) per arm at the calibrated CTA count, 2 GiB, 5 rounds; classifies case A/B/C.",
+  "seed": 14,
+  "blocks": [
+    {
+      "name": "e1_4",
+      "arms": [
+        "AG-MC",
+        "AG-CE",
+        "RS-MC",
+        "AR-MC",
+        "AR-NVLS",
+        "AR-Ring",
+        "AR-TMA"
+      ],
+      "ctas": {
+        "AG-MC": "calibrated",
+        "AG-CE": "calibrated",
+        "RS-MC": "calibrated",
+        "AR-MC": "calibrated",
+        "AR-NVLS": "calibrated",
+        "AR-Ring": "calibrated",
+        "AR-TMA": "calibrated"
+      },
+      "sizes": [
+        "2G"
+      ],
+      "rounds": 5,
+      "check": 0,
+      "counter_pair": {
+        "long": {
+          "n": 200,
+          "w": 20
+        },
+        "short": {
+          "n": 40,
+          "w": 20
+        }
+      }
+    }
+  ]
+}

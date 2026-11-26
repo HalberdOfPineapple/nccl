@@ -1,0 +1,12 @@
+== build NCCL (04:16:38)
+== build nccl-tests (04:16:40)
+== plan experiments/gb200x4/nvls/common/plans/e1_1.json (04:16:40)
+/mnt/home/wli10/nccl/experiments/gb200x4/nvls/common/scripts/nccl_runner.py:208: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  'started_utc': datetime.datetime.utcnow().isoformat() + 'Z',
+[1/28] 0000_e1_1_check_AR-MC_default_2G_r0_single ok algbw=446.49 4.8s ['AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512']
+[2/28] 0001_e1_1_check_AR-Ring_default_2G_r0_single ok algbw=443.26 4.6s ['RING/SIMPLE ctas=32']
+[3/28] 0002_e1_1_check_AG-MC_default_2G_r0_single kernel_mismatch algbw=936.58 4.1s []
+[4/28] 0003_e1_1_check_RS-MC_default_2G_r0_single ok algbw=542.05 4.6s ['ReduceScatter_LDMC ctas=6 threads=512']
+[5/28] 0004_e1_1_check_AR-NVLS_default_2G_r0_single ok algbw=434.83 4.6s ['NVLS/SIMPLE ctas=24']
+[6/28] 0005_e1_1_check_AR-LDST_default_2G_r0_single ok algbw=288.85 5.0s ['AllReduce_RSxLD_AGxST ctas=14 threads=512']
+[7/28] 0006_e1_1_check_AR-TMA_default_2G_r0_single ok algbw=378.08 4.7s ['AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512']

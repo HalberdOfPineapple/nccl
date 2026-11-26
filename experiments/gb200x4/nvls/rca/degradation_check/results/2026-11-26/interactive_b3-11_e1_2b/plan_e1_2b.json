@@ -1,0 +1,9 @@
+{
+  "name": "e1_2b",
+  "description": "Plan 01 E1.2 extension: AR-NVLS was still rising at 32 channels (the largest planned value); test 48 and 64 channels, 3 rounds, same settings as e1_2.",
+  "seed": 122,
+  "blocks": [
+    {"name": "e1_2", "arms": ["AR-NVLS"], "ctas": {"AR-NVLS": [48, 64]},
+     "sizes": ["2G"], "rounds": 3, "iterations": 30, "warmup": 5, "check": 0}
+  ]
+}

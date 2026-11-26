@@ -1,0 +1,4 @@
+{"run_id": "0000_smoke_calibrated_AR-MC_c16_256M_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 450.42, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 52}}
+{"run_id": "0001_smoke_calibrated_AG-CE_default_256M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 639.56, "launches": {"copy_engine": 52}}
+{"run_id": "0002_smoke_counters_RS-MC_c16_256M_r0_long", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 676.37, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 220}}
+{"run_id": "0003_smoke_counters_RS-MC_c16_256M_r0_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 672.11, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 60}}

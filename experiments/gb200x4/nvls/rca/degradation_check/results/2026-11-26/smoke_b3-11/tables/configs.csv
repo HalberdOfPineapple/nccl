@@ -1,0 +1,4 @@
+session,block,arm,ctas_requested,launched,size,rounds,algbw_median_gbps,algbw_iqr_gbps,busbw_median_gbps,busbw_iqr_gbps,busbw_share_of_nominal
+smoke_b3-11,smoke_calibrated,AG-CE,default,copy_engine,256M,1,639.56,0,639.56,0,0.669
+smoke_b3-11,smoke_calibrated,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,256M,1,450.42,0,563.02,0,0.589
+smoke_b3-11,smoke_counters,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,256M,1,676.37,0,676.37,0,0.707

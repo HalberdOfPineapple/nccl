@@ -1,0 +1,6 @@
+{"run_id": "0000_e1_2_AR-NVLS_c64_2G_r0_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 445.09, "launches": {"NVLS/SIMPLE ctas=64": 70}}
+{"run_id": "0001_e1_2_AR-NVLS_c48_2G_r0_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 443.63, "launches": {"NVLS/SIMPLE ctas=48": 70}}
+{"run_id": "0002_e1_2_AR-NVLS_c48_2G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 442.85, "launches": {"NVLS/SIMPLE ctas=48": 70}}
+{"run_id": "0003_e1_2_AR-NVLS_c64_2G_r1_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 445.21, "launches": {"NVLS/SIMPLE ctas=64": 70}}
+{"run_id": "0004_e1_2_AR-NVLS_c64_2G_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 444.92, "launches": {"NVLS/SIMPLE ctas=64": 70}}
+{"run_id": "0005_e1_2_AR-NVLS_c48_2G_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 442.94, "launches": {"NVLS/SIMPLE ctas=48": 70}}

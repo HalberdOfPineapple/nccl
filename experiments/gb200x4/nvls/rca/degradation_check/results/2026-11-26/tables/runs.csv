@@ -1,0 +1,254 @@
+session,run_id,block,round,arm,ctas_requested,size,length,iterations,warmup,status,launched,wall_seconds,size_bytes,out_of_place_time_us,out_of_place_algbw_gbps,in_place_time_us,in_place_algbw_gbps,out_of_place_wrong,in_place_wrong,out_of_place_busbw_gbps,sm_clock_after_mhz_min
+interactive_b3-11,0000_e1_1_check_AG-MC_default_2G_r0_single,e1_1_check,0,AG-MC,default,2G,single,5,2,ok,AllGather_STMC ctas=4 threads=512,4.25,2147483648,3033.66,707.89,3043.15,705.68,0,0,707.89,2062.0
+interactive_b3-11,0000_e1_2_AG-MC_c64_2G_r0_single,e1_2,0,AG-MC,64,2G,single,30,5,ok,AllGather_STMC ctas=64 threads=512,4.19,2147483648,3006.3,714.33,3008.79,713.74,N/A,N/A,714.33,2062.0
+interactive_b3-11,0001_e1_1_check_AR-MC_default_2G_r0_single,e1_1_check,0,AR-MC,default,2G,single,5,2,ok,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,4.92,2147483648,4808.38,446.61,4790.68,448.26,0,0,558.26,2062.0
+interactive_b3-11,0001_e1_2_AR-NVLS_c24_2G_r0_single,e1_2,0,AR-NVLS,24,2G,single,30,5,ok,NVLS/SIMPLE ctas=24,4.09,2147483648,4923.22,436.19,4926.17,435.93,N/A,N/A,545.24,2062.0
+interactive_b3-11,0002_e1_1_check_RS-MC_default_2G_r0_single,e1_1_check,0,RS-MC,default,2G,single,5,2,ok,ReduceScatter_LDMC ctas=6 threads=512,4.53,2147483648,3966.94,541.35,3967.4,541.28,0,0,541.35,2062.0
+interactive_b3-11,0002_e1_2_RS-MC_c24_2G_r0_single,e1_2,0,RS-MC,24,2G,single,30,5,ok,ReduceScatter_LDMC ctas=24 threads=512,4.2,2147483648,3052.01,703.63,3055.74,702.77,N/A,N/A,703.63,2062.0
+interactive_b3-11,0003_e1_1_check_AR-LDST_default_2G_r0_single,e1_1_check,0,AR-LDST,default,2G,single,5,2,ok,AllReduce_RSxLD_AGxST ctas=14 threads=512,4.8,2147483648,7433.11,288.91,7425.82,289.19,0,0,433.37,2062.0
+interactive_b3-11,0003_e1_2_AR-MC_c8_2G_r0_single,e1_2,0,AR-MC,8,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=8 threads=512,4.07,2147483648,4692.92,457.6,4699.44,456.97,N/A,N/A,572.0,2062.0
+interactive_b3-11,0004_e1_1_check_AG-CE_default_2G_r0_single,e1_1_check,0,AG-CE,default,2G,single,5,2,ok,copy_engine,4.12,2147483648,2290.64,937.5,2117.84,1014.0,0,0,703.12,2062.0
+interactive_b3-11,0004_e1_2_RS-Ring_c32_2G_r0_single,e1_2,0,RS-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.51,2147483648,2519.67,852.29,2514.95,853.89,N/A,N/A,639.22,2062.0
+interactive_b3-11,0005_e1_1_check_AR-NVLS_default_2G_r0_single,e1_1_check,0,AR-NVLS,default,2G,single,5,2,ok,NVLS/SIMPLE ctas=24,4.62,2147483648,4939.85,434.73,4953.54,433.53,0,0,543.41,2062.0
+interactive_b3-11,0005_e1_2_AR-Ring_c16_2G_r0_single,e1_2,0,AR-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.29,2147483648,7475.61,287.27,7467.72,287.57,N/A,N/A,430.9,2062.0
+interactive_b3-11,0006_e1_1_check_AR-TMA_default_2G_r0_single,e1_1_check,0,AR-TMA,default,2G,single,5,2,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,4.68,2147483648,5704.62,376.45,5809.42,369.66,0,0,564.67,2062.0
+interactive_b3-11,0006_e1_2_AR-Ring_c48_2G_r0_single,e1_2,0,AR-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.22,2147483648,4979.28,431.28,4979.95,431.23,N/A,N/A,646.92,2062.0
+interactive_b3-11,0007_e1_1_check_RS-Ring_default_2G_r0_single,e1_1_check,0,RS-Ring,default,2G,single,5,2,ok,RING/SIMPLE ctas=32,4.18,2147483648,2540.41,845.33,2533.28,847.71,0,0,634.0,2062.0
+interactive_b3-11,0007_e1_2_AR-Ring_c8_2G_r0_single,e1_2,0,AR-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.6,2147483648,14551.0,147.58,14545.6,147.64,N/A,N/A,221.37,2062.0
+interactive_b3-11,0008_e1_1_check_AR-Tuner_default_2G_r0_single,e1_1_check,0,AR-Tuner,default,2G,single,5,2,ok,RING/SIMPLE ctas=32,4.77,2147483648,4841.1,443.59,4845.1,443.23,0,0,,990.0
+interactive_b3-11,0008_e1_2_RS-MC_c2_2G_r0_single,e1_2,0,RS-MC,2,2G,single,30,5,ok,ReduceScatter_LDMC ctas=2 threads=512,4.91,2147483648,11187.7,191.95,11193.9,191.84,N/A,N/A,191.95,2062.0
+interactive_b3-11,0009_e1_1_check_AG-Ring_default_2G_r0_single,e1_1_check,0,AG-Ring,default,2G,single,5,2,ok,RING/SIMPLE ctas=32,4.04,2147483648,2686.57,799.34,2592.12,828.46,0,0,599.5,2062.0
+interactive_b3-11,0009_e1_2_AG-MC_c48_2G_r0_single,e1_2,0,AG-MC,48,2G,single,30,5,ok,AllGather_STMC ctas=48 threads=512,3.94,2147483648,3052.38,703.54,3056.48,702.6,N/A,N/A,703.54,2062.0
+interactive_b3-11,0010_e1_1_check_AR-Ring_default_2G_r0_single,e1_1_check,0,AR-Ring,default,2G,single,5,2,ok,RING/SIMPLE ctas=32,4.67,2147483648,4840.8,443.62,4840.16,443.68,0,0,665.43,2062.0
+interactive_b3-11,0010_e1_2_AR-MC_c48_2G_r0_single,e1_2,0,AR-MC,48,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=48 threads=512,4.41,2147483648,4662.95,460.54,4654.41,461.39,N/A,N/A,575.68,2062.0
+interactive_b3-11,0011_e1_1_counters_AR-TMA_default_2G_r0_long,e1_1_counters,0,AR-TMA,default,2G,long,200,20,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,6.59,2147483648,5681.6,377.97,5792.64,370.73,N/A,N/A,566.96,2062.0
+interactive_b3-11,0011_e1_2_RS-Ring_c8_2G_r0_single,e1_2,0,RS-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.3,2147483648,7073.47,303.6,7067.01,303.87,N/A,N/A,227.7,2062.0
+interactive_b3-11,0012_e1_1_counters_AR-TMA_default_2G_r0_short,e1_1_counters,0,AR-TMA,default,2G,short,40,20,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,4.8,2147483648,5677.24,378.26,5796.46,370.48,N/A,N/A,567.39,2062.0
+interactive_b3-11,0012_e1_2_AG-Ring_c8_2G_r0_single,e1_2,0,AG-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.22,2147483648,9053.95,237.19,8040.2,267.09,N/A,N/A,177.89,2062.0
+interactive_b3-11,0013_e1_1_counters_AR-NVLS_default_2G_r0_long,e1_1_counters,0,AR-NVLS,default,2G,long,200,20,ok,NVLS/SIMPLE ctas=24,6.03,2147483648,4920.05,436.48,4921.64,436.34,N/A,N/A,545.6,2062.0
+interactive_b3-11,0013_e1_2_AR-NVLS_c32_2G_r0_single,e1_2,0,AR-NVLS,32,2G,single,30,5,ok,NVLS/SIMPLE ctas=32,4.15,2147483648,4726.77,454.32,4729.74,454.04,N/A,N/A,567.9,2062.0
+interactive_b3-11,0014_e1_1_counters_AR-NVLS_default_2G_r0_short,e1_1_counters,0,AR-NVLS,default,2G,short,40,20,ok,NVLS/SIMPLE ctas=24,4.06,2147483648,4923.38,436.18,4920.39,436.45,N/A,N/A,545.23,2062.0
+interactive_b3-11,0014_e1_2_AG-MC_c32_2G_r0_single,e1_2,0,AG-MC,32,2G,single,30,5,ok,AllGather_STMC ctas=32 threads=512,4.28,2147483648,3006.27,714.33,3009.03,713.68,N/A,N/A,714.33,2062.0
+interactive_b3-11,0015_e1_1_counters_AR-LDST_default_2G_r0_long,e1_1_counters,0,AR-LDST,default,2G,long,200,20,ok,AllReduce_RSxLD_AGxST ctas=14 threads=512,7.01,2147483648,7421.89,289.34,7407.5,289.91,N/A,N/A,434.01,2062.0
+interactive_b3-11,0015_e1_2_AG-MC_c4_2G_r0_single,e1_2,0,AG-MC,4,2G,single,30,5,ok,AllGather_STMC ctas=4 threads=512,4.47,2147483648,3017.65,711.64,3025.54,709.79,N/A,N/A,711.64,2062.0
+interactive_b3-11,0016_e1_1_counters_AR-LDST_default_2G_r0_short,e1_1_counters,0,AR-LDST,default,2G,short,40,20,ok,AllReduce_RSxLD_AGxST ctas=14 threads=512,4.63,2147483648,7426.46,289.17,7406.79,289.93,N/A,N/A,433.75,2062.0
+interactive_b3-11,0016_e1_2_RS-MC_c32_2G_r0_single,e1_2,0,RS-MC,32,2G,single,30,5,ok,ReduceScatter_LDMC ctas=32 threads=512,4.56,2147483648,3050.96,703.87,3053.65,703.25,N/A,N/A,703.87,2062.0
+interactive_b3-11,0017_e1_1_counters_AG-MC_default_2G_r0_long,e1_1_counters,0,AG-MC,default,2G,long,200,20,ok,AllGather_STMC ctas=4 threads=512,5.16,2147483648,3021.46,710.74,3031.95,708.28,N/A,N/A,710.74,2062.0
+interactive_b3-11,0017_e1_2_AR-MC_c2_2G_r0_single,e1_2,0,AR-MC,2,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=2 threads=512,4.71,2147483648,11575.1,185.53,11590.5,185.28,N/A,N/A,231.91,2062.0
+interactive_b3-11,0018_e1_1_counters_AG-MC_default_2G_r0_short,e1_1_counters,0,AG-MC,default,2G,short,40,20,ok,AllGather_STMC ctas=4 threads=512,4.0,2147483648,3022.29,710.55,3028.75,709.03,N/A,N/A,710.55,2062.0
+interactive_b3-11,0018_e1_2_AR-TMA_c8_2G_r0_single,e1_2,0,AR-TMA,8,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=8 threads=512,4.58,2147483648,7294.7,294.39,7285.98,294.74,N/A,N/A,441.58,2062.0
+interactive_b3-11,0019_e1_1_counters_AR-Ring_default_2G_r0_long,e1_1_counters,0,AR-Ring,default,2G,long,200,20,ok,RING/SIMPLE ctas=32,6.23,2147483648,4814.04,446.09,4811.43,446.33,N/A,N/A,669.13,2062.0
+interactive_b3-11,0019_e1_2_AR-LDST_c32_2G_r0_single,e1_2,0,AR-LDST,32,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=32 threads=512,4.09,2147483648,5167.37,415.59,5010.02,428.64,N/A,N/A,623.38,2062.0
+interactive_b3-11,0020_e1_1_counters_AR-Ring_default_2G_r0_short,e1_1_counters,0,AR-Ring,default,2G,short,40,20,ok,RING/SIMPLE ctas=32,4.63,2147483648,4820.97,445.45,4822.03,445.35,N/A,N/A,668.17,2062.0
+interactive_b3-11,0020_e1_2_RS-Ring_c48_2G_r0_single,e1_2,0,RS-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.38,2147483648,2521.94,851.52,2511.61,855.02,N/A,N/A,638.64,2062.0
+interactive_b3-11,0021_e1_1_counters_AG-Ring_default_2G_r0_long,e1_1_counters,0,AG-Ring,default,2G,long,200,20,ok,RING/SIMPLE ctas=32,4.99,2147483648,2667.18,805.15,2571.13,835.23,N/A,N/A,603.86,2062.0
+interactive_b3-11,0021_e1_2_AR-MC_c24_2G_r0_single,e1_2,0,AR-MC,24,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=24 threads=512,4.12,2147483648,4641.08,462.71,4635.41,463.28,N/A,N/A,578.39,2062.0
+interactive_b3-11,0022_e1_1_counters_AG-Ring_default_2G_r0_short,e1_1_counters,0,AG-Ring,default,2G,short,40,20,ok,RING/SIMPLE ctas=32,4.19,2147483648,2669.16,804.55,2573.52,834.45,N/A,N/A,603.41,2062.0
+interactive_b3-11,0022_e1_2_AR-MC_c1_2G_r0_single,e1_2,0,AR-MC,1,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=1 threads=512,5.91,2147483648,22428.9,95.75,22540.5,95.27,N/A,N/A,119.69,2062.0
+interactive_b3-11,0023_e1_1_counters_AR-MC_default_2G_r0_long,e1_1_counters,0,AR-MC,default,2G,long,200,20,ok,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,6.01,2147483648,4796.67,447.7,4783.9,448.9,N/A,N/A,559.62,2062.0
+interactive_b3-11,0023_e1_2_AG-Ring_c64_2G_r0_single,e1_2,0,AG-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.3,2147483648,2614.16,821.48,2558.64,839.31,N/A,N/A,616.11,2062.0
+interactive_b3-11,0024_e1_1_counters_AR-MC_default_2G_r0_short,e1_1_counters,0,AR-MC,default,2G,short,40,20,ok,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,4.75,2147483648,4798.29,447.55,4787.2,448.59,N/A,N/A,559.44,2062.0
+interactive_b3-11,0024_e1_2_AG-Ring_c32_2G_r0_single,e1_2,0,AG-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.17,2147483648,2667.67,805.0,2569.33,835.81,N/A,N/A,603.75,2062.0
+interactive_b3-11,0025_e1_1_counters_AG-CE_default_2G_r0_long,e1_1_counters,0,AG-CE,default,2G,long,200,20,ok,copy_engine,4.58,2147483648,2268.45,946.67,2101.73,1021.8,N/A,N/A,710.0,2062.0
+interactive_b3-11,0025_e1_2_AG-Ring_c48_2G_r0_single,e1_2,0,AG-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.22,2147483648,2673.33,803.3,2593.9,827.9,N/A,N/A,602.47,2062.0
+interactive_b3-11,0026_e1_1_counters_AG-CE_default_2G_r0_short,e1_1_counters,0,AG-CE,default,2G,short,40,20,ok,copy_engine,4.19,2147483648,2271.82,945.27,2105.31,1020.0,N/A,N/A,708.95,2062.0
+interactive_b3-11,0026_e1_2_AR-LDST_c64_2G_r0_single,e1_2,0,AR-LDST,64,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=64 threads=512,4.11,2147483648,5061.63,424.27,5032.7,426.71,N/A,N/A,636.4,2062.0
+interactive_b3-11,0027_e1_1_counters_RS-MC_default_2G_r0_long,e1_1_counters,0,RS-MC,default,2G,long,200,20,ok,ReduceScatter_LDMC ctas=6 threads=512,5.64,2147483648,3958.76,542.46,3959.74,542.33,N/A,N/A,542.46,2062.0
+interactive_b3-11,0027_e1_2_RS-Ring_c64_2G_r0_single,e1_2,0,RS-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.23,2147483648,2535.98,846.81,2536.25,846.71,N/A,N/A,635.11,2062.0
+interactive_b3-11,0028_e1_1_counters_RS-MC_default_2G_r0_short,e1_1_counters,0,RS-MC,default,2G,short,40,20,ok,ReduceScatter_LDMC ctas=6 threads=512,4.2,2147483648,3954.99,542.98,3959.89,542.31,N/A,N/A,542.98,2062.0
+interactive_b3-11,0028_e1_2_AR-Ring_c24_2G_r0_single,e1_2,0,AR-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.61,2147483648,5370.69,399.85,5361.36,400.55,N/A,N/A,599.78,2062.0
+interactive_b3-11,0029_e1_1_counters_RS-Ring_default_2G_r0_long,e1_1_counters,0,RS-Ring,default,2G,long,200,20,ok,RING/SIMPLE ctas=32,5.32,2147483648,2522.3,851.4,2515.89,853.57,N/A,N/A,638.55,2062.0
+interactive_b3-11,0029_e1_2_AR-TMA_c24_2G_r0_single,e1_2,0,AR-TMA,24,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=24 threads=512,4.21,2147483648,4858.23,442.03,4908.38,437.51,N/A,N/A,663.04,2062.0
+interactive_b3-11,0030_e1_1_counters_RS-Ring_default_2G_r0_short,e1_1_counters,0,RS-Ring,default,2G,short,40,20,ok,RING/SIMPLE ctas=32,4.18,2147483648,2526.84,849.87,2526.1,850.12,N/A,N/A,637.4,2062.0
+interactive_b3-11,0030_e1_2_AR-TMA_c4_2G_r0_single,e1_2,0,AR-TMA,4,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=4 threads=512,5.18,2147483648,14220.0,151.02,14205.8,151.17,N/A,N/A,226.53,2062.0
+interactive_b3-11,0031_e1_2_AR-MC_c64_2G_r0_single,e1_2,0,AR-MC,64,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=64 threads=512,4.13,2147483648,4640.54,462.77,4639.62,462.86,N/A,N/A,578.46,2062.0
+interactive_b3-11,0032_e1_2_AR-LDST_c1_2G_r0_single,e1_2,0,AR-LDST,1,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=1 threads=512,10.67,2147483648,95187.3,22.56,94842.8,22.64,N/A,N/A,33.84,2062.0
+interactive_b3-11,0033_e1_2_AR-Ring_c64_2G_r0_single,e1_2,0,AR-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.69,2147483648,4988.82,430.46,4994.61,429.96,N/A,N/A,645.69,2062.0
+interactive_b3-11,0034_e1_2_AR-LDST_c8_2G_r0_single,e1_2,0,AR-LDST,8,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=8 threads=512,4.56,2147483648,12534.8,171.32,12504.1,171.74,N/A,N/A,256.98,2062.0
+interactive_b3-11,0035_e1_2_AG-Ring_c4_2G_r0_single,e1_2,0,AG-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,4.98,2147483648,18051.7,118.96,16032.1,133.95,N/A,N/A,89.22,2062.0
+interactive_b3-11,0036_e1_2_RS-Ring_c4_2G_r0_single,e1_2,0,RS-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,4.75,2147483648,14101.7,152.29,14098.6,152.32,N/A,N/A,114.22,2062.0
+interactive_b3-11,0037_e1_2_AG-MC_c24_2G_r0_single,e1_2,0,AG-MC,24,2G,single,30,5,ok,AllGather_STMC ctas=24 threads=512,4.12,2147483648,3100.0,692.74,3102.0,692.29,N/A,N/A,692.74,2062.0
+interactive_b3-11,0038_e1_2_AR-MC_c32_2G_r0_single,e1_2,0,AR-MC,32,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=32 threads=512,4.34,2147483648,4632.83,463.54,4632.77,463.54,N/A,N/A,579.43,2062.0
+interactive_b3-11,0039_e1_2_AR-NVLS_c4_2G_r0_single,e1_2,0,AR-NVLS,4,2G,single,30,5,ok,NVLS/SIMPLE ctas=4,5.6,2147483648,29188.0,73.57,29176.0,73.6,N/A,N/A,91.96,2062.0
+interactive_b3-11,0040_e1_2_AR-TMA_c16_2G_r0_single,e1_2,0,AR-TMA,16,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=16 threads=512,4.05,2147483648,5106.2,420.56,4943.39,434.41,N/A,N/A,630.84,2062.0
+interactive_b3-11,0041_e1_2_AG-MC_c16_2G_r0_single,e1_2,0,AG-MC,16,2G,single,30,5,ok,AllGather_STMC ctas=16 threads=512,3.99,2147483648,3006.4,714.3,3008.29,713.86,N/A,N/A,714.3,2062.0
+interactive_b3-11,0042_e1_2_RS-MC_c4_2G_r0_single,e1_2,0,RS-MC,4,2G,single,30,5,ok,ReduceScatter_LDMC ctas=4 threads=512,4.34,2147483648,5760.95,372.77,5757.85,372.97,N/A,N/A,372.77,2062.0
+interactive_b3-11,0043_e1_2_AR-TMA_c64_2G_r0_single,e1_2,0,AR-TMA,64,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=64 threads=512,3.86,2147483648,4922.39,436.27,4875.31,440.48,N/A,N/A,654.4,2062.0
+interactive_b3-11,0044_e1_2_AG-MC_c8_2G_r0_single,e1_2,0,AG-MC,8,2G,single,30,5,ok,AllGather_STMC ctas=8 threads=512,4.5,2147483648,3021.38,710.76,3026.06,709.66,N/A,N/A,710.76,2062.0
+interactive_b3-11,0045_e1_2_RS-MC_c8_2G_r0_single,e1_2,0,RS-MC,8,2G,single,30,5,ok,ReduceScatter_LDMC ctas=8 threads=512,4.1,2147483648,3205.95,669.84,3206.2,669.79,N/A,N/A,669.84,2062.0
+interactive_b3-11,0046_e1_2_AR-MC_c4_2G_r0_single,e1_2,0,AR-MC,4,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=4 threads=512,4.09,2147483648,6099.75,352.06,6096.02,352.28,N/A,N/A,440.07,2062.0
+interactive_b3-11,0047_e1_2_RS-MC_c1_2G_r0_single,e1_2,0,RS-MC,1,2G,single,30,5,ok,ReduceScatter_LDMC ctas=1 threads=512,5.48,2147483648,21896.1,98.08,21898.8,98.06,N/A,N/A,98.08,2062.0
+interactive_b3-11,0048_e1_2_AR-MC_c16_2G_r0_single,e1_2,0,AR-MC,16,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,4.4,2147483648,4636.68,463.15,4632.83,463.54,N/A,N/A,578.94,2062.0
+interactive_b3-11,0049_e1_2_AR-TMA_c1_2G_r0_single,e1_2,0,AR-TMA,1,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=1 threads=512,7.63,2147483648,54889.6,39.12,54785.6,39.2,N/A,N/A,58.68,2062.0
+interactive_b3-11,0050_e1_2_AG-CE_default_2G_r0_single,e1_2,0,AG-CE,default,2G,single,30,5,ok,copy_engine,4.13,2147483648,2270.74,945.72,2103.6,1020.9,N/A,N/A,709.29,2062.0
+interactive_b3-11,0051_e1_2_AR-LDST_c4_2G_r0_single,e1_2,0,AR-LDST,4,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=4 threads=512,5.65,2147483648,24437.3,87.88,24455.2,87.81,N/A,N/A,131.82,2062.0
+interactive_b3-11,0052_e1_2_AR-LDST_c24_2G_r0_single,e1_2,0,AR-LDST,24,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=24 threads=512,4.17,2147483648,5304.14,404.87,5331.38,402.8,N/A,N/A,607.31,2062.0
+interactive_b3-11,0053_e1_2_AG-MC_c1_2G_r0_single,e1_2,0,AG-MC,1,2G,single,30,5,ok,AllGather_STMC ctas=1 threads=512,4.71,2147483648,10724.0,200.25,10729.4,200.15,N/A,N/A,200.25,2062.0
+interactive_b3-11,0054_e1_2_AR-TMA_c48_2G_r0_single,e1_2,0,AR-TMA,48,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=48 threads=512,4.16,2147483648,4902.75,438.02,4859.89,441.88,N/A,N/A,657.03,2062.0
+interactive_b3-11,0055_e1_2_RS-MC_c16_2G_r0_single,e1_2,0,RS-MC,16,2G,single,30,5,ok,ReduceScatter_LDMC ctas=16 threads=512,4.43,2147483648,3072.55,698.93,3066.88,700.22,N/A,N/A,698.93,2062.0
+interactive_b3-11,0056_e1_2_AR-LDST_c2_2G_r0_single,e1_2,0,AR-LDST,2,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=2 threads=512,7.03,2147483648,47993.0,44.75,47894.9,44.84,N/A,N/A,67.12,2062.0
+interactive_b3-11,0057_e1_2_AR-Ring_c32_2G_r0_single,e1_2,0,AR-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.16,2147483648,4815.54,445.95,4813.24,446.16,N/A,N/A,668.92,2062.0
+interactive_b3-11,0058_e1_2_RS-Ring_c24_2G_r0_single,e1_2,0,RS-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.09,2147483648,2824.48,760.31,2816.8,762.39,N/A,N/A,570.23,2062.0
+interactive_b3-11,0059_e1_2_AR-TMA_c2_2G_r0_single,e1_2,0,AR-TMA,2,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=2 threads=512,5.54,2147483648,27861.4,77.08,27836.3,77.15,N/A,N/A,115.62,2062.0
+interactive_b3-11,0060_e1_2_AR-Ring_c4_2G_r0_single,e1_2,0,AR-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,5.78,2147483648,29125.2,73.73,29123.2,73.74,N/A,N/A,110.59,2062.0
+interactive_b3-11,0061_e1_2_AR-LDST_c16_2G_r0_single,e1_2,0,AR-LDST,16,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=16 threads=512,3.97,2147483648,6739.87,318.62,6682.69,321.35,N/A,N/A,477.93,2062.0
+interactive_b3-11,0062_e1_2_RS-MC_c48_2G_r0_single,e1_2,0,RS-MC,48,2G,single,30,5,ok,ReduceScatter_LDMC ctas=48 threads=512,4.1,2147483648,3041.88,705.97,3045.44,705.15,N/A,N/A,705.97,2062.0
+interactive_b3-11,0063_e1_2_AG-Ring_c24_2G_r0_single,e1_2,0,AG-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.15,2147483648,3179.92,675.33,2955.0,726.73,N/A,N/A,506.5,2062.0
+interactive_b3-11,0064_e1_2_AR-NVLS_c8_2G_r0_single,e1_2,0,AR-NVLS,8,2G,single,30,5,ok,NVLS/SIMPLE ctas=8,4.62,2147483648,14458.1,148.53,14406.7,149.06,N/A,N/A,185.66,2062.0
+interactive_b3-11,0065_e1_2_AG-MC_c2_2G_r0_single,e1_2,0,AG-MC,2,2G,single,30,5,ok,AllGather_STMC ctas=2 threads=512,4.02,2147483648,5379.0,399.23,5378.32,399.29,N/A,N/A,399.23,2062.0
+interactive_b3-11,0066_e1_2_AR-NVLS_c16_2G_r0_single,e1_2,0,AR-NVLS,16,2G,single,30,5,ok,NVLS/SIMPLE ctas=16,4.69,2147483648,7302.18,294.09,7290.04,294.58,N/A,N/A,367.61,2062.0
+interactive_b3-11,0067_e1_2_RS-MC_c64_2G_r0_single,e1_2,0,RS-MC,64,2G,single,30,5,ok,ReduceScatter_LDMC ctas=64 threads=512,3.98,2147483648,3039.15,706.61,3042.03,705.94,N/A,N/A,706.61,2062.0
+interactive_b3-11,0068_e1_2_AR-LDST_c48_2G_r0_single,e1_2,0,AR-LDST,48,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=48 threads=512,4.02,2147483648,5224.11,411.07,5299.81,405.2,N/A,N/A,616.61,2062.0
+interactive_b3-11,0069_e1_2_RS-Ring_c16_2G_r0_single,e1_2,0,RS-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.09,2147483648,3673.34,584.61,3659.32,586.85,N/A,N/A,438.46,2062.0
+interactive_b3-11,0070_e1_2_AR-TMA_c32_2G_r0_single,e1_2,0,AR-TMA,32,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,4.08,2147483648,4800.44,447.35,4804.26,447.0,N/A,N/A,671.03,2062.0
+interactive_b3-11,0071_e1_2_AG-Ring_c16_2G_r0_single,e1_2,0,AG-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.05,2147483648,4665.63,460.28,4146.55,517.9,N/A,N/A,345.21,2062.0
+interactive_b3-11,0072_e1_2_AR-MC_c4_2G_r1_single,e1_2,1,AR-MC,4,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=4 threads=512,4.36,2147483648,6089.0,352.68,6102.47,351.9,N/A,N/A,440.85,2062.0
+interactive_b3-11,0073_e1_2_RS-MC_c4_2G_r1_single,e1_2,1,RS-MC,4,2G,single,30,5,ok,ReduceScatter_LDMC ctas=4 threads=512,4.28,2147483648,5754.02,373.21,5760.8,372.78,N/A,N/A,373.21,2062.0
+interactive_b3-11,0074_e1_2_AR-NVLS_c8_2G_r1_single,e1_2,1,AR-NVLS,8,2G,single,30,5,ok,NVLS/SIMPLE ctas=8,4.57,2147483648,14374.3,149.4,14394.6,149.19,N/A,N/A,186.75,2062.0
+interactive_b3-11,0075_e1_2_AR-NVLS_c32_2G_r1_single,e1_2,1,AR-NVLS,32,2G,single,30,5,ok,NVLS/SIMPLE ctas=32,4.17,2147483648,4727.38,454.27,4728.26,454.18,N/A,N/A,567.84,2062.0
+interactive_b3-11,0076_e1_2_AR-TMA_c32_2G_r1_single,e1_2,1,AR-TMA,32,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,4.17,2147483648,4798.34,447.55,4808.83,446.57,N/A,N/A,671.33,2062.0
+interactive_b3-11,0077_e1_2_AR-LDST_c48_2G_r1_single,e1_2,1,AR-LDST,48,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=48 threads=512,4.07,2147483648,5224.12,411.07,5303.71,404.9,N/A,N/A,616.61,2062.0
+interactive_b3-11,0078_e1_2_AR-TMA_c1_2G_r1_single,e1_2,1,AR-TMA,1,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=1 threads=512,7.75,2147483648,54895.9,39.12,54858.3,39.15,N/A,N/A,58.68,2062.0
+interactive_b3-11,0079_e1_2_AR-LDST_c1_2G_r1_single,e1_2,1,AR-LDST,1,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=1 threads=512,10.63,2147483648,95082.7,22.59,94804.5,22.65,N/A,N/A,33.88,2062.0
+interactive_b3-11,0080_e1_2_AG-MC_c1_2G_r1_single,e1_2,1,AG-MC,1,2G,single,30,5,ok,AllGather_STMC ctas=1 threads=512,4.6,2147483648,10738.7,199.98,10738.7,199.98,N/A,N/A,199.98,2062.0
+interactive_b3-11,0081_e1_2_AR-Ring_c64_2G_r1_single,e1_2,1,AR-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.24,2147483648,4965.44,432.49,4970.15,432.08,N/A,N/A,648.74,2062.0
+interactive_b3-11,0082_e1_2_AG-MC_c8_2G_r1_single,e1_2,1,AG-MC,8,2G,single,30,5,ok,AllGather_STMC ctas=8 threads=512,4.33,2147483648,3022.05,710.6,3027.01,709.44,N/A,N/A,710.6,2062.0
+interactive_b3-11,0083_e1_2_AR-LDST_c8_2G_r1_single,e1_2,1,AR-LDST,8,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=8 threads=512,4.69,2147483648,12551.4,171.09,12530.7,171.38,N/A,N/A,256.63,2062.0
+interactive_b3-11,0084_e1_2_AR-MC_c48_2G_r1_single,e1_2,1,AR-MC,48,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=48 threads=512,3.96,2147483648,4662.72,460.56,4654.77,461.35,N/A,N/A,575.7,2062.0
+interactive_b3-11,0085_e1_2_AG-MC_c64_2G_r1_single,e1_2,1,AG-MC,64,2G,single,30,5,ok,AllGather_STMC ctas=64 threads=512,4.06,2147483648,3007.15,714.13,3009.18,713.64,N/A,N/A,714.13,2062.0
+interactive_b3-11,0086_e1_2_RS-MC_c64_2G_r1_single,e1_2,1,RS-MC,64,2G,single,30,5,ok,ReduceScatter_LDMC ctas=64 threads=512,4.08,2147483648,3039.13,706.61,3041.23,706.12,N/A,N/A,706.61,2062.0
+interactive_b3-11,0087_e1_2_AR-TMA_c2_2G_r1_single,e1_2,1,AR-TMA,2,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=2 threads=512,5.57,2147483648,27883.3,77.02,27867.5,77.06,N/A,N/A,115.53,2062.0
+interactive_b3-11,0088_e1_2_AG-MC_c24_2G_r1_single,e1_2,1,AG-MC,24,2G,single,30,5,ok,AllGather_STMC ctas=24 threads=512,4.36,2147483648,3100.04,692.73,3102.81,692.11,N/A,N/A,692.73,2062.0
+interactive_b3-11,0089_e1_2_AG-MC_c48_2G_r1_single,e1_2,1,AG-MC,48,2G,single,30,5,ok,AllGather_STMC ctas=48 threads=512,4.07,2147483648,3052.48,703.52,3056.34,702.63,N/A,N/A,703.52,2062.0
+interactive_b3-11,0090_e1_2_RS-Ring_c4_2G_r1_single,e1_2,1,RS-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,4.58,2147483648,14096.1,152.35,14091.5,152.4,N/A,N/A,114.26,2062.0
+interactive_b3-11,0091_e1_2_RS-MC_c24_2G_r1_single,e1_2,1,RS-MC,24,2G,single,30,5,ok,ReduceScatter_LDMC ctas=24 threads=512,4.1,2147483648,3053.55,703.27,3051.91,703.65,N/A,N/A,703.27,2062.0
+interactive_b3-11,0092_e1_2_AR-MC_c32_2G_r1_single,e1_2,1,AR-MC,32,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=32 threads=512,4.3,2147483648,4631.91,463.63,4630.96,463.72,N/A,N/A,579.54,2062.0
+interactive_b3-11,0093_e1_2_AG-CE_default_2G_r1_single,e1_2,1,AG-CE,default,2G,single,30,5,ok,copy_engine,4.13,2147483648,2271.65,945.34,2104.12,1020.6,N/A,N/A,709.0,2062.0
+interactive_b3-11,0094_e1_2_RS-MC_c1_2G_r1_single,e1_2,1,RS-MC,1,2G,single,30,5,ok,ReduceScatter_LDMC ctas=1 threads=512,5.98,2147483648,21923.9,97.95,21889.8,98.1,N/A,N/A,97.95,2062.0
+interactive_b3-11,0095_e1_2_AR-LDST_c16_2G_r1_single,e1_2,1,AR-LDST,16,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=16 threads=512,4.03,2147483648,6745.65,318.35,6684.74,321.25,N/A,N/A,477.53,2062.0
+interactive_b3-11,0096_e1_2_AG-Ring_c64_2G_r1_single,e1_2,1,AG-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.28,2147483648,2612.41,822.03,2559.76,838.94,N/A,N/A,616.52,2062.0
+interactive_b3-11,0097_e1_2_RS-Ring_c24_2G_r1_single,e1_2,1,RS-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.16,2147483648,2827.94,759.38,2815.17,762.83,N/A,N/A,569.53,2062.0
+interactive_b3-11,0098_e1_2_RS-MC_c32_2G_r1_single,e1_2,1,RS-MC,32,2G,single,30,5,ok,ReduceScatter_LDMC ctas=32 threads=512,4.23,2147483648,3053.34,703.32,3053.11,703.38,N/A,N/A,703.32,2062.0
+interactive_b3-11,0099_e1_2_RS-Ring_c32_2G_r1_single,e1_2,1,RS-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.02,2147483648,2518.69,852.62,2512.6,854.69,N/A,N/A,639.47,2062.0
+interactive_b3-11,0100_e1_2_AG-Ring_c32_2G_r1_single,e1_2,1,AG-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.48,2147483648,2664.75,805.89,2574.92,834.0,N/A,N/A,604.42,2062.0
+interactive_b3-11,0101_e1_2_AR-MC_c2_2G_r1_single,e1_2,1,AR-MC,2,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=2 threads=512,4.6,2147483648,11585.4,185.36,11600.0,185.13,N/A,N/A,231.7,2062.0
+interactive_b3-11,0102_e1_2_AR-MC_c1_2G_r1_single,e1_2,1,AR-MC,1,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=1 threads=512,5.53,2147483648,22465.8,95.59,22537.1,95.29,N/A,N/A,119.49,2062.0
+interactive_b3-11,0103_e1_2_AR-MC_c8_2G_r1_single,e1_2,1,AR-MC,8,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=8 threads=512,4.11,2147483648,4693.44,457.55,4699.16,456.99,N/A,N/A,571.94,2062.0
+interactive_b3-11,0104_e1_2_AR-TMA_c8_2G_r1_single,e1_2,1,AR-TMA,8,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=8 threads=512,4.77,2147483648,7308.58,293.83,7290.67,294.55,N/A,N/A,440.75,2062.0
+interactive_b3-11,0105_e1_2_AG-Ring_c16_2G_r1_single,e1_2,1,AG-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.31,2147483648,4643.86,462.44,4142.22,518.44,N/A,N/A,346.83,2062.0
+interactive_b3-11,0106_e1_2_AG-Ring_c48_2G_r1_single,e1_2,1,AG-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.3,2147483648,2683.91,800.13,2601.92,825.34,N/A,N/A,600.1,2062.0
+interactive_b3-11,0107_e1_2_RS-Ring_c64_2G_r1_single,e1_2,1,RS-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.26,2147483648,2537.74,846.22,2534.94,847.15,N/A,N/A,634.66,2062.0
+interactive_b3-11,0108_e1_2_RS-MC_c48_2G_r1_single,e1_2,1,RS-MC,48,2G,single,30,5,ok,ReduceScatter_LDMC ctas=48 threads=512,4.07,2147483648,3040.56,706.28,3044.53,705.36,N/A,N/A,706.28,2062.0
+interactive_b3-11,0109_e1_2_AG-MC_c16_2G_r1_single,e1_2,1,AG-MC,16,2G,single,30,5,ok,AllGather_STMC ctas=16 threads=512,4.04,2147483648,3006.57,714.26,3008.86,713.72,N/A,N/A,714.26,2062.0
+interactive_b3-11,0110_e1_2_AR-Ring_c48_2G_r1_single,e1_2,1,AR-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.41,2147483648,4969.67,432.12,4969.11,432.17,N/A,N/A,648.18,2062.0
+interactive_b3-11,0111_e1_2_AG-Ring_c4_2G_r1_single,e1_2,1,AG-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,5.08,2147483648,18049.4,118.98,16026.9,133.99,N/A,N/A,89.23,2062.0
+interactive_b3-11,0112_e1_2_AR-TMA_c48_2G_r1_single,e1_2,1,AR-TMA,48,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=48 threads=512,4.4,2147483648,4902.26,438.06,4864.14,441.49,N/A,N/A,657.09,2062.0
+interactive_b3-11,0113_e1_2_AG-MC_c32_2G_r1_single,e1_2,1,AG-MC,32,2G,single,30,5,ok,AllGather_STMC ctas=32 threads=512,4.05,2147483648,3006.78,714.21,3007.84,713.96,N/A,N/A,714.21,2062.0
+interactive_b3-11,0114_e1_2_AR-LDST_c2_2G_r1_single,e1_2,1,AR-LDST,2,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=2 threads=512,7.06,2147483648,48132.3,44.62,47968.5,44.77,N/A,N/A,66.93,2062.0
+interactive_b3-11,0115_e1_2_RS-MC_c8_2G_r1_single,e1_2,1,RS-MC,8,2G,single,30,5,ok,ReduceScatter_LDMC ctas=8 threads=512,4.27,2147483648,3204.46,670.16,3203.14,670.43,N/A,N/A,670.16,2062.0
+interactive_b3-11,0116_e1_2_AR-Ring_c24_2G_r1_single,e1_2,1,AR-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.08,2147483648,5370.39,399.87,5362.6,400.46,N/A,N/A,599.81,2062.0
+interactive_b3-11,0117_e1_2_AG-Ring_c8_2G_r1_single,e1_2,1,AG-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.43,2147483648,9057.56,237.09,8038.05,267.16,N/A,N/A,177.82,2062.0
+interactive_b3-11,0118_e1_2_AR-Ring_c16_2G_r1_single,e1_2,1,AR-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.1,2147483648,7469.38,287.5,7444.35,288.47,N/A,N/A,431.25,2062.0
+interactive_b3-11,0119_e1_2_AR-LDST_c32_2G_r1_single,e1_2,1,AR-LDST,32,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=32 threads=512,4.04,2147483648,5170.25,415.35,5006.34,428.95,N/A,N/A,623.03,2062.0
+interactive_b3-11,0120_e1_2_RS-Ring_c16_2G_r1_single,e1_2,1,RS-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.17,2147483648,3660.18,586.71,3645.66,589.05,N/A,N/A,440.03,2062.0
+interactive_b3-11,0121_e1_2_AR-Ring_c32_2G_r1_single,e1_2,1,AR-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.35,2147483648,4820.71,445.47,4816.64,445.85,N/A,N/A,668.21,2062.0
+interactive_b3-11,0122_e1_2_AR-TMA_c24_2G_r1_single,e1_2,1,AR-TMA,24,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=24 threads=512,4.08,2147483648,4859.97,441.87,4912.76,437.12,N/A,N/A,662.81,2062.0
+interactive_b3-11,0123_e1_2_AG-MC_c4_2G_r1_single,e1_2,1,AG-MC,4,2G,single,30,5,ok,AllGather_STMC ctas=4 threads=512,4.47,2147483648,3023.3,710.31,3031.29,708.44,N/A,N/A,710.31,2047.0
+interactive_b3-11,0124_e1_2_AR-MC_c64_2G_r1_single,e1_2,1,AR-MC,64,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=64 threads=512,4.05,2147483648,4641.37,462.68,4638.94,462.93,N/A,N/A,578.35,2062.0
+interactive_b3-11,0125_e1_2_AR-Ring_c8_2G_r1_single,e1_2,1,AR-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.61,2147483648,14566.4,147.43,14566.1,147.43,N/A,N/A,221.15,2062.0
+interactive_b3-11,0126_e1_2_AR-MC_c24_2G_r1_single,e1_2,1,AR-MC,24,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=24 threads=512,4.02,2147483648,4638.17,463.0,4634.46,463.37,N/A,N/A,578.75,2062.0
+interactive_b3-11,0127_e1_2_AG-MC_c2_2G_r1_single,e1_2,1,AG-MC,2,2G,single,30,5,ok,AllGather_STMC ctas=2 threads=512,4.24,2147483648,5381.49,399.05,5377.7,399.33,N/A,N/A,399.05,2062.0
+interactive_b3-11,0128_e1_2_RS-MC_c2_2G_r1_single,e1_2,1,RS-MC,2,2G,single,30,5,ok,ReduceScatter_LDMC ctas=2 threads=512,4.51,2147483648,11176.0,192.15,11164.1,192.36,N/A,N/A,192.15,2062.0
+interactive_b3-11,0129_e1_2_AG-Ring_c24_2G_r1_single,e1_2,1,AG-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.4,2147483648,3188.51,673.51,2955.6,726.58,N/A,N/A,505.13,2062.0
+interactive_b3-11,0130_e1_2_AR-NVLS_c16_2G_r1_single,e1_2,1,AR-NVLS,16,2G,single,30,5,ok,NVLS/SIMPLE ctas=16,4.05,2147483648,7328.61,293.03,7317.38,293.48,N/A,N/A,366.29,2062.0
+interactive_b3-11,0131_e1_2_AR-Ring_c4_2G_r1_single,e1_2,1,AR-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,5.54,2147483648,29073.7,73.86,29087.7,73.83,N/A,N/A,110.79,2062.0
+interactive_b3-11,0132_e1_2_AR-TMA_c64_2G_r1_single,e1_2,1,AR-TMA,64,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=64 threads=512,3.96,2147483648,4925.16,436.02,4876.03,440.42,N/A,N/A,654.03,2062.0
+interactive_b3-11,0133_e1_2_RS-Ring_c8_2G_r1_single,e1_2,1,RS-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.14,2147483648,7090.98,302.85,7079.97,303.32,N/A,N/A,227.14,2062.0
+interactive_b3-11,0134_e1_2_AR-MC_c16_2G_r1_single,e1_2,1,AR-MC,16,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,4.07,2147483648,4636.05,463.21,4631.99,463.62,N/A,N/A,579.01,2062.0
+interactive_b3-11,0135_e1_2_RS-Ring_c48_2G_r1_single,e1_2,1,RS-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.66,2147483648,2509.18,855.85,2506.63,856.72,N/A,N/A,641.89,2062.0
+interactive_b3-11,0136_e1_2_AR-LDST_c24_2G_r1_single,e1_2,1,AR-LDST,24,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=24 threads=512,4.07,2147483648,5300.65,405.14,5334.47,402.57,N/A,N/A,607.71,2062.0
+interactive_b3-11,0137_e1_2_AR-TMA_c4_2G_r1_single,e1_2,1,AR-TMA,4,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=4 threads=512,5.01,2147483648,14213.4,151.09,14186.8,151.37,N/A,N/A,226.63,2062.0
+interactive_b3-11,0138_e1_2_AR-TMA_c16_2G_r1_single,e1_2,1,AR-TMA,16,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=16 threads=512,4.03,2147483648,5105.04,420.66,4940.1,434.7,N/A,N/A,630.99,2062.0
+interactive_b3-11,0139_e1_2_RS-MC_c16_2G_r1_single,e1_2,1,RS-MC,16,2G,single,30,5,ok,ReduceScatter_LDMC ctas=16 threads=512,4.11,2147483648,3075.67,698.22,3072.74,698.88,N/A,N/A,698.22,2062.0
+interactive_b3-11,0140_e1_2_AR-LDST_c4_2G_r1_single,e1_2,1,AR-LDST,4,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=4 threads=512,5.51,2147483648,24482.2,87.72,24469.9,87.76,N/A,N/A,131.58,2062.0
+interactive_b3-11,0141_e1_2_AR-NVLS_c24_2G_r1_single,e1_2,1,AR-NVLS,24,2G,single,30,5,ok,NVLS/SIMPLE ctas=24,4.35,2147483648,4925.86,435.96,4921.59,436.34,N/A,N/A,544.95,2062.0
+interactive_b3-11,0142_e1_2_AR-NVLS_c4_2G_r1_single,e1_2,1,AR-NVLS,4,2G,single,30,5,ok,NVLS/SIMPLE ctas=4,5.6,2147483648,29121.0,73.74,29089.3,73.82,N/A,N/A,92.17,2062.0
+interactive_b3-11,0143_e1_2_AR-LDST_c64_2G_r1_single,e1_2,1,AR-LDST,64,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=64 threads=512,4.1,2147483648,5070.85,423.5,5031.36,426.82,N/A,N/A,635.25,2062.0
+interactive_b3-11,0144_e1_2_AG-Ring_c4_2G_r2_single,e1_2,2,AG-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,5.1,2147483648,18039.0,119.05,16018.5,134.06,N/A,N/A,89.29,2062.0
+interactive_b3-11,0145_e1_2_AR-MC_c16_2G_r2_single,e1_2,2,AR-MC,16,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,4.11,2147483648,4637.05,463.11,4631.95,463.62,N/A,N/A,578.89,2062.0
+interactive_b3-11,0146_e1_2_RS-Ring_c8_2G_r2_single,e1_2,2,RS-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.63,2147483648,7084.12,303.14,7065.89,303.92,N/A,N/A,227.35,2062.0
+interactive_b3-11,0147_e1_2_AR-TMA_c2_2G_r2_single,e1_2,2,AR-TMA,2,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=2 threads=512,5.68,2147483648,27890.7,77.0,27840.8,77.13,N/A,N/A,115.5,2062.0
+interactive_b3-11,0148_e1_2_AR-MC_c2_2G_r2_single,e1_2,2,AR-MC,2,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=2 threads=512,4.5,2147483648,11590.4,185.28,11612.4,184.93,N/A,N/A,231.6,2062.0
+interactive_b3-11,0149_e1_2_AG-Ring_c32_2G_r2_single,e1_2,2,AG-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.12,2147483648,2669.54,804.44,2576.77,833.4,N/A,N/A,603.33,2062.0
+interactive_b3-11,0150_e1_2_RS-MC_c2_2G_r2_single,e1_2,2,RS-MC,2,2G,single,30,5,ok,ReduceScatter_LDMC ctas=2 threads=512,4.72,2147483648,11199.1,191.75,11197.2,191.79,N/A,N/A,191.75,2062.0
+interactive_b3-11,0151_e1_2_RS-Ring_c24_2G_r2_single,e1_2,2,RS-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.05,2147483648,2827.51,759.5,2815.79,762.66,N/A,N/A,569.62,2062.0
+interactive_b3-11,0152_e1_2_AR-MC_c24_2G_r2_single,e1_2,2,AR-MC,24,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=24 threads=512,4.57,2147483648,4638.47,462.97,4636.02,463.22,N/A,N/A,578.71,2062.0
+interactive_b3-11,0153_e1_2_AR-Ring_c64_2G_r2_single,e1_2,2,AR-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.49,2147483648,5002.18,429.31,5006.35,428.95,N/A,N/A,643.97,2062.0
+interactive_b3-11,0154_e1_2_AG-Ring_c24_2G_r2_single,e1_2,2,AG-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.11,2147483648,3179.09,675.5,2956.62,726.33,N/A,N/A,506.62,2062.0
+interactive_b3-11,0155_e1_2_AR-LDST_c1_2G_r2_single,e1_2,2,AR-LDST,1,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=1 threads=512,10.53,2147483648,95343.4,22.52,95147.7,22.57,N/A,N/A,33.78,2062.0
+interactive_b3-11,0156_e1_2_AG-MC_c24_2G_r2_single,e1_2,2,AG-MC,24,2G,single,30,5,ok,AllGather_STMC ctas=24 threads=512,4.15,2147483648,3100.19,692.7,3102.81,692.11,N/A,N/A,692.7,2062.0
+interactive_b3-11,0157_e1_2_AR-LDST_c48_2G_r2_single,e1_2,2,AR-LDST,48,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=48 threads=512,4.24,2147483648,5228.99,410.69,5307.49,404.61,N/A,N/A,616.03,2062.0
+interactive_b3-11,0158_e1_2_AG-CE_default_2G_r2_single,e1_2,2,AG-CE,default,2G,single,30,5,ok,copy_engine,4.07,2147483648,2271.55,945.38,2103.89,1020.7,N/A,N/A,709.03,2062.0
+interactive_b3-11,0159_e1_2_RS-Ring_c4_2G_r2_single,e1_2,2,RS-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,4.63,2147483648,14096.7,152.34,14087.9,152.43,N/A,N/A,114.25,2062.0
+interactive_b3-11,0160_e1_2_RS-MC_c4_2G_r2_single,e1_2,2,RS-MC,4,2G,single,30,5,ok,ReduceScatter_LDMC ctas=4 threads=512,4.02,2147483648,5761.82,372.71,5761.86,372.71,N/A,N/A,372.71,2062.0
+interactive_b3-11,0161_e1_2_RS-Ring_c32_2G_r2_single,e1_2,2,RS-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.39,2147483648,2521.57,851.65,2515.22,853.8,N/A,N/A,638.74,2062.0
+interactive_b3-11,0162_e1_2_AR-Ring_c32_2G_r2_single,e1_2,2,AR-Ring,32,2G,single,30,5,ok,RING/SIMPLE ctas=32,4.17,2147483648,4827.44,444.85,4824.42,445.13,N/A,N/A,667.28,2062.0
+interactive_b3-11,0163_e1_2_AR-MC_c64_2G_r2_single,e1_2,2,AR-MC,64,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=64 threads=512,4.32,2147483648,4640.76,462.74,4639.34,462.89,N/A,N/A,578.42,2062.0
+interactive_b3-11,0164_e1_2_AR-MC_c32_2G_r2_single,e1_2,2,AR-MC,32,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=32 threads=512,4.12,2147483648,4632.98,463.52,4631.69,463.65,N/A,N/A,579.4,2062.0
+interactive_b3-11,0165_e1_2_AR-LDST_c2_2G_r2_single,e1_2,2,AR-LDST,2,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=2 threads=512,7.13,2147483648,48118.0,44.63,48023.6,44.72,N/A,N/A,66.95,2062.0
+interactive_b3-11,0166_e1_2_RS-Ring_c16_2G_r2_single,e1_2,2,RS-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.14,2147483648,3685.46,582.69,3665.66,585.84,N/A,N/A,437.02,2062.0
+interactive_b3-11,0167_e1_2_AR-Ring_c4_2G_r2_single,e1_2,2,AR-Ring,4,2G,single,30,5,ok,RING/SIMPLE ctas=4,5.61,2147483648,29060.8,73.9,29061.1,73.9,N/A,N/A,110.85,2062.0
+interactive_b3-11,0168_e1_2_AR-Ring_c16_2G_r2_single,e1_2,2,AR-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.74,2147483648,7460.12,287.86,7428.78,289.08,N/A,N/A,431.79,2062.0
+interactive_b3-11,0169_e1_2_AR-TMA_c32_2G_r2_single,e1_2,2,AR-TMA,32,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,4.16,2147483648,4796.9,447.68,4804.74,446.95,N/A,N/A,671.52,2062.0
+interactive_b3-11,0170_e1_2_AG-Ring_c48_2G_r2_single,e1_2,2,AG-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.2,2147483648,2661.26,806.94,2591.29,828.73,N/A,N/A,605.21,2062.0
+interactive_b3-11,0171_e1_2_AR-LDST_c24_2G_r2_single,e1_2,2,AR-LDST,24,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=24 threads=512,4.06,2147483648,5308.71,404.52,5331.5,402.79,N/A,N/A,606.78,2062.0
+interactive_b3-11,0172_e1_2_AG-MC_c32_2G_r2_single,e1_2,2,AG-MC,32,2G,single,30,5,ok,AllGather_STMC ctas=32 threads=512,4.31,2147483648,3006.48,714.28,3008.85,713.72,N/A,N/A,714.28,2062.0
+interactive_b3-11,0173_e1_2_AG-MC_c48_2G_r2_single,e1_2,2,AG-MC,48,2G,single,30,5,ok,AllGather_STMC ctas=48 threads=512,4.04,2147483648,3052.55,703.5,3055.97,702.72,N/A,N/A,703.5,2062.0
+interactive_b3-11,0174_e1_2_AG-MC_c16_2G_r2_single,e1_2,2,AG-MC,16,2G,single,30,5,ok,AllGather_STMC ctas=16 threads=512,4.35,2147483648,3006.81,714.21,3009.57,713.55,N/A,N/A,714.21,2062.0
+interactive_b3-11,0175_e1_2_AR-MC_c48_2G_r2_single,e1_2,2,AR-MC,48,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=48 threads=512,4.12,2147483648,4661.38,460.7,4653.61,461.47,N/A,N/A,575.88,2062.0
+interactive_b3-11,0176_e1_2_AR-LDST_c64_2G_r2_single,e1_2,2,AR-LDST,64,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=64 threads=512,4.0,2147483648,5080.08,422.73,5029.39,426.99,N/A,N/A,634.1,2062.0
+interactive_b3-11,0177_e1_2_AG-MC_c64_2G_r2_single,e1_2,2,AG-MC,64,2G,single,30,5,ok,AllGather_STMC ctas=64 threads=512,4.07,2147483648,3007.04,714.15,3008.87,713.72,N/A,N/A,714.15,2062.0
+interactive_b3-11,0178_e1_2_AR-TMA_c64_2G_r2_single,e1_2,2,AR-TMA,64,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=64 threads=512,4.1,2147483648,4937.94,434.89,4870.98,440.87,N/A,N/A,652.34,2062.0
+interactive_b3-11,0179_e1_2_AG-MC_c1_2G_r2_single,e1_2,2,AG-MC,1,2G,single,30,5,ok,AllGather_STMC ctas=1 threads=512,4.66,2147483648,10727.0,200.19,10729.1,200.16,N/A,N/A,200.19,2062.0
+interactive_b3-11,0180_e1_2_AG-MC_c2_2G_r2_single,e1_2,2,AG-MC,2,2G,single,30,5,ok,AllGather_STMC ctas=2 threads=512,4.32,2147483648,5373.42,399.65,5373.31,399.66,N/A,N/A,399.65,2062.0
+interactive_b3-11,0181_e1_2_AR-Ring_c24_2G_r2_single,e1_2,2,AR-Ring,24,2G,single,30,5,ok,RING/SIMPLE ctas=24,4.15,2147483648,5372.92,399.69,5363.39,400.4,N/A,N/A,599.53,2062.0
+interactive_b3-11,0182_e1_2_AG-Ring_c16_2G_r2_single,e1_2,2,AG-Ring,16,2G,single,30,5,ok,RING/SIMPLE ctas=16,4.08,2147483648,4646.74,462.15,4130.22,519.94,N/A,N/A,346.61,2062.0
+interactive_b3-11,0183_e1_2_AR-NVLS_c16_2G_r2_single,e1_2,2,AR-NVLS,16,2G,single,30,5,ok,NVLS/SIMPLE ctas=16,4.17,2147483648,7310.04,293.77,7300.82,294.14,N/A,N/A,367.21,2062.0
+interactive_b3-11,0184_e1_2_RS-MC_c8_2G_r2_single,e1_2,2,RS-MC,8,2G,single,30,5,ok,ReduceScatter_LDMC ctas=8 threads=512,4.23,2147483648,3203.76,670.3,3206.73,669.68,N/A,N/A,670.3,2062.0
+interactive_b3-11,0185_e1_2_AR-NVLS_c24_2G_r2_single,e1_2,2,AR-NVLS,24,2G,single,30,5,ok,NVLS/SIMPLE ctas=24,4.17,2147483648,4926.25,435.93,4928.55,435.72,N/A,N/A,544.91,2062.0
+interactive_b3-11,0186_e1_2_AR-Ring_c48_2G_r2_single,e1_2,2,AR-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.71,2147483648,4944.07,434.36,4927.95,435.78,N/A,N/A,651.54,2062.0
+interactive_b3-11,0187_e1_2_AG-Ring_c8_2G_r2_single,e1_2,2,AG-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.13,2147483648,9052.27,237.23,8040.51,267.08,N/A,N/A,177.92,2062.0
+interactive_b3-11,0188_e1_2_AR-MC_c4_2G_r2_single,e1_2,2,AR-MC,4,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=4 threads=512,4.03,2147483648,6101.98,351.93,6106.0,351.7,N/A,N/A,439.91,2062.0
+interactive_b3-11,0189_e1_2_RS-MC_c48_2G_r2_single,e1_2,2,RS-MC,48,2G,single,30,5,ok,ReduceScatter_LDMC ctas=48 threads=512,4.03,2147483648,3042.7,705.78,3044.18,705.44,N/A,N/A,705.78,2062.0
+interactive_b3-11,0190_e1_2_AG-MC_c4_2G_r2_single,e1_2,2,AG-MC,4,2G,single,30,5,ok,AllGather_STMC ctas=4 threads=512,4.15,2147483648,3022.89,710.41,3027.92,709.23,N/A,N/A,710.41,2062.0
+interactive_b3-11,0191_e1_2_AR-LDST_c4_2G_r2_single,e1_2,2,AR-LDST,4,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=4 threads=512,5.63,2147483648,24482.3,87.72,24514.8,87.6,N/A,N/A,131.58,2062.0
+interactive_b3-11,0192_e1_2_RS-MC_c64_2G_r2_single,e1_2,2,RS-MC,64,2G,single,30,5,ok,ReduceScatter_LDMC ctas=64 threads=512,4.39,2147483648,3042.26,705.89,3042.18,705.9,N/A,N/A,705.89,2062.0
+interactive_b3-11,0193_e1_2_AR-Ring_c8_2G_r2_single,e1_2,2,AR-Ring,8,2G,single,30,5,ok,RING/SIMPLE ctas=8,4.57,2147483648,14562.8,147.46,14559.7,147.5,N/A,N/A,221.19,2062.0
+interactive_b3-11,0194_e1_2_RS-MC_c1_2G_r2_single,e1_2,2,RS-MC,1,2G,single,30,5,ok,ReduceScatter_LDMC ctas=1 threads=512,5.55,2147483648,21932.1,97.92,21930.7,97.92,N/A,N/A,97.92,2062.0
+interactive_b3-11,0195_e1_2_AR-NVLS_c8_2G_r2_single,e1_2,2,AR-NVLS,8,2G,single,30,5,ok,NVLS/SIMPLE ctas=8,4.57,2147483648,14377.9,149.36,14316.4,150.0,N/A,N/A,186.7,2062.0
+interactive_b3-11,0196_e1_2_AR-TMA_c1_2G_r2_single,e1_2,2,AR-TMA,1,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=1 threads=512,7.86,2147483648,54930.0,39.09,54858.5,39.15,N/A,N/A,58.64,2062.0
+interactive_b3-11,0197_e1_2_AR-LDST_c32_2G_r2_single,e1_2,2,AR-LDST,32,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=32 threads=512,4.53,2147483648,5164.66,415.8,5009.19,428.71,N/A,N/A,623.7,2062.0
+interactive_b3-11,0198_e1_2_RS-MC_c32_2G_r2_single,e1_2,2,RS-MC,32,2G,single,30,5,ok,ReduceScatter_LDMC ctas=32 threads=512,4.02,2147483648,3052.78,703.45,3053.39,703.31,N/A,N/A,703.45,2062.0
+interactive_b3-11,0199_e1_2_AR-MC_c8_2G_r2_single,e1_2,2,AR-MC,8,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=8 threads=512,3.99,2147483648,4692.23,457.67,4699.1,457.0,N/A,N/A,572.09,2062.0
+interactive_b3-11,0200_e1_2_AR-LDST_c8_2G_r2_single,e1_2,2,AR-LDST,8,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=8 threads=512,4.6,2147483648,12563.8,170.93,12521.9,171.5,N/A,N/A,256.39,2062.0
+interactive_b3-11,0201_e1_2_RS-Ring_c64_2G_r2_single,e1_2,2,RS-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.48,2147483648,2537.64,846.25,2535.39,847.0,N/A,N/A,634.69,2062.0
+interactive_b3-11,0202_e1_2_AR-TMA_c4_2G_r2_single,e1_2,2,AR-TMA,4,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=4 threads=512,4.9,2147483648,14224.2,150.97,14215.8,151.06,N/A,N/A,226.45,2062.0
+interactive_b3-11,0203_e1_2_AR-TMA_c16_2G_r2_single,e1_2,2,AR-TMA,16,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=16 threads=512,4.42,2147483648,5104.12,420.74,4941.19,434.61,N/A,N/A,631.11,2062.0
+interactive_b3-11,0204_e1_2_AR-TMA_c24_2G_r2_single,e1_2,2,AR-TMA,24,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=24 threads=512,3.89,2147483648,4860.97,441.78,4908.3,437.52,N/A,N/A,662.67,2062.0
+interactive_b3-11,0205_e1_2_AR-NVLS_c32_2G_r2_single,e1_2,2,AR-NVLS,32,2G,single,30,5,ok,NVLS/SIMPLE ctas=32,4.09,2147483648,4726.85,454.32,4725.5,454.45,N/A,N/A,567.9,2062.0
+interactive_b3-11,0206_e1_2_RS-Ring_c48_2G_r2_single,e1_2,2,RS-Ring,48,2G,single,30,5,ok,RING/SIMPLE ctas=48,4.23,2147483648,2525.48,850.33,2508.93,855.94,N/A,N/A,637.75,2062.0
+interactive_b3-11,0207_e1_2_RS-MC_c24_2G_r2_single,e1_2,2,RS-MC,24,2G,single,30,5,ok,ReduceScatter_LDMC ctas=24 threads=512,4.19,2147483648,3053.83,703.21,3052.57,703.5,N/A,N/A,703.21,2062.0
+interactive_b3-11,0208_e1_2_AR-TMA_c48_2G_r2_single,e1_2,2,AR-TMA,48,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=48 threads=512,4.13,2147483648,4904.21,437.89,4865.02,441.41,N/A,N/A,656.84,2062.0
+interactive_b3-11,0209_e1_2_AR-LDST_c16_2G_r2_single,e1_2,2,AR-LDST,16,2G,single,30,5,ok,AllReduce_RSxLD_AGxST ctas=16 threads=512,4.47,2147483648,6742.17,318.52,6688.03,321.09,N/A,N/A,477.78,2062.0
+interactive_b3-11,0210_e1_2_AG-MC_c8_2G_r2_single,e1_2,2,AG-MC,8,2G,single,30,5,ok,AllGather_STMC ctas=8 threads=512,4.08,2147483648,3020.94,710.87,3028.52,709.09,N/A,N/A,710.87,2062.0
+interactive_b3-11,0211_e1_2_AR-MC_c1_2G_r2_single,e1_2,2,AR-MC,1,2G,single,30,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=1 threads=512,5.54,2147483648,22503.5,95.43,22548.5,95.24,N/A,N/A,119.29,2062.0
+interactive_b3-11,0212_e1_2_AG-Ring_c64_2G_r2_single,e1_2,2,AG-Ring,64,2G,single,30,5,ok,RING/SIMPLE ctas=64,4.22,2147483648,2606.49,823.9,2556.17,840.12,N/A,N/A,617.92,2062.0
+interactive_b3-11,0213_e1_2_AR-NVLS_c4_2G_r2_single,e1_2,2,AR-NVLS,4,2G,single,30,5,ok,NVLS/SIMPLE ctas=4,5.78,2147483648,29192.5,73.56,29162.3,73.64,N/A,N/A,91.95,2062.0
+interactive_b3-11,0214_e1_2_RS-MC_c16_2G_r2_single,e1_2,2,RS-MC,16,2G,single,30,5,ok,ReduceScatter_LDMC ctas=16 threads=512,4.16,2147483648,3073.5,698.71,3070.51,699.39,N/A,N/A,698.71,2062.0
+interactive_b3-11,0215_e1_2_AR-TMA_c8_2G_r2_single,e1_2,2,AR-TMA,8,2G,single,30,5,ok,AllReduce_RSxTmaLD_AGxTmaST ctas=8 threads=512,4.93,2147483648,7301.03,294.13,7301.24,294.13,N/A,N/A,441.19,2062.0
+interactive_b3-11_e1_2b,0000_e1_2_AR-NVLS_c64_2G_r0_single,e1_2,0,AR-NVLS,64,2G,single,30,5,ok,NVLS/SIMPLE ctas=64,4.44,2147483648,4824.81,445.09,4817.23,445.79,N/A,N/A,556.36,2062.0
+interactive_b3-11_e1_2b,0001_e1_2_AR-NVLS_c48_2G_r0_single,e1_2,0,AR-NVLS,48,2G,single,30,5,ok,NVLS/SIMPLE ctas=48,4.38,2147483648,4840.68,443.63,4847.72,442.99,N/A,N/A,554.54,2062.0
+interactive_b3-11_e1_2b,0002_e1_2_AR-NVLS_c48_2G_r1_single,e1_2,1,AR-NVLS,48,2G,single,30,5,ok,NVLS/SIMPLE ctas=48,4.13,2147483648,4849.27,442.85,4849.7,442.81,N/A,N/A,553.56,2062.0
+interactive_b3-11_e1_2b,0003_e1_2_AR-NVLS_c64_2G_r1_single,e1_2,1,AR-NVLS,64,2G,single,30,5,ok,NVLS/SIMPLE ctas=64,4.59,2147483648,4823.55,445.21,4825.43,445.03,N/A,N/A,556.51,2062.0
+interactive_b3-11_e1_2b,0004_e1_2_AR-NVLS_c64_2G_r2_single,e1_2,2,AR-NVLS,64,2G,single,30,5,ok,NVLS/SIMPLE ctas=64,4.22,2147483648,4826.69,444.92,4832.0,444.43,N/A,N/A,556.15,2062.0
+interactive_b3-11_e1_2b,0005_e1_2_AR-NVLS_c48_2G_r2_single,e1_2,2,AR-NVLS,48,2G,single,30,5,ok,NVLS/SIMPLE ctas=48,4.22,2147483648,4848.25,442.94,4853.6,442.45,N/A,N/A,553.67,2062.0

@@ -1,0 +1,96 @@
+session,block,arm,ctas_requested,launched,size,rounds,algbw_median_gbps,algbw_iqr_gbps,busbw_median_gbps,busbw_iqr_gbps,busbw_share_of_nominal
+interactive_b3-11,e1_1_check,AG-CE,default,copy_engine,2G,1,937.5,0,703.12,0,0.735
+interactive_b3-11,e1_1_check,AG-MC,default,AllGather_STMC ctas=4 threads=512,2G,1,707.89,0,707.89,0,0.74
+interactive_b3-11,e1_1_check,AG-Ring,default,RING/SIMPLE ctas=32,2G,1,799.34,0,599.5,0,0.627
+interactive_b3-11,e1_1_check,AR-LDST,default,AllReduce_RSxLD_AGxST ctas=14 threads=512,2G,1,288.91,0,433.37,0,0.453
+interactive_b3-11,e1_1_check,AR-MC,default,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,2G,1,446.61,0,558.26,0,0.584
+interactive_b3-11,e1_1_check,AR-NVLS,default,NVLS/SIMPLE ctas=24,2G,1,434.73,0,543.41,0,0.568
+interactive_b3-11,e1_1_check,AR-Ring,default,RING/SIMPLE ctas=32,2G,1,443.62,0,665.43,0,0.696
+interactive_b3-11,e1_1_check,AR-TMA,default,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,2G,1,376.45,0,564.67,0,0.591
+interactive_b3-11,e1_1_check,AR-Tuner,default,RING/SIMPLE ctas=32,2G,1,443.59,0,,,
+interactive_b3-11,e1_1_check,RS-MC,default,ReduceScatter_LDMC ctas=6 threads=512,2G,1,541.35,0,541.35,0,0.566
+interactive_b3-11,e1_1_check,RS-Ring,default,RING/SIMPLE ctas=32,2G,1,845.33,0,634.0,0,0.663
+interactive_b3-11,e1_1_counters,AG-CE,default,copy_engine,2G,1,946.67,0,710.0,0,0.742
+interactive_b3-11,e1_1_counters,AG-MC,default,AllGather_STMC ctas=4 threads=512,2G,1,710.74,0,710.74,0,0.743
+interactive_b3-11,e1_1_counters,AG-Ring,default,RING/SIMPLE ctas=32,2G,1,805.15,0,603.86,0,0.631
+interactive_b3-11,e1_1_counters,AR-LDST,default,AllReduce_RSxLD_AGxST ctas=14 threads=512,2G,1,289.34,0,434.01,0,0.454
+interactive_b3-11,e1_1_counters,AR-MC,default,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,2G,1,447.7,0,559.62,0,0.585
+interactive_b3-11,e1_1_counters,AR-NVLS,default,NVLS/SIMPLE ctas=24,2G,1,436.48,0,545.6,0,0.571
+interactive_b3-11,e1_1_counters,AR-Ring,default,RING/SIMPLE ctas=32,2G,1,446.09,0,669.13,0,0.7
+interactive_b3-11,e1_1_counters,AR-TMA,default,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,2G,1,377.97,0,566.96,0,0.593
+interactive_b3-11,e1_1_counters,RS-MC,default,ReduceScatter_LDMC ctas=6 threads=512,2G,1,542.46,0,542.46,0,0.567
+interactive_b3-11,e1_1_counters,RS-Ring,default,RING/SIMPLE ctas=32,2G,1,851.4,0,638.55,0,0.668
+interactive_b3-11,e1_2,AG-CE,default,copy_engine,2G,3,945.38,0.19,709.03,0.14,0.741
+interactive_b3-11,e1_2,AG-MC,1,AllGather_STMC ctas=1 threads=512,2G,3,200.19,0.14,200.19,0.14,0.209
+interactive_b3-11,e1_2,AG-MC,16,AllGather_STMC ctas=16 threads=512,2G,3,714.26,0.04,714.26,0.04,0.747
+interactive_b3-11,e1_2,AG-MC,2,AllGather_STMC ctas=2 threads=512,2G,3,399.23,0.3,399.23,0.3,0.417
+interactive_b3-11,e1_2,AG-MC,24,AllGather_STMC ctas=24 threads=512,2G,3,692.73,0.02,692.73,0.02,0.724
+interactive_b3-11,e1_2,AG-MC,32,AllGather_STMC ctas=32 threads=512,2G,3,714.28,0.06,714.28,0.06,0.747
+interactive_b3-11,e1_2,AG-MC,4,AllGather_STMC ctas=4 threads=512,2G,3,710.41,0.67,710.41,0.67,0.743
+interactive_b3-11,e1_2,AG-MC,48,AllGather_STMC ctas=48 threads=512,2G,3,703.52,0.02,703.52,0.02,0.736
+interactive_b3-11,e1_2,AG-MC,64,AllGather_STMC ctas=64 threads=512,2G,3,714.15,0.1,714.15,0.1,0.747
+interactive_b3-11,e1_2,AG-MC,8,AllGather_STMC ctas=8 threads=512,2G,3,710.76,0.13,710.76,0.13,0.743
+interactive_b3-11,e1_2,AG-Ring,16,RING/SIMPLE ctas=16,2G,3,462.15,1.08,346.61,0.81,0.362
+interactive_b3-11,e1_2,AG-Ring,24,RING/SIMPLE ctas=24,2G,3,675.33,0.99,506.5,0.75,0.53
+interactive_b3-11,e1_2,AG-Ring,32,RING/SIMPLE ctas=32,2G,3,805.0,0.72,603.75,0.55,0.631
+interactive_b3-11,e1_2,AG-Ring,4,RING/SIMPLE ctas=4,2G,3,118.98,0.05,89.23,0.04,0.093
+interactive_b3-11,e1_2,AG-Ring,48,RING/SIMPLE ctas=48,2G,3,803.3,3.41,602.47,2.55,0.63
+interactive_b3-11,e1_2,AG-Ring,64,RING/SIMPLE ctas=64,2G,3,822.03,1.21,616.52,0.9,0.645
+interactive_b3-11,e1_2,AG-Ring,8,RING/SIMPLE ctas=8,2G,3,237.19,0.07,177.89,0.05,0.186
+interactive_b3-11,e1_2,AR-LDST,1,AllReduce_RSxLD_AGxST ctas=1 threads=512,2G,3,22.56,0.04,33.84,0.05,0.035
+interactive_b3-11,e1_2,AR-LDST,16,AllReduce_RSxLD_AGxST ctas=16 threads=512,2G,3,318.52,0.13,477.78,0.2,0.5
+interactive_b3-11,e1_2,AR-LDST,2,AllReduce_RSxLD_AGxST ctas=2 threads=512,2G,3,44.63,0.06,66.95,0.09,0.07
+interactive_b3-11,e1_2,AR-LDST,24,AllReduce_RSxLD_AGxST ctas=24 threads=512,2G,3,404.87,0.31,607.31,0.47,0.635
+interactive_b3-11,e1_2,AR-LDST,32,AllReduce_RSxLD_AGxST ctas=32 threads=512,2G,3,415.59,0.22,623.38,0.34,0.652
+interactive_b3-11,e1_2,AR-LDST,4,AllReduce_RSxLD_AGxST ctas=4 threads=512,2G,3,87.72,0.08,131.58,0.12,0.138
+interactive_b3-11,e1_2,AR-LDST,48,AllReduce_RSxLD_AGxST ctas=48 threads=512,2G,3,411.07,0.19,616.61,0.29,0.645
+interactive_b3-11,e1_2,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,2G,3,423.5,0.77,635.25,1.15,0.664
+interactive_b3-11,e1_2,AR-LDST,8,AllReduce_RSxLD_AGxST ctas=8 threads=512,2G,3,171.09,0.19,256.63,0.3,0.268
+interactive_b3-11,e1_2,AR-MC,1,AllReduce_RSxLDMC_AGxSTMC ctas=1 threads=512,2G,3,95.59,0.16,119.49,0.2,0.125
+interactive_b3-11,e1_2,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,2G,3,463.15,0.05,578.94,0.06,0.605
+interactive_b3-11,e1_2,AR-MC,2,AllReduce_RSxLDMC_AGxSTMC ctas=2 threads=512,2G,3,185.36,0.12,231.7,0.16,0.242
+interactive_b3-11,e1_2,AR-MC,24,AllReduce_RSxLDMC_AGxSTMC ctas=24 threads=512,2G,3,462.97,0.14,578.71,0.18,0.605
+interactive_b3-11,e1_2,AR-MC,32,AllReduce_RSxLDMC_AGxSTMC ctas=32 threads=512,2G,3,463.54,0.06,579.43,0.07,0.606
+interactive_b3-11,e1_2,AR-MC,4,AllReduce_RSxLDMC_AGxSTMC ctas=4 threads=512,2G,3,352.06,0.38,440.07,0.47,0.46
+interactive_b3-11,e1_2,AR-MC,48,AllReduce_RSxLDMC_AGxSTMC ctas=48 threads=512,2G,3,460.56,0.08,575.7,0.1,0.602
+interactive_b3-11,e1_2,AR-MC,64,AllReduce_RSxLDMC_AGxSTMC ctas=64 threads=512,2G,3,462.74,0.04,578.42,0.06,0.605
+interactive_b3-11,e1_2,AR-MC,8,AllReduce_RSxLDMC_AGxSTMC ctas=8 threads=512,2G,3,457.6,0.06,572.0,0.08,0.598
+interactive_b3-11,e1_2,AR-NVLS,16,NVLS/SIMPLE ctas=16,2G,3,293.77,0.53,367.21,0.66,0.384
+interactive_b3-11,e1_2,AR-NVLS,24,NVLS/SIMPLE ctas=24,2G,3,435.96,0.13,544.95,0.16,0.57
+interactive_b3-11,e1_2,AR-NVLS,32,NVLS/SIMPLE ctas=32,2G,3,454.32,0.03,567.9,0.03,0.594
+interactive_b3-11,e1_2,AR-NVLS,4,NVLS/SIMPLE ctas=4,2G,3,73.57,0.09,91.96,0.11,0.096
+interactive_b3-11,e1_2,AR-NVLS,8,NVLS/SIMPLE ctas=8,2G,3,149.36,0.44,186.7,0.54,0.195
+interactive_b3-11,e1_2,AR-Ring,16,RING/SIMPLE ctas=16,2G,3,287.5,0.3,431.25,0.44,0.451
+interactive_b3-11,e1_2,AR-Ring,24,RING/SIMPLE ctas=24,2G,3,399.85,0.09,599.78,0.14,0.627
+interactive_b3-11,e1_2,AR-Ring,32,RING/SIMPLE ctas=32,2G,3,445.47,0.55,668.21,0.82,0.699
+interactive_b3-11,e1_2,AR-Ring,4,RING/SIMPLE ctas=4,2G,3,73.86,0.08,110.79,0.13,0.116
+interactive_b3-11,e1_2,AR-Ring,48,RING/SIMPLE ctas=48,2G,3,432.12,1.54,648.18,2.31,0.678
+interactive_b3-11,e1_2,AR-Ring,64,RING/SIMPLE ctas=64,2G,3,430.46,1.59,645.69,2.38,0.675
+interactive_b3-11,e1_2,AR-Ring,8,RING/SIMPLE ctas=8,2G,3,147.46,0.08,221.19,0.11,0.231
+interactive_b3-11,e1_2,AR-TMA,1,AllReduce_RSxTmaLD_AGxTmaST ctas=1 threads=512,2G,3,39.12,0.01,58.68,0.02,0.061
+interactive_b3-11,e1_2,AR-TMA,16,AllReduce_RSxTmaLD_AGxTmaST ctas=16 threads=512,2G,3,420.66,0.09,630.99,0.13,0.66
+interactive_b3-11,e1_2,AR-TMA,2,AllReduce_RSxTmaLD_AGxTmaST ctas=2 threads=512,2G,3,77.02,0.04,115.53,0.06,0.121
+interactive_b3-11,e1_2,AR-TMA,24,AllReduce_RSxTmaLD_AGxTmaST ctas=24 threads=512,2G,3,441.87,0.12,662.81,0.18,0.693
+interactive_b3-11,e1_2,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,2G,3,447.55,0.16,671.33,0.24,0.702
+interactive_b3-11,e1_2,AR-TMA,4,AllReduce_RSxTmaLD_AGxTmaST ctas=4 threads=512,2G,3,151.02,0.06,226.53,0.09,0.237
+interactive_b3-11,e1_2,AR-TMA,48,AllReduce_RSxTmaLD_AGxTmaST ctas=48 threads=512,2G,3,438.02,0.08,657.03,0.12,0.687
+interactive_b3-11,e1_2,AR-TMA,64,AllReduce_RSxTmaLD_AGxTmaST ctas=64 threads=512,2G,3,436.02,0.69,654.03,1.03,0.684
+interactive_b3-11,e1_2,AR-TMA,8,AllReduce_RSxTmaLD_AGxTmaST ctas=8 threads=512,2G,3,294.13,0.28,441.19,0.41,0.461
+interactive_b3-11,e1_2,RS-MC,1,ReduceScatter_LDMC ctas=1 threads=512,2G,3,97.95,0.08,97.95,0.08,0.102
+interactive_b3-11,e1_2,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,2G,3,698.71,0.35,698.71,0.35,0.731
+interactive_b3-11,e1_2,RS-MC,2,ReduceScatter_LDMC ctas=2 threads=512,2G,3,191.95,0.2,191.95,0.2,0.201
+interactive_b3-11,e1_2,RS-MC,24,ReduceScatter_LDMC ctas=24 threads=512,2G,3,703.27,0.21,703.27,0.21,0.735
+interactive_b3-11,e1_2,RS-MC,32,ReduceScatter_LDMC ctas=32 threads=512,2G,3,703.45,0.28,703.45,0.28,0.736
+interactive_b3-11,e1_2,RS-MC,4,ReduceScatter_LDMC ctas=4 threads=512,2G,3,372.77,0.25,372.77,0.25,0.39
+interactive_b3-11,e1_2,RS-MC,48,ReduceScatter_LDMC ctas=48 threads=512,2G,3,705.97,0.25,705.97,0.25,0.738
+interactive_b3-11,e1_2,RS-MC,64,ReduceScatter_LDMC ctas=64 threads=512,2G,3,706.61,0.36,706.61,0.36,0.739
+interactive_b3-11,e1_2,RS-MC,8,ReduceScatter_LDMC ctas=8 threads=512,2G,3,670.16,0.23,670.16,0.23,0.701
+interactive_b3-11,e1_2,RS-Ring,16,RING/SIMPLE ctas=16,2G,3,584.61,2.01,438.46,1.5,0.459
+interactive_b3-11,e1_2,RS-Ring,24,RING/SIMPLE ctas=24,2G,3,759.5,0.46,569.62,0.35,0.596
+interactive_b3-11,e1_2,RS-Ring,32,RING/SIMPLE ctas=32,2G,3,852.29,0.48,639.22,0.37,0.668
+interactive_b3-11,e1_2,RS-Ring,4,RING/SIMPLE ctas=4,2G,3,152.34,0.03,114.25,0.02,0.119
+interactive_b3-11,e1_2,RS-Ring,48,RING/SIMPLE ctas=48,2G,3,851.52,2.76,638.64,2.07,0.668
+interactive_b3-11,e1_2,RS-Ring,64,RING/SIMPLE ctas=64,2G,3,846.25,0.29,634.69,0.23,0.664
+interactive_b3-11,e1_2,RS-Ring,8,RING/SIMPLE ctas=8,2G,3,303.14,0.38,227.35,0.28,0.238
+interactive_b3-11_e1_2b,e1_2,AR-NVLS,48,NVLS/SIMPLE ctas=48,2G,3,442.94,0.39,553.67,0.49,0.579
+interactive_b3-11_e1_2b,e1_2,AR-NVLS,64,NVLS/SIMPLE ctas=64,2G,3,445.09,0.14,556.36,0.18,0.582

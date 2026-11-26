@@ -1,0 +1,120 @@
+{
+  "name": "e1_2",
+  "description": "Plan 01 E1.2: CTA calibration per arm at 2 GiB; symmetric kernels via NCCL_SYM_CTAS (max 64), Ring via NCCL_MIN/MAX_NCHANNELS, NVLS via NCCL_NVLS_NCHANNELS",
+  "seed": 12,
+  "blocks": [
+    {
+      "name": "e1_2",
+      "arms": [
+        "AG-MC",
+        "AG-CE",
+        "RS-MC",
+        "AR-MC",
+        "AR-TMA",
+        "AR-LDST",
+        "AR-NVLS",
+        "AR-Ring",
+        "AG-Ring",
+        "RS-Ring"
+      ],
+      "ctas": {
+        "AG-MC": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "RS-MC": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "AR-MC": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "AR-TMA": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "AR-LDST": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "AR-NVLS": [
+          4,
+          8,
+          16,
+          24,
+          32
+        ],
+        "AR-Ring": [
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "AG-Ring": [
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ],
+        "RS-Ring": [
+          4,
+          8,
+          16,
+          24,
+          32,
+          48,
+          64
+        ]
+      },
+      "sizes": [
+        "2G"
+      ],
+      "rounds": 3,
+      "iterations": 30,
+      "warmup": 5,
+      "check": 0
+    }
+  ]
+}

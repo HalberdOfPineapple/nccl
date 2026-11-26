@@ -1,0 +1,9 @@
+session,block,arm,ctas_requested,size,round,gpu,direction,data_bytes_per_payload_byte,raw_bytes_per_payload_byte,raw_per_data_byte,data_rate_gbps,raw_link_rate_gbps,ceiling_share
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,0,rx,0.25,0.5,2.0001,169.3,338.6,0.354
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,0,tx,1.0,1.0625,1.0625,677.2,719.5,0.752
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,1,rx,0.25,0.5,2.0001,169.3,338.6,0.354
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,1,tx,1.0,1.0625,1.0625,677.2,719.5,0.752
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,2,rx,0.25,0.5,2.0001,169.3,338.6,0.354
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,2,tx,1.0,1.0625,1.0625,677.2,719.5,0.752
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,3,rx,0.25,0.5,2.0001,169.3,338.6,0.354
+smoke_b3-11,smoke_counters,RS-MC,16,256M,0,3,tx,1.0,1.0625,1.0625,677.2,719.5,0.752

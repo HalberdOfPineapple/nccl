@@ -1,0 +1,635 @@
+{"run_id": "0000_e1_3_calibrated_small_AG-MC_c4_128M_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 666.96, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0001_e1_3_calibrated_small_AR-LDST_c64_64M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 392.24, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0002_e1_3_calibrated_small_AR-MC_c16_512M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 456.28, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0003_e1_3_calibrated_small_RS-Ring_c32_512M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 763.4, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0004_e1_3_calibrated_small_AR-NVLS_c32_256M_r0_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 316.81, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0005_e1_3_calibrated_small_AR-MC_c16_64M_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 416.8, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0006_e1_3_calibrated_small_RS-MC_c16_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 672.0, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0007_e1_3_calibrated_small_AR-NVLS_c32_64M_r0_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 274.89, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0008_e1_3_calibrated_small_AG-CE_default_512M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 898.29, "launches": {"copy_engine": 240}}
+{"run_id": "0009_e1_3_calibrated_small_AG-MC_c4_512M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 704.11, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0010_e1_3_calibrated_small_AG-CE_default_128M_r0_single", "status": "kernel_mismatch", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 745.27, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0011_e1_3_calibrated_small_RS-Ring_c32_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 714.34, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0012_e1_3_calibrated_small_AR-Ring_c32_256M_r0_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 398.3, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0013_e1_3_calibrated_small_AR-Ring_c32_64M_r0_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 369.46, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0014_e1_3_calibrated_small_AG-Ring_c64_128M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 706.38, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0015_e1_3_calibrated_small_AG-Ring_c64_256M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 747.92, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0016_e1_3_calibrated_small_AR-LDST_c64_256M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 419.27, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0017_e1_3_calibrated_small_AG-MC_c4_256M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 694.18, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0018_e1_3_calibrated_small_AR-Ring_c32_128M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 385.09, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0019_e1_3_calibrated_small_AG-Ring_c64_64M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 635.33, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0020_e1_3_calibrated_small_AR-NVLS_c32_128M_r0_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 300.84, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0021_e1_3_calibrated_small_AR-TMA_c32_512M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 439.77, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0022_e1_3_calibrated_small_AR-LDST_c64_128M_r0_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 407.97, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0023_e1_3_calibrated_small_AR-Ring_c32_512M_r0_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 417.58, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0024_e1_3_calibrated_small_AR-MC_c16_128M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 438.25, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0025_e1_3_calibrated_small_AG-MC_c4_64M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 634.26, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0026_e1_3_calibrated_small_AG-Ring_c64_512M_r0_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 777.2, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0027_e1_3_calibrated_small_AR-LDST_c64_512M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 426.83, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0028_e1_3_calibrated_small_AG-CE_default_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 837.89, "launches": {"copy_engine": 240}}
+{"run_id": "0029_e1_3_calibrated_small_AR-NVLS_c32_512M_r0_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 326.69, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0030_e1_3_calibrated_small_AR-TMA_c32_128M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 420.32, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0031_e1_3_calibrated_small_AG-CE_default_64M_r0_single", "status": "kernel_mismatch", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 686.02, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0032_e1_3_calibrated_small_RS-MC_c16_64M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 613.89, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0033_e1_3_calibrated_small_RS-Ring_c32_128M_r0_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 674.14, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0034_e1_3_calibrated_small_RS-Ring_c32_64M_r0_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 614.81, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0035_e1_3_calibrated_small_RS-MC_c16_128M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 647.86, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0036_e1_3_calibrated_small_AR-MC_c16_256M_r0_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 451.81, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0037_e1_3_calibrated_small_RS-MC_c16_512M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 687.94, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0038_e1_3_calibrated_small_AR-TMA_c32_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 424.06, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0039_e1_3_calibrated_small_AR-TMA_c32_64M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 394.9, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0040_e1_3_calibrated_small_AR-Ring_c32_256M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 398.18, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0041_e1_3_calibrated_small_RS-MC_c16_256M_r1_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 676.65, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0042_e1_3_calibrated_small_AR-TMA_c32_256M_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 423.4, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0043_e1_3_calibrated_small_AR-LDST_c64_128M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 407.91, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0044_e1_3_calibrated_small_AR-LDST_c64_64M_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 391.68, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0045_e1_3_calibrated_small_AG-MC_c4_64M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 634.93, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0046_e1_3_calibrated_small_AR-MC_c16_128M_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 436.23, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0047_e1_3_calibrated_small_AR-TMA_c32_128M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 419.31, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0048_e1_3_calibrated_small_AR-Ring_c32_128M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 383.67, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0049_e1_3_calibrated_small_AG-MC_c4_128M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 668.0, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0050_e1_3_calibrated_small_AG-MC_c4_256M_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 694.43, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0051_e1_3_calibrated_small_AG-Ring_c64_64M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 633.52, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0052_e1_3_calibrated_small_AR-NVLS_c32_64M_r1_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 275.03, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0053_e1_3_calibrated_small_AG-MC_c4_512M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 704.61, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0054_e1_3_calibrated_small_AR-LDST_c64_512M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 426.5, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0055_e1_3_calibrated_small_AR-NVLS_c32_512M_r1_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 326.76, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0056_e1_3_calibrated_small_AG-CE_default_512M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 899.19, "launches": {"copy_engine": 240}}
+{"run_id": "0057_e1_3_calibrated_small_AR-MC_c16_512M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 456.09, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0058_e1_3_calibrated_small_AG-CE_default_64M_r1_single", "status": "kernel_mismatch", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 686.83, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0059_e1_3_calibrated_small_AR-MC_c16_64M_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 414.6, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0060_e1_3_calibrated_small_RS-Ring_c32_512M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 763.25, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0061_e1_3_calibrated_small_AR-TMA_c32_512M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 439.91, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0062_e1_3_calibrated_small_AR-NVLS_c32_128M_r1_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 301.59, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0063_e1_3_calibrated_small_AR-MC_c16_256M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 451.74, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0064_e1_3_calibrated_small_AR-NVLS_c32_256M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 318.24, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0065_e1_3_calibrated_small_AG-Ring_c64_256M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 747.9, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0066_e1_3_calibrated_small_AR-Ring_c32_512M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 418.91, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0067_e1_3_calibrated_small_RS-Ring_c32_128M_r1_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 675.97, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0068_e1_3_calibrated_small_AG-CE_default_128M_r1_single", "status": "kernel_mismatch", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 747.2, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0069_e1_3_calibrated_small_AG-CE_default_256M_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 833.4, "launches": {"copy_engine": 240}}
+{"run_id": "0070_e1_3_calibrated_small_RS-MC_c16_128M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 651.19, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0071_e1_3_calibrated_small_RS-MC_c16_512M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 686.83, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0072_e1_3_calibrated_small_AG-Ring_c64_128M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 707.25, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0073_e1_3_calibrated_small_RS-Ring_c32_64M_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 616.08, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0074_e1_3_calibrated_small_RS-MC_c16_64M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 615.21, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0075_e1_3_calibrated_small_AG-Ring_c64_512M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 777.8, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0076_e1_3_calibrated_small_AR-Ring_c32_64M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 369.26, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0077_e1_3_calibrated_small_AR-TMA_c32_64M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 393.51, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0078_e1_3_calibrated_small_RS-Ring_c32_256M_r1_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 712.95, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0079_e1_3_calibrated_small_AR-LDST_c64_256M_r1_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 420.3, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0080_e1_3_calibrated_small_AR-MC_c16_128M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 436.34, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0081_e1_3_calibrated_small_AR-Ring_c32_256M_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 397.96, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0082_e1_3_calibrated_small_RS-Ring_c32_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 715.18, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0083_e1_3_calibrated_small_AG-CE_default_128M_r2_single", "status": "kernel_mismatch", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 745.82, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0084_e1_3_calibrated_small_AR-NVLS_c32_64M_r2_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 275.3, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0085_e1_3_calibrated_small_AG-MC_c4_64M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 636.78, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0086_e1_3_calibrated_small_RS-MC_c16_128M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 652.47, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0087_e1_3_calibrated_small_AG-Ring_c64_64M_r2_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 636.03, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0088_e1_3_calibrated_small_AR-TMA_c32_128M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 419.03, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0089_e1_3_calibrated_small_RS-MC_c16_64M_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 611.51, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0090_e1_3_calibrated_small_AG-Ring_c64_512M_r2_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 777.23, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0091_e1_3_calibrated_small_AR-MC_c16_256M_r2_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 451.58, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0092_e1_3_calibrated_small_AG-MC_c4_512M_r2_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 704.44, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0093_e1_3_calibrated_small_AR-NVLS_c32_512M_r2_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 327.7, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0094_e1_3_calibrated_small_AG-MC_c4_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 693.84, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0095_e1_3_calibrated_small_RS-Ring_c32_64M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 617.34, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0096_e1_3_calibrated_small_RS-MC_c16_512M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 687.28, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0097_e1_3_calibrated_small_AR-LDST_c64_64M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 391.4, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0098_e1_3_calibrated_small_AR-TMA_c32_256M_r2_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 424.12, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0099_e1_3_calibrated_small_AG-MC_c4_128M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 667.61, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0100_e1_3_calibrated_small_AR-NVLS_c32_128M_r2_single", "status": "ok", "wall_seconds": 3.7, "out_of_place_algbw_gbps": 301.61, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0101_e1_3_calibrated_small_AG-CE_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 833.89, "launches": {"copy_engine": 240}}
+{"run_id": "0102_e1_3_calibrated_small_AR-MC_c16_512M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 456.19, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0103_e1_3_calibrated_small_RS-Ring_c32_512M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 762.5, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0104_e1_3_calibrated_small_AG-CE_default_512M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 897.9, "launches": {"copy_engine": 240}}
+{"run_id": "0105_e1_3_calibrated_small_AR-TMA_c32_512M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 439.78, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0106_e1_3_calibrated_small_AR-Ring_c32_128M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 384.61, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0107_e1_3_calibrated_small_AG-CE_default_64M_r2_single", "status": "kernel_mismatch", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 690.07, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0108_e1_3_calibrated_small_AR-LDST_c64_128M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 407.16, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0109_e1_3_calibrated_small_AG-Ring_c64_128M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 704.85, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0110_e1_3_calibrated_small_AG-Ring_c64_256M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 747.1, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0111_e1_3_calibrated_small_AR-LDST_c64_512M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 426.73, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0112_e1_3_calibrated_small_AR-MC_c16_64M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 415.88, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0113_e1_3_calibrated_small_AR-LDST_c64_256M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 420.45, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0114_e1_3_calibrated_small_RS-Ring_c32_128M_r2_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 676.74, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0115_e1_3_calibrated_small_AR-NVLS_c32_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 318.45, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0116_e1_3_calibrated_small_RS-MC_c16_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 675.98, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0117_e1_3_calibrated_small_AR-TMA_c32_64M_r2_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 394.88, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0118_e1_3_calibrated_small_AR-Ring_c32_64M_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 367.65, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0119_e1_3_calibrated_small_AR-Ring_c32_512M_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 418.98, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0120_e1_3_calibrated_small_RS-MC_c16_128M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 651.58, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0121_e1_3_calibrated_small_AR-MC_c16_128M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 437.19, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0122_e1_3_calibrated_small_AR-NVLS_c32_64M_r3_single", "status": "ok", "wall_seconds": 3.7, "out_of_place_algbw_gbps": 274.52, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0123_e1_3_calibrated_small_AR-MC_c16_64M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 416.29, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0124_e1_3_calibrated_small_AG-Ring_c64_256M_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 749.36, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0125_e1_3_calibrated_small_AR-LDST_c64_512M_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 426.95, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0126_e1_3_calibrated_small_RS-Ring_c32_512M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 764.09, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0127_e1_3_calibrated_small_AR-NVLS_c32_512M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 328.26, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0128_e1_3_calibrated_small_RS-Ring_c32_64M_r3_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 618.46, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0129_e1_3_calibrated_small_AG-CE_default_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 832.64, "launches": {"copy_engine": 240}}
+{"run_id": "0130_e1_3_calibrated_small_AR-Ring_c32_64M_r3_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 369.81, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0131_e1_3_calibrated_small_AR-Ring_c32_128M_r3_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 384.34, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0132_e1_3_calibrated_small_AR-MC_c16_256M_r3_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 452.01, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0133_e1_3_calibrated_small_AR-LDST_c64_64M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 391.52, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0134_e1_3_calibrated_small_AG-MC_c4_512M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 704.76, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0135_e1_3_calibrated_small_AR-Ring_c32_256M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 398.36, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0136_e1_3_calibrated_small_AR-NVLS_c32_128M_r3_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 302.89, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0137_e1_3_calibrated_small_AR-Ring_c32_512M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 418.32, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0138_e1_3_calibrated_small_RS-Ring_c32_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 714.65, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0139_e1_3_calibrated_small_AG-CE_default_64M_r3_single", "status": "kernel_mismatch", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 687.1, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0140_e1_3_calibrated_small_AR-LDST_c64_128M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 408.62, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0141_e1_3_calibrated_small_RS-MC_c16_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 676.91, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0142_e1_3_calibrated_small_RS-Ring_c32_128M_r3_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 673.63, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0143_e1_3_calibrated_small_AG-MC_c4_128M_r3_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 667.8, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0144_e1_3_calibrated_small_RS-MC_c16_512M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 688.19, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0145_e1_3_calibrated_small_AR-TMA_c32_64M_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 393.96, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0146_e1_3_calibrated_small_AR-MC_c16_512M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 456.1, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0147_e1_3_calibrated_small_AG-MC_c4_256M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 693.8, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0148_e1_3_calibrated_small_AR-LDST_c64_256M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 419.61, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0149_e1_3_calibrated_small_AG-Ring_c64_64M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 634.59, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0150_e1_3_calibrated_small_AR-TMA_c32_256M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 424.29, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0151_e1_3_calibrated_small_AR-TMA_c32_128M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 420.27, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0152_e1_3_calibrated_small_AG-Ring_c64_512M_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 776.29, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0153_e1_3_calibrated_small_AR-NVLS_c32_256M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 319.16, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0154_e1_3_calibrated_small_AG-CE_default_512M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 899.31, "launches": {"copy_engine": 240}}
+{"run_id": "0155_e1_3_calibrated_small_AR-TMA_c32_512M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 439.88, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0156_e1_3_calibrated_small_RS-MC_c16_64M_r3_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 617.06, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0157_e1_3_calibrated_small_AG-MC_c4_64M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 634.45, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0158_e1_3_calibrated_small_AG-Ring_c64_128M_r3_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 705.01, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0159_e1_3_calibrated_small_AG-CE_default_128M_r3_single", "status": "kernel_mismatch", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 746.33, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0160_e1_3_calibrated_small_AG-Ring_c64_128M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 708.13, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0161_e1_3_calibrated_small_AG-MC_c4_512M_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 704.45, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0162_e1_3_calibrated_small_AR-NVLS_c32_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 318.52, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0163_e1_3_calibrated_small_AG-CE_default_512M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 898.39, "launches": {"copy_engine": 240}}
+{"run_id": "0164_e1_3_calibrated_small_AR-NVLS_c32_128M_r4_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 301.7, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0165_e1_3_calibrated_small_AR-Ring_c32_128M_r4_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 382.84, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0166_e1_3_calibrated_small_AR-LDST_c64_128M_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 408.22, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0167_e1_3_calibrated_small_AG-Ring_c64_512M_r4_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 776.08, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0168_e1_3_calibrated_small_AR-Ring_c32_64M_r4_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 367.91, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0169_e1_3_calibrated_small_RS-Ring_c32_512M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 764.42, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0170_e1_3_calibrated_small_AG-CE_default_64M_r4_single", "status": "kernel_mismatch", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 685.76, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0171_e1_3_calibrated_small_AR-Ring_c32_256M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 398.61, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0172_e1_3_calibrated_small_AG-CE_default_128M_r4_single", "status": "kernel_mismatch", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 745.49, "launches": {"AllGather_TmaST ctas=14 threads=512": 120, "AllGather_TmaST ctas=12 threads=512": 120}}
+{"run_id": "0173_e1_3_calibrated_small_AR-TMA_c32_128M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 419.67, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0174_e1_3_calibrated_small_RS-MC_c16_64M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 614.84, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0175_e1_3_calibrated_small_AG-Ring_c64_256M_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 748.28, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0176_e1_3_calibrated_small_AR-NVLS_c32_64M_r4_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 275.68, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0177_e1_3_calibrated_small_AG-CE_default_256M_r4_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 837.44, "launches": {"copy_engine": 240}}
+{"run_id": "0178_e1_3_calibrated_small_RS-MC_c16_128M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 652.66, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0179_e1_3_calibrated_small_AG-MC_c4_64M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 634.83, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0180_e1_3_calibrated_small_AR-TMA_c32_512M_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 439.79, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0181_e1_3_calibrated_small_AG-Ring_c64_64M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 636.09, "launches": {"RING/SIMPLE ctas=64": 240}}
+{"run_id": "0182_e1_3_calibrated_small_AR-LDST_c64_512M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 426.73, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0183_e1_3_calibrated_small_AG-MC_c4_256M_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 694.41, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0184_e1_3_calibrated_small_AR-MC_c16_256M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 451.7, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0185_e1_3_calibrated_small_AR-MC_c16_64M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 415.38, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0186_e1_3_calibrated_small_RS-MC_c16_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 677.33, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0187_e1_3_calibrated_small_AG-MC_c4_128M_r4_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 668.2, "launches": {"AllGather_STMC ctas=4 threads=512": 240}}
+{"run_id": "0188_e1_3_calibrated_small_AR-Ring_c32_512M_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 421.06, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0189_e1_3_calibrated_small_RS-MC_c16_512M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 686.86, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 240}}
+{"run_id": "0190_e1_3_calibrated_small_AR-LDST_c64_64M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 391.63, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0191_e1_3_calibrated_small_AR-MC_c16_128M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 436.23, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0192_e1_3_calibrated_small_RS-Ring_c32_256M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 714.78, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0193_e1_3_calibrated_small_AR-TMA_c32_256M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 423.22, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0194_e1_3_calibrated_small_RS-Ring_c32_64M_r4_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 619.16, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0195_e1_3_calibrated_small_AR-LDST_c64_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 420.28, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 240}}
+{"run_id": "0196_e1_3_calibrated_small_AR-MC_c16_512M_r4_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 456.34, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 240}}
+{"run_id": "0197_e1_3_calibrated_small_RS-Ring_c32_128M_r4_single", "status": "ok", "wall_seconds": 3.7, "out_of_place_algbw_gbps": 675.68, "launches": {"RING/SIMPLE ctas=32": 240}}
+{"run_id": "0198_e1_3_calibrated_small_AR-NVLS_c32_512M_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 329.6, "launches": {"NVLS/SIMPLE ctas=32": 240}}
+{"run_id": "0199_e1_3_calibrated_small_AR-TMA_c32_64M_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 394.26, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 240}}
+{"run_id": "0200_e1_3_calibrated_large_AR-TMA_c32_1G_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 432.12, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0201_e1_3_calibrated_large_AR-NVLS_c32_4G_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 458.9, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0202_e1_3_calibrated_large_AG-Ring_c64_2G_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 822.54, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0203_e1_3_calibrated_large_AR-Ring_c32_4G_r0_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 450.58, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0204_e1_3_calibrated_large_AG-Ring_c64_4G_r0_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 856.99, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0205_e1_3_calibrated_large_AG-Ring_c64_1G_r0_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 808.53, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0206_e1_3_calibrated_large_RS-Ring_c32_2G_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 849.78, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0207_e1_3_calibrated_large_AR-MC_c16_1G_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 461.97, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0208_e1_3_calibrated_large_AR-NVLS_c32_8G_r0_single", "status": "ok", "wall_seconds": 6.3, "out_of_place_algbw_gbps": 461.29, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0209_e1_3_calibrated_large_AG-CE_default_8G_r0_single", "status": "ok", "wall_seconds": 5.4, "out_of_place_algbw_gbps": 961.26, "launches": {"copy_engine": 120}}
+{"run_id": "0210_e1_3_calibrated_large_AR-LDST_c64_1G_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 417.54, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0211_e1_3_calibrated_large_AG-Ring_c64_8G_r0_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 862.69, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0212_e1_3_calibrated_large_RS-Ring_c32_4G_r0_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 864.87, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0213_e1_3_calibrated_large_AG-MC_c4_8G_r0_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 715.68, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0214_e1_3_calibrated_large_AR-Ring_c32_2G_r0_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 445.66, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0215_e1_3_calibrated_large_AG-MC_c4_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 710.17, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0216_e1_3_calibrated_large_AR-LDST_c64_2G_r0_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 422.88, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0217_e1_3_calibrated_large_AR-Ring_c32_8G_r0_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 453.55, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0218_e1_3_calibrated_large_AG-CE_default_2G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 946.13, "launches": {"copy_engine": 120}}
+{"run_id": "0219_e1_3_calibrated_large_RS-MC_c16_4G_r0_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 701.64, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0220_e1_3_calibrated_large_AR-NVLS_c32_2G_r0_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 454.34, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0221_e1_3_calibrated_large_AG-CE_default_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 928.48, "launches": {"copy_engine": 120}}
+{"run_id": "0222_e1_3_calibrated_large_RS-MC_c16_2G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 698.88, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0223_e1_3_calibrated_large_AR-TMA_c32_2G_r0_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 447.68, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0224_e1_3_calibrated_large_RS-MC_c16_8G_r0_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 700.47, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0225_e1_3_calibrated_large_AG-MC_c4_2G_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 715.07, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0226_e1_3_calibrated_large_AR-MC_c16_2G_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 463.8, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0227_e1_3_calibrated_large_AR-Ring_c32_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 431.77, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0228_e1_3_calibrated_large_RS-Ring_c32_1G_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 811.9, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0229_e1_3_calibrated_large_AR-MC_c16_4G_r0_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 463.99, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0230_e1_3_calibrated_large_AR-MC_c16_8G_r0_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 464.53, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0231_e1_3_calibrated_large_AR-LDST_c64_8G_r0_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 412.68, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0232_e1_3_calibrated_large_AG-CE_default_4G_r0_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 955.66, "launches": {"copy_engine": 120}}
+{"run_id": "0233_e1_3_calibrated_large_RS-MC_c16_1G_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 691.95, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0234_e1_3_calibrated_large_AR-LDST_c64_4G_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 422.15, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0235_e1_3_calibrated_large_AG-MC_c4_4G_r0_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 715.9, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0236_e1_3_calibrated_large_AR-TMA_c32_4G_r0_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 434.68, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0237_e1_3_calibrated_large_AR-NVLS_c32_1G_r0_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 446.01, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0238_e1_3_calibrated_large_RS-Ring_c32_8G_r0_single", "status": "ok", "wall_seconds": 5.4, "out_of_place_algbw_gbps": 882.79, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0239_e1_3_calibrated_large_AR-TMA_c32_8G_r0_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 444.43, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0240_e1_3_calibrated_large_RS-Ring_c32_2G_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 849.07, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0241_e1_3_calibrated_large_AR-LDST_c64_1G_r1_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 418.45, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0242_e1_3_calibrated_large_AR-MC_c16_4G_r1_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 463.78, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0243_e1_3_calibrated_large_RS-MC_c16_4G_r1_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 701.5, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0244_e1_3_calibrated_large_RS-Ring_c32_4G_r1_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 863.38, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0245_e1_3_calibrated_large_AG-Ring_c64_1G_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 810.17, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0246_e1_3_calibrated_large_AG-CE_default_4G_r1_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 955.46, "launches": {"copy_engine": 120}}
+{"run_id": "0247_e1_3_calibrated_large_AG-CE_default_2G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 945.95, "launches": {"copy_engine": 120}}
+{"run_id": "0248_e1_3_calibrated_large_AR-MC_c16_2G_r1_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 463.69, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0249_e1_3_calibrated_large_AR-LDST_c64_4G_r1_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 422.04, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0250_e1_3_calibrated_large_AR-TMA_c32_8G_r1_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 444.51, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0251_e1_3_calibrated_large_AR-TMA_c32_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 431.82, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0252_e1_3_calibrated_large_RS-Ring_c32_8G_r1_single", "status": "ok", "wall_seconds": 5.5, "out_of_place_algbw_gbps": 882.8, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0253_e1_3_calibrated_large_AR-LDST_c64_2G_r1_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 422.99, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0254_e1_3_calibrated_large_AR-TMA_c32_4G_r1_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 434.54, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0255_e1_3_calibrated_large_AG-MC_c4_1G_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 710.16, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0256_e1_3_calibrated_large_AG-MC_c4_2G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 715.25, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0257_e1_3_calibrated_large_AR-NVLS_c32_4G_r1_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 458.82, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0258_e1_3_calibrated_large_AG-MC_c4_4G_r1_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 716.1, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0259_e1_3_calibrated_large_AR-Ring_c32_8G_r1_single", "status": "ok", "wall_seconds": 6.3, "out_of_place_algbw_gbps": 454.26, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0260_e1_3_calibrated_large_AR-LDST_c64_8G_r1_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 412.94, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0261_e1_3_calibrated_large_AR-NVLS_c32_8G_r1_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 461.16, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0262_e1_3_calibrated_large_AG-CE_default_1G_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 928.14, "launches": {"copy_engine": 120}}
+{"run_id": "0263_e1_3_calibrated_large_RS-MC_c16_2G_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 698.55, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0264_e1_3_calibrated_large_RS-Ring_c32_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 813.29, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0265_e1_3_calibrated_large_AR-Ring_c32_2G_r1_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 445.92, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0266_e1_3_calibrated_large_RS-MC_c16_8G_r1_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 700.45, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0267_e1_3_calibrated_large_AG-Ring_c64_8G_r1_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 862.99, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0268_e1_3_calibrated_large_AR-NVLS_c32_1G_r1_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 446.33, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0269_e1_3_calibrated_large_AR-TMA_c32_2G_r1_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 447.4, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0270_e1_3_calibrated_large_AR-Ring_c32_4G_r1_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 450.26, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0271_e1_3_calibrated_large_RS-MC_c16_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 692.86, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0272_e1_3_calibrated_large_AG-CE_default_8G_r1_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 961.37, "launches": {"copy_engine": 120}}
+{"run_id": "0273_e1_3_calibrated_large_AG-Ring_c64_4G_r1_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 855.82, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0274_e1_3_calibrated_large_AG-MC_c4_8G_r1_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 715.91, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0275_e1_3_calibrated_large_AR-NVLS_c32_2G_r1_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 454.38, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0276_e1_3_calibrated_large_AR-MC_c16_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 462.27, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0277_e1_3_calibrated_large_AR-Ring_c32_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 432.15, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0278_e1_3_calibrated_large_AG-Ring_c64_2G_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 822.36, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0279_e1_3_calibrated_large_AR-MC_c16_8G_r1_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 464.43, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0280_e1_3_calibrated_large_AR-LDST_c64_8G_r2_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 412.96, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0281_e1_3_calibrated_large_AR-LDST_c64_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 418.49, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0282_e1_3_calibrated_large_AG-CE_default_2G_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 946.39, "launches": {"copy_engine": 120}}
+{"run_id": "0283_e1_3_calibrated_large_AG-MC_c4_2G_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 715.23, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0284_e1_3_calibrated_large_AG-MC_c4_8G_r2_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 715.93, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0285_e1_3_calibrated_large_RS-Ring_c32_1G_r2_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 812.11, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0286_e1_3_calibrated_large_AR-NVLS_c32_4G_r2_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 458.9, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0287_e1_3_calibrated_large_AG-Ring_c64_1G_r2_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 810.47, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0288_e1_3_calibrated_large_AR-NVLS_c32_8G_r2_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 461.08, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0289_e1_3_calibrated_large_AR-Ring_c32_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 431.68, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0290_e1_3_calibrated_large_RS-Ring_c32_2G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 849.31, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0291_e1_3_calibrated_large_AR-LDST_c64_4G_r2_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 421.98, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0292_e1_3_calibrated_large_AR-MC_c16_1G_r2_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 461.99, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0293_e1_3_calibrated_large_AR-MC_c16_8G_r2_single", "status": "ok", "wall_seconds": 6.3, "out_of_place_algbw_gbps": 464.51, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0294_e1_3_calibrated_large_RS-Ring_c32_8G_r2_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 882.7, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0295_e1_3_calibrated_large_AR-MC_c16_2G_r2_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 463.7, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0296_e1_3_calibrated_large_RS-MC_c16_8G_r2_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 700.57, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0297_e1_3_calibrated_large_AR-TMA_c32_4G_r2_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 434.38, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0298_e1_3_calibrated_large_RS-Ring_c32_4G_r2_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 864.62, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0299_e1_3_calibrated_large_RS-MC_c16_4G_r2_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 701.83, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0300_e1_3_calibrated_large_AR-LDST_c64_2G_r2_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 423.0, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0301_e1_3_calibrated_large_RS-MC_c16_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 691.63, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0302_e1_3_calibrated_large_AR-Ring_c32_8G_r2_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 454.46, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0303_e1_3_calibrated_large_AR-Ring_c32_2G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 445.65, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0304_e1_3_calibrated_large_AR-TMA_c32_1G_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 431.58, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0305_e1_3_calibrated_large_AG-MC_c4_1G_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 710.21, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0306_e1_3_calibrated_large_RS-MC_c16_2G_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 699.13, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0307_e1_3_calibrated_large_AR-MC_c16_4G_r2_single", "status": "ok", "wall_seconds": 5.4, "out_of_place_algbw_gbps": 463.91, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0308_e1_3_calibrated_large_AG-Ring_c64_2G_r2_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 821.99, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0309_e1_3_calibrated_large_AG-Ring_c64_8G_r2_single", "status": "ok", "wall_seconds": 5.4, "out_of_place_algbw_gbps": 861.54, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0310_e1_3_calibrated_large_AG-CE_default_1G_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 928.07, "launches": {"copy_engine": 120}}
+{"run_id": "0311_e1_3_calibrated_large_AR-TMA_c32_2G_r2_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 447.67, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0312_e1_3_calibrated_large_AG-Ring_c64_4G_r2_single", "status": "ok", "wall_seconds": 4.9, "out_of_place_algbw_gbps": 854.97, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0313_e1_3_calibrated_large_AR-Ring_c32_4G_r2_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 450.49, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0314_e1_3_calibrated_large_AR-NVLS_c32_1G_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 446.41, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0315_e1_3_calibrated_large_AR-NVLS_c32_2G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 454.45, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0316_e1_3_calibrated_large_AR-TMA_c32_8G_r2_single", "status": "ok", "wall_seconds": 6.0, "out_of_place_algbw_gbps": 444.34, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0317_e1_3_calibrated_large_AG-CE_default_4G_r2_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 956.14, "launches": {"copy_engine": 120}}
+{"run_id": "0318_e1_3_calibrated_large_AG-CE_default_8G_r2_single", "status": "ok", "wall_seconds": 5.5, "out_of_place_algbw_gbps": 961.16, "launches": {"copy_engine": 120}}
+{"run_id": "0319_e1_3_calibrated_large_AG-MC_c4_4G_r2_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 716.05, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0320_e1_3_calibrated_large_AR-MC_c16_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 463.98, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0321_e1_3_calibrated_large_AG-CE_default_2G_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 945.75, "launches": {"copy_engine": 120}}
+{"run_id": "0322_e1_3_calibrated_large_RS-Ring_c32_8G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 879.58, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0323_e1_3_calibrated_large_AG-MC_c4_8G_r3_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 715.93, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0324_e1_3_calibrated_large_AR-LDST_c64_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 422.12, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0325_e1_3_calibrated_large_AG-Ring_c64_2G_r3_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 821.5, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0326_e1_3_calibrated_large_AG-CE_default_8G_r3_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 961.36, "launches": {"copy_engine": 120}}
+{"run_id": "0327_e1_3_calibrated_large_AR-LDST_c64_2G_r3_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 423.33, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0328_e1_3_calibrated_large_AG-Ring_c64_4G_r3_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 854.22, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0329_e1_3_calibrated_large_AR-LDST_c64_8G_r3_single", "status": "ok", "wall_seconds": 6.3, "out_of_place_algbw_gbps": 412.56, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0330_e1_3_calibrated_large_RS-MC_c16_4G_r3_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 701.66, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0331_e1_3_calibrated_large_AR-NVLS_c32_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 458.73, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0332_e1_3_calibrated_large_AR-NVLS_c32_8G_r3_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 461.06, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0333_e1_3_calibrated_large_AR-TMA_c32_8G_r3_single", "status": "ok", "wall_seconds": 6.3, "out_of_place_algbw_gbps": 444.19, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0334_e1_3_calibrated_large_AR-NVLS_c32_2G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 454.32, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0335_e1_3_calibrated_large_AR-Ring_c32_1G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 432.39, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0336_e1_3_calibrated_large_AR-NVLS_c32_1G_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 446.19, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0337_e1_3_calibrated_large_AR-TMA_c32_2G_r3_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 447.65, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0338_e1_3_calibrated_large_AG-Ring_c64_8G_r3_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 862.46, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0339_e1_3_calibrated_large_AR-MC_c16_2G_r3_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 463.7, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0340_e1_3_calibrated_large_AR-LDST_c64_1G_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 417.82, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0341_e1_3_calibrated_large_AR-Ring_c32_8G_r3_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 454.95, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0342_e1_3_calibrated_large_RS-Ring_c32_4G_r3_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 862.34, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0343_e1_3_calibrated_large_AR-TMA_c32_1G_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 431.94, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0344_e1_3_calibrated_large_AR-Ring_c32_2G_r3_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 445.69, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0345_e1_3_calibrated_large_AR-MC_c16_8G_r3_single", "status": "ok", "wall_seconds": 6.4, "out_of_place_algbw_gbps": 464.58, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0346_e1_3_calibrated_large_RS-Ring_c32_2G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 850.26, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0347_e1_3_calibrated_large_RS-MC_c16_2G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 698.76, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0348_e1_3_calibrated_large_AG-CE_default_1G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 927.76, "launches": {"copy_engine": 120}}
+{"run_id": "0349_e1_3_calibrated_large_AR-TMA_c32_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 434.59, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0350_e1_3_calibrated_large_AG-MC_c4_1G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 710.4, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0351_e1_3_calibrated_large_AG-CE_default_4G_r3_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 956.04, "launches": {"copy_engine": 120}}
+{"run_id": "0352_e1_3_calibrated_large_RS-MC_c16_1G_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 691.85, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0353_e1_3_calibrated_large_RS-MC_c16_8G_r3_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 700.37, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0354_e1_3_calibrated_large_AG-Ring_c64_1G_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 809.79, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0355_e1_3_calibrated_large_AR-Ring_c32_4G_r3_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 450.49, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0356_e1_3_calibrated_large_AG-MC_c4_4G_r3_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 715.73, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0357_e1_3_calibrated_large_RS-Ring_c32_1G_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 813.48, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0358_e1_3_calibrated_large_AG-MC_c4_2G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 715.27, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0359_e1_3_calibrated_large_AR-MC_c16_1G_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 462.2, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0360_e1_3_calibrated_large_AR-NVLS_c32_2G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 454.19, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0361_e1_3_calibrated_large_RS-MC_c16_1G_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 692.86, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0362_e1_3_calibrated_large_AG-CE_default_2G_r4_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 946.18, "launches": {"copy_engine": 120}}
+{"run_id": "0363_e1_3_calibrated_large_AG-CE_default_4G_r4_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 955.66, "launches": {"copy_engine": 120}}
+{"run_id": "0364_e1_3_calibrated_large_AR-NVLS_c32_4G_r4_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 458.64, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0365_e1_3_calibrated_large_AR-MC_c16_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 462.0, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0366_e1_3_calibrated_large_AR-NVLS_c32_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 446.23, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0367_e1_3_calibrated_large_AG-Ring_c64_4G_r4_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 855.06, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0368_e1_3_calibrated_large_RS-Ring_c32_4G_r4_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 862.33, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0369_e1_3_calibrated_large_RS-MC_c16_4G_r4_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 701.65, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0370_e1_3_calibrated_large_AG-MC_c4_4G_r4_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 715.99, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0371_e1_3_calibrated_large_AR-TMA_c32_2G_r4_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 447.69, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0372_e1_3_calibrated_large_AR-TMA_c32_4G_r4_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 434.57, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0373_e1_3_calibrated_large_AG-MC_c4_2G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 715.22, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0374_e1_3_calibrated_large_RS-Ring_c32_8G_r4_single", "status": "ok", "wall_seconds": 5.5, "out_of_place_algbw_gbps": 882.15, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0375_e1_3_calibrated_large_RS-MC_c16_2G_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 698.55, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0376_e1_3_calibrated_large_AR-NVLS_c32_8G_r4_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 461.16, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0377_e1_3_calibrated_large_AR-TMA_c32_8G_r4_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 444.65, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0378_e1_3_calibrated_large_RS-Ring_c32_2G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 850.09, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0379_e1_3_calibrated_large_AR-Ring_c32_2G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 445.64, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0380_e1_3_calibrated_large_RS-Ring_c32_1G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 816.11, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0381_e1_3_calibrated_large_AG-CE_default_1G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 929.03, "launches": {"copy_engine": 120}}
+{"run_id": "0382_e1_3_calibrated_large_RS-MC_c16_8G_r4_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 700.33, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0383_e1_3_calibrated_large_AR-Ring_c32_8G_r4_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 453.63, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0384_e1_3_calibrated_large_AG-Ring_c64_8G_r4_single", "status": "ok", "wall_seconds": 5.7, "out_of_place_algbw_gbps": 867.37, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0385_e1_3_calibrated_large_AR-LDST_c64_8G_r4_single", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 412.62, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0386_e1_3_calibrated_large_AR-Ring_c32_4G_r4_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 450.52, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0387_e1_3_calibrated_large_AG-CE_default_8G_r4_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 961.1, "launches": {"copy_engine": 120}}
+{"run_id": "0388_e1_3_calibrated_large_AR-MC_c16_2G_r4_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 463.55, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0389_e1_3_calibrated_large_AR-LDST_c64_4G_r4_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 422.13, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0390_e1_3_calibrated_large_AR-TMA_c32_1G_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 432.01, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0391_e1_3_calibrated_large_AG-MC_c4_8G_r4_single", "status": "ok", "wall_seconds": 5.4, "out_of_place_algbw_gbps": 715.77, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0392_e1_3_calibrated_large_AR-MC_c16_4G_r4_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 463.9, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0393_e1_3_calibrated_large_AR-LDST_c64_2G_r4_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 423.31, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0394_e1_3_calibrated_large_AR-Ring_c32_1G_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 431.15, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0395_e1_3_calibrated_large_AG-MC_c4_1G_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 710.42, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0396_e1_3_calibrated_large_AG-Ring_c64_1G_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 806.38, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0397_e1_3_calibrated_large_AG-Ring_c64_2G_r4_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 819.47, "launches": {"RING/SIMPLE ctas=64": 120}}
+{"run_id": "0398_e1_3_calibrated_large_AR-LDST_c64_1G_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 417.87, "launches": {"AllReduce_RSxLD_AGxST ctas=64 threads=512": 120}}
+{"run_id": "0399_e1_3_calibrated_large_AR-MC_c16_8G_r4_single", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 464.52, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0400_e1_3_default_AR-Tuner_default_4G_r0_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 448.16, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0401_e1_3_default_AR-NVLS_default_4G_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 440.39, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0402_e1_3_default_AG-MC_default_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 710.24, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0403_e1_3_default_AR-Ring_default_4G_r0_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 448.14, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0404_e1_3_default_AR-MC_default_4G_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 444.36, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0405_e1_3_default_AG-CE_default_4G_r0_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 955.75, "launches": {"copy_engine": 120}}
+{"run_id": "0406_e1_3_default_AR-LDST_default_4G_r0_single", "status": "ok", "wall_seconds": 5.8, "out_of_place_algbw_gbps": 292.93, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0407_e1_3_default_RS-Ring_default_4G_r0_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 865.08, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0408_e1_3_default_AR-MC_default_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 435.54, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0409_e1_3_default_RS-Ring_default_256M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 713.26, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0410_e1_3_default_RS-MC_default_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 541.73, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0411_e1_3_default_AG-MC_default_256M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 693.07, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0412_e1_3_default_AG-CE_default_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 928.71, "launches": {"copy_engine": 120}}
+{"run_id": "0413_e1_3_default_AR-NVLS_default_1G_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 430.47, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0414_e1_3_default_AR-Tuner_default_256M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 397.45, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0415_e1_3_default_AR-LDST_default_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 283.59, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0416_e1_3_default_AG-Ring_default_4G_r0_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 815.58, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0417_e1_3_default_AR-Ring_default_256M_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 397.31, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0418_e1_3_default_AR-Ring_default_1G_r0_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 431.55, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0419_e1_3_default_RS-MC_default_256M_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 531.63, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0420_e1_3_default_AG-CE_default_256M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 832.27, "launches": {"copy_engine": 120}}
+{"run_id": "0421_e1_3_default_AR-TMA_default_256M_r0_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 359.16, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0422_e1_3_default_AR-MC_default_1G_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 444.02, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0423_e1_3_default_RS-MC_default_4G_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 545.34, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0424_e1_3_default_RS-Ring_default_1G_r0_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 815.07, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0425_e1_3_default_AR-TMA_default_4G_r0_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 379.4, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0426_e1_3_default_AG-MC_default_4G_r0_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 716.2, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0427_e1_3_default_AR-TMA_default_1G_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 380.4, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0428_e1_3_default_AR-LDST_default_1G_r0_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 290.22, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0429_e1_3_default_AR-NVLS_default_256M_r0_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 297.03, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0430_e1_3_default_AG-Ring_default_1G_r0_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 780.02, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0431_e1_3_default_AR-Tuner_default_1G_r0_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 431.78, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0432_e1_3_default_AG-Ring_default_256M_r0_single", "status": "ok", "wall_seconds": 3.7, "out_of_place_algbw_gbps": 719.4, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0433_e1_3_default_AR-NVLS_default_4G_r1_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 439.85, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0434_e1_3_default_AR-Ring_default_4G_r1_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 447.43, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0435_e1_3_default_RS-MC_default_4G_r1_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 546.25, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0436_e1_3_default_AR-LDST_default_256M_r1_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 283.38, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0437_e1_3_default_AG-Ring_default_256M_r1_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 719.33, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0438_e1_3_default_AG-MC_default_1G_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 710.25, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0439_e1_3_default_RS-MC_default_1G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 543.31, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0440_e1_3_default_AR-TMA_default_4G_r1_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 379.78, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0441_e1_3_default_AR-Ring_default_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 431.97, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0442_e1_3_default_AR-MC_default_4G_r1_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 444.37, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0443_e1_3_default_AR-Ring_default_256M_r1_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 397.57, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0444_e1_3_default_RS-Ring_default_256M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 714.3, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0445_e1_3_default_AG-CE_default_4G_r1_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 955.87, "launches": {"copy_engine": 120}}
+{"run_id": "0446_e1_3_default_AR-NVLS_default_256M_r1_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 294.39, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0447_e1_3_default_RS-Ring_default_4G_r1_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 864.51, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0448_e1_3_default_AR-TMA_default_256M_r1_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 360.62, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0449_e1_3_default_AR-NVLS_default_1G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 430.52, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0450_e1_3_default_AG-CE_default_1G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 928.36, "launches": {"copy_engine": 120}}
+{"run_id": "0451_e1_3_default_AG-CE_default_256M_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 836.75, "launches": {"copy_engine": 120}}
+{"run_id": "0452_e1_3_default_AG-MC_default_4G_r1_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 716.07, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0453_e1_3_default_AG-Ring_default_1G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 779.63, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0454_e1_3_default_AR-Tuner_default_4G_r1_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 450.33, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0455_e1_3_default_RS-Ring_default_1G_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 812.24, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0456_e1_3_default_AR-Tuner_default_256M_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 397.66, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0457_e1_3_default_AR-TMA_default_1G_r1_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 381.05, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0458_e1_3_default_RS-MC_default_256M_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 531.63, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0459_e1_3_default_AR-LDST_default_1G_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 290.23, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0460_e1_3_default_AG-Ring_default_4G_r1_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 815.28, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0461_e1_3_default_AR-Tuner_default_1G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 432.22, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0462_e1_3_default_AR-MC_default_1G_r1_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 443.99, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0463_e1_3_default_AR-LDST_default_4G_r1_single", "status": "ok", "wall_seconds": 5.7, "out_of_place_algbw_gbps": 292.7, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0464_e1_3_default_AR-MC_default_256M_r1_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 435.75, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0465_e1_3_default_AG-MC_default_256M_r1_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 692.85, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0466_e1_3_default_RS-MC_default_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 542.19, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0467_e1_3_default_AR-TMA_default_4G_r2_single", "status": "ok", "wall_seconds": 5.3, "out_of_place_algbw_gbps": 379.27, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0468_e1_3_default_AG-Ring_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 718.54, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0469_e1_3_default_AG-MC_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 693.1, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0470_e1_3_default_AR-Ring_default_4G_r2_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 449.96, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0471_e1_3_default_AG-Ring_default_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 779.78, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0472_e1_3_default_AR-NVLS_default_4G_r2_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 440.36, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0473_e1_3_default_AR-MC_default_1G_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 444.08, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0474_e1_3_default_AR-TMA_default_256M_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 359.96, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0475_e1_3_default_RS-MC_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 532.12, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0476_e1_3_default_RS-MC_default_4G_r2_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 545.38, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0477_e1_3_default_AR-LDST_default_256M_r2_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 282.83, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0478_e1_3_default_AR-Ring_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 397.41, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0479_e1_3_default_RS-Ring_default_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 811.92, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0480_e1_3_default_AR-Tuner_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 397.1, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0481_e1_3_default_AR-LDST_default_4G_r2_single", "status": "ok", "wall_seconds": 5.6, "out_of_place_algbw_gbps": 292.69, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0482_e1_3_default_AR-NVLS_default_256M_r2_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 293.8, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0483_e1_3_default_AR-MC_default_256M_r2_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 434.92, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0484_e1_3_default_AR-TMA_default_1G_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 380.28, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0485_e1_3_default_AG-MC_default_4G_r2_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 716.27, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0486_e1_3_default_AR-Tuner_default_4G_r2_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 449.12, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0487_e1_3_default_AR-Ring_default_1G_r2_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 431.87, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0488_e1_3_default_RS-Ring_default_4G_r2_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 864.6, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0489_e1_3_default_AG-Ring_default_4G_r2_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 815.21, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0490_e1_3_default_AR-NVLS_default_1G_r2_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 430.5, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0491_e1_3_default_AR-MC_default_4G_r2_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 444.33, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0492_e1_3_default_AG-MC_default_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 710.31, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0493_e1_3_default_AG-CE_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 831.72, "launches": {"copy_engine": 120}}
+{"run_id": "0494_e1_3_default_AG-CE_default_1G_r2_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 927.45, "launches": {"copy_engine": 120}}
+{"run_id": "0495_e1_3_default_AR-LDST_default_1G_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 290.16, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0496_e1_3_default_RS-Ring_default_256M_r2_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 715.16, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0497_e1_3_default_AR-Tuner_default_1G_r2_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 432.16, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0498_e1_3_default_AG-CE_default_4G_r2_single", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 955.97, "launches": {"copy_engine": 120}}
+{"run_id": "0499_e1_3_default_AR-Tuner_default_4G_r3_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 447.93, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0500_e1_3_default_AG-Ring_default_4G_r3_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 814.94, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0501_e1_3_default_AR-NVLS_default_256M_r3_single", "status": "ok", "wall_seconds": 3.5, "out_of_place_algbw_gbps": 293.72, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0502_e1_3_default_RS-MC_default_256M_r3_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 532.38, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0503_e1_3_default_AR-Ring_default_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 448.19, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0504_e1_3_default_AR-Tuner_default_256M_r3_single", "status": "ok", "wall_seconds": 3.7, "out_of_place_algbw_gbps": 396.16, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0505_e1_3_default_AG-MC_default_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 693.24, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0506_e1_3_default_AR-LDST_default_1G_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 290.51, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0507_e1_3_default_AR-Ring_default_1G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 431.52, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0508_e1_3_default_AG-CE_default_4G_r3_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 956.2, "launches": {"copy_engine": 120}}
+{"run_id": "0509_e1_3_default_AR-TMA_default_256M_r3_single", "status": "ok", "wall_seconds": 3.8, "out_of_place_algbw_gbps": 359.42, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0510_e1_3_default_AR-LDST_default_4G_r3_single", "status": "ok", "wall_seconds": 5.7, "out_of_place_algbw_gbps": 293.0, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0511_e1_3_default_RS-Ring_default_1G_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 812.35, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0512_e1_3_default_AR-MC_default_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 444.25, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0513_e1_3_default_AG-MC_default_4G_r3_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 716.12, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0514_e1_3_default_AR-TMA_default_1G_r3_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 380.08, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0515_e1_3_default_AG-MC_default_1G_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 710.27, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0516_e1_3_default_AR-NVLS_default_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 439.86, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0517_e1_3_default_AR-TMA_default_4G_r3_single", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 379.5, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0518_e1_3_default_AR-LDST_default_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 282.92, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0519_e1_3_default_AR-Ring_default_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 397.03, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0520_e1_3_default_RS-Ring_default_4G_r3_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 865.08, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0521_e1_3_default_AR-MC_default_256M_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 435.54, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0522_e1_3_default_AR-NVLS_default_1G_r3_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 430.25, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0523_e1_3_default_RS-MC_default_1G_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 541.67, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0524_e1_3_default_AG-Ring_default_1G_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 779.9, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0525_e1_3_default_AG-CE_default_1G_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 928.87, "launches": {"copy_engine": 120}}
+{"run_id": "0526_e1_3_default_RS-MC_default_4G_r3_single", "status": "ok", "wall_seconds": 4.8, "out_of_place_algbw_gbps": 545.1, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0527_e1_3_default_AG-Ring_default_256M_r3_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 719.55, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0528_e1_3_default_AR-Tuner_default_1G_r3_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 431.37, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0529_e1_3_default_RS-Ring_default_256M_r3_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 714.54, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0530_e1_3_default_AG-CE_default_256M_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 833.37, "launches": {"copy_engine": 120}}
+{"run_id": "0531_e1_3_default_AR-MC_default_1G_r3_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 443.88, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0532_e1_3_default_RS-MC_default_256M_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 530.0, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0533_e1_3_default_AR-NVLS_default_256M_r4_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 293.65, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0534_e1_3_default_RS-Ring_default_256M_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 713.27, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0535_e1_3_default_AR-Tuner_default_4G_r4_single", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 449.49, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0536_e1_3_default_AR-MC_default_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 443.91, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0537_e1_3_default_AR-MC_default_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 435.71, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0538_e1_3_default_AG-Ring_default_1G_r4_single", "status": "ok", "wall_seconds": 4.3, "out_of_place_algbw_gbps": 781.32, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0539_e1_3_default_RS-MC_default_4G_r4_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 545.85, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0540_e1_3_default_AG-MC_default_4G_r4_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 716.27, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0541_e1_3_default_AG-MC_default_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 710.25, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0542_e1_3_default_AG-CE_default_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 834.02, "launches": {"copy_engine": 120}}
+{"run_id": "0543_e1_3_default_AR-LDST_default_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 283.5, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0544_e1_3_default_AR-TMA_default_4G_r4_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 379.07, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0545_e1_3_default_AR-TMA_default_256M_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 360.51, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0546_e1_3_default_AG-CE_default_4G_r4_single", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 955.86, "launches": {"copy_engine": 120}}
+{"run_id": "0547_e1_3_default_AG-Ring_default_256M_r4_single", "status": "ok", "wall_seconds": 3.7, "out_of_place_algbw_gbps": 719.21, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0548_e1_3_default_AR-Ring_default_256M_r4_single", "status": "ok", "wall_seconds": 3.6, "out_of_place_algbw_gbps": 397.75, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0549_e1_3_default_AG-Ring_default_4G_r4_single", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 817.18, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0550_e1_3_default_AR-NVLS_default_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 430.65, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0551_e1_3_default_RS-Ring_default_4G_r4_single", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 863.89, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0552_e1_3_default_AR-Ring_default_4G_r4_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 450.24, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0553_e1_3_default_AR-MC_default_4G_r4_single", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 444.28, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512": 120}}
+{"run_id": "0554_e1_3_default_RS-MC_default_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 542.67, "launches": {"ReduceScatter_LDMC ctas=6 threads=512": 120}}
+{"run_id": "0555_e1_3_default_AR-Tuner_default_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 431.99, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0556_e1_3_default_AR-LDST_default_1G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 290.55, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0557_e1_3_default_AR-NVLS_default_4G_r4_single", "status": "ok", "wall_seconds": 4.9, "out_of_place_algbw_gbps": 440.12, "launches": {"NVLS/SIMPLE ctas=24": 120}}
+{"run_id": "0558_e1_3_default_AR-Tuner_default_256M_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 396.13, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0559_e1_3_default_AR-Ring_default_1G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 431.93, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0560_e1_3_default_AG-CE_default_1G_r4_single", "status": "ok", "wall_seconds": 3.9, "out_of_place_algbw_gbps": 928.02, "launches": {"copy_engine": 120}}
+{"run_id": "0561_e1_3_default_AR-TMA_default_1G_r4_single", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 379.43, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512": 120}}
+{"run_id": "0562_e1_3_default_AG-MC_default_256M_r4_single", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 693.45, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0563_e1_3_default_RS-Ring_default_1G_r4_single", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 814.89, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0564_e1_3_default_AR-LDST_default_4G_r4_single", "status": "ok", "wall_seconds": 5.7, "out_of_place_algbw_gbps": 292.8, "launches": {"AllReduce_RSxLD_AGxST ctas=14 threads=512": 120}}
+{"run_id": "0000_e1_4_AR-TMA_c32_2G_r0_long", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 447.59, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 440}}
+{"run_id": "0001_e1_4_AR-TMA_c32_2G_r0_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 447.47, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0002_e1_4_RS-MC_c16_2G_r0_long", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 698.14, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 440}}
+{"run_id": "0003_e1_4_RS-MC_c16_2G_r0_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 698.04, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0004_e1_4_AR-MC_c16_2G_r0_long", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 463.78, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 440}}
+{"run_id": "0005_e1_4_AR-MC_c16_2G_r0_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 463.62, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0006_e1_4_AG-CE_default_2G_r0_long", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 946.72, "launches": {"copy_engine": 440}}
+{"run_id": "0007_e1_4_AG-CE_default_2G_r0_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 945.69, "launches": {"copy_engine": 120}}
+{"run_id": "0008_e1_4_AR-Ring_c32_2G_r0_long", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 445.57, "launches": {"RING/SIMPLE ctas=32": 440}}
+{"run_id": "0009_e1_4_AR-Ring_c32_2G_r0_short", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 444.92, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0010_e1_4_AR-NVLS_c32_2G_r0_long", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 454.3, "launches": {"NVLS/SIMPLE ctas=32": 440}}
+{"run_id": "0011_e1_4_AR-NVLS_c32_2G_r0_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 454.24, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0012_e1_4_AG-MC_c4_2G_r0_long", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 715.38, "launches": {"AllGather_STMC ctas=4 threads=512": 440}}
+{"run_id": "0013_e1_4_AG-MC_c4_2G_r0_short", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 715.11, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0014_e1_4_AR-NVLS_c32_2G_r1_long", "status": "ok", "wall_seconds": 5.6, "out_of_place_algbw_gbps": 454.36, "launches": {"NVLS/SIMPLE ctas=32": 440}}
+{"run_id": "0015_e1_4_AR-NVLS_c32_2G_r1_short", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 454.04, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0016_e1_4_AR-TMA_c32_2G_r1_long", "status": "ok", "wall_seconds": 6.0, "out_of_place_algbw_gbps": 447.73, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 440}}
+{"run_id": "0017_e1_4_AR-TMA_c32_2G_r1_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 447.43, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0018_e1_4_AG-CE_default_2G_r1_long", "status": "ok", "wall_seconds": 4.9, "out_of_place_algbw_gbps": 946.66, "launches": {"copy_engine": 440}}
+{"run_id": "0019_e1_4_AG-CE_default_2G_r1_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 945.73, "launches": {"copy_engine": 120}}
+{"run_id": "0020_e1_4_AR-MC_c16_2G_r1_long", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 463.7, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 440}}
+{"run_id": "0021_e1_4_AR-MC_c16_2G_r1_short", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 463.62, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0022_e1_4_AG-MC_c4_2G_r1_long", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 715.36, "launches": {"AllGather_STMC ctas=4 threads=512": 440}}
+{"run_id": "0023_e1_4_AG-MC_c4_2G_r1_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 715.23, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0024_e1_4_AR-Ring_c32_2G_r1_long", "status": "ok", "wall_seconds": 6.3, "out_of_place_algbw_gbps": 445.07, "launches": {"RING/SIMPLE ctas=32": 440}}
+{"run_id": "0025_e1_4_AR-Ring_c32_2G_r1_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 444.98, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0026_e1_4_RS-MC_c16_2G_r1_long", "status": "ok", "wall_seconds": 5.2, "out_of_place_algbw_gbps": 698.27, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 440}}
+{"run_id": "0027_e1_4_RS-MC_c16_2G_r1_short", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 698.02, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0028_e1_4_RS-MC_c16_2G_r2_long", "status": "ok", "wall_seconds": 4.9, "out_of_place_algbw_gbps": 698.42, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 440}}
+{"run_id": "0029_e1_4_RS-MC_c16_2G_r2_short", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 697.83, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0030_e1_4_AR-NVLS_c32_2G_r2_long", "status": "ok", "wall_seconds": 5.6, "out_of_place_algbw_gbps": 454.18, "launches": {"NVLS/SIMPLE ctas=32": 440}}
+{"run_id": "0031_e1_4_AR-NVLS_c32_2G_r2_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 454.33, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0032_e1_4_AG-CE_default_2G_r2_long", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 946.68, "launches": {"copy_engine": 440}}
+{"run_id": "0033_e1_4_AG-CE_default_2G_r2_short", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 945.74, "launches": {"copy_engine": 120}}
+{"run_id": "0034_e1_4_AG-MC_c4_2G_r2_long", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 715.36, "launches": {"AllGather_STMC ctas=4 threads=512": 440}}
+{"run_id": "0035_e1_4_AG-MC_c4_2G_r2_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 715.11, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0036_e1_4_AR-TMA_c32_2G_r2_long", "status": "ok", "wall_seconds": 6.0, "out_of_place_algbw_gbps": 447.73, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 440}}
+{"run_id": "0037_e1_4_AR-TMA_c32_2G_r2_short", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 447.56, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0038_e1_4_AR-MC_c16_2G_r2_long", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 463.7, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 440}}
+{"run_id": "0039_e1_4_AR-MC_c16_2G_r2_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 463.75, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0040_e1_4_AR-Ring_c32_2G_r2_long", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 445.42, "launches": {"RING/SIMPLE ctas=32": 440}}
+{"run_id": "0041_e1_4_AR-Ring_c32_2G_r2_short", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 445.27, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0042_e1_4_AR-MC_c16_2G_r3_long", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 463.74, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 440}}
+{"run_id": "0043_e1_4_AR-MC_c16_2G_r3_short", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 463.67, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0044_e1_4_AG-MC_c4_2G_r3_long", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 715.37, "launches": {"AllGather_STMC ctas=4 threads=512": 440}}
+{"run_id": "0045_e1_4_AG-MC_c4_2G_r3_short", "status": "ok", "wall_seconds": 4.2, "out_of_place_algbw_gbps": 715.06, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0046_e1_4_AG-CE_default_2G_r3_long", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 946.84, "launches": {"copy_engine": 440}}
+{"run_id": "0047_e1_4_AG-CE_default_2G_r3_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 945.71, "launches": {"copy_engine": 120}}
+{"run_id": "0048_e1_4_AR-NVLS_c32_2G_r3_long", "status": "ok", "wall_seconds": 5.6, "out_of_place_algbw_gbps": 454.33, "launches": {"NVLS/SIMPLE ctas=32": 440}}
+{"run_id": "0049_e1_4_AR-NVLS_c32_2G_r3_short", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 454.02, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0050_e1_4_AR-Ring_c32_2G_r3_long", "status": "ok", "wall_seconds": 6.1, "out_of_place_algbw_gbps": 445.27, "launches": {"RING/SIMPLE ctas=32": 440}}
+{"run_id": "0051_e1_4_AR-Ring_c32_2G_r3_short", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 445.36, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0052_e1_4_RS-MC_c16_2G_r3_long", "status": "ok", "wall_seconds": 5.1, "out_of_place_algbw_gbps": 698.62, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 440}}
+{"run_id": "0053_e1_4_RS-MC_c16_2G_r3_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 697.72, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0054_e1_4_AR-TMA_c32_2G_r3_long", "status": "ok", "wall_seconds": 5.9, "out_of_place_algbw_gbps": 447.61, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 440}}
+{"run_id": "0055_e1_4_AR-TMA_c32_2G_r3_short", "status": "ok", "wall_seconds": 4.5, "out_of_place_algbw_gbps": 447.37, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0056_e1_4_AR-MC_c16_2G_r4_long", "status": "ok", "wall_seconds": 6.4, "out_of_place_algbw_gbps": 463.75, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 440}}
+{"run_id": "0057_e1_4_AR-MC_c16_2G_r4_short", "status": "ok", "wall_seconds": 4.7, "out_of_place_algbw_gbps": 463.71, "launches": {"AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512": 120}}
+{"run_id": "0058_e1_4_AR-Ring_c32_2G_r4_long", "status": "ok", "wall_seconds": 6.2, "out_of_place_algbw_gbps": 445.55, "launches": {"RING/SIMPLE ctas=32": 440}}
+{"run_id": "0059_e1_4_AR-Ring_c32_2G_r4_short", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 445.43, "launches": {"RING/SIMPLE ctas=32": 120}}
+{"run_id": "0060_e1_4_AG-MC_c4_2G_r4_long", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 715.37, "launches": {"AllGather_STMC ctas=4 threads=512": 440}}
+{"run_id": "0061_e1_4_AG-MC_c4_2G_r4_short", "status": "ok", "wall_seconds": 4.4, "out_of_place_algbw_gbps": 715.08, "launches": {"AllGather_STMC ctas=4 threads=512": 120}}
+{"run_id": "0062_e1_4_AR-TMA_c32_2G_r4_long", "status": "ok", "wall_seconds": 5.9, "out_of_place_algbw_gbps": 447.63, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 440}}
+{"run_id": "0063_e1_4_AR-TMA_c32_2G_r4_short", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 447.6, "launches": {"AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512": 120}}
+{"run_id": "0064_e1_4_RS-MC_c16_2G_r4_long", "status": "ok", "wall_seconds": 5.0, "out_of_place_algbw_gbps": 698.36, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 440}}
+{"run_id": "0065_e1_4_RS-MC_c16_2G_r4_short", "status": "ok", "wall_seconds": 4.0, "out_of_place_algbw_gbps": 698.06, "launches": {"ReduceScatter_LDMC ctas=16 threads=512": 120}}
+{"run_id": "0066_e1_4_AR-NVLS_c32_2G_r4_long", "status": "ok", "wall_seconds": 5.9, "out_of_place_algbw_gbps": 454.3, "launches": {"NVLS/SIMPLE ctas=32": 440}}
+{"run_id": "0067_e1_4_AR-NVLS_c32_2G_r4_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 454.31, "launches": {"NVLS/SIMPLE ctas=32": 120}}
+{"run_id": "0068_e1_4_AG-CE_default_2G_r4_long", "status": "ok", "wall_seconds": 4.6, "out_of_place_algbw_gbps": 946.45, "launches": {"copy_engine": 440}}
+{"run_id": "0069_e1_4_AG-CE_default_2G_r4_short", "status": "ok", "wall_seconds": 4.1, "out_of_place_algbw_gbps": 945.65, "launches": {"copy_engine": 120}}

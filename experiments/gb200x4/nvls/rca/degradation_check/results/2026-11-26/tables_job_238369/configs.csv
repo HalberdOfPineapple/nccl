@@ -1,0 +1,119 @@
+session,block,arm,ctas_requested,launched,size,rounds,algbw_median_gbps,algbw_iqr_gbps,busbw_median_gbps,busbw_iqr_gbps,busbw_share_of_nominal
+job_238369,e1_3_calibrated_large,AG-CE,default,copy_engine,1G,5,928.14,0.41,696.11,0.31,0.728
+job_238369,e1_3_calibrated_large,AG-CE,default,copy_engine,2G,5,946.13,0.23,709.6,0.17,0.742
+job_238369,e1_3_calibrated_large,AG-CE,default,copy_engine,4G,5,955.66,0.38,716.75,0.28,0.75
+job_238369,e1_3_calibrated_large,AG-CE,default,copy_engine,8G,5,961.26,0.2,720.94,0.15,0.754
+job_238369,e1_3_calibrated_large,AG-MC,4,AllGather_STMC ctas=4 threads=512,1G,5,710.21,0.23,710.21,0.23,0.743
+job_238369,e1_3_calibrated_large,AG-MC,4,AllGather_STMC ctas=4 threads=512,2G,5,715.23,0.03,715.23,0.03,0.748
+job_238369,e1_3_calibrated_large,AG-MC,4,AllGather_STMC ctas=4 threads=512,4G,5,715.99,0.15,715.99,0.15,0.749
+job_238369,e1_3_calibrated_large,AG-MC,4,AllGather_STMC ctas=4 threads=512,8G,5,715.91,0.16,715.91,0.16,0.749
+job_238369,e1_3_calibrated_large,AG-Ring,64,RING/SIMPLE ctas=64,1G,5,809.79,1.64,607.34,1.23,0.635
+job_238369,e1_3_calibrated_large,AG-Ring,64,RING/SIMPLE ctas=64,2G,5,821.99,0.86,616.49,0.65,0.645
+job_238369,e1_3_calibrated_large,AG-Ring,64,RING/SIMPLE ctas=64,4G,5,855.06,0.85,641.29,0.64,0.671
+job_238369,e1_3_calibrated_large,AG-Ring,64,RING/SIMPLE ctas=64,8G,5,862.69,0.53,647.02,0.39,0.677
+job_238369,e1_3_calibrated_large,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,1G,5,417.87,0.63,626.81,0.94,0.655
+job_238369,e1_3_calibrated_large,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,2G,5,423.0,0.32,634.5,0.48,0.664
+job_238369,e1_3_calibrated_large,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,4G,5,422.12,0.09,633.18,0.13,0.662
+job_238369,e1_3_calibrated_large,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,8G,5,412.68,0.32,619.02,0.48,0.647
+job_238369,e1_3_calibrated_large,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,1G,5,462.0,0.21,577.5,0.26,0.604
+job_238369,e1_3_calibrated_large,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,2G,5,463.7,0.01,579.62,0.01,0.606
+job_238369,e1_3_calibrated_large,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,4G,5,463.91,0.08,579.89,0.1,0.606
+job_238369,e1_3_calibrated_large,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,8G,5,464.52,0.02,580.65,0.02,0.607
+job_238369,e1_3_calibrated_large,AR-NVLS,32,NVLS/SIMPLE ctas=32,1G,5,446.23,0.14,557.79,0.17,0.583
+job_238369,e1_3_calibrated_large,AR-NVLS,32,NVLS/SIMPLE ctas=32,2G,5,454.34,0.06,567.92,0.08,0.594
+job_238369,e1_3_calibrated_large,AR-NVLS,32,NVLS/SIMPLE ctas=32,4G,5,458.82,0.17,573.52,0.21,0.6
+job_238369,e1_3_calibrated_large,AR-NVLS,32,NVLS/SIMPLE ctas=32,8G,5,461.16,0.08,576.45,0.1,0.603
+job_238369,e1_3_calibrated_large,AR-Ring,32,RING/SIMPLE ctas=32,1G,5,431.77,0.47,647.65,0.7,0.677
+job_238369,e1_3_calibrated_large,AR-Ring,32,RING/SIMPLE ctas=32,2G,5,445.66,0.04,668.49,0.06,0.699
+job_238369,e1_3_calibrated_large,AR-Ring,32,RING/SIMPLE ctas=32,4G,5,450.49,0.03,675.74,0.04,0.707
+job_238369,e1_3_calibrated_large,AR-Ring,32,RING/SIMPLE ctas=32,8G,5,454.26,0.83,681.39,1.25,0.713
+job_238369,e1_3_calibrated_large,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,1G,5,431.94,0.19,647.91,0.28,0.678
+job_238369,e1_3_calibrated_large,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,2G,5,447.67,0.03,671.5,0.05,0.702
+job_238369,e1_3_calibrated_large,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,4G,5,434.57,0.05,651.86,0.07,0.682
+job_238369,e1_3_calibrated_large,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,8G,5,444.43,0.17,666.64,0.25,0.697
+job_238369,e1_3_calibrated_large,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,1G,5,691.95,1.01,691.95,1.01,0.724
+job_238369,e1_3_calibrated_large,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,2G,5,698.76,0.33,698.76,0.33,0.731
+job_238369,e1_3_calibrated_large,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,4G,5,701.65,0.02,701.65,0.02,0.734
+job_238369,e1_3_calibrated_large,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,8G,5,700.45,0.1,700.45,0.1,0.732
+job_238369,e1_3_calibrated_large,RS-Ring,32,RING/SIMPLE ctas=32,1G,5,813.29,1.37,609.97,1.03,0.638
+job_238369,e1_3_calibrated_large,RS-Ring,32,RING/SIMPLE ctas=32,2G,5,849.78,0.78,637.34,0.59,0.666
+job_238369,e1_3_calibrated_large,RS-Ring,32,RING/SIMPLE ctas=32,4G,5,863.38,2.28,647.53,1.72,0.677
+job_238369,e1_3_calibrated_large,RS-Ring,32,RING/SIMPLE ctas=32,8G,5,882.7,0.64,662.03,0.48,0.692
+job_238369,e1_3_calibrated_small,AG-CE,default,copy_engine,256M,5,833.89,4.04,625.42,3.03,0.654
+job_238369,e1_3_calibrated_small,AG-CE,default,copy_engine,512M,5,898.39,0.9,673.79,0.67,0.705
+job_238369,e1_3_calibrated_small,AG-MC,4,AllGather_STMC ctas=4 threads=512,128M,5,667.8,0.39,667.8,0.39,0.698
+job_238369,e1_3_calibrated_small,AG-MC,4,AllGather_STMC ctas=4 threads=512,256M,5,694.18,0.57,694.18,0.57,0.726
+job_238369,e1_3_calibrated_small,AG-MC,4,AllGather_STMC ctas=4 threads=512,512M,5,704.45,0.17,704.45,0.17,0.737
+job_238369,e1_3_calibrated_small,AG-MC,4,AllGather_STMC ctas=4 threads=512,64M,5,634.83,0.48,634.83,0.48,0.664
+job_238369,e1_3_calibrated_small,AG-Ring,64,RING/SIMPLE ctas=64,128M,5,706.38,2.24,529.78,1.68,0.554
+job_238369,e1_3_calibrated_small,AG-Ring,64,RING/SIMPLE ctas=64,256M,5,747.92,0.38,560.94,0.29,0.587
+job_238369,e1_3_calibrated_small,AG-Ring,64,RING/SIMPLE ctas=64,512M,5,777.2,0.94,582.9,0.7,0.61
+job_238369,e1_3_calibrated_small,AG-Ring,64,RING/SIMPLE ctas=64,64M,5,635.33,1.44,476.5,1.08,0.498
+job_238369,e1_3_calibrated_small,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,128M,5,407.97,0.31,611.96,0.46,0.64
+job_238369,e1_3_calibrated_small,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,256M,5,420.28,0.69,630.42,1.04,0.659
+job_238369,e1_3_calibrated_small,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,512M,5,426.73,0.1,640.1,0.15,0.669
+job_238369,e1_3_calibrated_small,AR-LDST,64,AllReduce_RSxLD_AGxST ctas=64 threads=512,64M,5,391.63,0.16,587.44,0.24,0.614
+job_238369,e1_3_calibrated_small,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,128M,5,436.34,0.96,545.42,1.2,0.57
+job_238369,e1_3_calibrated_small,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,256M,5,451.74,0.11,564.67,0.14,0.591
+job_238369,e1_3_calibrated_small,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,512M,5,456.19,0.18,570.24,0.23,0.596
+job_238369,e1_3_calibrated_small,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,64M,5,415.88,0.91,519.85,1.13,0.544
+job_238369,e1_3_calibrated_small,AR-NVLS,32,NVLS/SIMPLE ctas=32,128M,5,301.61,0.11,377.01,0.13,0.394
+job_238369,e1_3_calibrated_small,AR-NVLS,32,NVLS/SIMPLE ctas=32,256M,5,318.45,0.28,398.06,0.35,0.416
+job_238369,e1_3_calibrated_small,AR-NVLS,32,NVLS/SIMPLE ctas=32,512M,5,327.7,1.5,409.62,1.87,0.428
+job_238369,e1_3_calibrated_small,AR-NVLS,32,NVLS/SIMPLE ctas=32,64M,5,275.03,0.41,343.79,0.51,0.36
+job_238369,e1_3_calibrated_small,AR-Ring,32,RING/SIMPLE ctas=32,128M,5,384.34,0.94,576.51,1.41,0.603
+job_238369,e1_3_calibrated_small,AR-Ring,32,RING/SIMPLE ctas=32,256M,5,398.3,0.18,597.45,0.27,0.625
+job_238369,e1_3_calibrated_small,AR-Ring,32,RING/SIMPLE ctas=32,512M,5,418.91,0.66,628.37,0.99,0.657
+job_238369,e1_3_calibrated_small,AR-Ring,32,RING/SIMPLE ctas=32,64M,5,369.26,1.55,553.89,2.32,0.579
+job_238369,e1_3_calibrated_small,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,128M,5,419.67,0.96,629.5,1.43,0.658
+job_238369,e1_3_calibrated_small,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,256M,5,424.06,0.72,636.09,1.08,0.665
+job_238369,e1_3_calibrated_small,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,512M,5,439.79,0.1,659.69,0.15,0.69
+job_238369,e1_3_calibrated_small,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,64M,5,394.26,0.92,591.39,1.38,0.618
+job_238369,e1_3_calibrated_small,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,128M,5,651.58,1.28,651.58,1.28,0.681
+job_238369,e1_3_calibrated_small,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,256M,5,676.65,0.93,676.65,0.93,0.708
+job_238369,e1_3_calibrated_small,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,512M,5,687.28,1.08,687.28,1.08,0.719
+job_238369,e1_3_calibrated_small,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,64M,5,614.84,1.32,614.84,1.32,0.643
+job_238369,e1_3_calibrated_small,RS-Ring,32,RING/SIMPLE ctas=32,128M,5,675.68,1.83,506.76,1.37,0.53
+job_238369,e1_3_calibrated_small,RS-Ring,32,RING/SIMPLE ctas=32,256M,5,714.65,0.44,535.99,0.34,0.561
+job_238369,e1_3_calibrated_small,RS-Ring,32,RING/SIMPLE ctas=32,512M,5,763.4,0.84,572.55,0.63,0.599
+job_238369,e1_3_calibrated_small,RS-Ring,32,RING/SIMPLE ctas=32,64M,5,617.34,2.38,463.0,1.79,0.484
+job_238369,e1_3_default,AG-CE,default,copy_engine,1G,5,928.36,0.69,696.27,0.52,0.728
+job_238369,e1_3_default,AG-CE,default,copy_engine,256M,5,833.37,1.75,625.03,1.31,0.654
+job_238369,e1_3_default,AG-CE,default,copy_engine,4G,5,955.87,0.11,716.9,0.09,0.75
+job_238369,e1_3_default,AG-MC,default,AllGather_STMC ctas=4 threads=512,1G,5,710.25,0.02,710.25,0.02,0.743
+job_238369,e1_3_default,AG-MC,default,AllGather_STMC ctas=4 threads=512,256M,5,693.1,0.17,693.1,0.17,0.725
+job_238369,e1_3_default,AG-MC,default,AllGather_STMC ctas=4 threads=512,4G,5,716.2,0.15,716.2,0.15,0.749
+job_238369,e1_3_default,AG-Ring,default,RING/SIMPLE ctas=32,1G,5,779.9,0.24,584.92,0.17,0.612
+job_238369,e1_3_default,AG-Ring,default,RING/SIMPLE ctas=32,256M,5,719.33,0.19,539.5,0.14,0.564
+job_238369,e1_3_default,AG-Ring,default,RING/SIMPLE ctas=32,4G,5,815.28,0.37,611.46,0.28,0.639
+job_238369,e1_3_default,AR-LDST,default,AllReduce_RSxLD_AGxST ctas=14 threads=512,1G,5,290.23,0.29,435.35,0.43,0.455
+job_238369,e1_3_default,AR-LDST,default,AllReduce_RSxLD_AGxST ctas=14 threads=512,256M,5,283.38,0.58,425.07,0.87,0.445
+job_238369,e1_3_default,AR-LDST,default,AllReduce_RSxLD_AGxST ctas=14 threads=512,4G,5,292.8,0.23,439.2,0.34,0.459
+job_238369,e1_3_default,AR-MC,default,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,1G,5,443.99,0.11,554.99,0.13,0.58
+job_238369,e1_3_default,AR-MC,default,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,256M,5,435.54,0.17,544.43,0.21,0.569
+job_238369,e1_3_default,AR-MC,default,AllReduce_RSxLDMC_AGxSTMC ctas=6 threads=512,4G,5,444.33,0.08,555.41,0.1,0.581
+job_238369,e1_3_default,AR-NVLS,default,NVLS/SIMPLE ctas=24,1G,5,430.5,0.05,538.12,0.06,0.563
+job_238369,e1_3_default,AR-NVLS,default,NVLS/SIMPLE ctas=24,256M,5,293.8,0.67,367.25,0.84,0.384
+job_238369,e1_3_default,AR-NVLS,default,NVLS/SIMPLE ctas=24,4G,5,440.12,0.5,550.15,0.62,0.575
+job_238369,e1_3_default,AR-Ring,default,RING/SIMPLE ctas=32,1G,5,431.87,0.38,647.81,0.56,0.677
+job_238369,e1_3_default,AR-Ring,default,RING/SIMPLE ctas=32,256M,5,397.41,0.26,596.12,0.39,0.623
+job_238369,e1_3_default,AR-Ring,default,RING/SIMPLE ctas=32,4G,5,448.19,1.82,672.28,2.73,0.703
+job_238369,e1_3_default,AR-TMA,default,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,1G,5,380.28,0.32,570.42,0.48,0.597
+job_238369,e1_3_default,AR-TMA,default,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,256M,5,359.96,1.09,539.94,1.63,0.565
+job_238369,e1_3_default,AR-TMA,default,AllReduce_RSxTmaLD_AGxTmaST ctas=14 threads=512,4G,5,379.4,0.23,569.1,0.35,0.595
+job_238369,e1_3_default,AR-Tuner,default,RING/SIMPLE ctas=32,1G,5,431.99,0.38,,,
+job_238369,e1_3_default,AR-Tuner,default,RING/SIMPLE ctas=32,256M,5,397.1,1.29,,,
+job_238369,e1_3_default,AR-Tuner,default,RING/SIMPLE ctas=32,4G,5,449.12,1.33,,,
+job_238369,e1_3_default,RS-MC,default,ReduceScatter_LDMC ctas=6 threads=512,1G,5,542.19,0.94,542.19,0.94,0.567
+job_238369,e1_3_default,RS-MC,default,ReduceScatter_LDMC ctas=6 threads=512,256M,5,531.63,0.49,531.63,0.49,0.556
+job_238369,e1_3_default,RS-MC,default,ReduceScatter_LDMC ctas=6 threads=512,4G,5,545.38,0.51,545.38,0.51,0.57
+job_238369,e1_3_default,RS-Ring,default,RING/SIMPLE ctas=32,1G,5,812.35,2.65,609.26,1.99,0.637
+job_238369,e1_3_default,RS-Ring,default,RING/SIMPLE ctas=32,256M,5,714.3,1.27,535.72,0.95,0.56
+job_238369,e1_3_default,RS-Ring,default,RING/SIMPLE ctas=32,4G,5,864.6,0.57,648.45,0.43,0.678
+job_238369,e1_4,AG-CE,default,copy_engine,2G,5,946.68,0.06,710.01,0.04,0.742
+job_238369,e1_4,AG-MC,4,AllGather_STMC ctas=4 threads=512,2G,5,715.37,0.01,715.37,0.01,0.748
+job_238369,e1_4,AR-MC,16,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,2G,5,463.74,0.05,579.67,0.07,0.606
+job_238369,e1_4,AR-NVLS,32,NVLS/SIMPLE ctas=32,2G,5,454.3,0.03,567.88,0.03,0.594
+job_238369,e1_4,AR-Ring,32,RING/SIMPLE ctas=32,2G,5,445.42,0.28,668.13,0.43,0.699
+job_238369,e1_4,AR-TMA,32,AllReduce_RSxTmaLD_AGxTmaST ctas=32 threads=512,2G,5,447.63,0.12,671.44,0.19,0.702
+job_238369,e1_4,RS-MC,16,ReduceScatter_LDMC ctas=16 threads=512,2G,5,698.36,0.15,698.36,0.15,0.73

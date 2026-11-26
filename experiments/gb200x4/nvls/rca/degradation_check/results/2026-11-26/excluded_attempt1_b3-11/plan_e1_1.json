@@ -1,0 +1,12 @@
+{
+  "name": "e1_1",
+  "description": "Plan 01 E1.1: kernel selection, correctness, and long/short NVLink counter pair per arm at NCCL default CTAs, 2 GiB",
+  "seed": 11,
+  "blocks": [
+    {"name": "e1_1_check", "arms": ["AG-MC", "RS-MC", "AR-MC", "AR-TMA", "AR-LDST", "AR-NVLS", "AR-Ring", "AG-Ring", "RS-Ring", "AR-Tuner"],
+     "sizes": ["2G"], "rounds": 1, "iterations": 5, "warmup": 2, "check": 1},
+    {"name": "e1_1_counters", "arms": ["AG-MC", "RS-MC", "AR-MC", "AR-TMA", "AR-LDST", "AR-NVLS", "AR-Ring", "AG-Ring", "RS-Ring"],
+     "sizes": ["2G"], "rounds": 1, "check": 0,
+     "counter_pair": {"long": {"n": 200, "w": 20}, "short": {"n": 40, "w": 20}}}
+  ]
+}

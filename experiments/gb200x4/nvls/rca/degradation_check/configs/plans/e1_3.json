@@ -1,0 +1,109 @@
+{
+  "name": "e1_3",
+  "description": "Plan 01 E1.3: throughput against payload size. Every arm at its calibrated CTA count (configs/calibrated_ctas.json) for 64 MiB-8 GiB, and at NCCL defaults (plus NCCL's own tuner choice) at 256 MiB, 1 GiB, 4 GiB. 5 rounds, rotated.",
+  "seed": 13,
+  "blocks": [
+    {
+      "name": "e1_3_calibrated_small",
+      "arms": [
+        "AG-MC",
+        "AG-CE",
+        "RS-MC",
+        "AR-MC",
+        "AR-TMA",
+        "AR-LDST",
+        "AR-NVLS",
+        "AR-Ring",
+        "AG-Ring",
+        "RS-Ring"
+      ],
+      "ctas": {
+        "AG-MC": "calibrated",
+        "AG-CE": "calibrated",
+        "RS-MC": "calibrated",
+        "AR-MC": "calibrated",
+        "AR-TMA": "calibrated",
+        "AR-LDST": "calibrated",
+        "AR-NVLS": "calibrated",
+        "AR-Ring": "calibrated",
+        "AG-Ring": "calibrated",
+        "RS-Ring": "calibrated"
+      },
+      "sizes": [
+        "64M",
+        "128M",
+        "256M",
+        "512M"
+      ],
+      "rounds": 5,
+      "iterations": 100,
+      "warmup": 20,
+      "check": 0
+    },
+    {
+      "name": "e1_3_calibrated_large",
+      "arms": [
+        "AG-MC",
+        "AG-CE",
+        "RS-MC",
+        "AR-MC",
+        "AR-TMA",
+        "AR-LDST",
+        "AR-NVLS",
+        "AR-Ring",
+        "AG-Ring",
+        "RS-Ring"
+      ],
+      "ctas": {
+        "AG-MC": "calibrated",
+        "AG-CE": "calibrated",
+        "RS-MC": "calibrated",
+        "AR-MC": "calibrated",
+        "AR-TMA": "calibrated",
+        "AR-LDST": "calibrated",
+        "AR-NVLS": "calibrated",
+        "AR-Ring": "calibrated",
+        "AG-Ring": "calibrated",
+        "RS-Ring": "calibrated"
+      },
+      "sizes": [
+        "1G",
+        "2G",
+        "4G",
+        "8G"
+      ],
+      "rounds": 5,
+      "iterations": 50,
+      "warmup": 10,
+      "check": 0
+    },
+    {
+      "name": "e1_3_default",
+      "arms": [
+        "AG-MC",
+        "AG-CE",
+        "RS-MC",
+        "AR-MC",
+        "AR-TMA",
+        "AR-LDST",
+        "AR-NVLS",
+        "AR-Ring",
+        "AG-Ring",
+        "RS-Ring",
+        "AR-Tuner"
+      ],
+      "ctas_default": [
+        null
+      ],
+      "sizes": [
+        "256M",
+        "1G",
+        "4G"
+      ],
+      "rounds": 5,
+      "iterations": 50,
+      "warmup": 10,
+      "check": 0
+    }
+  ]
+}

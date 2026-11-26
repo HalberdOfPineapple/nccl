@@ -1,0 +1,483 @@
+{
+ "source": "experiments/gb200x4/nvls/rca/degradation_check/results/2026-11-26/tables/configs.csv",
+ "block": "e1_2",
+ "rule": "first CTA count after which two successive increases each add < 1% busBW",
+ "ctas": {
+  "AG-CE": null,
+  "AG-MC": 4,
+  "AG-Ring": 64,
+  "AR-LDST": 64,
+  "AR-MC": 16,
+  "AR-NVLS": 32,
+  "AR-Ring": 32,
+  "AR-TMA": 32,
+  "RS-MC": 16,
+  "RS-Ring": 32
+ },
+ "details": {
+  "AG-MC": {
+   "status": "plateau",
+   "chosen_ctas": 4,
+   "chosen_busbw_gbps": 710.41,
+   "chosen_iqr_gbps": 0.67,
+   "best_ctas": 32,
+   "best_busbw_gbps": 714.28,
+   "downturn_after_best": false,
+   "curve": [
+    {
+     "ctas": 1,
+     "busbw_gbps": 200.19,
+     "iqr_gbps": 0.14
+    },
+    {
+     "ctas": 2,
+     "busbw_gbps": 399.23,
+     "iqr_gbps": 0.3
+    },
+    {
+     "ctas": 4,
+     "busbw_gbps": 710.41,
+     "iqr_gbps": 0.67
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 710.76,
+     "iqr_gbps": 0.13
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 714.26,
+     "iqr_gbps": 0.04
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 692.73,
+     "iqr_gbps": 0.02
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 714.28,
+     "iqr_gbps": 0.06
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 703.52,
+     "iqr_gbps": 0.02
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 714.15,
+     "iqr_gbps": 0.1
+    }
+   ]
+  },
+  "AG-Ring": {
+   "status": "not_saturated",
+   "chosen_ctas": 64,
+   "chosen_busbw_gbps": 616.52,
+   "chosen_iqr_gbps": 0.9,
+   "best_ctas": 64,
+   "best_busbw_gbps": 616.52,
+   "downturn_after_best": false,
+   "curve": [
+    {
+     "ctas": 4,
+     "busbw_gbps": 89.23,
+     "iqr_gbps": 0.04
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 177.89,
+     "iqr_gbps": 0.05
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 346.61,
+     "iqr_gbps": 0.81
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 506.5,
+     "iqr_gbps": 0.75
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 603.75,
+     "iqr_gbps": 0.55
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 602.47,
+     "iqr_gbps": 2.55
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 616.52,
+     "iqr_gbps": 0.9
+    }
+   ]
+  },
+  "AR-LDST": {
+   "status": "not_saturated",
+   "chosen_ctas": 64,
+   "chosen_busbw_gbps": 635.25,
+   "chosen_iqr_gbps": 1.15,
+   "best_ctas": 64,
+   "best_busbw_gbps": 635.25,
+   "downturn_after_best": false,
+   "curve": [
+    {
+     "ctas": 1,
+     "busbw_gbps": 33.84,
+     "iqr_gbps": 0.05
+    },
+    {
+     "ctas": 2,
+     "busbw_gbps": 66.95,
+     "iqr_gbps": 0.09
+    },
+    {
+     "ctas": 4,
+     "busbw_gbps": 131.58,
+     "iqr_gbps": 0.12
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 256.63,
+     "iqr_gbps": 0.3
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 477.78,
+     "iqr_gbps": 0.2
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 607.31,
+     "iqr_gbps": 0.47
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 623.38,
+     "iqr_gbps": 0.34
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 616.61,
+     "iqr_gbps": 0.29
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 635.25,
+     "iqr_gbps": 1.15
+    }
+   ]
+  },
+  "AR-MC": {
+   "status": "plateau",
+   "chosen_ctas": 16,
+   "chosen_busbw_gbps": 578.94,
+   "chosen_iqr_gbps": 0.06,
+   "best_ctas": 32,
+   "best_busbw_gbps": 579.43,
+   "downturn_after_best": false,
+   "curve": [
+    {
+     "ctas": 1,
+     "busbw_gbps": 119.49,
+     "iqr_gbps": 0.2
+    },
+    {
+     "ctas": 2,
+     "busbw_gbps": 231.7,
+     "iqr_gbps": 0.16
+    },
+    {
+     "ctas": 4,
+     "busbw_gbps": 440.07,
+     "iqr_gbps": 0.47
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 572.0,
+     "iqr_gbps": 0.08
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 578.94,
+     "iqr_gbps": 0.06
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 578.71,
+     "iqr_gbps": 0.18
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 579.43,
+     "iqr_gbps": 0.07
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 575.7,
+     "iqr_gbps": 0.1
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 578.42,
+     "iqr_gbps": 0.06
+    }
+   ]
+  },
+  "AR-NVLS": {
+   "status": "plateau",
+   "chosen_ctas": 32,
+   "chosen_busbw_gbps": 567.9,
+   "chosen_iqr_gbps": 0.03,
+   "best_ctas": 32,
+   "best_busbw_gbps": 567.9,
+   "downturn_after_best": true,
+   "curve": [
+    {
+     "ctas": 4,
+     "busbw_gbps": 91.96,
+     "iqr_gbps": 0.11
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 186.7,
+     "iqr_gbps": 0.54
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 367.21,
+     "iqr_gbps": 0.66
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 544.95,
+     "iqr_gbps": 0.16
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 567.9,
+     "iqr_gbps": 0.03
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 553.67,
+     "iqr_gbps": 0.49
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 556.36,
+     "iqr_gbps": 0.18
+    }
+   ]
+  },
+  "AR-Ring": {
+   "status": "plateau",
+   "chosen_ctas": 32,
+   "chosen_busbw_gbps": 668.21,
+   "chosen_iqr_gbps": 0.82,
+   "best_ctas": 32,
+   "best_busbw_gbps": 668.21,
+   "downturn_after_best": true,
+   "curve": [
+    {
+     "ctas": 4,
+     "busbw_gbps": 110.79,
+     "iqr_gbps": 0.13
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 221.19,
+     "iqr_gbps": 0.11
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 431.25,
+     "iqr_gbps": 0.44
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 599.78,
+     "iqr_gbps": 0.14
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 668.21,
+     "iqr_gbps": 0.82
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 648.18,
+     "iqr_gbps": 2.31
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 645.69,
+     "iqr_gbps": 2.38
+    }
+   ]
+  },
+  "AR-TMA": {
+   "status": "plateau",
+   "chosen_ctas": 32,
+   "chosen_busbw_gbps": 671.33,
+   "chosen_iqr_gbps": 0.24,
+   "best_ctas": 32,
+   "best_busbw_gbps": 671.33,
+   "downturn_after_best": true,
+   "curve": [
+    {
+     "ctas": 1,
+     "busbw_gbps": 58.68,
+     "iqr_gbps": 0.02
+    },
+    {
+     "ctas": 2,
+     "busbw_gbps": 115.53,
+     "iqr_gbps": 0.06
+    },
+    {
+     "ctas": 4,
+     "busbw_gbps": 226.53,
+     "iqr_gbps": 0.09
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 441.19,
+     "iqr_gbps": 0.41
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 630.99,
+     "iqr_gbps": 0.13
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 662.81,
+     "iqr_gbps": 0.18
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 671.33,
+     "iqr_gbps": 0.24
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 657.03,
+     "iqr_gbps": 0.12
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 654.03,
+     "iqr_gbps": 1.03
+    }
+   ]
+  },
+  "RS-MC": {
+   "status": "plateau",
+   "chosen_ctas": 16,
+   "chosen_busbw_gbps": 698.71,
+   "chosen_iqr_gbps": 0.35,
+   "best_ctas": 64,
+   "best_busbw_gbps": 706.61,
+   "downturn_after_best": false,
+   "curve": [
+    {
+     "ctas": 1,
+     "busbw_gbps": 97.95,
+     "iqr_gbps": 0.08
+    },
+    {
+     "ctas": 2,
+     "busbw_gbps": 191.95,
+     "iqr_gbps": 0.2
+    },
+    {
+     "ctas": 4,
+     "busbw_gbps": 372.77,
+     "iqr_gbps": 0.25
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 670.16,
+     "iqr_gbps": 0.23
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 698.71,
+     "iqr_gbps": 0.35
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 703.27,
+     "iqr_gbps": 0.21
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 703.45,
+     "iqr_gbps": 0.28
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 705.97,
+     "iqr_gbps": 0.25
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 706.61,
+     "iqr_gbps": 0.36
+    }
+   ]
+  },
+  "RS-Ring": {
+   "status": "plateau",
+   "chosen_ctas": 32,
+   "chosen_busbw_gbps": 639.22,
+   "chosen_iqr_gbps": 0.37,
+   "best_ctas": 32,
+   "best_busbw_gbps": 639.22,
+   "downturn_after_best": false,
+   "curve": [
+    {
+     "ctas": 4,
+     "busbw_gbps": 114.25,
+     "iqr_gbps": 0.02
+    },
+    {
+     "ctas": 8,
+     "busbw_gbps": 227.35,
+     "iqr_gbps": 0.28
+    },
+    {
+     "ctas": 16,
+     "busbw_gbps": 438.46,
+     "iqr_gbps": 1.5
+    },
+    {
+     "ctas": 24,
+     "busbw_gbps": 569.62,
+     "iqr_gbps": 0.35
+    },
+    {
+     "ctas": 32,
+     "busbw_gbps": 639.22,
+     "iqr_gbps": 0.37
+    },
+    {
+     "ctas": 48,
+     "busbw_gbps": 638.64,
+     "iqr_gbps": 2.07
+    },
+    {
+     "ctas": 64,
+     "busbw_gbps": 634.69,
+     "iqr_gbps": 0.23
+    }
+   ]
+  }
+ }
+}

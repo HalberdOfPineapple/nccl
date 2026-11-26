@@ -1,0 +1,42 @@
+{
+  "name": "e1_3_repeat",
+  "description": "Plan 01 E1.3 step 5: second-session repeat of 1 GiB and 2 GiB for every arm at the calibrated CTA count, 5 rounds (run in a different job, ideally on another node).",
+  "seed": 31,
+  "blocks": [
+    {
+      "name": "e1_3_repeat",
+      "arms": [
+        "AG-MC",
+        "AG-CE",
+        "RS-MC",
+        "AR-MC",
+        "AR-TMA",
+        "AR-LDST",
+        "AR-NVLS",
+        "AR-Ring",
+        "AG-Ring",
+        "RS-Ring"
+      ],
+      "ctas": {
+        "AG-MC": "calibrated",
+        "AG-CE": "calibrated",
+        "RS-MC": "calibrated",
+        "AR-MC": "calibrated",
+        "AR-TMA": "calibrated",
+        "AR-LDST": "calibrated",
+        "AR-NVLS": "calibrated",
+        "AR-Ring": "calibrated",
+        "AG-Ring": "calibrated",
+        "RS-Ring": "calibrated"
+      },
+      "sizes": [
+        "1G",
+        "2G"
+      ],
+      "rounds": 5,
+      "iterations": 50,
+      "warmup": 10,
+      "check": 0
+    }
+  ]
+}

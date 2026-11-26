@@ -1,0 +1,1 @@
+Excluded 2026-11-26: AG-MC ran NCCL's copy-engine AllGather (NCCL_SYM_CE_THRESHOLD not raised), and the run order changed when AG-CE was added. Kept for the record; not used in any summary.

@@ -1,0 +1,9 @@
+AG-MC    plateau        ctas=  4 busbw=  710.4 best=32@714.3 downturn=False
+AG-Ring  not_saturated  ctas= 64 busbw=  616.5 best=64@616.5 downturn=False
+AR-LDST  not_saturated  ctas= 64 busbw=  635.2 best=64@635.2 downturn=False
+AR-MC    plateau        ctas= 16 busbw=  578.9 best=32@579.4 downturn=False
+AR-NVLS  plateau        ctas= 32 busbw=  567.9 best=32@567.9 downturn=True
+AR-Ring  plateau        ctas= 32 busbw=  668.2 best=32@668.2 downturn=True
+AR-TMA   plateau        ctas= 32 busbw=  671.3 best=32@671.3 downturn=True
+RS-MC    plateau        ctas= 16 busbw=  698.7 best=64@706.6 downturn=False
+RS-Ring  plateau        ctas= 32 busbw=  639.2 best=32@639.2 downturn=False

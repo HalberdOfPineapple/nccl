@@ -1,0 +1,12 @@
+{
+  "name": "smoke",
+  "description": "Pre-flight for batch jobs (about 1 minute): one calibrated run, one copy-engine run, one counter pair. Exercises the calibrated-CTA path, the copy-engine arm and the long-minus-short accounting.",
+  "seed": 99,
+  "blocks": [
+    {"name": "smoke_calibrated", "arms": ["AR-MC", "AG-CE"], "ctas": {"AR-MC": "calibrated", "AG-CE": "calibrated"},
+     "sizes": ["256M"], "rounds": 1, "iterations": 20, "warmup": 5, "check": 1},
+    {"name": "smoke_counters", "arms": ["RS-MC"], "ctas": {"RS-MC": "calibrated"},
+     "sizes": ["256M"], "rounds": 1, "check": 0,
+     "counter_pair": {"long": {"n": 100, "w": 10}, "short": {"n": 20, "w": 10}}}
+  ]
+}

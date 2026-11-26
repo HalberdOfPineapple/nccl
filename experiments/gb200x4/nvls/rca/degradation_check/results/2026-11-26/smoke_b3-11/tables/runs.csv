@@ -1,0 +1,5 @@
+session,run_id,block,round,arm,ctas_requested,size,length,iterations,warmup,status,launched,wall_seconds,size_bytes,out_of_place_time_us,out_of_place_algbw_gbps,in_place_time_us,in_place_algbw_gbps,out_of_place_wrong,in_place_wrong,out_of_place_busbw_gbps,sm_clock_after_mhz_min
+smoke_b3-11,0000_smoke_calibrated_AR-MC_c16_256M_r0_single,smoke_calibrated,0,AR-MC,16,256M,single,20,5,ok,AllReduce_RSxLDMC_AGxSTMC ctas=16 threads=512,4.7,268435456,595.97,450.42,595.95,450.43,0,0,563.02,705.0
+smoke_b3-11,0001_smoke_calibrated_AG-CE_default_256M_r0_single,smoke_calibrated,0,AG-CE,default,256M,single,20,5,ok,copy_engine,3.96,268435456,419.72,639.56,368.03,729.39,0,0,639.56,2062.0
+smoke_b3-11,0002_smoke_counters_RS-MC_c16_256M_r0_long,smoke_counters,0,RS-MC,16,256M,long,100,10,ok,ReduceScatter_LDMC ctas=16 threads=512,3.89,268435456,396.88,676.37,395.9,678.03,N/A,N/A,676.37,2062.0
+smoke_b3-11,0003_smoke_counters_RS-MC_c16_256M_r0_short,smoke_counters,0,RS-MC,16,256M,short,20,10,ok,ReduceScatter_LDMC ctas=16 threads=512,4.1,268435456,399.39,672.11,397.03,676.11,N/A,N/A,672.11,600.0
