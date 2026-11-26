@@ -1,0 +1,13 @@
+{
+ "rounds": 1,
+ "cells": [
+  {
+   "id": "check_n2",
+   "devices": "4,5",
+   "min_ctas": 4,
+   "max_ctas": 4,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  }
+ ]
+}

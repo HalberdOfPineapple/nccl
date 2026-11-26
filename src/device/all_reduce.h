@@ -401,7 +401,7 @@ struct RunWorkColl<ncclFuncAllReduce, T, RedOp, NCCL_ALGO_NVLS, NCCL_PROTO_SIMPL
     const int nThreadsScatter = scatterWarps * WARP_SIZE;
     const int nThreadsGather = gatherWarps * WARP_SIZE;
     const int nThreadsReduce = reduceWarps * WARP_SIZE;
-    const int nThreadsBcast = (bcastWarps)*WARP_SIZE;
+    const int nThreadsBcast = (bcastWarps) * WARP_SIZE;
     const int tidEndScatter = nThreadsScatter;
     const int tidEndGather = tidEndScatter + nThreadsGather;
     const int tidEndReduce = tidEndGather + nThreadsReduce;
@@ -441,10 +441,21 @@ struct RunWorkColl<ncclFuncAllReduce, T, RedOp, NCCL_ALGO_NVLS, NCCL_PROTO_SIMPL
       } else if (tid < tidEndReduce && nvls->headRank != -1) {
         // Reduce, broadcast through NVLS
         using Proto = ProtoSimple<1, 1, COLL_UNROLL, 1, 1>;
-        Primitives<T, RedOp, FanSymmetric<1>, /*Direct=*/1, Proto, 0> prims(tid - tidEndGather, nThreadsReduce,
-                                                                            &nvls->down, &nvls->down, NULL, NULL,
-                                                                            work->redOpArg, 2 * Proto::MaxGroupWidth, 0,
-                                                                            0, work);
+
+
+        // template <typename T, typename RedOp, typename Fan, int Direct, int SlicePerChunk, int StepPerSlice, int Unroll,
+        //  int P2p, int MultimemSrcs, int MultimemDsts, bool isNetOffload>
+        // __device__ Primitives(
+        // int tid, int nthreads, int const* recvPeers, int const* sendPeers, void const* inputBuf,
+        // void* outputBuf, uint64_t redOpArg, uint8_t group = 0, uint8_t connIndexRecv = 0,
+        // uint8_t connIndexSend = 0, struct ncclDevWorkColl* collWork = nullptr,
+        // struct ncclDevWorkP2p* p2pWork = nullptr, int stepSize_ = 0, int mode = primsModeDefault)
+        Primitives<T, RedOp, FanSymmetric<1>, /*Direct=*/1, Proto, 0> prims(
+          tid - tidEndGather, nThreadsReduce,
+          &nvls->down, &nvls->down, NULL, NULL,
+          work->redOpArg, 2 * Proto::MaxGroupWidth, 0, 0, work
+        );
+
         for (ssize_t elemOffset = 0; elemOffset < channelCount; elemOffset += loopCount) {
           ssize_t chunkOffset, offset;
           int nelem;
@@ -452,6 +463,11 @@ struct RunWorkColl<ncclFuncAllReduce, T, RedOp, NCCL_ALGO_NVLS, NCCL_PROTO_SIMPL
           chunkOffset = elemOffset + nvls->headRank * chunkSize;
           offset = gridOffset + chunkOffset;
           nelem = min(chunkSize, channelCount - chunkOffset);
+
+          //  template <int DirectRecv1, int DirectSend1, int Recv, int Send, int SrcBuf, int DstBuf>
+          // __device__ __forceinline__ void genericOp(intptr_t srcIx, intptr_t dstIx, int nelem, bool postOp)
+          // __device__ __forceinline__ void directRecvDirectSend(intptr_t inpIx, intptr_t outIx, int eltN, bool postOp = false)
+          // genericOp<1, 1, 1, 1, -1, -1>(inpIx, outIx, eltN, postOp);
           prims.directRecvDirectSend(offset, offset, nelem);
         }
       }

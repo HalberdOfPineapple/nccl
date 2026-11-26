@@ -1,0 +1,31 @@
+cell_id,arm,gpu_count,devices,requested_ctas,ctas_used,threads_per_cta,size_bytes,runs,algbw_median_gbps,algbw_min_gbps,algbw_max_gbps,in_place_algbw_median_gbps,bus_factor,busbw_median_gbps,collective
+selection_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),2147483648,1,322.75,322.75,322.75,323.63,1.0,322.75,allgather
+selection_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),2147483648,1,551.82,551.82,551.82,603.43,0.5,275.91,allgather
+selection_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,2147483648,1,513.16,513.16,513.16,577.99,0.5,256.58,allgather
+selection_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),2147483648,1,361.1,361.1,361.1,361.54,1.0,361.1,allgather
+selection_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),2147483648,1,440.64,440.64,440.64,455.56,0.75,330.48,allgather
+selection_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,2147483648,1,372.78,372.78,372.78,372.84,1.0,372.78,allgather
+selection_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,2147483648,1,394.24,394.24,394.24,395.02,0.75,295.68,allgather
+selection_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),2147483616,1,354.18,354.18,354.18,357.82,1.0,354.18,allgather
+selection_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),2147483616,1,409.37,409.37,409.37,418.54,0.8333,341.14,allgather
+selection_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,2147483616,1,354.01,354.01,354.01,354.59,1.0,354.01,allgather
+selection_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,2147483616,1,309.58,309.58,309.58,321.06,0.8333,257.98,allgather
+selection_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),2147483648,1,347.9,347.9,347.9,349.16,1.0,347.9,allgather
+selection_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),2147483648,1,400.45,400.45,400.45,404.82,0.875,350.39,allgather
+selection_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,2147483648,1,373.39,373.39,373.39,373.39,1.0,373.39,allgather
+selection_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,2147483648,1,317.54,317.54,317.54,327.12,0.875,277.85,allgather
+selection_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),2147483648,1,328.65,328.65,328.65,328.73,1.0,328.65,reducescatter
+selection_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),2147483648,1,552.95,552.95,552.95,564.8,0.5,276.48,reducescatter
+selection_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,2147483648,1,326.32,326.32,326.32,329.03,0.5,163.16,reducescatter
+selection_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),2147483648,1,349.0,349.0,349.0,349.44,1.0,349.0,reducescatter
+selection_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),2147483648,1,445.89,445.89,445.89,455.58,0.75,334.42,reducescatter
+selection_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,2147483648,1,354.47,354.47,354.47,354.43,1.0,354.47,reducescatter
+selection_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,2147483648,1,365.06,365.06,365.06,364.5,0.75,273.8,reducescatter
+selection_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),2147483616,1,356.22,356.22,356.22,355.55,1.0,356.22,reducescatter
+selection_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),2147483616,1,412.93,412.93,412.93,412.26,0.8333,344.11,reducescatter
+selection_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,2147483616,1,337.94,337.94,337.94,337.27,1.0,337.94,reducescatter
+selection_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,2147483616,1,350.48,350.48,350.48,351.12,0.8333,292.07,reducescatter
+selection_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),2147483648,1,358.15,358.15,358.15,357.98,1.0,358.15,reducescatter
+selection_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),2147483648,1,403.07,403.07,403.07,402.04,0.875,352.69,reducescatter
+selection_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,2147483648,1,363.9,363.9,363.9,363.84,1.0,363.9,reducescatter
+selection_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,2147483648,1,354.83,354.83,354.83,354.96,0.875,310.48,reducescatter

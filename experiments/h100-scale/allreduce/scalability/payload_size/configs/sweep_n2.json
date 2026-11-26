@@ -1,0 +1,26 @@
+{
+ "rounds": 5,
+ "cells": [
+  {
+   "id": "n2_ring_auto_sweep",
+   "arm": "ring",
+   "devices": "4,5",
+   "min_size": "32M",
+   "max_size": "8G"
+  },
+  {
+   "id": "n2_nvls_auto_sweep",
+   "arm": "nvls",
+   "devices": "4,5",
+   "min_size": "32M",
+   "max_size": "8G"
+  },
+  {
+   "id": "n2_sym_plain_auto_sweep",
+   "arm": "sym_plain",
+   "devices": "4,5",
+   "min_size": "32M",
+   "max_size": "8G"
+  }
+ ]
+}

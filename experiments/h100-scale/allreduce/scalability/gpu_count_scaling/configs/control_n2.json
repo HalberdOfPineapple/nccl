@@ -1,0 +1,68 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "n2_g45_ring_auto",
+   "arm": "ring",
+   "devices": "4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g45_nvls_auto",
+   "arm": "nvls",
+   "devices": "4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g45_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g01_ring_auto",
+   "arm": "ring",
+   "devices": "0,1",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g01_nvls_auto",
+   "arm": "nvls",
+   "devices": "0,1",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g01_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "0,1",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g34_ring_auto",
+   "arm": "ring",
+   "devices": "3,4",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g34_nvls_auto",
+   "arm": "nvls",
+   "devices": "3,4",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n2_g34_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "3,4",
+   "min_size": "2G",
+   "max_size": "2G"
+  }
+ ]
+}

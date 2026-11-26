@@ -1,0 +1,45 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "link_n8_oneshot_c8_long",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_ctas": 8,
+   "max_ctas": 8,
+   "min_size": 2147483648,
+   "max_size": 2147483648,
+   "kernels": "oneshot",
+   "timed_iters": 100
+  },
+  {
+   "id": "link_n8_oneshot_c8_short",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_ctas": 8,
+   "max_ctas": 8,
+   "min_size": 2147483648,
+   "max_size": 2147483648,
+   "kernels": "oneshot",
+   "timed_iters": 10
+  },
+  {
+   "id": "link_n8_twoshot_c8_long",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_ctas": 8,
+   "max_ctas": 8,
+   "min_size": 2147483648,
+   "max_size": 2147483648,
+   "kernels": "twoshot",
+   "timed_iters": 100
+  },
+  {
+   "id": "link_n8_twoshot_c8_short",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_ctas": 8,
+   "max_ctas": 8,
+   "min_size": 2147483648,
+   "max_size": 2147483648,
+   "kernels": "twoshot",
+   "timed_iters": 10
+  }
+ ]
+}

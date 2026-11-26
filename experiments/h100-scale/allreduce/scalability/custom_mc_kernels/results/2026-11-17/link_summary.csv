@@ -1,0 +1,5 @@
+gpu_count,devices,kernel,ctas_x_threads,pairs,sent_per_payload_byte_median,sent_min,sent_max,received_per_payload_byte_median,received_min,received_max,model_sent,model_received,algbw_long_run_gbps,sent_link_rate_gbps,sent_share_of_link_rating
+4,"4,5,6,7",oneshot,16x1024,3,4.0,4.0,4.0,1.0,1.0,1.0,4.0,1.0,89.01,356.0,0.745
+4,"4,5,6,7",twoshot,16x1024,3,1.25,1.25,1.25,1.25,1.25,1.25,1.25,1.25,247.51,309.4,0.647
+8,"0,1,2,3,4,5,6,7",oneshot,8x1024,3,8.0,8.0,8.0,1.0,1.0,1.0,8.0,1.0,45.56,364.5,0.762
+8,"0,1,2,3,4,5,6,7",twoshot,8x1024,3,1.125,1.125,1.125,1.125,1.125,1.125,1.125,1.125,272.42,306.5,0.641

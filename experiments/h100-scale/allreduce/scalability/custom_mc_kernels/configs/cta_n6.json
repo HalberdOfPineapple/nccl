@@ -1,0 +1,77 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "cta_n6_c1",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 1,
+   "max_ctas": 1,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c2",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 2,
+   "max_ctas": 2,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c4",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 4,
+   "max_ctas": 4,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c8",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 8,
+   "max_ctas": 8,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c16",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 16,
+   "max_ctas": 16,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c32",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 32,
+   "max_ctas": 32,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c64",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 64,
+   "max_ctas": 64,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c128",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 128,
+   "max_ctas": 128,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  },
+  {
+   "id": "cta_n6_c256",
+   "devices": "1,2,3,4,5,6",
+   "min_ctas": 256,
+   "max_ctas": 256,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  }
+ ]
+}

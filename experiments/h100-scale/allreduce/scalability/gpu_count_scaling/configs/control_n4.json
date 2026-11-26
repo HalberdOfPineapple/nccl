@@ -1,0 +1,89 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "n4_g4567_ring_auto",
+   "arm": "ring",
+   "devices": "4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g4567_nvls_auto",
+   "arm": "nvls",
+   "devices": "4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g4567_sym_multicast_auto",
+   "arm": "sym_multicast",
+   "devices": "4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g4567_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g0123_ring_auto",
+   "arm": "ring",
+   "devices": "0,1,2,3",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g0123_nvls_auto",
+   "arm": "nvls",
+   "devices": "0,1,2,3",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g0123_sym_multicast_auto",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g0123_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g2345_ring_auto",
+   "arm": "ring",
+   "devices": "2,3,4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g2345_nvls_auto",
+   "arm": "nvls",
+   "devices": "2,3,4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g2345_sym_multicast_auto",
+   "arm": "sym_multicast",
+   "devices": "2,3,4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n4_g2345_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "2,3,4,5",
+   "min_size": "2G",
+   "max_size": "2G"
+  }
+ ]
+}

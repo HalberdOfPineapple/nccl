@@ -1,0 +1,33 @@
+{
+ "rounds": 5,
+ "cells": [
+  {
+   "id": "n4_ring_auto_sweep",
+   "arm": "ring",
+   "devices": "4,5,6,7",
+   "min_size": "32M",
+   "max_size": "8G"
+  },
+  {
+   "id": "n4_nvls_auto_sweep",
+   "arm": "nvls",
+   "devices": "4,5,6,7",
+   "min_size": "32M",
+   "max_size": "8G"
+  },
+  {
+   "id": "n4_sym_multicast_auto_sweep",
+   "arm": "sym_multicast",
+   "devices": "4,5,6,7",
+   "min_size": "32M",
+   "max_size": "8G"
+  },
+  {
+   "id": "n4_sym_plain_auto_sweep",
+   "arm": "sym_plain",
+   "devices": "4,5,6,7",
+   "min_size": "32M",
+   "max_size": "8G"
+  }
+ ]
+}

@@ -1,0 +1,95 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "raw_n8_allreduce_ring_auto_long",
+   "collective": "allreduce",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "raw_n8_allreduce_ring_auto_short",
+   "collective": "allreduce",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "raw_n8_allreduce_sym_multicast_auto_long",
+   "collective": "allreduce",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "raw_n8_allreduce_sym_multicast_auto_short",
+   "collective": "allreduce",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "raw_n8_allgather_sym_multicast_auto_long",
+   "collective": "allgather",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "raw_n8_allgather_sym_multicast_auto_short",
+   "collective": "allgather",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "raw_n8_reducescatter_sym_multicast_auto_long",
+   "collective": "reducescatter",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "raw_n8_reducescatter_sym_multicast_auto_short",
+   "collective": "reducescatter",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "raw_n8_allgather_ring_auto_long",
+   "collective": "allgather",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "raw_n8_allgather_ring_auto_short",
+   "collective": "allgather",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  }
+ ]
+}

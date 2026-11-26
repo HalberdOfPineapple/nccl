@@ -1,0 +1,13 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "cta_n8_c256",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_ctas": 256,
+   "max_ctas": 256,
+   "min_size": 33554432,
+   "max_size": 2147483648
+  }
+ ]
+}

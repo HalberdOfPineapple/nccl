@@ -1,0 +1,1517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NVLS AllReduce Call Paths</title>
+<style>
+:root {
+  --bg: #fbfbfa;
+  --panel: #ffffff;
+  --panel-2: #f3f3f1;
+  --fg: #1d1d1f;
+  --muted: #5f6368;
+  --border: #dcdcd8;
+  --accent: #1f6feb;
+  --accent-soft: #e6efff;
+  --lsa: #1a7f37;
+  --lsa-soft: #e3f4e8;
+  --gin: #b35900;
+  --gin-soft: #fff0e0;
+  --cft: #7c3aed;
+  --cft-soft: #f1eaff;
+  --warn: #b42318;
+  --warn-soft: #fdecea;
+  --code-bg: #f5f5f3;
+  --code-fg: #24292f;
+  --cmt: #6a737d;
+  --kw: #cf222e;
+  --fn: #8250df;
+  --str: #0a3069;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111214;
+    --panel: #18191c;
+    --panel-2: #1f2125;
+    --fg: #e6e6e6;
+    --muted: #a0a4ab;
+    --border: #33363c;
+    --accent: #6ea8ff;
+    --accent-soft: #1a2740;
+    --lsa: #4cc76d;
+    --lsa-soft: #15291c;
+    --gin: #ffa24d;
+    --gin-soft: #2e2012;
+    --cft: #b794ff;
+    --cft-soft: #241a3a;
+    --warn: #ff7b6e;
+    --warn-soft: #351a18;
+    --code-bg: #1c1e22;
+    --code-fg: #d8dade;
+    --cmt: #8b949e;
+    --kw: #ff7b72;
+    --fn: #d2a8ff;
+    --str: #a5d6ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111214;
+  --panel: #18191c;
+  --panel-2: #1f2125;
+  --fg: #e6e6e6;
+  --muted: #a0a4ab;
+  --border: #33363c;
+  --accent: #6ea8ff;
+  --accent-soft: #1a2740;
+  --lsa: #4cc76d;
+  --lsa-soft: #15291c;
+  --gin: #ffa24d;
+  --gin-soft: #2e2012;
+  --cft: #b794ff;
+  --cft-soft: #241a3a;
+  --warn: #ff7b6e;
+  --warn-soft: #351a18;
+  --code-bg: #1c1e22;
+  --code-fg: #d8dade;
+  --cmt: #8b949e;
+  --kw: #ff7b72;
+  --fn: #d2a8ff;
+  --str: #a5d6ff;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+code, pre, .mono { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); max-width: 1320px; margin: 0 auto; }
+nav.toc {
+  position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto;
+  padding: 28px 18px 28px 20px; border-right: 1px solid var(--border); font-size: 14px;
+}
+nav.toc .brand { font-weight: 700; font-size: 15px; margin-bottom: 14px; }
+nav.toc ol { list-style: none; padding: 0; margin: 0; }
+nav.toc li { margin: 2px 0; }
+nav.toc li a { display: block; padding: 3px 8px; border-radius: 6px; color: var(--muted); }
+nav.toc li a:hover { background: var(--panel-2); color: var(--fg); text-decoration: none; }
+nav.toc li.sub a { padding-left: 22px; font-size: 13px; }
+main { padding: 36px 44px 80px; min-width: 0; }
+header.hero h1 { font-size: 34px; line-height: 1.2; margin: 0 0 10px; letter-spacing: -0.01em; }
+header.hero p.lede { font-size: 18px; color: var(--muted); max-width: 820px; margin: 0 0 18px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.pill { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); background: var(--panel); }
+.pill.lsa { color: var(--lsa); border-color: var(--lsa); background: var(--lsa-soft); }
+.pill.gin { color: var(--gin); border-color: var(--gin); background: var(--gin-soft); }
+.pill.cft { color: var(--cft); border-color: var(--cft); background: var(--cft-soft); }
+section { margin-top: 56px; }
+h2 { font-size: 26px; margin: 0 0 12px; padding-top: 8px; border-top: 1px solid var(--border); padding-top: 22px; }
+h2 .num { color: var(--accent); margin-right: 8px; }
+h3 { font-size: 19px; margin: 30px 0 10px; }
+h4 { font-size: 16px; margin: 22px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+p { margin: 10px 0; max-width: 900px; }
+ul, ol { max-width: 900px; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 0.88em; }
+pre {
+  background: var(--code-bg); color: var(--code-fg); padding: 14px 16px; border-radius: 10px;
+  border: 1px solid var(--border); overflow-x: auto; font-size: 13.5px; line-height: 1.55; margin: 12px 0;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+pre .c { color: var(--cmt); font-style: italic; }
+pre .k { color: var(--kw); }
+pre .f { color: var(--fn); }
+pre .s { color: var(--str); }
+pre .hl { background: var(--accent-soft); display: inline-block; width: 100%; }
+pre .n { display: inline-block; min-width: 2.2em; color: var(--cmt); user-select: none; }
+.co { display: inline-block; min-width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 12px/20px sans-serif; text-align: center; margin: 0 3px; font-style: normal; }
+.src { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: var(--muted); background: var(--panel-2); border: 1px solid var(--border); border-radius: 5px; padding: 0 6px; white-space: nowrap; }
+a.src:hover { color: var(--accent); text-decoration: none; border-color: var(--accent); }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 16px 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.card h5 { margin: 0 0 6px; font-size: 15px; }
+.card p, .card ul { margin: 6px 0; font-size: 14.5px; }
+.callout { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 16px; border-radius: 0 10px 10px 0; margin: 16px 0; max-width: 940px; }
+.callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+.callout.lsa { border-color: var(--lsa); background: var(--lsa-soft); }
+.callout.gin { border-color: var(--gin); background: var(--gin-soft); }
+.callout b:first-child { display: block; margin-bottom: 2px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 12px 0; }
+.tablewrap { overflow-x: auto; }
+th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: var(--panel-2); font-weight: 600; }
+td code { font-size: 12.5px; }
+figure { margin: 18px 0; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+/* call-chain trees */
+.chain { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 14px 10px; margin: 14px 0; font-size: 14px; overflow-x: auto; }
+.chain .title { font-weight: 600; margin: 0 0 6px 6px; }
+.chain ul { list-style: none; margin: 0; padding-left: 22px; position: relative; }
+.chain > ul { padding-left: 8px; }
+.chain li { position: relative; padding: 3px 0 3px 14px; }
+.chain ul ul li::before { content: ""; position: absolute; left: -8px; top: 0; bottom: 0; border-left: 1px solid var(--border); }
+.chain ul ul li:last-child::before { bottom: calc(100% - 15px); }
+.chain ul ul li::after { content: ""; position: absolute; left: -8px; top: 15px; width: 16px; border-top: 1px solid var(--border); }
+.chain .fn { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 600; font-size: 13px; }
+.chain .note { color: var(--muted); font-size: 13px; }
+.chain .tag { font-size: 11px; padding: 0 6px; border-radius: 4px; margin-left: 4px; }
+.tag.host { background: var(--accent-soft); color: var(--accent); }
+.tag.dev { background: var(--lsa-soft); color: var(--lsa); }
+.tag.net { background: var(--gin-soft); color: var(--gin); }
+.tag.cpu { background: var(--cft-soft); color: var(--cft); }
+details { margin: 12px 0; }
+details > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.steps { counter-reset: step; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: step; position: relative; padding-left: 40px; margin: 12px 0; }
+.steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+/* SVG theming */
+svg text { fill: var(--fg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+svg .t-muted { fill: var(--muted); }
+svg .t-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+svg .t-lsa { fill: var(--lsa); } svg .t-gin { fill: var(--gin); } svg .t-cft { fill: var(--cft); } svg .t-acc { fill: var(--accent); } svg .t-warn { fill: var(--warn); }
+svg .box { fill: var(--panel); stroke: var(--border); stroke-width: 1.3; }
+svg .box2 { fill: var(--panel-2); stroke: var(--border); stroke-width: 1.3; }
+svg .b-acc { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; }
+svg .b-lsa { fill: var(--lsa-soft); stroke: var(--lsa); stroke-width: 1.4; }
+svg .b-gin { fill: var(--gin-soft); stroke: var(--gin); stroke-width: 1.4; }
+svg .b-cft { fill: var(--cft-soft); stroke: var(--cft); stroke-width: 1.4; }
+svg .b-warn { fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.4; }
+svg .ln { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+svg .ln-acc { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+svg .ln-lsa { stroke: var(--lsa); stroke-width: 1.8; fill: none; }
+svg .ln-gin { stroke: var(--gin); stroke-width: 1.8; fill: none; }
+svg .ln-cft { stroke: var(--cft); stroke-width: 1.8; fill: none; }
+svg .dash { stroke-dasharray: 5 4; }
+svg .f-acc { fill: var(--accent); } svg .f-lsa { fill: var(--lsa); } svg .f-gin { fill: var(--gin); } svg .f-muted { fill: var(--muted); } svg .f-cft { fill: var(--cft); }
+.theme-toggle { position: fixed; right: 16px; top: calc(14px + env(safe-area-inset-top, 0px)); z-index: 5; background: var(--panel); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  nav.toc { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 18px 16px; }
+  nav.toc ol { columns: 2; column-gap: 16px; }
+  main { padding: 24px 16px 60px; }
+  .grid2, .grid3 { grid-template-columns: minmax(0, 1fr); }
+  header.hero h1 { font-size: 27px; }
+}
+@media (max-width: 560px) { nav.toc ol { columns: 1; } }
+
+/* additions for the NVLS call-path walkthrough */
+.tag.ptx { background: var(--warn-soft); color: var(--warn); }
+.chain .tag.ptx { font-size: 11px; padding: 0 6px; border-radius: 4px; margin-left: 4px; }
+.lede .tag { font-size: 11px; padding: 0 6px; border-radius: 4px; }
+.src.ext { border-style: dashed; }
+.src.gen { border-style: dotted; font-style: italic; }
+.card h5.t-gin-h { color: var(--gin); }
+.card h5.t-lsa-h { color: var(--lsa); }
+p code, li code, td code, figcaption code { overflow-wrap: anywhere; }
+/* Arm colours on this page: NVLS = --gin (orange), symmetric multicast = --lsa (violet).
+   Validated with the dataviz palette checker: CVD dE >= 27 in light and dark. */
+:root { --lsa: #6e40c9; --lsa-soft: #efe9fb; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --gin: #d0752a; --lsa: #8f74e6; --lsa-soft: #221a36; } }
+:root[data-theme="dark"] { --gin: #d0752a; --lsa: #8f74e6; --lsa-soft: #221a36; }
+/* charts in section 10 */
+.chartwrap { position: relative; margin: 16px 0 6px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 10px 8px 4px; overflow-x: auto; }
+.chartwrap svg.chart { width: 100%; min-width: 520px; height: auto; display: block; }
+svg.chart .grid { stroke: var(--border); stroke-width: 1; }
+svg.chart .axis { stroke: var(--muted); stroke-width: 1.2; }
+svg.chart .tick { fill: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+svg.chart .axlabel { fill: var(--fg); font-size: 12.5px; }
+svg.chart .direct { fill: var(--fg); font-size: 12.5px; font-weight: 600; }
+svg.chart .series { fill: none; stroke-width: 2; stroke-linejoin: round; }
+svg.chart .s-gin { stroke: var(--gin); }
+svg.chart .s-lsa { stroke: var(--lsa); }
+svg.chart .pt.s-gin { fill: var(--gin); stroke: var(--panel); stroke-width: 2; }
+svg.chart .pt.s-lsa { fill: var(--lsa); stroke: var(--panel); stroke-width: 2; }
+svg.chart .pt.chosen { stroke: var(--fg); stroke-width: 2; }
+svg.chart .chosen-key { fill: var(--panel); stroke: var(--fg); stroke-width: 2; }
+svg.chart .cross { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+svg.chart .hit { fill: transparent; cursor: crosshair; outline: none; }
+svg.chart .hit:focus-visible { stroke: var(--accent); stroke-width: 2; }
+.chart-tip { position: absolute; z-index: 3; pointer-events: none; background: var(--panel); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 13px; line-height: 1.5; box-shadow: 0 4px 14px rgba(0,0,0,.12); min-width: 200px; font-variant-numeric: tabular-nums; }
+.chart-tip .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.chart-tip .sw.s-gin { background: var(--gin); }
+.chart-tip .sw.s-lsa { background: var(--lsa); }
+.chartcap { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; }
+svg tspan.t-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">◐ Theme</button>
+<div class="layout">
+<nav class="toc" aria-label="Table of contents">
+  <div class="brand">NVLS AllReduce paths</div>
+  <ol>
+    <li><a href="#answer">1. The short answer</a></li>
+    <li class="sub"><a href="#insn">One multimem instruction</a></li>
+    <li class="sub"><a href="#insn-threads">How threads share work</a></li>
+    <li><a href="#words">2. Words and code map</a></li>
+    <li class="sub"><a href="#names">Names in NVIDIA docs</a></li>
+    <li><a href="#front">3. From the harness to NCCL</a></li>
+    <li class="sub"><a href="#front-harness">nccl-tests side</a></li>
+    <li class="sub"><a href="#front-queue">ncclAllReduce only queues</a></li>
+    <li><a href="#setup">4. Setup before the first call</a></li>
+    <li class="sub"><a href="#setup-nvls">NVLS buffers</a></li>
+    <li class="sub"><a href="#setup-sym">Symmetric windows</a></li>
+    <li class="sub"><a href="#setup-meaning">Two meanings of "symmetric"</a></li>
+    <li><a href="#host">5. One call on the host</a></li>
+    <li class="sub"><a href="#host-fork">Where the paths split</a></li>
+    <li class="sub"><a href="#host-nvls">NVLS: plan and launch</a></li>
+    <li class="sub"><a href="#host-sym">Symmetric: plan and launch</a></li>
+    <li><a href="#dev-nvls">6. NVLS on the GPU</a></li>
+    <li class="sub"><a href="#dev-nvls-entry">Kernel entry</a></li>
+    <li class="sub"><a href="#dev-nvls-warps">Three warp groups</a></li>
+    <li class="sub"><a href="#dev-nvls-step">One reduce step</a></li>
+    <li class="sub"><a href="#dev-nvls-ptx">Down to PTX</a></li>
+    <li><a href="#dev-sym">7. Symmetric multicast on the GPU</a></li>
+    <li class="sub"><a href="#dev-sym-entry">Kernel entry</a></li>
+    <li class="sub"><a href="#dev-sym-loop">The data loop</a></li>
+    <li class="sub"><a href="#dev-sym-bar">The barrier</a></li>
+    <li><a href="#compare">8. Side by side</a></li>
+    <li class="sub"><a href="#compare-warps">Warps at run time</a></li>
+    <li><a href="#why">9. Why the designs differ</a></li>
+    <li class="sub"><a href="#history">How they arrived</a></li>
+    <li><a href="#explain">10. What they explain</a></li>
+    <li class="sub"><a href="#explain-ctas">CTAs needed</a></li>
+    <li class="sub"><a href="#explain-payload">Small payloads</a></li>
+    <li class="sub"><a href="#explain-large">Large payloads</a></li>
+    <li class="sub"><a href="#explain-hbm">Hidden memory cost</a></li>
+    <li class="sub"><a href="#explain-stability">Stability, 2 GPUs</a></li>
+    <li class="sub"><a href="#explain-tests">Tests to run</a></li>
+    <li><a href="#ref">11. Quick reference</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="meta">
+    <span class="pill">NCCL 2.32.3</span>
+    <span class="pill">nccl-tests 2.21.1</span>
+    <span class="pill gin">NVLS · NCCL_ALGO=NVLS</span>
+    <span class="pill lsa">Symmetric multicast · AllReduce_RSxLDMC_AGxSTMC</span>
+  </div>
+  <h1>Two NVLS AllReduce paths: from <code>all_reduce_perf</code> to <code>multimem</code></h1>
+  <p class="lede">NCCL has two ways to run an AllReduce with NVSwitch multicast on one node. Both end in the same two PTX instructions. This page follows one <code>ncclAllReduce</code> call through each path: from nccl-tests, through NCCL's host code, into the GPU kernel, down to the instruction. It explains the arms "NVLS" and "Symmetric multicast" of the <a href="../experiments/h100-scale/allreduce/scalability/PLANS.md">AllReduce scalability series</a>.</p>
+  <p class="lede" style="font-size:15px">Linked badges such as <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1992" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1992</a> open the file at the <code>v2.32.3-1</code> tag on GitHub; the line is the same in this checkout. One file, <code>src/device/all_reduce.h</code>, has local comment edits: its badges show the local line and link to the tag line. Grey badges such as <span class="src ext" title="nccl-tests src/common.cu">common.cu:563</span> are nccl-tests (<code>/root/nccl-tests/src</code>, commit <code>afd59ab</code>), and <span class="src gen" title="build/obj/device/gensrc/host_table.cc (generated)">host_table.cc:2844</span> marks generated files under <code>build/obj/device/gensrc</code>. Chain tags: <span class="tag host">host</span> runs on the CPU, <span class="tag dev">device</span> runs in the GPU kernel, <span class="tag ptx">ptx</span> is the instruction itself.</p>
+  <p class="lede" style="font-size:15px"><b>The case traced:</b> <code>all_reduce_perf -t 1 -g 8 -b 2G -e 2G -d float -o sum</code> on 8 H100 GPUs of one node. One process drives all 8 GPUs. For NVLS the run uses <code>-R 0</code> and <code>NCCL_ALGO=NVLS NCCL_PROTO=Simple</code>. For symmetric multicast it uses <code>-R 2</code> and <code>NCCL_SYM_KERNEL=allreduce:AllReduce_RSxLDMC_AGxSTMC</code>. Other environment variables keep their defaults.</p>
+</header>
+
+<!-- ============================================================= -->
+<section id="answer">
+<h2><span class="num">1</span>The short answer</h2>
+<p>Both paths reach the NVSwitch through two PTX instructions:</p>
+<ul>
+<li><code>multimem.ld_reduce.relaxed.sys.global.add.v4.f32</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1172" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1172</a>: one load through a <b>multicast address</b> returns the sum of the 16 bytes at that address on every GPU.</li>
+<li><code>multimem.st.global.v4.f32</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L437" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:437</a>: one store through a multicast address writes the same 16 bytes on every GPU.</li>
+</ul>
+<p>A <b>multicast address</b> is a virtual address that the driver maps to "the same buffer on every GPU of the group". NCCL creates it with <code>cuMulticastCreate</code> and binds real memory to it with <code>cuMulticastBindMem</code> or <code>cuMulticastBindAddr</code>. The two paths differ in <b>which memory is behind that address</b> and <b>who issues the instructions</b>:</p>
+
+<figure>
+<svg viewBox="0 0 1000 560" role="img" aria-label="Overview: two call paths from all_reduce_perf to the multimem instructions">
+  <!-- shared top -->
+  <rect x="300" y="14" width="400" height="56" rx="10" class="b-acc"/>
+  <text x="500" y="38" text-anchor="middle" font-weight="700" font-size="14">nccl-tests: startColl → ncclAllReduce × 8</text>
+  <text x="500" y="57" text-anchor="middle" font-size="12" class="t-muted">inside ncclGroupStart … ncclGroupEnd</text>
+  <rect x="300" y="88" width="400" height="56" rx="10" class="b-acc"/>
+  <text x="500" y="112" text-anchor="middle" font-weight="700" font-size="14">NCCL host: queue tasks; ncclGroupEnd launches</text>
+  <text x="500" y="131" text-anchor="middle" font-size="12" class="t-muted">ncclPrepareTasks decides the path</text>
+  <path d="M500 70 L500 86" class="ln"/>
+  <path d="M440 144 L250 186" class="ln-gin"/><polygon points="250,180 240,189 254,191" class="f-gin"/>
+  <path d="M560 144 L750 186" class="ln-lsa"/><polygon points="746,180 760,189 748,191" class="f-lsa"/>
+  <text x="292" y="160" text-anchor="end" font-size="12" class="t-gin">no symmetric window</text>
+  <text x="708" y="160" text-anchor="start" font-size="12" class="t-lsa">both buffers in symmetric windows</text>
+
+  <!-- NVLS lane -->
+  <rect x="20" y="192" width="460" height="352" rx="14" class="box2"/>
+  <text x="250" y="216" text-anchor="middle" font-weight="700" font-size="15" class="t-gin">NVLS (classic collective path)</text>
+  <rect x="40" y="228" width="420" height="44" rx="8" class="box"/>
+  <text x="250" y="248" text-anchor="middle" class="t-mono" font-size="12.5">ncclGetAlgoInfo → algo NVLS, 16 CTAs × 640 threads</text>
+  <text x="250" y="264" text-anchor="middle" font-size="11.5" class="t-muted">cuLaunchKernelEx(ncclDevKernel_AllReduce_f32_RING)</text>
+  <rect x="40" y="284" width="420" height="44" rx="8" class="box"/>
+  <text x="250" y="304" text-anchor="middle" class="t-mono" font-size="12.5">ncclKernelMain → ncclDevFuncTable[259]</text>
+  <text x="250" y="320" text-anchor="middle" font-size="11.5" class="t-muted">→ RunWorkColl&lt;AllReduce, NVLS, SIMPLE&gt;::run</text>
+  <rect x="40" y="340" width="130" height="62" rx="8" class="box"/>
+  <text x="105" y="362" text-anchor="middle" font-size="12.5" font-weight="600">scatter warps</text>
+  <text x="105" y="380" text-anchor="middle" font-size="11" class="t-muted">input → NCCL slot</text>
+  <text x="105" y="395" text-anchor="middle" font-size="11" class="t-muted">plain copy</text>
+  <rect x="185" y="340" width="130" height="62" rx="8" class="b-gin"/>
+  <text x="250" y="362" text-anchor="middle" font-size="12.5" font-weight="600" class="t-gin">reduce warps</text>
+  <text x="250" y="380" text-anchor="middle" font-size="11">ld_reduce + st</text>
+  <text x="250" y="395" text-anchor="middle" font-size="11" class="t-muted">on NCCL slots</text>
+  <rect x="330" y="340" width="130" height="62" rx="8" class="box"/>
+  <text x="395" y="362" text-anchor="middle" font-size="12.5" font-weight="600">gather warps</text>
+  <text x="395" y="380" text-anchor="middle" font-size="11" class="t-muted">NCCL slot → output</text>
+  <text x="395" y="395" text-anchor="middle" font-size="11" class="t-muted">plain copy</text>
+  <path d="M170 371 L183 371" class="ln"/><path d="M315 371 L328 371" class="ln"/>
+  <rect x="40" y="414" width="420" height="44" rx="8" class="box"/>
+  <text x="250" y="434" text-anchor="middle" class="t-mono" font-size="12.5">Primitives::directRecvDirectSend → genericOp</text>
+  <text x="250" y="450" text-anchor="middle" font-size="11.5" class="t-muted">wait on flags, then reduceCopy&lt;MultimemSrcs=1, MultimemDsts=1&gt;</text>
+  <rect x="40" y="470" width="420" height="60" rx="8" class="b-gin"/>
+  <text x="250" y="492" text-anchor="middle" class="t-mono" font-size="12">multimem.ld_reduce.add / multimem.st</text>
+  <text x="250" y="510" text-anchor="middle" font-size="11.5">on NCCL's own buffer (dataPartition, multicast view)</text>
+  <text x="250" y="524" text-anchor="middle" font-size="11" class="t-muted">plus multimem.ld_reduce.min to poll progress flags</text>
+  <path d="M250 272 L250 282 M250 328 L250 338 M250 402 L250 412 M250 458 L250 468" class="ln"/>
+
+  <!-- symmetric lane -->
+  <rect x="520" y="192" width="460" height="352" rx="14" class="box2"/>
+  <text x="750" y="216" text-anchor="middle" font-weight="700" font-size="15" class="t-lsa">Symmetric multicast (symmetric-memory kernel)</text>
+  <rect x="540" y="228" width="420" height="44" rx="8" class="box"/>
+  <text x="750" y="248" text-anchor="middle" class="t-mono" font-size="12.5">ncclMakeSymmetricTaskList → kernel id, 2 CTAs × 512</text>
+  <text x="750" y="264" text-anchor="middle" font-size="11" class="t-muted">cuLaunchKernelEx(ncclSymkDevKernel_…_RSxLDMC_AGxSTMC_sum_f32)</text>
+  <rect x="540" y="284" width="420" height="44" rx="8" class="box"/>
+  <text x="750" y="304" text-anchor="middle" class="t-mono" font-size="12.5">ncclSymkRun_AllReduce_RSxLDMC_AGxSTMC</text>
+  <text x="750" y="320" text-anchor="middle" font-size="11.5" class="t-muted">one function, no function table</text>
+  <rect x="540" y="340" width="420" height="62" rx="8" class="b-lsa"/>
+  <text x="750" y="362" text-anchor="middle" font-size="12.5" font-weight="600" class="t-lsa">every warp: ld_reduce + st</text>
+  <text x="750" y="380" text-anchor="middle" font-size="11">directly on the user's input and output</text>
+  <text x="750" y="395" text-anchor="middle" font-size="11" class="t-muted">no copies, no slots, no step flags</text>
+  <rect x="540" y="414" width="420" height="44" rx="8" class="box"/>
+  <text x="750" y="434" text-anchor="middle" class="t-mono" font-size="12">allreduceMultimem(in.multimemPtr, out.multimemPtr)</text>
+  <text x="750" y="450" text-anchor="middle" font-size="11.5" class="t-muted">calls applyLoadMultimem and multimem_st_global itself</text>
+  <rect x="540" y="470" width="420" height="60" rx="8" class="b-lsa"/>
+  <text x="750" y="492" text-anchor="middle" class="t-mono" font-size="12">multimem.ld_reduce.add / multimem.st</text>
+  <text x="750" y="510" text-anchor="middle" font-size="11.5">on the user's registered buffer (window, multicast view)</text>
+  <text x="750" y="524" text-anchor="middle" font-size="11" class="t-muted">plus one multimem.red barrier at start and end</text>
+  <path d="M750 272 L750 282 M750 328 L750 338 M750 402 L750 412 M750 458 L750 468" class="ln"/>
+</svg>
+<figcaption>Figure 1. The two paths share the harness and NCCL's queueing code, split in <code>ncclPrepareTasks</code>, and meet again at the same two PTX instructions. The difference is the memory behind the multicast address and the work around the instructions.</figcaption>
+</figure>
+
+<div class="grid2">
+<div class="card"><h5 class="t-gin-h">NVLS</h5>
+<ul>
+<li>The switch works on <b>NCCL's own buffer</b>, set up by NCCL. Your buffer is never seen by the switch.</li>
+<li>Each CTA runs a 3-stage pipeline: copy your data into NCCL's buffer, reduce through the switch, copy the result out.</li>
+<li>Stages and GPUs synchronise through <b>step flags</b>, every 128 KiB chunk.</li>
+</ul></div>
+<div class="card"><h5 class="t-lsa-h">Symmetric multicast</h5>
+<ul>
+<li>The switch works on <b>your buffer</b>, after you register it as a symmetric window (<code>-R 2</code>).</li>
+<li>Every thread does load-reduce then store, on its share of the data.</li>
+<li>One barrier across GPUs at the start of the call and one at the end.</li>
+</ul></div>
+</div>
+
+<h3 id="insn">1.1 What one multimem instruction does</h3>
+<p>A multimem instruction is issued by <b>one thread</b>, like an ordinary load or store. The difference is the address: it is a multicast address, so the request goes to the NVSwitch instead of to one GPU's memory.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Instruction (as NCCL uses it for <code>float</code> sum)</th><th>Bytes per thread</th><th>What the thread gets or causes</th><th>Code</th></tr></thead>
+<tbody>
+<tr><td><code>multimem.ld_reduce.relaxed.sys.global.add.v4.f32 {r0,r1,r2,r3}, [mcAddr]</code></td><td><b>16</b> (4 floats)</td><td>4 registers holding, for each of the 4 floats, the sum of that float over all GPUs bound to the multicast address. The issuing GPU's own copy is included.</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1172" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1172</a></td></tr>
+<tr><td><code>multimem.st.global.v4.f32 [mcAddr], {r0,r1,r2,r3}</code></td><td><b>16</b></td><td>The same 16 bytes are written into every GPU's copy at that address. The thread does not wait for the writes to finish.</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L437" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:437</a></td></tr>
+<tr><td><code>multimem.ld_reduce….add.f32</code> / <code>multimem.st.global.b32</code></td><td>4</td><td>Same, one float. NCCL uses these only for the few elements at the start or end that do not fill a 16-byte pack.</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1131" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1131</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L429" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:429</a></td></tr>
+<tr><td><code>multimem.ld_reduce.acquire.sys.global.min.u64</code></td><td>8</td><td>NVLS only: the smallest value of a 64-bit step counter over all GPUs (§6.3).</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L90" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:90</a></td></tr>
+<tr><td><code>multimem.red.release.sys.add.u32 [mcAddr], 1</code></td><td>4</td><td>Symmetric kernel only: adds 1 to a barrier counter on every GPU; returns nothing (§7.3).</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/lsa_barrier__funcs.h#L62" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/lsa_barrier__funcs.h">lsa_barrier__funcs.h:62</a></td></tr>
+</tbody></table></div>
+<p>16 bytes is the largest pack NCCL uses for these instructions. <code>LoadMultimem_BigPackSize</code> picks 16 bytes for floating-point sum with elements smaller than 8 bytes, and the element size otherwise (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1258" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1258-1269</a>). So with <code>float</code>, <b>one instruction moves 16 bytes of payload for one thread</b>. To move 2 GiB, the GPUs together issue 2 GiB ÷ 16 B = 134 million load-reduce instructions and the same number of stores. Each GPU issues 1/8 of them.</p>
+
+<h3 id="insn-threads">1.2 How threads share the work</h3>
+<p>The instruction does not coordinate threads; each thread works alone. Threads cooperate only through <b>which addresses they are given</b>. Both kernels use the same layout:</p>
+<ol class="steps">
+<li><b>Lanes of a warp take neighbouring 16-byte packs.</b> Lane <i>l</i> starts at byte <code>16 × l</code> of the warp's piece (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common_kernel.h#L54" target="_blank" rel="noopener" class="src" title="src/device/common_kernel.h">common_kernel.h:54-55</a>; <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L455" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:455-456</a>). The 32 lanes together cover 512 contiguous bytes, so the hardware can combine the requests the same way it coalesces ordinary loads. How these requests are packed on NVLink is not documented by NVIDIA and was not measured here.</li>
+<li><b>Each thread issues 8 loads before it stores.</b> The unroll factor is 8 on H100 (<code>ncclCollUnroll</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/device.h#L576" target="_blank" rel="noopener" class="src" title="src/include/device.h">device.h:576-578</a>; the symmetric kernel uses <code>UnrollPacks = 16·8/16 = 8</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L449" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:449</a>). The 8 load-reduces go to addresses 512 B apart and do not depend on each other, so all 8 can wait at the switch at the same time. A warp therefore covers 8 × 512 B = <b>4 KiB per round</b> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common_kernel.h#L48" target="_blank" rel="noopener" class="src" title="src/device/common_kernel.h">common_kernel.h:48</a>). Then the thread issues its 8 stores.</li>
+<li><b>Warps take neighbouring 4 KiB pieces</b> and then jump ahead by (number of warps × 4 KiB), so no two threads ever touch the same bytes.</li>
+<li><b>GPUs take different pieces.</b> In NVLS, GPU h reduces only the slice of each chunk that belongs to head h. In the symmetric kernel, the thread number counts over all GPUs (rank is part of <code>flattenIx</code>), so the 4 KiB pieces are dealt out to the GPUs in turn. Either way each byte is load-reduced by exactly one thread on exactly one GPU, and stored by that same thread to all GPUs.</li>
+</ol>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="How one warp issues multimem loads and stores">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">One warp, one round: 32 lanes × 8 packs × 16 B = 4 KiB</text>
+  <g font-size="11" text-anchor="middle">
+    <text x="60" y="56" text-anchor="end" class="t-muted">u = 0</text>
+    <rect x="70" y="42" width="40" height="22" rx="3" class="b-lsa"/><text x="90" y="57">L0</text>
+    <rect x="112" y="42" width="40" height="22" rx="3" class="b-lsa"/><text x="132" y="57">L1</text>
+    <rect x="154" y="42" width="40" height="22" rx="3" class="b-lsa"/><text x="174" y="57">L2</text>
+    <rect x="196" y="42" width="360" height="22" rx="3" class="box2"/><text x="376" y="57">…  lanes 3 … 30, 16 B each  …</text>
+    <rect x="558" y="42" width="40" height="22" rx="3" class="b-lsa"/><text x="578" y="57">L31</text>
+    <text x="610" y="57" text-anchor="start" class="t-muted">512 B contiguous</text>
+    <text x="60" y="86" text-anchor="end" class="t-muted">u = 1</text>
+    <rect x="70" y="72" width="40" height="22" rx="3" class="box"/><text x="90" y="87">L0</text>
+    <rect x="112" y="72" width="40" height="22" rx="3" class="box"/><text x="132" y="87">L1</text>
+    <rect x="154" y="72" width="40" height="22" rx="3" class="box"/><text x="174" y="87">L2</text>
+    <rect x="196" y="72" width="360" height="22" rx="3" class="box2"/><text x="376" y="87">…</text>
+    <rect x="558" y="72" width="40" height="22" rx="3" class="box"/><text x="578" y="87">L31</text>
+    <text x="610" y="87" text-anchor="start" class="t-muted">next 512 B</text>
+    <text x="334" y="114" class="t-muted">⋮  u = 2 … 7</text>
+  </g>
+  <rect x="70" y="132" width="420" height="66" rx="8" class="b-acc"/>
+  <text x="280" y="154" text-anchor="middle" font-size="12.5" font-weight="600">phase 1: each lane issues 8 × ld_reduce</text>
+  <text x="280" y="172" text-anchor="middle" font-size="11.5">independent → up to 8 per lane in flight</text>
+  <text x="280" y="188" text-anchor="middle" font-size="11.5" class="t-muted">results land in 8 × 4 registers</text>
+  <rect x="510" y="132" width="420" height="66" rx="8" class="b-acc"/>
+  <text x="720" y="154" text-anchor="middle" font-size="12.5" font-weight="600">phase 2: each lane issues 8 × st</text>
+  <text x="720" y="172" text-anchor="middle" font-size="11.5">same 4 KiB, to every GPU</text>
+  <text x="720" y="188" text-anchor="middle" font-size="11.5" class="t-muted">no wait for completion</text>
+  <path d="M490 165 L506 165" class="ln-acc"/><polygon points="506,160 514,165 506,170" class="f-acc"/>
+  <rect x="70" y="214" width="860" height="72" rx="8" class="box2"/>
+  <text x="90" y="236" font-size="12" font-weight="600">Loads in flight per GPU (data instructions only, 8 GPUs, 16 B × 8 per thread):</text>
+  <text x="90" y="256" font-size="12" class="t-gin">NVLS: 16 CTAs × 4 data warps of the reduce group × 32 lanes × 8 × 16 B = 256 KiB</text>
+  <text x="90" y="276" font-size="12" class="t-lsa">Symmetric multicast: 2 CTAs × 16 warps × 32 lanes × 8 × 16 B = 128 KiB</text>
+</svg>
+<figcaption>Figure 1b. The cooperation is purely by address: lanes take neighbouring 16-byte packs, each lane keeps 8 independent load-reduces in flight, warps take neighbouring 4 KiB pieces. The "in flight" numbers are upper bounds from the code; how many requests the hardware really keeps open was not measured. In the calibration, symmetric multicast gained nothing from 2 to 64 CTAs (128 KiB to 4 MiB in flight by this count), so at 2 GiB the number of loads in flight is not what limits it.</figcaption>
+</figure>
+</section>
+
+<!-- ============================================================= -->
+<section id="words">
+<h2><span class="num">2</span>Words and code map</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Word</th><th>Meaning on this page</th></tr></thead>
+<tbody>
+<tr><td>Unicast (UC) address</td><td>An ordinary GPU address. It points to memory on one GPU.</td></tr>
+<tr><td>Multicast (MC) address</td><td>An address that stands for the same buffer on every GPU of a group. Loads and stores through it go to the NVSwitch.</td></tr>
+<tr><td>Channel</td><td>NCCL's name for one CTA's share of a collective. One channel = one CTA (thread block).</td></tr>
+<tr><td>Rank</td><td>One GPU in the communicator. Here 8 ranks, one per GPU, all in one process.</td></tr>
+<tr><td>Head rank</td><td>In NVLS, the rank that reduces one slice of the data through the switch. On one node every rank is the head for its own 1/8 of each chunk.</td></tr>
+<tr><td>Slot</td><td>One piece of NCCL's NVLS buffer. NVLS keeps 8 pipeline steps of 128 KiB per slot.</td></tr>
+<tr><td>Step flag (head / tail)</td><td>A 64-bit counter. The producer raises <code>tail</code> when a step is full; the consumer raises <code>head</code> when it has used it.</td></tr>
+<tr><td>Symmetric window</td><td>A user buffer registered with <code>ncclCommWindowRegister(..., NCCL_WIN_COLL_SYMMETRIC)</code>. NCCL maps it at the same offset on every GPU and binds it to a multicast address.</td></tr>
+<tr><td>Legacy enqueue path</td><td>The default host scheduling code (<code>NCCL_ENQUEUE_REARCH_ENABLE=0</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L33" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:33</a>). Files under <code>src/enqueue/task_*</code> belong to the other path and are not used here.</td></tr>
+</tbody></table></div>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Layer</th><th>NVLS files</th><th>Symmetric multicast files</th></tr></thead>
+<tbody>
+<tr><td>Harness</td><td colspan="2"><code>nccl-tests/src/common.cu</code>, <code>all_reduce.cu</code></td></tr>
+<tr><td>Public API, queueing</td><td colspan="2"><code>src/collectives.cc</code>, <code>src/enqueue/enqueue.cc</code>, <code>src/group.cc</code></td></tr>
+<tr><td>Setup of multicast memory</td><td><code>src/transport/nvls.cc</code>, <code>src/transport/multicast.cc</code>, <code>src/graph/connect.cc</code>, <code>src/init.cc</code></td><td><code>src/dev_runtime.cc</code>, <code>src/sym_kernels.cc</code>, <code>src/transport/multicast.cc</code></td></tr>
+<tr><td>Choosing the kernel</td><td><code>src/enqueue/enqueue.cc</code> (<code>ncclGetAlgoInfo</code>), <code>src/tuning/*.cc</code></td><td><code>src/scheduler/symmetric_sched.cc</code>, <code>src/tuning/sym_model*.cc</code></td></tr>
+<tr><td>Kernel entry</td><td><code>src/device/common.h</code>, generated <code>host_table.cc</code> / <code>device_table.cu</code></td><td>generated <code>symmetric/all_reduce_sum_f32.cu</code></td></tr>
+<tr><td>Algorithm</td><td><code>src/device/all_reduce.h</code>, <code>prims_simple.h</code></td><td><code>src/device/symmetric/all_reduce.cuh</code>, <code>primitives.cuh</code></td></tr>
+<tr><td>Instructions</td><td colspan="2"><code>src/device/common_kernel.h</code>, <code>reduce_kernel.h</code>, <code>op128.h</code></td></tr>
+</tbody></table></div>
+<h3 id="names">2.1 Names in NVIDIA's documents</h3>
+<p>"Symmetric multicast" is this page's label; NVIDIA does not use it. The table maps this page's names to the names in NVIDIA's documents, logs and switches.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>This page</th><th>NVIDIA's names</th><th>Where the name appears</th><th>Since</th></tr></thead>
+<tbody>
+<tr><td><b>NVLS</b></td><td>the "NVLS" algorithm, "NVLink SHARP"; across nodes "NVLSTree" or "NVLink SHARP + IB SHARP"</td><td><code>NCCL_ALGO=NVLS</code>; the environment-variable docs say "NVLS and NVLSTree enable NVLink SHARP offload" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/userguide/source/env.rst#L1489" target="_blank" rel="noopener" class="src" title="docs/userguide/source/env.rst">env.rst:1489-1508</a>); the log prints <code>Algo NVLS proto SIMPLE</code></td><td>2.17</td></tr>
+<tr><td><b>Symmetric multicast</b></td><td>"symmetric kernels", "symmetric memory", "low-latency kernels", "window registration"; no public name for the multicast variant alone</td><td>docs section "Window Registration" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/userguide/source/usage/bufferreg.rst#L169" target="_blank" rel="noopener" class="src" title="docs/userguide/source/usage/bufferreg.rst">bufferreg.rst:169</a>); perf tables "Symmetric Kernels" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/perf/v2.31.2-1.md#L72" target="_blank" rel="noopener" class="src" title="docs/perf/v2.31.2-1.md">v2.31.2-1.md:72</a>); the log prints <code>AllReduce [Symmetric]: … -&gt; Kernel AllReduce_RSxLDMC_AGxSTMC</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L421" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:421</a>). <code>NCCL_SYM_KERNEL</code>, used in the experiments to force the kernel, is not in the environment-variable docs</td><td>2.27</td></tr>
+</tbody></table></div>
+<p><b>"NVLink SHARP" names the hardware, not a kernel:</b> the NVSwitch doing the reduction and the multicast. Both kernels use it. Two rules tell the kernels apart in a text:</p>
+<ol>
+<li>Mentions of <code>ncclCommWindowRegister</code>, <code>NCCL_WIN_COLL_SYMMETRIC</code>, "symmetric", or "identical addresses on every GPU" mean the <b>symmetric kernels</b>. Of those, only the multicast variant uses NVLink SHARP.</li>
+<li>Mentions of <code>NCCL_ALGO=NVLS</code> or NVLSTree, no buffer registration, or cross-node "NVLink SHARP + IB SHARP" mean the <b>NVLS algorithm</b>. Its optional registration (<code>ncclCommRegister</code>) is documented separately as "NVLink Sharp Buffer Registration" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/userguide/source/usage/bufferreg.rst#L14" target="_blank" rel="noopener" class="src" title="docs/userguide/source/usage/bufferreg.rst">bufferreg.rst:14</a>).</li>
+</ol>
+<div class="tablewrap"><table>
+<thead><tr><th>Example: <a href="https://developer.nvidia.com/blog/enabling-fast-inference-and-resilient-training-with-nccl-2-27" target="_blank" rel="noopener">NCCL 2.27 blog</a></th><th>Which path</th><th>How to tell</th></tr></thead>
+<tbody>
+<tr><td>"NVLink and InfiniBand SHARP support"</td><td><b>NVLS</b>, multi-node</td><td>AllGather and ReduceScatter "from the GPU to the network when using NVLink Sharp plus IB Sharp"; no registration, no "symmetric". In the code, multi-node NVLS AllGather and ReduceScatter are NVLS kernels that need IB SHARP (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/nvls.cc#L76" target="_blank" rel="noopener" class="src" title="src/tuning/nvls.cc">nvls.cc:76-80</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_gather.h#L274" target="_blank" rel="noopener" class="src" title="src/device/all_gather.h">all_gather.h:274</a>)</td></tr>
+<tr><td>"Low-latency kernels with symmetric memory", "Symmetric memory APIs"</td><td><b>Symmetric kernels</b></td><td>"buffers with identical virtual addresses", <code>ncclCommWindowRegister</code>, <code>NCCL_WIN_COLL_SYMMETRIC</code>, "within a single NVLink domain". The blog does not say which symmetric kernel its latency numbers come from; for small messages NCCL usually picks the LL variants, so "up to 9× lower latency" most likely refers to those, not to <code>RSxLDMC_AGxSTMC</code> (inference from the size range)</td></tr>
+</tbody></table></div>
+<div class="callout warn"><b>Published work mixes them up.</b>A 2026 paper states that "NCCL [NVLS] uses the RSxLDMC_AGxSTMC symmetric kernel intra-node" (<a href="https://arxiv.org/pdf/2606.05951" target="_blank" rel="noopener">arXiv 2606.05951</a>). The trace on this page shows that <code>NCCL_ALGO=NVLS</code> never reaches that kernel; it runs only on registered windows (§5). Two checks settle which path a measurement used: whether the buffers were registered (in nccl-tests, <code>-R 2</code>), and which line the NCCL log prints, <code>Algo NVLS</code> or <code>[Symmetric] … Kernel …</code>.</div>
+</section>
+
+<!-- ============================================================= -->
+<section id="front">
+<h2><span class="num">3</span>From the harness to NCCL</h2>
+<h3 id="front-harness">3.1 The nccl-tests side</h3>
+<p>This part is the same for both arms, except for one setup step: <code>-R 2</code> registers the buffers as symmetric windows, <code>-R 0</code> does not. With <code>-t 1 -g 8</code>, one CPU thread drives all 8 GPUs, so each AllReduce is 8 <code>ncclAllReduce</code> calls inside one NCCL group.</p>
+<div class="chain">
+<div class="title">Call chain: all_reduce_perf, one timed iteration</div>
+<ul>
+<li><span class="fn">main</span><span class="tag host">host</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:1151</span> <span class="note">parses options; <code>-R</code> → <code>local_register</code> at</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:1338</span>
+  <ul>
+  <li><span class="fn">run</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:1570</span>
+    <ul>
+    <li><span class="fn">initComms</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:200</span> <span class="note">one group with 8 × <code>ncclCommInitRankConfig</code> (<span class="src ext" title="nccl-tests src/common.cu">common.cu:226-236</span>); NCCL init runs here, see §4</span></li>
+    <li><span class="fn">AllocateBuffs</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:1728</span> → <span class="src ext" title="nccl-tests src/common.cu">common.cu:1134</span> <span class="note"><code>ncclMemAlloc</code> per GPU (cuMem memory)</span></li>
+    <li><span class="note">only with <code>-R 2</code>: </span><span class="fn">ncclCommWindowRegister(comm, sendbuff/recvbuff, …, NCCL_WIN_COLL_SYMMETRIC)</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:1731-1732</span> <span class="note">inside a group (<span class="src ext" title="nccl-tests src/common.cu">common.cu:1725</span> … <span class="src ext" title="nccl-tests src/common.cu">common.cu:1740</span>); see §4.2</span></li>
+    <li><span class="fn">threadRunTests</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:979</span> <span class="note">set at</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:1866</span><span class="note">; with <code>-t 1</code> it runs on the main thread</span>
+      <ul>
+      <li><span class="fn">AllReduceRunTest</span> <span class="src ext" title="nccl-tests src/all_reduce.cu">all_reduce.cu:545</span> → <span class="fn">TimeTest</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:942</span> → <span class="fn">BenchTime</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:720</span> <span class="note">5 warm-up calls (<span class="src ext" title="nccl-tests src/common.cu">common.cu:729</span>), then 20 timed calls (<span class="src ext" title="nccl-tests src/common.cu">common.cu:762</span>)</span>
+        <ul>
+        <li><span class="fn">startColl</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:554</span>
+          <ul>
+          <li><span class="fn">ncclGroupStart()</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:563</span></li>
+          <li><span class="note">for each of the 8 GPUs: </span><span class="fn">AllReduceRunColl</span> <span class="src ext" title="nccl-tests src/all_reduce.cu">all_reduce.cu:500</span> → <span class="fn">ncclAllReduce(sendbuff, recvbuff, count, ncclFloat, ncclSum, comm, stream)</span> <span class="src ext" title="nccl-tests src/all_reduce.cu">all_reduce.cu:507</span></li>
+          <li><span class="fn">ncclGroupEnd()</span> <span class="src ext" title="nccl-tests src/common.cu">common.cu:645</span> <span class="note">← the 8 kernels are launched here</span></li>
+          </ul></li>
+        </ul></li>
+      </ul></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+<h3 id="front-queue">3.2 <code>ncclAllReduce</code> only queues a task</h3>
+<p>Inside a group, <code>ncclAllReduce</code> does not launch anything. It checks the arguments, builds a task and puts it in a per-communicator sorter. The launch happens in <code>ncclGroupEnd</code>, for all 8 communicators together. This is the same for both arms.</p>
+<div class="chain">
+<div class="title">Call chain: ncclAllReduce inside a group</div>
+<ul>
+<li><span class="fn">ncclAllReduce</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/collectives.cc#L206" target="_blank" rel="noopener" class="src" title="src/collectives.cc">collectives.cc:206</a> → <span class="fn">ncclAllReduceConfigImpl</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/collectives.cc#L192" target="_blank" rel="noopener" class="src" title="src/collectives.cc">collectives.cc:192</a> <span class="note">fills an <code>ncclInfo</code></span>
+  <ul>
+  <li><span class="fn">ncclEnqueueCheck</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L3478" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:3478</a> <span class="note">group depth +1, argument checks</span>
+    <ul>
+    <li><span class="fn">taskAppend</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L3513" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:3513</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L3337" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:3337</a> → <span class="fn">collTaskAppend</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L3467" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:3467</a>
+      <ul>
+      <li><span class="fn">collTaskAppend</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L2757" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:2757</a> <span class="note">allocates an <code>ncclTaskColl</code> (op, type, count, buffers) and joins the comm to the group</span></li>
+      <li><span class="fn">ncclTaskCollSorterInsert</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L2847" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:2847</a> <span class="note">task waits here until group end</span></li>
+      </ul></li>
+    <li><span class="fn">ncclGroupEndInternal</span> <span class="note">only lowers the depth; the user's group is still open</span></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+</section>
+
+<!-- ============================================================= -->
+<section id="setup">
+<h2><span class="num">4</span>Setup before the first call</h2>
+<p>A multimem instruction needs a multicast address, and memory must be bound behind it. The two arms prepare this at different times and with different memory.</p>
+
+<h3 id="setup-nvls">4.1 NVLS: NCCL builds its own multicast buffer</h3>
+<p>At communicator init, NCCL creates one multicast group per communicator and reserves address space for three things: progress flags ("credit"), data slots, and user-buffer registration. Only the flags are backed by memory at init. Because <code>NCCL_RUNTIME_CONNECT=1</code> by default (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L65" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:65</a>), the data slots get memory on the <b>first NVLS collective</b>, in <code>ncclNvlsBufferSetup</code>.</p>
+<div class="chain">
+<div class="title">Call chain: NVLS resources at init and at the first call</div>
+<ul>
+<li><span class="fn">ncclCommInitRankConfig</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L3049" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:3049</a> → <span class="fn">ncclCommInitRankDev</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L2851" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:2851</a> → <span class="fn">ncclCommInitRankFunc</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L2105" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:2105</a> → <span class="fn">initTransportsRank</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L1163" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:1163</a>
+  <ul>
+  <li><span class="fn">ncclNvlsInit</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L1419" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:1419</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L166" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:166</a> <span class="note">checks that the GPU supports multicast; sets <code>nvlsSupport</code></span></li>
+  <li><span class="fn">ncclNvlsChannels</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L128" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:128</a> <span class="note">16 channels on H100; chunk size 128 KiB (<code>NCCL_NVLS_CHUNKSIZE</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L58" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:58</a>)</span></li>
+  <li><span class="fn">connectNvls</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/graph/connect.cc#L248" target="_blank" rel="noopener" class="src" title="src/graph/connect.cc">connect.cc:248</a> <span class="note">per channel: <code>nvls.up[h] = nRanks+1+h</code>, <code>nvls.down = nRanks+1+headRank</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/graph/connect.cc#L262" target="_blank" rel="noopener" class="src" title="src/graph/connect.cc">connect.cc:262-264</a>). These are "virtual peers": one per head rank</span></li>
+  <li><span class="fn">ncclNvlsSetup</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L1817" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:1817</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L370" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:370</a>
+    <ul>
+    <li><span class="fn">ncclMcGroupBuildPartitions</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L438" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:438</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L79" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:79</a>
+      <ul>
+      <li><span class="fn">cuMulticastCreate</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L27" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:27</a> <span class="note">on local rank 0; the handle is shared with the others</span></li>
+      <li><span class="fn">cuMulticastAddDevice</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L139" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:139</a> <span class="note">each GPU joins the group</span></li>
+      <li><span class="fn">cuMemAddressReserve</span> + <span class="fn">cuMemMap(base, …, mcHandle)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L150" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:150</a> <span class="note">the MC address range</span></li>
+      <li><span class="note">partition pointers = base + offset</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L166" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:166</a><span class="note">: <code>creditPartition</code>, <code>dataPartition</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L439" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:439-440</a>)</span></li>
+      </ul></li>
+    <li><span class="fn">nvlsAllocBindUc(creditPartition → creditUc)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L446" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:446</a> <span class="note">allocate local memory and bind it behind the MC flags</span></li>
+    <li><span class="note">per head h and channel c: set head/tail flag pointers of the 4 connections</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L456" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:456-491</a> <span class="note">and copy them to the GPU</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L493" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:493-504</a></li>
+    </ul></li>
+  <li><span class="fn">devCommSetup</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L712" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:712</a> <span class="note">copies each channel's <code>peers</code> and <code>nvls</code> fields to GPU memory (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L836" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:836</a>); the kernel reads them at start</span></li>
+  </ul></li>
+<li><span class="note">first NVLS AllReduce, inside ncclGroupEnd: </span><span class="fn">ncclCollPreconnect</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L291" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:291</a> → <span class="fn">ncclNvlsBufferSetup</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L244" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:244</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L279" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:279</a>
+  <ul>
+  <li><span class="fn">nvlsAllocBindUc(dataPartition → dataUc)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L309" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:309</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L225" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:225</a> <span class="note"><code>cuMemCreate</code> + <code>cuMemMap</code> local memory, then</span> <span class="fn">cuMulticastBindMem</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L214" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:214</a></li>
+  <li><span class="note">per head h and channel c, set the data pointer of each connection</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L318" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:318-333</a></li>
+  </ul></li>
+</ul>
+</div>
+
+<p>The key detail is that every slot has <b>two addresses</b>: a unicast one (<code>dataUc</code>, this GPU's copy) and a multicast one (<code>dataPartition</code>, all GPUs' copies). Each virtual peer <code>nRanks+1+h</code> has four connections, and NCCL gives some of them the unicast address and some the multicast address:</p>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Connection of peer <code>nRanks+1+h</code></th><th>Used by</th><th>Data slot</th><th>Address type</th><th>Code</th></tr></thead>
+<tbody>
+<tr><td><code>send[1]</code></td><td>scatter warps (write)</td><td>reduce slot of head h</td><td>unicast (<code>dataUc</code>)</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L325" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:325</a></td></tr>
+<tr><td><code>recv[0]</code></td><td>reduce warps (read)</td><td>reduce slot of head h</td><td><b>multicast</b> (<code>dataPartition</code>)</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L326" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:326-327</a></td></tr>
+<tr><td><code>send[0]</code></td><td>reduce warps (write)</td><td>broadcast slot of head h</td><td><b>multicast</b> (<code>dataPartition</code>)</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L332" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:332-333</a></td></tr>
+<tr><td><code>recv[1]</code></td><td>gather warps (read)</td><td>broadcast slot of head h</td><td>unicast (<code>dataUc</code>)</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L330" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:330-331</a></td></tr>
+</tbody></table></div>
+<p>The step flags follow the same pattern (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L463" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:463-491</a>). The two connections with a multicast address also get the flag <code>NCCL_NVLS_MIN_POLL</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L476" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:476</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L491" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:491</a>). It makes the GPU read their flags with a multicast <i>minimum</i>, so one read tells it whether <i>all</i> GPUs have reached a step (§6.3).</p>
+
+<figure>
+<svg viewBox="0 0 1000 410" role="img" aria-label="NVLS buffer: unicast and multicast views of the same slots">
+  <text x="500" y="24" text-anchor="middle" font-weight="700" font-size="14">NCCL's NVLS data buffer, one channel, slots for head h (4 GPUs drawn, 8 in the run)</text>
+  <!-- GPUs -->
+  <g>
+    <rect x="30" y="50" width="200" height="200" rx="12" class="box2"/>
+    <text x="130" y="72" text-anchor="middle" font-weight="700" font-size="13">GPU 0</text>
+    <rect x="50" y="86" width="160" height="40" rx="6" class="box"/><text x="130" y="111" text-anchor="middle" font-size="12">user input</text>
+    <rect x="50" y="136" width="160" height="34" rx="6" class="b-gin"/><text x="130" y="158" text-anchor="middle" font-size="12">reduce slot h</text>
+    <rect x="50" y="178" width="160" height="34" rx="6" class="b-gin"/><text x="130" y="200" text-anchor="middle" font-size="12">broadcast slot h</text>
+    <rect x="50" y="220" width="160" height="22" rx="5" class="box"/><text x="130" y="236" text-anchor="middle" font-size="11.5">user output</text>
+  </g>
+  <g>
+    <rect x="270" y="50" width="200" height="200" rx="12" class="box2"/>
+    <text x="370" y="72" text-anchor="middle" font-weight="700" font-size="13">GPU 1</text>
+    <rect x="290" y="86" width="160" height="40" rx="6" class="box"/><text x="370" y="111" text-anchor="middle" font-size="12">user input</text>
+    <rect x="290" y="136" width="160" height="34" rx="6" class="b-gin"/><text x="370" y="158" text-anchor="middle" font-size="12">reduce slot h</text>
+    <rect x="290" y="178" width="160" height="34" rx="6" class="b-gin"/><text x="370" y="200" text-anchor="middle" font-size="12">broadcast slot h</text>
+    <rect x="290" y="220" width="160" height="22" rx="5" class="box"/><text x="370" y="236" text-anchor="middle" font-size="11.5">user output</text>
+  </g>
+  <g>
+    <rect x="510" y="50" width="200" height="200" rx="12" class="box2"/>
+    <text x="610" y="72" text-anchor="middle" font-weight="700" font-size="13">GPU h (head)</text>
+    <rect x="530" y="86" width="160" height="40" rx="6" class="box"/><text x="610" y="111" text-anchor="middle" font-size="12">user input</text>
+    <rect x="530" y="136" width="160" height="34" rx="6" class="b-gin"/><text x="610" y="158" text-anchor="middle" font-size="12">reduce slot h</text>
+    <rect x="530" y="178" width="160" height="34" rx="6" class="b-gin"/><text x="610" y="200" text-anchor="middle" font-size="12">broadcast slot h</text>
+    <rect x="530" y="220" width="160" height="22" rx="5" class="box"/><text x="610" y="236" text-anchor="middle" font-size="11.5">user output</text>
+  </g>
+  <g>
+    <rect x="750" y="50" width="200" height="200" rx="12" class="box2"/>
+    <text x="850" y="72" text-anchor="middle" font-weight="700" font-size="13">GPU 7</text>
+    <rect x="770" y="86" width="160" height="40" rx="6" class="box"/><text x="850" y="111" text-anchor="middle" font-size="12">user input</text>
+    <rect x="770" y="136" width="160" height="34" rx="6" class="b-gin"/><text x="850" y="158" text-anchor="middle" font-size="12">reduce slot h</text>
+    <rect x="770" y="178" width="160" height="34" rx="6" class="b-gin"/><text x="850" y="200" text-anchor="middle" font-size="12">broadcast slot h</text>
+    <rect x="770" y="220" width="160" height="22" rx="5" class="box"/><text x="850" y="236" text-anchor="middle" font-size="11.5">user output</text>
+  </g>
+  <text x="730" y="160" text-anchor="middle" font-size="16" class="t-muted">…</text>
+  <!-- unicast arrows: scatter -->
+  <path d="M130 126 L130 134" class="ln"/><path d="M370 126 L370 134" class="ln"/><path d="M610 126 L610 134" class="ln"/><path d="M850 126 L850 134" class="ln"/>
+  <path d="M130 212 L130 218" class="ln"/><path d="M370 212 L370 218" class="ln"/><path d="M610 212 L610 218" class="ln"/><path d="M850 212 L850 218" class="ln"/>
+  <!-- MC bars -->
+  <rect x="30" y="282" width="920" height="40" rx="8" class="b-gin"/>
+  <text x="490" y="300" text-anchor="middle" font-size="12.5" font-weight="600" class="t-gin">multicast address of "reduce slot h" (recv[0])  →  multimem.ld_reduce.add returns Σ over all GPUs</text>
+  <text x="490" y="315" text-anchor="middle" font-size="11.5" class="t-muted">issued only by the reduce warps of GPU h</text>
+  <rect x="30" y="336" width="920" height="40" rx="8" class="b-gin"/>
+  <text x="490" y="354" text-anchor="middle" font-size="12.5" font-weight="600" class="t-gin">multicast address of "broadcast slot h" (send[0])  →  multimem.st writes the sum into every GPU</text>
+  <text x="490" y="369" text-anchor="middle" font-size="11.5" class="t-muted">issued by the same reduce warps, right after the load</text>
+  <path d="M130 250 L130 280 M370 250 L370 280 M610 250 L610 280 M850 250 L850 280" class="ln-gin dash"/>
+  <text x="500" y="398" text-anchor="middle" font-size="11.5" class="t-muted">input → reduce slot: scatter copy (unicast) · broadcast slot → output: gather copy (unicast)</text>
+</svg>
+<figcaption>Figure 2. Each GPU first copies chunk h of its input into its own "reduce slot h" through the unicast address. The head GPU h then reads all GPUs' copies of that slot with one multicast load-reduce, and writes the sum into every GPU's "broadcast slot h" with one multicast store. Finally every GPU copies its broadcast slots into its output. The same happens for every head h at the same time, each GPU being the head for its own slice.</figcaption>
+</figure>
+
+<h3 id="setup-sym">4.2 Symmetric multicast: NCCL binds <i>your</i> buffer</h3>
+<p>Here NCCL does not need a buffer of its own. When the harness registers its buffers as symmetric windows (<code>-R 2</code>), NCCL places each buffer at the same offset (<code>bigOffset</code>) of a large multicast range and binds the buffer's memory there. The first symmetric window also starts NCCL's symmetric kernels and creates a device communicator that carries the multicast base address.</p>
+<div class="chain">
+<div class="title">Call chain: window registration with -R 2</div>
+<ul>
+<li><span class="fn">ncclCommWindowRegister(comm, buff, size, &amp;win, NCCL_WIN_COLL_SYMMETRIC)</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1800" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1800</a> <span class="note">queues a registration task in the open group</span>
+  <ul>
+  <li><span class="note">at ncclGroupEnd: </span><span class="fn">ncclCommGroupRegisterSymmetric</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L372" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:372</a> → <span class="fn">ncclDevrWindowRegisterInGroup</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L381" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:381</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1149" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1149</a>
+    <ul>
+    <li><span class="fn">ncclSymkInitOnce</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1175" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1175</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L185" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:185</a> <span class="note">first symmetric window only</span>
+      <ul>
+      <li><code>hasLsaMultimem = NVLS enabled &amp;&amp; lsa nRanks &gt; 2 &amp;&amp; …</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L194" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:194-196</a> <span class="note">← why this arm is not available with 2 GPUs</span></li>
+      <li><span class="fn">ncclDevrCommCreateInternal(reqs.lsaMultimem = true)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L254" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:254</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1399" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1399</a>
+        <ul>
+        <li><span class="fn">symTeamObtain(lsa, multimem)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1513" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1513</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L451" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:451</a>
+          <ul>
+          <li><span class="fn">ncclMcCreate</span> → <span class="fn">cuMulticastCreate</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L503" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:503</a> <span class="note">size = <code>bigSize</code>, at least the GPU memory size</span></li>
+          <li><span class="fn">cuMulticastAddDevice</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L514" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:514</a>, <span class="fn">cuMemMap(mcAddr, bigSize, 0, mcHandle)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L519" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:519</a> <span class="note">→ <code>mcBasePtr</code></span></li>
+          </ul></li>
+        <li><code>devComm.lsaMultimem.mcBasePtr = tmLsa-&gt;mcBasePtr</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1516" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1516</a> <span class="note">← the kernel will receive this</span></li>
+        </ul></li>
+      </ul></li>
+    <li><span class="fn">symMemoryObtain</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1207" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1207</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L698" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:698</a>
+      <ul>
+      <li><span class="fn">ncclSpaceAlloc(&amp;devr-&gt;bigSpace, …)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L814" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:814</a> <span class="note">picks <code>bigOffset</code>, the same on every GPU</span></li>
+      <li><span class="fn">symBindTeamMemory</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L855" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:855</a> → <span class="fn">cuMulticastBindAddr(mcHandle, bigOffset, userBuffer, size)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L432" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:432</a> <span class="note">the user buffer is now behind the multicast address</span></li>
+      </ul></li>
+    <li><span class="fn">symWindowCreate</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1214" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1214</a> → <code>mcOffset4K = bigOffset &gt;&gt; 12</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L1027" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:1027</a> <span class="note">stored in the window, which lives in GPU memory</span></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Symmetric window bound into the multicast range">
+  <text x="500" y="24" text-anchor="middle" font-weight="700" font-size="14">One multicast range of size bigSize; the user buffer of every GPU is bound at the same bigOffset</text>
+  <rect x="40" y="48" width="920" height="46" rx="8" class="b-lsa"/>
+  <text x="56" y="76" font-size="12.5" class="t-mono">mcBasePtr</text>
+  <rect x="380" y="52" width="260" height="38" rx="6" class="box"/>
+  <text x="510" y="76" text-anchor="middle" font-size="12.5" font-weight="600">window: bigOffset … +size</text>
+  <path d="M150 94 L150 100 L380 100" class="ln"/>
+  <text x="265" y="114" text-anchor="middle" font-size="11.5" class="t-muted">mcOffset4K × 4096 = bigOffset</text>
+  <g>
+    <rect x="40" y="160" width="200" height="110" rx="10" class="box2"/><text x="52" y="182" text-anchor="start" font-weight="700" font-size="13">GPU 0</text>
+    <rect x="60" y="196" width="160" height="56" rx="6" class="box"/><text x="140" y="220" text-anchor="middle" font-size="12">user input / output</text><text x="140" y="238" text-anchor="middle" font-size="11" class="t-muted">ncclMemAlloc</text>
+    <rect x="280" y="160" width="200" height="110" rx="10" class="box2"/><text x="292" y="182" text-anchor="start" font-weight="700" font-size="13">GPU 1</text>
+    <rect x="300" y="196" width="160" height="56" rx="6" class="box"/><text x="380" y="220" text-anchor="middle" font-size="12">user input / output</text><text x="380" y="238" text-anchor="middle" font-size="11" class="t-muted">ncclMemAlloc</text>
+    <rect x="520" y="160" width="200" height="110" rx="10" class="box2"/><text x="532" y="182" text-anchor="start" font-weight="700" font-size="13">GPU 2</text>
+    <rect x="540" y="196" width="160" height="56" rx="6" class="box"/><text x="620" y="220" text-anchor="middle" font-size="12">user input / output</text><text x="620" y="238" text-anchor="middle" font-size="11" class="t-muted">ncclMemAlloc</text>
+    <rect x="760" y="160" width="200" height="110" rx="10" class="box2"/><text x="772" y="182" text-anchor="start" font-weight="700" font-size="13">GPU 7</text>
+    <rect x="780" y="196" width="160" height="56" rx="6" class="box"/><text x="860" y="220" text-anchor="middle" font-size="12">user input / output</text><text x="860" y="238" text-anchor="middle" font-size="11" class="t-muted">ncclMemAlloc</text>
+    <text x="740" y="220" text-anchor="middle" font-size="16" class="t-muted">…</text>
+  </g>
+  <path d="M510 90 L140 158 M510 90 L380 158 M510 90 L620 158 M510 90 L860 158" class="ln-lsa dash"/>
+  <text x="40" y="134" text-anchor="start" font-size="11.5" class="t-lsa">cuMulticastBindAddr on every GPU</text>
+</svg>
+<figcaption>Figure 3. After registration, <code>mcBasePtr + bigOffset + i</code> means "byte i of this buffer on every GPU". The kernel computes this address with <code>ncclGetMultimemPointer</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/core__funcs.h#L176" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/core__funcs.h">core__funcs.h:176-179</a>): <code>mcBasePtr + mcOffset4K × 4096 + offset</code>. No NCCL buffer is in between.</figcaption>
+</figure>
+<h3 id="setup-meaning">4.3 Both kernels use symmetric memory, in different senses</h3>
+<p>A multimem instruction only works on memory that is bound to a multicast object at the same offset on every GPU. So <b>both</b> kernels need symmetric memory. The confusion comes from the word "symmetric", which is used in two senses:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Sense</th><th>What it is</th><th>NVLS</th><th>Symmetric kernels</th></tr></thead>
+<tbody>
+<tr><td><b>Hardware sense</b>: memory multimem can work on</td><td>a multicast object, with memory of every GPU bound to it at the same offset</td><td><b>yes</b>, on NCCL's own buffer</td><td><b>yes</b>, on the user's buffer</td></tr>
+<tr><td><b>NCCL API sense</b>: the "symmetric memory" feature (since 2.27)</td><td>the <i>user</i> registers <i>their</i> buffers with <code>ncclCommWindowRegister(…, NCCL_WIN_COLL_SYMMETRIC)</code></td><td>no</td><td><b>yes</b></td></tr>
+</tbody></table></div>
+<p>When NVIDIA's documents say "symmetric memory", they mean the second sense. NVLS does not use that feature, but it builds a symmetric buffer of its own, because multimem cannot work without one.</p>
+
+<h4>What multimem requires: the same offset, not the same address</h4>
+<p>Each GPU maps the multicast object at <b>its own</b> virtual address: every rank reserves its own range (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L149" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:149-150</a> for NVLS, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L515" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:515-519</a> for windows), and the addresses may differ between GPUs. What must match is the <b>offset inside the multicast object</b>. A multimem instruction on any GPU is translated to (multicast object, offset), and the NVSwitch reads or writes that offset on every member GPU.</p>
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Each GPU maps the multicast object at its own address; memory is bound at the same offset on every GPU">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">Different addresses, same offset</text>
+  <g font-size="12" text-anchor="middle">
+    <text x="150" y="50" font-weight="600">Each GPU's own mapping</text>
+    <text x="500" y="50" font-weight="600">Multicast object</text>
+    <text x="850" y="50" font-weight="600">Memory bound at offset off</text>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <rect x="40" y="66" width="220" height="36" rx="6" class="box"/><text x="150" y="89" class="t-mono">GPU 0: mcAddr₀ + off</text>
+    <rect x="40" y="112" width="220" height="36" rx="6" class="box"/><text x="150" y="135" class="t-mono">GPU 1: mcAddr₁ + off</text>
+    <text x="150" y="172" class="t-muted">⋮</text>
+    <rect x="40" y="186" width="220" height="36" rx="6" class="box"/><text x="150" y="209" class="t-mono">GPU 7: mcAddr₇ + off</text>
+    <rect x="400" y="104" width="200" height="80" rx="10" class="b-acc"/>
+    <text x="500" y="134" font-weight="600">(object, off)</text>
+    <text x="500" y="154" font-size="11.5">NVSwitch fans the</text>
+    <text x="500" y="170" font-size="11.5">request out to all members</text>
+    <rect x="740" y="66" width="220" height="36" rx="6" class="box2"/><text x="850" y="89">GPU 0 memory at off</text>
+    <rect x="740" y="112" width="220" height="36" rx="6" class="box2"/><text x="850" y="135">GPU 1 memory at off</text>
+    <text x="850" y="172" class="t-muted">⋮</text>
+    <rect x="740" y="186" width="220" height="36" rx="6" class="box2"/><text x="850" y="209">GPU 7 memory at off</text>
+  </g>
+  <path d="M260 84 L398 132 M260 130 L398 142 M260 204 L398 158" class="ln"/>
+  <path d="M600 132 L738 84 M600 142 L738 130 M600 158 L738 204" class="ln-acc"/>
+  <text x="500" y="250" text-anchor="middle" font-size="12"><tspan class="t-gin" font-weight="600">NVLS:</tspan> off is inside NCCL's buffer (same slot layout on every GPU)   ·   <tspan class="t-lsa" font-weight="600">Symmetric kernel:</tspan> off = bigOffset of the user's window</text>
+  <text x="500" y="276" text-anchor="middle" font-size="11.5" class="t-muted">The mcAddr values may differ from GPU to GPU; only the offset and the layout behind it must match.</text>
+</svg>
+<figcaption>Figure 3b. What multimem needs. Any GPU can issue the instruction through its own address; the switch uses only the object and the offset. Both kernels satisfy this, in different ways (table below).</figcaption>
+</figure>
+
+<h4>Who makes the memory symmetric</h4>
+<div class="tablewrap"><table>
+<thead><tr><th></th><th>NVLS</th><th>Symmetric kernel</th></tr></thead>
+<tbody>
+<tr><td>Whose memory</td><td>NCCL's internal buffer (<code>dataUc</code>)</td><td>the user's send and receive buffers</td></tr>
+<tr><td>How the same offset is guaranteed</td><td>every rank binds its buffer at offset 0 of the data partition (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L257" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:257</a> → <code>cuMulticastBindMem</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L214" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:214</a>), and every rank computes the same slot positions, <code>(h·2·nChannels + c)·buffSize</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L325" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:325-333</a>)</td><td>NCCL picks one <code>bigOffset</code> for all ranks (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L814" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:814</a>) and binds each rank's buffer there (<code>cuMulticastBindAddr</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L432" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:432</a>)</td></tr>
+<tr><td>Why the user is or is not involved</td><td>NCCL owns the buffer, so it lays it out the same way on every GPU by itself</td><td>NCCL cannot choose where the user's buffer lives, so every rank must register its buffer, with matching sizes, in the same collective call</td></tr>
+<tr><td>Consequence</td><td>user data is <b>copied</b> into the symmetric buffer and back out (scatter and gather warps, §6.2)</td><td>no copies: the user's buffer <b>is</b> the symmetric buffer</td></tr>
+<tr><td>Extra view</td><td>none</td><td>a unicast "flat" range in which each peer's copy can be reached with ordinary loads and stores (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L397" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:397</a>); the plain load/store kernel <code>RSxLD_AGxST</code> uses it</td></tr>
+</tbody></table></div>
+<p><b>In one sentence:</b> both kernels need memory bound at the same offset on every GPU; NVLS provides it with its own buffer and copies data through it, and the symmetric kernels get it by having the user register their buffer, so no copies are needed.</p>
+</section>
+
+<!-- ============================================================= -->
+<section id="host">
+<h2><span class="num">5</span>One call on the host: from <code>ncclGroupEnd</code> to the launch</h2>
+<h3 id="host-fork">5.1 Where the two paths split</h3>
+<p>When nccl-tests calls <code>ncclGroupEnd</code> (<span class="src ext" title="nccl-tests src/common.cu">common.cu:645</span>), NCCL processes the 8 queued tasks. The split happens in <code>ncclPrepareTasks</code>: it first offers each task to the symmetric-kernel scheduler, and only tasks that it does not take go to the classic algorithm selection.</p>
+<div class="chain">
+<div class="title">Call chain: ncclGroupEnd, common part</div>
+<ul>
+<li><span class="fn">ncclGroupEnd</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L175" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:175</a> → <span class="fn">ncclGroupEndInternal</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L1039" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:1039</a> → <span class="fn">groupLaunch</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L1139" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:1139</a> → <span class="fn">groupLaunchLegacy</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L1032" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:1032</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L748" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:748</a>
+  <ul>
+  <li><span class="fn">ncclPrepareTasksAndCollPreconnectFunc</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L282" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:282</a> <span class="note">one async job per communicator</span>
+    <ul>
+    <li><span class="fn">ncclPrepareTasks</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L423" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:423</a>
+      <ul>
+      <li><span class="fn">ncclMakeSymmetricTaskList</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L473" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:473</a> <span class="note">← <b>fork</b>: keeps the task only if symmetric tuning finds a kernel for it; otherwise hands it back (§5.3)</span></li>
+      <li><span class="fn">ncclGetAlgoInfo</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L514" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:514</a> <span class="note">← classic path for the remaining tasks (§5.2)</span></li>
+      </ul></li>
+    <li><span class="fn">ncclCollPreconnect</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L291" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:291</a> <span class="note">NVLS only, first call: data buffers (§4.1)</span></li>
+    </ul></li>
+  <li><span class="fn">doLaunches</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L427" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:427</a>
+    <ul>
+    <li><span class="fn">ncclLaunchPrepare</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1695" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1695</a> <span class="note">builds the launch plan: symmetric (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1733" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1733</a>) or classic (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1745" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1745</a>)</span></li>
+    <li><span class="fn">ncclLaunchKernel</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L482" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:482</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1886" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1886</a> <span class="note">grid = number of channels, block = threads per CTA</span>
+      <ul><li><span class="fn">cuLaunchKernelEx(&amp;config, fn, nullptr, extra)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1992" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1992</a> <span class="note">the kernel arguments are a byte buffer (<code>plan-&gt;kernelArgs</code>)</span></li></ul></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+<figure>
+<svg viewBox="0 0 1000 250" role="img" aria-label="Decision in ncclMakeSymmetricTaskList">
+  <rect x="330" y="14" width="340" height="50" rx="10" class="b-acc"/>
+  <text x="500" y="36" text-anchor="middle" font-weight="700" font-size="13.5">ncclMakeSymmetricTaskList(task)</text>
+  <text x="500" y="54" text-anchor="middle" font-size="11.5" class="t-muted">symmetric_sched.cc:79</text>
+  <rect x="40" y="96" width="290" height="62" rx="8" class="box"/>
+  <text x="185" y="118" text-anchor="middle" font-size="12.5" font-weight="600">1. symmetric kernels available?</text>
+  <text x="185" y="136" text-anchor="middle" font-size="11.5" class="t-muted">ncclSymkAvailable: all-NVLink node,</text>
+  <text x="185" y="150" text-anchor="middle" font-size="11.5" class="t-muted">kernel mask for op/type/size</text>
+  <rect x="355" y="96" width="290" height="62" rx="8" class="box"/>
+  <text x="500" y="118" text-anchor="middle" font-size="12.5" font-weight="600">2. which buffers are in windows?</text>
+  <text x="500" y="136" text-anchor="middle" font-size="11.5" class="t-muted">ncclDevrFindWindow(send, recv)</text>
+  <text x="500" y="150" text-anchor="middle" font-size="11.5" class="t-muted">labels the task; rejects nothing</text>
+  <rect x="670" y="96" width="290" height="62" rx="8" class="box"/>
+  <text x="815" y="118" text-anchor="middle" font-size="12.5" font-weight="600">3. tuning picks a symmetric kernel?</text>
+  <text x="815" y="136" text-anchor="middle" font-size="11.5" class="t-muted">ncclTuningCompute; NCCL_SYM_KERNEL</text>
+  <text x="815" y="150" text-anchor="middle" font-size="11.5" class="t-muted">leaves only the named kernel enabled</text>
+  <path d="M500 64 L185 94 M500 64 L500 94 M500 64 L815 94" class="ln"/>
+  <rect x="60" y="186" width="400" height="48" rx="8" class="b-gin"/>
+  <text x="260" y="207" text-anchor="middle" font-size="12.5" font-weight="600" class="t-gin">1 or 3 "no" → back to classic path</text>
+  <text x="260" y="224" text-anchor="middle" font-size="11.5">NVLS run: check 3 finds no kernel → ncclGetAlgoInfo</text>
+  <rect x="540" y="186" width="400" height="48" rx="8" class="b-lsa"/>
+  <text x="740" y="207" text-anchor="middle" font-size="12.5" font-weight="600" class="t-lsa">kernel found → collSymTaskQueue</text>
+  <text x="740" y="224" text-anchor="middle" font-size="11.5">symmetric run: -R 2 and the forced kernel</text>
+  <path d="M185 158 L240 184 M815 158 L440 184" class="ln-gin"/>
+  <path d="M860 158 L860 184" class="ln-lsa"/>
+</svg>
+<figcaption>Figure 4. The fork. A task that passes check 1 enters the symmetric list (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L105" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:105-117</a>); check 2 only records which buffers are registered (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L395" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:395-411</a>). Check 3 decides. In the NVLS run it finds no kernel for two separate reasons: <code>NCCL_ALGO=NVLS</code> first switches off every symmetric kernel and then enables only NVLS (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/cost_model.cc#L327" target="_blank" rel="noopener" class="src" title="src/tuning/cost_model.cc">cost_model.cc:327-329</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/cost_model.cc#L372" target="_blank" rel="noopener" class="src" title="src/tuning/cost_model.cc">cost_model.cc:372-383</a>); and an AllReduce on unregistered buffers may use only the LL symmetric kernels (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model.cc#L65" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model.cc">sym_model.cc:65-72</a>), which are off from 2 GiB of bus bytes (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L339" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:339</a>). So the task is handed back (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L224" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:224-241</a>) and goes to <code>ncclGetAlgoInfo</code>. In the symmetric run both buffers are registered and <code>NCCL_SYM_KERNEL</code> leaves exactly one kernel enabled.</figcaption>
+</figure>
+
+<h3 id="host-nvls">5.2 NVLS: algorithm, plan, launch</h3>
+<div class="chain">
+<div class="title">Call chain: classic path for the NVLS arm</div>
+<ul>
+<li><span class="note">at comm init: </span><span class="fn">ncclTuningCostModelInit</span><span class="tag host">host</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/cost_model.cc#L306" target="_blank" rel="noopener" class="src" title="src/tuning/cost_model.cc">cost_model.cc:306</a> <span class="note">reads <code>NCCL_ALGO</code>/<code>NCCL_PROTO</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/cost_model.cc#L324" target="_blank" rel="noopener" class="src" title="src/tuning/cost_model.cc">cost_model.cc:324-325</a>) and disables every algorithm and protocol not named</span></li>
+<li><span class="fn">ncclGetAlgoInfo</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L514" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:514</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L2159" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:2159</a>
+  <ul>
+  <li><span class="fn">ncclTuningCompute</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L2214" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:2214</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning.cc#L180" target="_blank" rel="noopener" class="src" title="src/tuning/tuning.cc">tuning.cc:180</a> <span class="note">only NVLS/Simple is left</span>
+    <ul><li><span class="fn">ncclTuningGetChannels</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning.cc#L234" target="_blank" rel="noopener" class="src" title="src/tuning/tuning.cc">tuning.cc:234</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning_general.cc#L141" target="_blank" rel="noopener" class="src" title="src/tuning/tuning_general.cc">tuning_general.cc:141</a> <span class="note">channels = <code>nvlsChannels</code> = 16 (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning_general.cc#L162" target="_blank" rel="noopener" class="src" title="src/tuning/tuning_general.cc">tuning_general.cc:162</a>); threads = <code>NCCL_MAX_NTHREADS</code> = 640 (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning_general.cc#L94" target="_blank" rel="noopener" class="src" title="src/tuning/tuning_general.cc">tuning_general.cc:94-95</a>) → 20 warps (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning_general.cc#L196" target="_blank" rel="noopener" class="src" title="src/tuning/tuning_general.cc">tuning_general.cc:196</a>)</span></li></ul></li>
+  </ul></li>
+<li><code>agg.devFuncId = ncclDevFuncId(AllReduce, Sum, f32, NVLS, SIMPLE)</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L515" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:515</a> <span class="note">→ 259 in this build</span></li>
+<li><span class="fn">ncclRegisterCollNvlsBuffers</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L570" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:570</a> <span class="note">returns early: no registration with <code>-R 0</code>, and NVLS buffer registration is off when one process drives all GPUs</span></li>
+<li><span class="note">build <code>ncclDevWorkColl</code>: </span><code>oneNode = 1</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L597" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:597</a><span class="note">, <code>regUsed = 0</code>, buffers, warps</span></li>
+<li><span class="fn">scheduleCollTasksToPlan</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1745" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1745</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L644" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:644</a> <span class="note">split the count over 16 channels; chunk ≤ 128 KiB</span>
+  <ul><li><code>plan-&gt;kernelFn = ncclDevKernelForFunc[devFuncId]</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L905" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:905</a> <span class="note">row 259 → <code>ncclDevKernel_AllReduce_f32_RING</code></span> <span class="src gen" title="build/obj/device/gensrc/host_table.cc (generated)">host_table.cc:2844</span></li></ul></li>
+<li><span class="fn">cuLaunchKernelEx</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1992" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1992</a> <span class="note">grid 16, block 640</span></li>
+</ul>
+</div>
+<div class="callout warn"><b>The launched kernel is named "RING", but it runs NVLS.</b> NCCL compiles a few "specialized" kernels per (collective, type) and reaches all other algorithms through a function table. The NVLS AllReduce for <code>float</code> is entry 259 of <code>ncclDevFuncTable</code> (<span class="src gen" title="build/obj/device/gensrc/device_table.cu (generated)">device_table.cu:1788</span>). Entry 259 of the host table points to the generic kernel <code>ncclDevKernel_AllReduce_f32_RING</code>, whose specialized function is Ring/LL (<span class="src gen" title="build/obj/device/gensrc/all_reduce_sum_f32.cu (generated)">all_reduce_sum_f32.cu:3</span>). The kernel finds the real function at run time (§6.1). The generated files come from the build of 2026-10-05, the same build as <code>build/lib/libnccl.so.2.32.3</code>.</div>
+
+<h3 id="host-sym">5.3 Symmetric multicast: kernel id, plan, launch</h3>
+<div class="chain">
+<div class="title">Call chain: symmetric path for the symmetric-multicast arm</div>
+<ul>
+<li><span class="note">at comm init: </span><span class="fn">ncclTuningCostModelInit</span><span class="tag host">host</span> <span class="note">reads <code>NCCL_SYM_KERNEL</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/cost_model.cc#L326" target="_blank" rel="noopener" class="src" title="src/tuning/cost_model.cc">cost_model.cc:326</a>) and enables only <code>AllReduce_RSxLDMC_AGxSTMC</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/cost_model.cc#L341" target="_blank" rel="noopener" class="src" title="src/tuning/cost_model.cc">cost_model.cc:341</a>)</span></li>
+<li><span class="fn">ncclMakeSymmetricTaskList</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L473" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:473</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L79" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:79</a>
+  <ul>
+  <li><span class="fn">ncclSymkAvailable</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L99" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:99</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L354" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:354</a> <span class="note">multicast kernels need <code>hasLsaMultimem</code></span></li>
+  <li><span class="fn">ncclDevrFindWindow</span> (send, recv) <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L106" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:106</a> <span class="note">both found → <code>ncclSymSendRegRecvReg</code></span></li>
+  <li><span class="fn">ncclTuningCompute</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L206" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:206</a> → <span class="fn">ncclTuningSymkModelSim</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model.cc#L40" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model.cc">sym_model.cc:40</a>
+    <ul>
+    <li><span class="fn">ncclSymkLsaModel</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model/lsa.cc#L45" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model/lsa.cc">lsa.cc:45</a> <span class="note">max CTAs for this kernel = ⌈16 / nRanks⌉ = 2 on H100 with 8 GPUs (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model/lsa.cc#L18" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model/lsa.cc">lsa.cc:18-24</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model/lsa.cc#L48" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model/lsa.cc">lsa.cc:48</a>)</span></li>
+    <li><code>tuning-&gt;nChannels = kBlocks</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model.cc#L94" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model.cc">sym_model.cc:94</a><span class="note">, </span><code>tuning-&gt;nWarps = 16</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model.cc#L95" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model.cc">sym_model.cc:95</a> <span class="note">→ 512 threads, fixed</span></li>
+    </ul></li>
+  <li><code>task-&gt;devFuncId = kernelId</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L253" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:253</a><span class="note">; queued on <code>collSymTaskQueue</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L257" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:257</a>)</span></li>
+  </ul></li>
+<li><span class="fn">ncclSymmetricTaskScheduler</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1733" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1733</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L268" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:268</a>
+  <ul>
+  <li><code>plan-&gt;isSymColl = true</code>, threads = 16 × 32 <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L290" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:290-291</a></li>
+  <li><code>plan-&gt;kernelFn = ncclSymkKernelList[…]</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L304" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:304</a> <span class="note">→ <code>ncclSymkDevKernel_AllReduce_RSxLDMC_AGxSTMC_sum_f32</code></span></li>
+  <li><span class="fn">ncclSymkMakeDevWork</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L343" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:343</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L380" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:380</a> <span class="note">element count, input/output window and offset</span></li>
+  <li><span class="note">copy the device communicator (with <code>lsaMultimem.mcBasePtr</code>) into the kernel arguments</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L411" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:411</a></li>
+  </ul></li>
+<li><span class="fn">cuLaunchKernelEx</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1992" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1992</a> <span class="note">grid 2, block 512</span></li>
+</ul>
+</div>
+</section>
+
+<!-- ============================================================= -->
+<section id="dev-nvls">
+<h2><span class="num">6</span>NVLS on the GPU</h2>
+<h3 id="dev-nvls-entry">6.1 Kernel entry: from the "RING" kernel to the NVLS function</h3>
+<div class="chain">
+<div class="title">Call chain: kernel start, one CTA (= one channel)</div>
+<ul>
+<li><span class="fn">ncclDevKernel_AllReduce_f32_RING(args4K)</span><span class="tag dev">device</span> <span class="src gen" title="build/obj/device/gensrc/all_reduce_sum_f32.cu (generated)">all_reduce_sum_f32.cu:3</span> <span class="note">made by the macro</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L506" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:506-509</a>
+  <ul>
+  <li><span class="fn">ncclKernelMain&lt;261, RunWorkBatch&lt;…RING, LL&gt;&gt;</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L420" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:420</a>
+    <ul>
+    <li><span class="note">find this CTA's channel from <code>channelMask</code>; warp 0 copies the communicator into shared memory</span></li>
+    <li><span class="note">warp 1 copies <code>channels[channelId]</code> into <code>ncclShmem.channel</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L460" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:460</a>): this brings <code>peers</code> and <code>nvls.up/down/headRank</code> from §4.1</span></li>
+    <li><span class="fn">loadWorkBatchToShmem</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L475" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:475</a> <span class="note">reads the work; sets <code>ncclShmem.funcId</code> = 259</span></li>
+    <li><span class="note">259 ≠ 261, so: </span><span class="fn">ncclDevFuncTable[ncclShmem.funcId]()</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L486" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:486</a>
+      <ul>
+      <li><span class="fn">ncclDevFunc_AllReduce_Sum_f32_NVLS_SIMPLE</span> <span class="src gen" title="build/obj/device/gensrc/all_reduce_sum_f32.cu (generated)">all_reduce_sum_f32.cu:8</span> <span class="note">macro</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L514" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:514-517</a>
+        <ul><li><span class="fn">RunWorkBatch::run</span> → <span class="fn">RunWorkColl&lt;AllReduce, float, Sum, NVLS, SIMPLE&gt;().run(tid, 640, work)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common.h#L333" target="_blank" rel="noopener" class="src" title="src/device/common.h">common.h:333</a></li></ul></li>
+      </ul></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+<h3 id="dev-nvls-warps">6.2 Three warp groups in one CTA</h3>
+<p><code>RunWorkColl&lt;…, NCCL_ALGO_NVLS, NCCL_PROTO_SIMPLE&gt;::run</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L390" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:390</a>) splits the 20 warps of the CTA into groups (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L396" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:396-399</a>). With <code>regUsed = 0</code>, no network, and 8 ranks:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Group</th><th>Warps</th><th><code>Primitives</code> type</th><th>Peers, connection</th><th>Call</th><th>Does</th></tr></thead>
+<tbody>
+<tr><td>Scatter</td><td>8 (7 move data)</td><td><code>ProtoSimple&lt;1,1,UNROLL&gt;</code> (multimem 0, 0)</td><td>send to <code>nvls-&gt;up[0..7]</code>, <code>send[1]</code></td><td><code>prims.scatter</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L427" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:427</a></td><td>copies chunk h of the user input into "reduce slot h" (unicast), for every h</td></tr>
+<tr><td>Reduce</td><td>5 (4 move data)</td><td><code>ProtoSimple&lt;1,1,UNROLL,<b>1</b>,<b>1</b>&gt;</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L443" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:443</a></td><td>recv from and send to <code>nvls-&gt;down</code>, <code>recv[0]</code> / <code>send[0]</code></td><td><code>prims.directRecvDirectSend</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L455" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h (line 455 at tag v2.32.3-1; local edits shift it)">all_reduce.h:471</a></td><td>multicast load-reduce of "reduce slot headRank", multicast store into "broadcast slot headRank"</td></tr>
+<tr><td>Gather</td><td>7 (all move data)</td><td><code>ProtoSimple&lt;1,1,UNROLL&gt;</code> (multimem 0, 0)</td><td>recv from <code>nvls-&gt;up[0..7]</code>, <code>recv[1]</code></td><td><code>prims.gather</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L439" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:439</a></td><td>copies "broadcast slot h" (unicast) into chunk h of the user output, for every h</td></tr>
+</tbody></table></div>
+<p>In each group with send peers and at least 3 warps, the last warp moves no data: <code>nworkers = nthreads − 32</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L626" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:626</a>). It only holds the threads that post flags. The gather group has no send peers, so all its warps copy.</p>
+<p><b>With registered buffers the split changes.</b> NVLS can also work on the user's buffer, if it is registered with <code>ncclCommRegister</code> or captured in a CUDA graph (NVLS buffer registration, since NCCL 2.19). The work item then has <code>regUsed = 1</code>, and on one node the same 20 warps are split differently (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L396" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:396-399</a>):</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Team, one CTA of 20 warps</th><th>Unregistered (what the experiments ran)</th><th>Registered (<code>regUsed = 1</code>)</th></tr></thead>
+<tbody>
+<tr><td>Scatter</td><td>8 warps, 7 copy data</td><td>1 warp, moves no data: <code>nelem = 0</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L426" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:426</a>)</td></tr>
+<tr><td>Reduce</td><td>5 warps, 4 issue multimem</td><td>18 warps, 17 issue multimem (same "last warp only posts" rule)</td></tr>
+<tr><td>Gather</td><td>7 warps, 7 copy data</td><td>1 warp, moves no data (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L438" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:438</a>)</td></tr>
+</tbody></table></div>
+<p>The reduce warps' connections then get the <code>DirectRead</code> flag (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L514" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:514-516</a>) and work on the registered buffer's multicast address instead of the slots. The step flags and team barriers stay. So registered NVLS removes the copies and has about 4 times as many warps issuing multimem, but keeps the per-step synchronisation. It sits between the two kernels this page compares. It was not measured; §10.6 lists the test.</p>
+<p>The last two template numbers of <code>ProtoSimple</code> are <code>MultimemSrcs</code> and <code>MultimemDsts</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/primitives.h#L27" target="_blank" rel="noopener" class="src" title="src/device/primitives.h">primitives.h:27-33</a>). They are 1 only for the reduce warps. This is the only place in <code>all_reduce.h</code> that asks for multimem; the instructions themselves are deeper, in the shared copy routine.</p>
+<p>The reduce warps build their <code>Primitives</code> object with <code>&amp;nvls-&gt;down</code> as both receive and send peer, connection 0 (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L444" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h (line 444 at tag v2.32.3-1; local edits shift it)">all_reduce.h:453</a>). The constructor (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L614" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:614</a>) loads the connections (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L689" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:689</a>):</p>
+<ul>
+<li>Receive side: <code>connEltsFifo = conn-&gt;buffs[SIMPLE]</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L498" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:498</a>): the <b>multicast</b> address of "reduce slot h". The flag <code>NCCL_NVLS_MIN_POLL</code> turns on <code>NvlsMinPolling</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L494" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:494</a>).</li>
+<li>Send side: <code>connEltsFifo = conn-&gt;buffs[SIMPLE]</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L549" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:549</a>): the <b>multicast</b> address of "broadcast slot h". Also <code>NvlsMinPolling</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L545" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:545</a>).</li>
+</ul>
+
+<h3 id="dev-nvls-step">6.3 One reduce step, instruction by instruction</h3>
+<div class="chain">
+<div class="title">Call chain: one chunk in the reduce warps of GPU h</div>
+<ul>
+<li><span class="fn">prims.directRecvDirectSend(offset, offset, nelem)</span><span class="tag dev">device</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L455" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h (line 455 at tag v2.32.3-1; local edits shift it)">all_reduce.h:471</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L974" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:974</a> → <span class="fn">genericOp&lt;1,1,1,1,-1,-1&gt;</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L178" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:178</a>
+  <ul>
+  <li><span class="fn">waitPeer</span> <span class="note">one thread waits until the step can be used:</span>
+    <ul>
+    <li><span class="note">receive: wait for <code>tail</code> of "reduce slot h". With <code>NvlsMinPolling</code> the read is</span> <code>multimem.ld_reduce.acquire.sys.global.min.u64</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L90" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:90</a><span class="tag ptx">ptx</span> <span class="note">→ the smallest <code>tail</code> over all 8 GPUs, so the wait ends only when <b>every</b> GPU has scattered this step</span></li>
+    <li><span class="note">send: wait for <code>head</code> of "broadcast slot h" the same way → every GPU's gather has freed the slot</span></li>
+    <li><span class="note">data pointers: <code>connEltsFifo + (step % 8) × stepSize</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L152" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:152</a>); both are multicast addresses</span></li>
+    </ul></li>
+  <li><span class="fn">reduceCopy&lt;Unroll, Sum, float, MultimemSrcs=1, …, MultimemDsts=1, …&gt;</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L266" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:266</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common_kernel.h#L210" target="_blank" rel="noopener" class="src" title="src/device/common_kernel.h">common_kernel.h:210</a>
+    <ul>
+    <li><span class="fn">reduceCopyPacks</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common_kernel.h#L40" target="_blank" rel="noopener" class="src" title="src/device/common_kernel.h">common_kernel.h:40</a> <span class="note">16-byte packs</span>
+      <ul>
+      <li><code>if (0 &lt; MultimemSrcs)</code> → <span class="fn">applyLoadMultimem</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common_kernel.h#L93" target="_blank" rel="noopener" class="src" title="src/device/common_kernel.h">common_kernel.h:93-95</a> → <code>multimem.ld_reduce.relaxed.sys.global.add.v4.f32</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1172" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1172</a><span class="tag ptx">ptx</span></li>
+      <li><code>if (d &lt; MultimemDsts)</code> → <span class="fn">multimem_st_global</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/common_kernel.h#L161" target="_blank" rel="noopener" class="src" title="src/device/common_kernel.h">common_kernel.h:161-162</a> → <code>multimem.st.global.v4.f32</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L437" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:437</a><span class="tag ptx">ptx</span></li>
+      </ul></li>
+    </ul></li>
+  <li><span class="fn">postPeer</span> <span class="note">fence (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L393" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:393</a>), then raise the step counter:</span> <code>st_relaxed_sys_global(connStepPtr, step)</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L173" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:173</a> <span class="note">— a plain store to a multicast address, so it reaches the flag on every GPU</span></li>
+  </ul></li>
+</ul>
+</div>
+
+<figure>
+<svg viewBox="0 0 1000 290" role="img" aria-label="Pipeline of one NVLS step across warp groups and GPUs">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">One 128 KiB step of slot h: who waits for whom</text>
+  <rect x="30" y="44" width="220" height="70" rx="10" class="box"/>
+  <text x="140" y="68" text-anchor="middle" font-size="13" font-weight="600">scatter warps, every GPU</text>
+  <text x="140" y="88" text-anchor="middle" font-size="11.5" class="t-muted">copy input chunk h → reduce slot h</text>
+  <text x="140" y="104" text-anchor="middle" font-size="11.5" class="t-muted">then tail++ (unicast flag)</text>
+  <rect x="390" y="44" width="220" height="70" rx="10" class="b-gin"/>
+  <text x="500" y="68" text-anchor="middle" font-size="13" font-weight="600" class="t-gin">reduce warps, GPU h</text>
+  <text x="500" y="88" text-anchor="middle" font-size="11">wait: ld_reduce.min(tail), all GPUs</text>
+  <text x="500" y="104" text-anchor="middle" font-size="11.5">ld_reduce.add (MC) → st (MC)</text>
+  <rect x="750" y="44" width="220" height="70" rx="10" class="box"/>
+  <text x="860" y="68" text-anchor="middle" font-size="13" font-weight="600">gather warps, every GPU</text>
+  <text x="860" y="88" text-anchor="middle" font-size="11.5" class="t-muted">wait: tail of broadcast slot h</text>
+  <text x="860" y="104" text-anchor="middle" font-size="11.5" class="t-muted">copy broadcast slot h → output</text>
+  <path d="M250 79 L386 79" class="ln-gin"/><polygon points="386,74 396,79 386,84" class="f-gin"/>
+  <path d="M610 79 L746 79" class="ln-gin"/><polygon points="746,74 756,79 746,84" class="f-gin"/>
+  <text x="318" y="70" text-anchor="middle" font-size="11" class="t-gin">tail flags</text>
+  <text x="678" y="70" text-anchor="middle" font-size="11" class="t-gin">tail via MC store</text>
+  <path d="M860 114 L860 150 L140 150 L140 116" class="ln dash"/><polygon points="135,124 140,114 145,124" class="f-muted"/>
+  <text x="500" y="166" text-anchor="middle" font-size="11.5" class="t-muted">head flags return the slot when it has been used; with 8 steps per slot, up to 8 chunks are in flight</text>
+  <rect x="30" y="190" width="940" height="84" rx="10" class="box2"/>
+  <text x="50" y="214" font-size="12.5" font-weight="600">Per 16-byte pack in the reduce warps of GPU h, the NVSwitch does:</text>
+  <text x="50" y="236" font-size="12" class="t-mono">ld_reduce: read reduce slot h on GPUs 0..7 (8 × 16 B in), add, return 16 B to GPU h</text>
+  <text x="50" y="256" font-size="12" class="t-mono">st:        write 16 B into broadcast slot h on GPUs 0..7 (8 × 16 B out)</text>
+</svg>
+<figcaption>Figure 5. Every step of the pipeline needs flag traffic in addition to the data. The reduce warps poll the minimum of 8 flags through the switch before each step. The symmetric kernel has none of this traffic inside the call (§7).</figcaption>
+</figure>
+
+<h3 id="dev-nvls-ptx">6.4 The two data instructions</h3>
+<pre><code><span class="c">// reduce_kernel.h:1162-1178 (macro body, float instantiation at :1280)</span>
+<span class="k">asm volatile</span>(<span class="s">"multimem.ld_reduce.relaxed.sys.global.add.v4.f32 {%0,%1,%2,%3}, [%4];"</span> ...);
+<span class="c">// op128.h:436-437</span>
+<span class="k">asm volatile</span>(<span class="s">"multimem.st.global.v4.f32 [%0], {%1,%2,%3,%4};"</span> ...);</code></pre>
+<p>For <code>float</code> sum, the multimem pack is 16 bytes (<code>LoadMultimem_BigPackSize</code>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1258" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1258</a>). Elements that do not fill a pack use the 4-byte forms (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1131" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1131</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L429" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:429</a>).</p>
+</section>
+
+<!-- ============================================================= -->
+<section id="dev-sym">
+<h2><span class="num">7</span>Symmetric multicast on the GPU</h2>
+<h3 id="dev-sym-entry">7.1 Kernel entry</h3>
+<div class="chain">
+<div class="title">Call chain: one CTA of the symmetric kernel</div>
+<ul>
+<li><span class="fn">ncclSymkDevKernel_AllReduce_RSxLDMC_AGxSTMC_sum_f32(args4K)</span><span class="tag dev">device</span> <span class="note">generated by</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/generate.py#L183" target="_blank" rel="noopener" class="src" title="src/device/symmetric/generate.py">generate.py:183</a> <span class="note">into <code>gensrc/symmetric/all_reduce_sum_f32.cu</code>; waits for the previous kernel (<code>cudaGridDependencySynchronize</code>) and calls:</span>
+  <ul>
+  <li><span class="fn">ncclSymkRun_AllReduce_RSxLDMC_AGxSTMC&lt;false, FuncSum, float&gt;</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L487" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:487</a>
+    <ul>
+    <li><span class="fn">ncclSymkArgsHandler handler{args}</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L488" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:488</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/primitives.cuh#L103" target="_blank" rel="noopener" class="src" title="src/device/symmetric/primitives.cuh">primitives.cuh:103</a> <span class="note">gives <code>comm</code> (with <code>lsaMultimem</code>) and the work</span></li>
+    <li><span class="fn">bar.sync(acquire)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L497" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:497</a> <span class="note">barrier across the 8 GPUs (§7.3)</span></li>
+    <li><span class="fn">handler.forEachWork</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L500" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:500</a> → <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/primitives.cuh#L170" target="_blank" rel="noopener" class="src" title="src/device/symmetric/primitives.cuh">primitives.cuh:170</a> <span class="note">gives the input/output as <code>ncclSymPtr</code> (window + offset); both CTAs get the whole range</span>
+      <ul>
+      <li><span class="fn">allreduceMultimem(gtn, gt, red, input.multimemPtr(multimem), output.multimemPtr(multimem), nElts)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L507" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:507</a>
+        <ul><li><span class="fn">ncclSymPtr::multimemPtr</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/ptr__funcs.h#L126" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/ptr__funcs.h">ptr__funcs.h:126</a> → <span class="fn">ncclGetMultimemPointer</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/core__funcs.h#L176" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/core__funcs.h">core__funcs.h:176</a> <span class="note">= <code>mcBasePtr + mcOffset4K×4096 + offset</code></span></li></ul></li>
+      </ul></li>
+    <li><span class="fn">bar.sync(release)</span> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L511" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:511</a></li>
+    </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+<h3 id="dev-sym-loop">7.2 The data loop</h3>
+<pre><code><span class="c">// all_reduce.cuh:503-507 — one global thread number over all GPUs, CTAs and warps</span>
+<span class="k">int</span> gt  = flattenIx(lane, 32, rank, nRanks, block, nBlocks, warp, nWarps);
+<span class="k">int</span> gtn = nRanks * nBlocks * blockDim.x;          <span class="c">// 8 × 2 × 512 = 8192</span>
+<span class="f">allreduceMultimem</span>(gtn, gt, red, inputMC, outputMC, nElts);
+
+<span class="c">// all_reduce.cuh:459-470 — each warp takes chunks of 32 lanes × 8 packs × 16 B = 4 KiB</span>
+<span class="k">while</span> (0 &lt; nIters) {
+  <span class="k">for</span> (u...) tmp[u] = <span class="f">applyLoadMultimem</span>&lt;Red, 16&gt;(red, inputUptr + cursor + u*32*16);  <span class="c">// multimem.ld_reduce</span>
+  <span class="k">for</span> (u...) <span class="f">multimem_st_global</span>(outputUptr + cursor + u*32*16, tmp[u]);           <span class="c">// multimem.st</span>
+  cursor += gtn * 8 * 16;                                                         <span class="c">// skip what the other 8191 threads do</span>
+}</code></pre>
+<figure>
+<svg viewBox="0 0 1000 170" role="img" aria-label="How the symmetric kernel splits the buffer among GPUs">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">The whole buffer, cut into 4 KiB warp chunks, dealt out in turn</text>
+  <g font-size="10.5" text-anchor="middle">
+    <rect x="40" y="40" width="70" height="40" rx="4" class="b-lsa"/><text x="75" y="56">GPU0</text><text x="75" y="71" class="t-muted">c0 w0</text>
+    <rect x="112" y="40" width="70" height="40" rx="4" class="box"/><text x="147" y="56">GPU1</text><text x="147" y="71" class="t-muted">c0 w0</text>
+    <rect x="184" y="40" width="70" height="40" rx="4" class="box"/><text x="219" y="56">GPU2</text><text x="219" y="71" class="t-muted">c0 w0</text>
+    <rect x="256" y="40" width="70" height="40" rx="4" class="box"/><text x="291" y="56">…</text><text x="291" y="71" class="t-muted">c0 w0</text>
+    <rect x="328" y="40" width="70" height="40" rx="4" class="box"/><text x="363" y="56">GPU7</text><text x="363" y="71" class="t-muted">c0 w0</text>
+    <rect x="400" y="40" width="70" height="40" rx="4" class="b-lsa"/><text x="435" y="56">GPU0</text><text x="435" y="71" class="t-muted">c1 w0</text>
+    <rect x="472" y="40" width="70" height="40" rx="4" class="box"/><text x="507" y="56">GPU1</text><text x="507" y="71" class="t-muted">c1 w0</text>
+    <rect x="544" y="40" width="70" height="40" rx="4" class="box"/><text x="579" y="56">…</text><text x="579" y="71" class="t-muted">c1 w0</text>
+    <rect x="616" y="40" width="70" height="40" rx="4" class="box"/><text x="651" y="56">GPU7</text><text x="651" y="71" class="t-muted">c1 w0</text>
+    <rect x="688" y="40" width="70" height="40" rx="4" class="b-lsa"/><text x="723" y="56">GPU0</text><text x="723" y="71" class="t-muted">c0 w1</text>
+    <rect x="760" y="40" width="200" height="40" rx="4" class="box2"/><text x="860" y="64">… wrap</text>
+  </g>
+  <text x="40" y="104" font-size="12">Each thread: <tspan class="t-mono">ld_reduce</tspan> its chunk of the input (sum over 8 GPUs), then <tspan class="t-mono">st</tspan> the same chunk of the output (to 8 GPUs).</text>
+  <text x="40" y="122" font-size="12">So each GPU reduces and broadcasts exactly 1/8 of the buffer: reduce-scatter and all-gather in one loop ("RSxLDMC_AGxSTMC").</text>
+  <text x="40" y="144" font-size="12" class="t-muted">No step flags inside the loop: the load reads the user input directly, which is ready because of the barrier at the start.</text>
+</svg>
+<figcaption>Figure 6. The work split is done with thread numbers, not with a pipeline. <code>flattenIx</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/primitives.cuh#L74" target="_blank" rel="noopener" class="src" title="src/device/symmetric/primitives.cuh">primitives.cuh:74-84</a>) counts lane fastest, then rank, then CTA (c), then warp (w). So 4 KiB piece k goes to GPU <code>k mod 8</code>: GPUs 0–7 with CTA 0 warp 0, then GPUs 0–7 with CTA 1 warp 0, then CTA 0 warp 1, and so on. After all 8 × 2 × 16 = 256 warps, the pattern repeats 1 MiB further on.</figcaption>
+</figure>
+
+<h3 id="dev-sym-bar">7.3 The barrier at the start and the end</h3>
+<p>The kernel must not read another GPU's input before that GPU's previous work on it is done, and must not finish before every GPU has stored its share. It uses one barrier per CTA, built on multimem as well:</p>
+<div class="chain">
+<div class="title">Call chain: ncclLsaBarrierSession with multimem = true</div>
+<ul>
+<li><span class="fn">bar.sync(order)</span><span class="tag dev">device</span> = <span class="fn">arrive</span> + <span class="fn">wait</span> <span class="note">(<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/lsa_barrier__funcs.h#L165" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/lsa_barrier__funcs.h">lsa_barrier__funcs.h:165-168</a>)</span>
+  <ul>
+  <li><span class="fn">arrive</span>: thread 0 adds 1 to the barrier counter on every GPU at once: <code>multimem.red.release.sys.add.u32</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/lsa_barrier__funcs.h#L62" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/lsa_barrier__funcs.h">lsa_barrier__funcs.h:62</a><span class="tag ptx">ptx</span> <span class="note">(the <code>relaxed</code> form at :64 for the opening barrier)</span></li>
+  <li><span class="fn">wait</span>: thread 0 spins on a <b>local</b> read of its own counter until it has grown by 8 (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/lsa_barrier__funcs.h#L100" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/lsa_barrier__funcs.h">lsa_barrier__funcs.h:100</a>)</li>
+  </ul></li>
+</ul>
+</div>
+</section>
+
+<!-- ============================================================= -->
+<section id="compare">
+<h2><span class="num">8</span>Side by side</h2>
+<div class="tablewrap"><table>
+<thead><tr><th></th><th>NVLS</th><th>Symmetric multicast</th></tr></thead>
+<tbody>
+<tr><td>Selected by</td><td><code>NCCL_ALGO=NVLS</code>, buffers not in symmetric windows</td><td><code>NCCL_SYM_KERNEL=…</code>, both buffers in symmetric windows</td></tr>
+<tr><td>Multicast memory</td><td>NCCL's buffer: 16 channels × 8 heads × 2 slots × 8 steps × 128 KiB, bound on the first call (§4.1)</td><td>The user's buffer, bound at registration (§4.2)</td></tr>
+<tr><td>Kernel launched</td><td><code>ncclDevKernel_AllReduce_f32_RING</code> → function table entry 259</td><td><code>ncclSymkDevKernel_AllReduce_RSxLDMC_AGxSTMC_sum_f32</code></td></tr>
+<tr><td>CTAs × threads/CTA (8 GPUs)</td><td>16 × 640</td><td>2 × 512</td></tr>
+<tr><td>Who issues multimem data instructions</td><td>4 warps per CTA (the data warps of the reduce group)</td><td>all 16 warps per CTA</td></tr>
+<tr><td>Other work per byte</td><td>2 local copies (scatter in, gather out)</td><td>none</td></tr>
+<tr><td>Synchronisation</td><td>step flags per 128 KiB chunk; waits use <code>multimem.ld_reduce.min</code>, posts use a store to a multicast flag</td><td>one <code>multimem.red</code> barrier at start and one at end</td></tr>
+<tr><td>Data instructions</td><td colspan="2"><code>multimem.ld_reduce.relaxed.sys.global.add.v4.f32</code> + <code>multimem.st.global.v4.f32</code>, same code (<code>applyLoadMultimem</code>, <code>multimem_st_global</code>)</td></tr>
+<tr><td>NVLink bytes per payload byte (measured)</td><td colspan="2">1 + 1/N for both: the two local copies stay in the GPU's own memory</td></tr>
+</tbody></table></div>
+
+<h3 id="compare-warps">8.1 What the warps do while the kernel runs</h3>
+<p>The two kernels use their warps in very different ways. One NVLS CTA is three separate teams that talk through flags in memory; one symmetric CTA is a single team that runs one loop without stopping.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>One CTA</th><th>Teams</th><th>Who waits, on what</th><th>How the wait is done</th><th>Who posts</th><th>Barriers inside the data loop</th></tr></thead>
+<tbody>
+<tr><td rowspan="3">NVLS, 20 warps</td><td>Scatter, 8 warps (7 copy)</td><td>threads 0–7: is each of the 8 reduce slots free? (<code>head</code>)</td><td>plain volatile load of a local flag</td><td>threads 248–255 raise <code>tail</code> of the 8 slots (local store)</td><td rowspan="3">per slice, per team: wait → named barrier → copy → named barrier → post. Each team has its own hardware barrier (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L49" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:49-62</a>)</td></tr>
+<tr><td>Reduce, 5 warps (4 copy)</td><td>thread 0: has <b>every</b> GPU filled reduce slot h? thread 1: has <b>every</b> GPU emptied broadcast slot h?</td><td><code>multimem.ld_reduce.min</code> on a multicast flag (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L90" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:90</a>)</td><td>thread 159 raises <code>tail</code>, thread 158 raises <code>head</code>, each a store to a multicast flag (all GPUs)</td></tr>
+<tr><td>Gather, 7 warps (7 copy)</td><td>threads 0–7: is each of the 8 broadcast slots full? (<code>tail</code>)</td><td>plain volatile load of a local flag</td><td>threads 216–223 raise <code>head</code> (local store)</td></tr>
+<tr><td>Symmetric multicast, 16 warps</td><td>one team</td><td>only at the start and the end: thread 0 waits until all 8 GPUs arrived</td><td>local load of a counter that every GPU increments with <code>multimem.red</code></td><td>thread 0, once at start and once at end</td><td>none: each thread runs 8 × <code>ld_reduce</code>, 8 × <code>st</code>, jumps 1 MiB, repeats</td></tr>
+</tbody></table></div>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Timeline of warp activity in the two kernels">
+  <text x="20" y="24" font-weight="700" font-size="14">Time along one CTA (schematic, not to scale)</text>
+  <text x="20" y="56" font-size="12.5" font-weight="600" class="t-gin">NVLS</text>
+  <text x="20" y="84" font-size="12" class="t-muted">scatter</text>
+  <text x="20" y="114" font-size="12" class="t-muted">reduce</text>
+  <text x="20" y="144" font-size="12" class="t-muted">gather</text>
+  <g>
+    <rect x="110" y="72" width="40" height="18" rx="3" class="box2"/><rect x="152" y="72" width="90" height="18" rx="3" class="box"/><rect x="244" y="72" width="40" height="18" rx="3" class="box2"/><rect x="286" y="72" width="90" height="18" rx="3" class="box"/><rect x="378" y="72" width="40" height="18" rx="3" class="box2"/><rect x="420" y="72" width="90" height="18" rx="3" class="box"/><rect x="512" y="72" width="40" height="18" rx="3" class="box2"/><rect x="554" y="72" width="90" height="18" rx="3" class="box"/>
+    <rect x="200" y="102" width="50" height="18" rx="3" class="box2"/><rect x="252" y="102" width="80" height="18" rx="3" class="b-gin"/><rect x="334" y="102" width="50" height="18" rx="3" class="box2"/><rect x="386" y="102" width="80" height="18" rx="3" class="b-gin"/><rect x="468" y="102" width="50" height="18" rx="3" class="box2"/><rect x="520" y="102" width="80" height="18" rx="3" class="b-gin"/><rect x="602" y="102" width="50" height="18" rx="3" class="box2"/><rect x="654" y="102" width="80" height="18" rx="3" class="b-gin"/>
+    <rect x="300" y="132" width="40" height="18" rx="3" class="box2"/><rect x="342" y="132" width="90" height="18" rx="3" class="box"/><rect x="434" y="132" width="40" height="18" rx="3" class="box2"/><rect x="476" y="132" width="90" height="18" rx="3" class="box"/><rect x="568" y="132" width="40" height="18" rx="3" class="box2"/><rect x="610" y="132" width="90" height="18" rx="3" class="box"/><rect x="702" y="132" width="40" height="18" rx="3" class="box2"/><rect x="744" y="132" width="90" height="18" rx="3" class="box"/>
+  </g>
+  <text x="760" y="86" font-size="11" class="t-muted">…  8 slots in flight</text>
+  <text x="20" y="196" font-size="12.5" font-weight="600" class="t-lsa">Symmetric</text>
+  <text x="20" y="224" font-size="12" class="t-muted">all warps</text>
+  <rect x="110" y="212" width="40" height="18" rx="3" class="b-acc"/>
+  <rect x="152" y="212" width="740" height="18" rx="3" class="b-lsa"/>
+  <rect x="894" y="212" width="40" height="18" rx="3" class="b-acc"/>
+  <text x="522" y="225" text-anchor="middle" font-size="11">ld_reduce × 8, st × 8, next 1 MiB … no waits</text>
+  <g font-size="11">
+    <rect x="110" y="256" width="16" height="12" rx="2" class="box2"/><text x="132" y="266">wait on flags + barrier</text>
+    <rect x="290" y="256" width="16" height="12" rx="2" class="box"/><text x="312" y="266">plain copy</text>
+    <rect x="410" y="256" width="16" height="12" rx="2" class="b-gin"/><text x="432" y="266">multimem (NVLS reduce team)</text>
+    <rect x="600" y="256" width="16" height="12" rx="2" class="b-lsa"/><text x="622" y="266">multimem (symmetric)</text>
+    <rect x="790" y="256" width="16" height="12" rx="2" class="b-acc"/><text x="812" y="266">multimem.red barrier</text>
+  </g>
+</svg>
+<figcaption>Figure 7. In NVLS the three teams of one CTA form a pipeline: the reduce team can start a slot only after the scatter teams of <i>all</i> GPUs filled it, and the gather team only after the reduce team stored it. Every slice has two waits on flags and two team barriers. In the symmetric kernel the warps never wait for each other between the two barriers; each warp drifts at its own speed.</figcaption>
+</figure>
+
+</section>
+
+<!-- ============================================================= -->
+<section id="why">
+<h2><span class="num">9</span>Why the two designs differ</h2>
+<p>Both kernels issue the same two multimem instructions. They differ in everything around those instructions, because they were built for different jobs. In short: <b>NVLS pays at run time so the user pays nothing; the symmetric kernel makes the user pay once at setup so the run-time path is as short as possible.</b></p>
+
+<div class="grid2">
+<div class="card"><h5 class="t-gin-h">NVLS: accept any buffer, on one node or many</h5>
+<ul>
+<li><b>Any user buffer, no setup.</b> The switch only works on memory bound to a multicast object, and binding is a collective, page-aligned step. So NCCL binds <i>its own</i> 256 MiB buffer once and <b>copies</b> user data through it (scatter and gather teams).</li>
+<li><b>A fixed buffer is reused</b> (8 steps × 128 KiB per slot), so every step needs flow control: "filled" and "free" flags, checked across all GPUs with <code>multimem.ld_reduce.min</code>.</li>
+<li><b>Same code for many nodes.</b> It lives in NCCL's classic channel and <code>Primitives</code> framework, like Ring, and has a network branch where the sum goes to a network peer (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L458" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:458-521</a>). A step-by-step pipeline with flags is how NCCL feeds networks.</li>
+</ul></div>
+<div class="card"><h5 class="t-lsa-h">Symmetric multicast: fastest path inside one node</h5>
+<ul>
+<li><b>The user registers once.</b> Buffers come from <code>ncclMemAlloc</code> and are registered as windows, collectively. NCCL binds the <i>user's</i> buffer to the multicast range at that time (§4.2).</li>
+<li><b>No staging buffer, so no slots to reuse and no flow control.</b> The kernel only needs inputs to be ready before anyone reads, and every store to be done before anyone leaves: one barrier at each end.</li>
+<li><b>The price is on the user's side:</b> a collective registration step, allocation rules, one NVLink domain only, and no multicast with 2 GPUs (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/sym_kernels.cc#L194" target="_blank" rel="noopener" class="src" title="src/sym_kernels.cc">sym_kernels.cc:194-196</a>).</li>
+</ul></div>
+</div>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Where each design pays its costs: setup, init, every call, every step">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">Where each design pays</text>
+  <g font-size="12" font-weight="600" text-anchor="middle">
+    <text x="275" y="52">Application setup</text>
+    <text x="475" y="52">NCCL setup</text>
+    <text x="675" y="52">Every call</text>
+    <text x="875" y="52">Every 128 KiB step</text>
+  </g>
+  <text x="20" y="104" font-size="13" font-weight="700" class="t-gin">NVLS</text>
+  <text x="20" y="122" font-size="11" class="t-muted">-R 0</text>
+  <rect x="190" y="66" width="170" height="86" rx="8" class="box2"/>
+  <text x="275" y="113" text-anchor="middle" font-size="12" class="t-muted">nothing</text>
+  <rect x="390" y="66" width="170" height="86" rx="8" class="b-gin"/>
+  <text x="475" y="92" text-anchor="middle" font-size="11.5">multicast group (init)</text>
+  <text x="475" y="110" text-anchor="middle" font-size="11.5">256 MiB NCCL buffer,</text>
+  <text x="475" y="126" text-anchor="middle" font-size="11.5">bound on first call</text>
+  <rect x="590" y="66" width="170" height="86" rx="8" class="b-gin"/>
+  <text x="675" y="92" text-anchor="middle" font-size="11.5">copy in + copy out</text>
+  <text x="675" y="110" text-anchor="middle" font-size="11.5">fill and drain a</text>
+  <text x="675" y="126" text-anchor="middle" font-size="11.5">3-team pipeline</text>
+  <rect x="790" y="66" width="170" height="86" rx="8" class="b-gin"/>
+  <text x="875" y="92" text-anchor="middle" font-size="11.5">2 flag waits across</text>
+  <text x="875" y="110" text-anchor="middle" font-size="11.5">all GPUs, 2 team</text>
+  <text x="875" y="126" text-anchor="middle" font-size="11.5">barriers, flag posts</text>
+  <text x="20" y="214" font-size="13" font-weight="700" class="t-lsa">Symmetric</text>
+  <text x="20" y="232" font-size="11" class="t-muted">-R 2</text>
+  <rect x="190" y="176" width="170" height="86" rx="8" class="b-lsa"/>
+  <text x="275" y="202" text-anchor="middle" font-size="11.5">ncclMemAlloc +</text>
+  <text x="275" y="220" text-anchor="middle" font-size="11.5">ncclCommWindowRegister</text>
+  <text x="275" y="236" text-anchor="middle" font-size="11.5">(collective, binds user buffer)</text>
+  <rect x="390" y="176" width="170" height="86" rx="8" class="b-lsa"/>
+  <text x="475" y="210" text-anchor="middle" font-size="11.5">symmetric kernels and</text>
+  <text x="475" y="228" text-anchor="middle" font-size="11.5">device communicator</text>
+  <rect x="590" y="176" width="170" height="86" rx="8" class="b-lsa"/>
+  <text x="675" y="210" text-anchor="middle" font-size="11.5">2 barriers</text>
+  <text x="675" y="228" text-anchor="middle" font-size="11.5">(multimem.red)</text>
+  <rect x="790" y="176" width="170" height="86" rx="8" class="box2"/>
+  <text x="875" y="223" text-anchor="middle" font-size="12" class="t-muted">nothing</text>
+  <text x="500" y="290" text-anchor="middle" font-size="11.5" class="t-muted">Cost moves left for the symmetric kernel: paid once by the application, not on every call and every step.</text>
+</svg>
+<figcaption>Figure 8. The two designs put their fixed costs in different places. The columns on the right repeat many times per call, so a cost there grows with the number of calls and steps; a cost on the left is paid once per buffer.</figcaption>
+</figure>
+
+<h3 id="history">9.1 How the two paths arrived</h3>
+<p>The two paths come from different NCCL releases. The years follow the timeline note in the repo (<code>notes/nccl_nvls_development_timeline.md</code>); the version numbers were checked against NCCL's own documentation where stated.</p>
+<figure>
+<svg viewBox="0 0 1000 250" role="img" aria-label="Release history of classic NVLS and the symmetric kernels">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">NCCL releases that shaped the two paths</text>
+  <line x1="60" y1="130" x2="960" y2="130" class="ln"/>
+  <g font-size="12" text-anchor="middle" font-weight="600">
+    <circle cx="120" cy="130" r="6" class="f-gin"/><text x="120" y="152">2.17</text><text x="120" y="168" font-weight="400" class="t-muted">2023</text>
+    <circle cx="250" cy="130" r="6" class="f-gin"/><text x="250" y="152">2.18</text>
+    <circle cx="380" cy="130" r="6" class="f-gin"/><text x="380" y="152">2.19</text><text x="380" y="168" font-weight="400" class="t-muted">2023–2024</text>
+    <circle cx="640" cy="130" r="6" class="f-lsa"/><text x="640" y="152">2.27</text><text x="640" y="168" font-weight="400" class="t-muted">July 2025</text>
+    <circle cx="770" cy="130" r="6" class="f-lsa"/><text x="770" y="152">2.28</text><text x="770" y="168" font-weight="400" class="t-muted">2025</text>
+    <circle cx="900" cy="130" r="6" class="f-acc"/><text x="900" y="152">2.32.3</text><text x="900" y="168" font-weight="400" class="t-muted">this checkout</text>
+  </g>
+  <g font-size="11" text-anchor="middle">
+    <rect x="58" y="40" width="124" height="62" rx="8" class="b-gin"/><text x="120" y="60">NVLS algorithm,</text><text x="120" y="76">NCCL's own buffer,</text><text x="120" y="92">copies + flags</text>
+    <rect x="188" y="40" width="124" height="62" rx="8" class="b-gin"/><text x="250" y="60">NVLSTree:</text><text x="250" y="76">NVLS + IB SHARP,</text><text x="250" y="92">multi-node</text>
+    <rect x="318" y="40" width="124" height="62" rx="8" class="b-gin"/><text x="380" y="60">NVLS buffer</text><text x="380" y="76">registration:</text><text x="380" y="92">no copies</text>
+    <rect x="578" y="40" width="124" height="62" rx="8" class="b-lsa"/><text x="640" y="60">symmetric windows</text><text x="640" y="76">+ symmetric</text><text x="640" y="92">kernels</text>
+    <rect x="708" y="40" width="124" height="62" rx="8" class="b-lsa"/><text x="770" y="60">device API: LSA,</text><text x="770" y="76">multimem, GIN;</text><text x="770" y="92">kernels rebuilt</text>
+    <rect x="838" y="40" width="124" height="62" rx="8" class="b-acc"/><text x="900" y="60">all three paths;</text><text x="900" y="76">this page and</text><text x="900" y="92">the experiments</text>
+  </g>
+  <path d="M120 102 L120 122 M250 102 L250 122 M380 102 L380 122 M640 102 L640 122 M770 102 L770 122 M900 102 L900 122" class="ln"/>
+  <text x="250" y="206" text-anchor="middle" font-size="12" class="t-gin" font-weight="600">classic NVLS line</text>
+  <text x="705" y="206" text-anchor="middle" font-size="12" class="t-lsa" font-weight="600">symmetric-memory line</text>
+  <text x="500" y="232" text-anchor="middle" font-size="11.5" class="t-muted">Spacing is by release, not to scale in time. 2.18 year not stated in the note.</text>
+</svg>
+<figcaption>Figure 8b. Classic NVLS came first (2.17) and later gained multi-node variants (2.18) and buffer registration (2.19). The symmetric kernels arrived with the public symmetric-memory API (2.27) and were rebuilt on the device API (2.28). Version sources: <code>NCCL_ALGO</code> lists NVLS "2.17+" and NVLSTree "2.18+" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/userguide/source/env.rst#L1489" target="_blank" rel="noopener" class="src" title="docs/userguide/source/env.rst">env.rst:1489-1508</a>); NVLS buffer registration "since 2.19.x" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/userguide/source/usage/bufferreg.rst#L17" target="_blank" rel="noopener" class="src" title="docs/userguide/source/usage/bufferreg.rst">bufferreg.rst:17</a>); window registration "since 2.27" (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/docs/userguide/source/usage/bufferreg.rst#L172" target="_blank" rel="noopener" class="src" title="docs/userguide/source/usage/bufferreg.rst">bufferreg.rst:172</a>).</figcaption>
+</figure>
+<p><b>Three paths, not two.</b> Between the two kernels this page compares sits <b>registered classic NVLS</b> (§6.2): the classic pipeline without the copies. A comparison of "classic NVLS against symmetric kernel" therefore mixes two effects, the copies and the kernel design. Only the three-way test in §10.6 separates them.</p>
+</section>
+
+<!-- ============================================================= -->
+<section id="explain">
+<h2><span class="num">10</span>How the designs explain the measurements</h2>
+<p>The numbers in this section were measured on 8 H100 GPUs (GPUs 0–7) in the AllReduce scalability series (repo path <code>experiments/h100-scale/allreduce/scalability/</code>), with <code>float</code> sum. algBW = payload bytes per GPU ÷ time of one call. "Measured" marks a number from those runs; "from the code" marks something read in the source; the rest is reasoning and is marked as such.</p>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Observation (measured)</th><th>Design reason</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Symmetric multicast is at full speed with 2 CTAs; NVLS needs 16 (§10.1)</td><td>4 multimem-issuing warps per NVLS CTA, stopping every step; 16 in the symmetric CTA, never stopping</td><td>warp counts from the code; split of the remaining gap not measured</td></tr>
+<tr><td>NVLS is slow for small payloads; at 32 MiB it is no faster than Ring (§10.2)</td><td>fixed costs per call in the NVLS pipeline: fill, drain, cross-GPU flag waits</td><td>reasoning; not tested</td></tr>
+<tr><td>At 2 GiB the two are 2% apart, and both stop at 58–66% of the link rating (§10.3)</td><td>when the pipeline is full, copies and flags are hidden; both hit the same multimem ceiling</td><td>rates measured; the ceiling is not explained</td></tr>
+<tr><td>Same NVLink bytes per payload byte, 1 + 1/N (§10.3)</td><td>NVLS's copies stay in the GPU's own memory</td><td>measured</td></tr>
+<tr><td>NVLS moves about 3× more bytes in each GPU's own memory (§10.4)</td><td>copy in, copy out, slots read and written</td><td>estimate from byte counting; not measured</td></tr>
+<tr><td>NVLS is stable across GPU sets; the symmetric kernels are not (§10.5)</td><td>fixed internal buffer and layout vs the user's buffer and a rank-dependent split</td><td>plausible; not tested</td></tr>
+</tbody></table></div>
+
+<h3 id="explain-ctas">10.1 How many CTAs each kernel needs</h3>
+<div class="chartwrap" id="chartCtas" data-xlabel="CTAs requested (log scale)" data-unit="CTAs"></div>
+<p class="chartcap">Chart 9. algBW against CTAs requested, 8 GPUs, 2 GiB per GPU, median of 3 runs. Threads per CTA: NVLS 640, symmetric multicast 512. Hover a point for values. NCCL's own choice is 16 CTAs for NVLS and 2 for symmetric multicast.</p>
+<details><summary>Table view</summary><div class="tablewrap" id="tableCtas"></div></details>
+<ul>
+<li><b>Per CTA, the symmetric kernel moves about 6× more</b> (measured): 276.1 GB/s ÷ 2 CTAs = 138 GB/s per CTA, against about 22 GB/s per CTA for NVLS up to 4 CTAs (44.2 at 2, 87.7 at 4).</li>
+<li><b>Most of that gap is the number of warps issuing multimem</b> (from the code): 4 of 20 warps in an NVLS CTA (§6.2) against 16 of 16 in a symmetric CTA, a factor of 4.</li>
+<li><b>The rest is plausibly the per-step stops</b> (reasoning): every NVLS slice has two flag waits and two team barriers (§8.1), during which the data warps issue nothing. This split was not measured; per-warp stall reasons from <code>ncu</code> would show it.</li>
+<li><b>NVLS reaches full speed only by using many CTAs.</b> With 16 CTAs it has 64 issuing warps per GPU; the symmetric kernel needs 32.</li>
+</ul>
+
+<h3 id="explain-payload">10.2 Small payloads</h3>
+<div class="chartwrap" id="chartPayload" data-xlabel="Payload per GPU (log scale)" data-unit="bytes"></div>
+<p class="chartcap">Chart 10. algBW against payload per GPU, 8 GPUs, CTAs chosen by NCCL (NVLS 16 × 640, symmetric multicast 2 × 512, the same at every payload), median of 5 runs. Hover a point for values.</p>
+<details><summary>Table view</summary><div class="tablewrap" id="tablePayload"></div></details>
+<ul>
+<li><b>At 8 GPUs, classic NVLS leads Ring only from 128 MiB; symmetric multicast leads at every payload</b> (measured): NVLS ÷ Ring is 1.01 at 32 MiB (165.5 against 163.6 GB/s), 1.20 at 128 MiB and 1.31 at 8 GiB; symmetric multicast ÷ Ring is 1.52 at 32 MiB (248.1 GB/s) and 1.31 at 8 GiB. Across GPU counts, the GPU count decides first: both multimem arms gain on Ring as N grows, and at 2 GPUs NVLS loses at every payload (see the payload report, corrected 2026-11-18).</li>
+<li><b>Why</b> (reasoning): NVLS has fixed costs per call. The 3-team pipeline must fill before the reduce team starts and drain after it ends, and every step waits on flags from all 8 GPUs. At 32 MiB per GPU, each of the 16 channels handles only 2 MiB, so a few pipeline rounds must carry those costs. The symmetric kernel's fixed cost per call is two barriers.</li>
+<li><b>Why it matters for LLM work:</b> gradient buckets of about 25 MiB (PyTorch DDP default) fall in exactly the range where NVLS loses most.</li>
+<li><b>Test that would confirm it:</b> sweep <code>NCCL_NVLS_CHUNKSIZE</code> at 32–256 MiB. If fill, drain and per-step waits are the cost, the step size should move the small-payload rate.</li>
+</ul>
+
+<h3 id="explain-large">10.3 Large payloads: the same ceiling</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>8 GPUs, 2 GiB per GPU (measured)</th><th>NVLS, 16 × 640</th><th>Symmetric multicast, 2 × 512</th></tr></thead>
+<tbody>
+<tr><td>algBW, GB/s (5 runs, min–max)</td><td>270.3 (270.3–270.6)</td><td>276.2 (276.1–276.3)</td></tr>
+<tr><td>NVLink data bytes per payload byte, per GPU and direction</td><td>1.1253</td><td>1.1250</td></tr>
+<tr><td>Link rate in use (algBW × link bytes)</td><td>304 GB/s</td><td>311 GB/s</td></tr>
+<tr><td>Share of the 478 GB/s link rating</td><td>0.64</td><td>0.65</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Once the pipeline is full and there are enough CTAs, the NVLS overheads are hidden</b> (measured result, reasoning for the cause): the copies and flags run alongside the multimem traffic, and the two kernels end 2% apart.</li>
+<li><b>Both stop at the same place, well below the link rating.</b> The designs do not explain this, since both use the same instructions. The limit is somewhere in the multimem path itself: the switch's reduction, how requests are handled, or something else. It is an open question of the series.</li>
+<li><b>Link bytes are the same</b> because NVLS's extra copies never cross NVLink: both match 1 + 1/N to within 0.03%.</li>
+</ul>
+
+<h3 id="explain-hbm">10.4 A cost NVLS hides: traffic in each GPU's own memory</h3>
+<figure>
+<svg viewBox="0 0 1000 330" role="img" aria-label="Bytes each design moves in each GPU's own memory per payload byte">
+  <text x="500" y="22" text-anchor="middle" font-weight="700" font-size="14">Bytes in this GPU's own memory (HBM) per payload byte S</text>
+  <text x="20" y="62" font-size="13" font-weight="700" class="t-gin">NVLS</text>
+  <g font-size="11.5" text-anchor="middle">
+    <rect x="110" y="44" width="110" height="34" rx="6" class="box"/><text x="165" y="65">user input</text>
+    <rect x="330" y="44" width="120" height="34" rx="6" class="b-gin"/><text x="390" y="65">reduce slots</text>
+    <rect x="560" y="44" width="130" height="34" rx="6" class="b-gin"/><text x="625" y="65">broadcast slots</text>
+    <rect x="800" y="44" width="110" height="34" rx="6" class="box"/><text x="855" y="65">user output</text>
+  </g>
+  <g font-size="11" class="t-muted" text-anchor="middle">
+    <path d="M220 61 L326 61" class="ln-gin"/><polygon points="326,56 334,61 326,66" class="f-gin"/>
+    <text x="273" y="98">① scatter reads S</text><text x="273" y="113">② writes S</text>
+    <path d="M450 61 L556 61" class="ln-gin dash"/><polygon points="556,56 564,61 556,66" class="f-gin"/>
+    <text x="505" y="98">③ switch reads S</text><text x="505" y="113">④ switch writes S</text>
+    <path d="M690 61 L796 61" class="ln-gin"/><polygon points="796,56 804,61 796,66" class="f-gin"/>
+    <text x="745" y="98">⑤ gather reads S</text><text x="745" y="113">⑥ writes S</text>
+  </g>
+  <text x="20" y="168" font-size="13" font-weight="700" class="t-lsa">Symmetric</text>
+  <g font-size="11.5" text-anchor="middle">
+    <rect x="110" y="150" width="110" height="34" rx="6" class="box"/><text x="165" y="171">user input</text>
+    <rect x="800" y="150" width="110" height="34" rx="6" class="box"/><text x="855" y="171">user output</text>
+  </g>
+  <path d="M220 167 L796 167" class="ln-lsa dash"/><polygon points="796,162 804,167 796,172" class="f-lsa"/>
+  <text x="508" y="200" text-anchor="middle" font-size="11" class="t-muted">① switch reads S (ld_reduce)   ② switch writes S (st)</text>
+  <g>
+    <text x="20" y="248" font-size="12" font-weight="600">Estimated HBM rate at the measured algBW (H100 peak 3,350 GB/s):</text>
+    <rect x="110" y="262" width="800" height="16" rx="3" class="box2"/>
+    <rect x="110" y="262" width="387" height="16" rx="3" class="f-gin"/>
+    <text x="505" y="275" font-size="11.5">NVLS: 6 × 270.3 ≈ 1,620 GB/s (48% of peak)</text>
+    <rect x="110" y="290" width="800" height="16" rx="3" class="box2"/>
+    <rect x="110" y="290" width="132" height="16" rx="3" class="f-lsa"/>
+    <text x="250" y="303" font-size="11.5">Symmetric: 2 × 276.2 ≈ 550 GB/s (16% of peak)</text>
+  </g>
+</svg>
+<figcaption>Figure 11. Counting bytes, not measured. For each payload byte, NVLS reads and writes about 6 bytes in each GPU's own memory; the symmetric kernel about 2. The dashed steps are done by the NVSwitch through multimem. The real DRAM traffic may be lower, because the L2 cache (50 MB) can hold some slot data between the write and the read. The <code>ncu</code> DRAM-byte metric (C1 in the series registry) would measure it.</figcaption>
+</figure>
+<ul>
+<li><b>Alone, this cost is hidden:</b> half of the memory bandwidth is still free, and NVLS reaches the same ceiling as the symmetric kernel.</li>
+<li><b>Next to other work it may not be hidden</b> (reasoning, not tested): when a co-running kernel uses memory bandwidth, as in the memory co-runner experiments of this project, NVLS competes for about three times as many bytes as the symmetric kernel.</li>
+</ul>
+
+<h3 id="explain-stability">10.5 Stability across GPUs, and the 2-GPU case</h3>
+<ul>
+<li><b>NVLS is stable</b> (measured): busBW 302–310 GB/s from 2 to 8 GPUs; changing the GPU set at 2, 4 or 6 GPUs moves it by at most 0.8%.</li>
+<li><b>The symmetric kernels are not</b> (measured): at 6 GPUs, symmetric multicast varies by 6.7% between four GPU sets and plain load/store by 14%; in the payload sweep, where buffers are sized for 8 GiB, they differ by up to 3% from fixed-size runs. Splitting 2 GiB evenly over 6 GPUs changes nothing.</li>
+<li><b>A plausible design link</b> (not tested): NVLS always works on its own buffer with a fixed 128 KiB-per-slot layout. The symmetric kernel works on the user's buffer and hands 4 KiB pieces to GPUs in turn, piece k to GPU k mod N (§7.2), so which addresses each GPU touches depends on the rank count and on where the buffer lies.</li>
+<li><b>At 2 GPUs</b>, NVLS is slower than Ring (206.5 against 339.5 GB/s, measured). This is the algorithm, not the warps: with 2 GPUs, multimem AllReduce moves 1.5 link bytes per payload byte and Ring 1.0, as the link counters confirmed. Symmetric multicast does not exist at 2 GPUs.</li>
+</ul>
+
+<h3 id="explain-tests">10.6 Tests that would turn the reasoning into results</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Test</th><th>What it separates</th><th>How</th></tr></thead>
+<tbody>
+<tr><td><b>Three-way comparison:</b> classic NVLS unregistered, classic NVLS registered, symmetric kernel; 4 and 8 GPUs; 32 MiB to 2 GiB</td><td>the cost of the copies and the low warp count (unregistered vs registered NVLS) from the cost of the per-step flags (registered NVLS vs symmetric kernel)</td><td>registered NVLS: <code>NCCL_ALGO=NVLS</code>, <code>-R 1</code> (<code>ncclCommRegister</code>), and <code>NCCL_SINGLE_PROC_MEM_REG_ENABLE=1</code>, because NCCL turns NVLS registration off when one process drives all GPUs (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/init.cc#L1342" target="_blank" rel="noopener" class="src" title="src/init.cc">init.cc:1342-1355</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/group.cc#L680" target="_blank" rel="noopener" class="src" title="src/group.cc">group.cc:680</a>). Each run must show <code>NVLS UB registered</code> in the log, not <code>fell back for</code> (<a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls_ub.cc#L510" target="_blank" rel="noopener" class="src" title="src/transport/nvls_ub.cc">nvls_ub.cc:510-512</a>). Planned as plan 05 of the scalability series</td></tr>
+<tr><td><code>NCCL_NVLS_CHUNKSIZE</code> sweep at 32–256 MiB</td><td>whether pipeline fill, drain and per-step waits cause the small-payload loss</td><td>same harness, one more environment variable</td></tr>
+<tr><td>One <code>ncu</code> pass per arm</td><td>real DRAM bytes (Figure 11) and per-warp stall reasons (Chart 9)</td><td>separate profiler runs after timing runs, as the series rules require</td></tr>
+<tr><td>Symmetric kernels on more 6-GPU sets and buffer offsets</td><td>placement effect vs rank-count effect</td><td>vary the GPU set and the window offset with a fixed payload</td></tr>
+</tbody></table></div>
+
+<div class="callout"><b>Limits of this walkthrough</b>The chains follow the default settings listed at the top. Other settings take other branches: <code>NCCL_ENQUEUE_REARCH_ENABLE=1</code> (different scheduler files), <code>NCCL_RUNTIME_CONNECT=0</code> (NVLS buffers bound at init), more than one node (the NVLS network branch in <code>all_reduce.h</code>), or a toolkit older than CUDA 12.6 (the barrier falls back to unicast). Kernel-table numbers (259, 261) come from the generated files of the 2026-10-05 build.</div>
+</section>
+
+
+<!-- ============================================================= -->
+<section id="ref">
+<h2><span class="num">11</span>Quick reference</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Step</th><th>NVLS</th><th>Symmetric multicast</th></tr></thead>
+<tbody>
+<tr><td>User call</td><td colspan="2"><code>ncclAllReduce</code> <span class="src ext" title="nccl-tests src/all_reduce.cu">all_reduce.cu:507</span> inside <code>ncclGroupStart/End</code> <span class="src ext" title="nccl-tests src/common.cu">common.cu:563</span> / <span class="src ext" title="nccl-tests src/common.cu">common.cu:645</span></td></tr>
+<tr><td>Multicast object</td><td><code>cuMulticastCreate</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L27" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:27</a> via <code>ncclNvlsSetup</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/nvls.cc#L370" target="_blank" rel="noopener" class="src" title="src/transport/nvls.cc">nvls.cc:370</a></td><td><code>cuMulticastCreate</code> via <code>symTeamObtain</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L503" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:503</a></td></tr>
+<tr><td>Memory bound</td><td><code>cuMulticastBindMem</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/transport/multicast.cc#L214" target="_blank" rel="noopener" class="src" title="src/transport/multicast.cc">multicast.cc:214</a> (NCCL buffer)</td><td><code>cuMulticastBindAddr</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/dev_runtime.cc#L432" target="_blank" rel="noopener" class="src" title="src/dev_runtime.cc">dev_runtime.cc:432</a> (user buffer)</td></tr>
+<tr><td>Path chosen</td><td><code>ncclGetAlgoInfo</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L514" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:514</a></td><td><code>ncclMakeSymmetricTaskList</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L473" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:473</a></td></tr>
+<tr><td>CTAs, threads</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning_general.cc#L162" target="_blank" rel="noopener" class="src" title="src/tuning/tuning_general.cc">tuning_general.cc:162</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/tuning_general.cc#L94" target="_blank" rel="noopener" class="src" title="src/tuning/tuning_general.cc">tuning_general.cc:94-95</a></td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model/lsa.cc#L48" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model/lsa.cc">lsa.cc:48</a>, <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/tuning/sym_model.cc#L94" target="_blank" rel="noopener" class="src" title="src/tuning/sym_model.cc">sym_model.cc:94-95</a></td></tr>
+<tr><td>Kernel function</td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L905" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:905</a></td><td><a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/scheduler/symmetric_sched.cc#L304" target="_blank" rel="noopener" class="src" title="src/scheduler/symmetric_sched.cc">symmetric_sched.cc:304</a></td></tr>
+<tr><td>Launch</td><td colspan="2"><code>cuLaunchKernelEx</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/enqueue/enqueue.cc#L1992" target="_blank" rel="noopener" class="src" title="src/enqueue/enqueue.cc">enqueue.cc:1992</a></td></tr>
+<tr><td>Kernel body</td><td><code>RunWorkColl&lt;…NVLS, SIMPLE&gt;::run</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L390" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:390</a></td><td><code>ncclSymkRun_AllReduce_RSxLDMC_AGxSTMC</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L487" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:487</a></td></tr>
+<tr><td>Multimem request</td><td><code>ProtoSimple&lt;…,1,1&gt;</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/all_reduce.h#L443" target="_blank" rel="noopener" class="src" title="src/device/all_reduce.h">all_reduce.h:443</a> → <code>reduceCopy</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L266" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:266</a></td><td><code>allreduceMultimem</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/symmetric/all_reduce.cuh#L438" target="_blank" rel="noopener" class="src" title="src/device/symmetric/all_reduce.cuh">all_reduce.cuh:438</a></td></tr>
+<tr><td>Load-reduce</td><td colspan="2"><code>applyLoadMultimem</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L216" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:216</a> → PTX <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/reduce_kernel.h#L1172" target="_blank" rel="noopener" class="src" title="src/device/reduce_kernel.h">reduce_kernel.h:1172</a></td></tr>
+<tr><td>Store</td><td colspan="2"><code>multimem_st_global</code> <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L436" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:436</a> → PTX <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/op128.h#L437" target="_blank" rel="noopener" class="src" title="src/device/op128.h">op128.h:437</a></td></tr>
+<tr><td>Synchronisation</td><td><code>multimem.ld_reduce.min</code> poll <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L90" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:90</a>, post <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/device/prims_simple.h#L173" target="_blank" rel="noopener" class="src" title="src/device/prims_simple.h">prims_simple.h:173</a></td><td><code>multimem.red</code> barrier <a href="https://github.com/NVIDIA/nccl/blob/v2.32.3-1/src/include/nccl_device/impl/lsa_barrier__funcs.h#L62" target="_blank" rel="noopener" class="src" title="src/include/nccl_device/impl/lsa_barrier__funcs.h">lsa_barrier__funcs.h:62</a></td></tr>
+</tbody></table></div>
+<p style="color:var(--muted);font-size:14px;margin-top:28px">Written 2026-11-17 from the source at commit <code>b2f274f8</code> (NCCL 2.32.3-1 plus local edits to <code>src/device/all_reduce.h</code>) and nccl-tests <code>afd59ab</code>. Companion note: <a href="nccl_device_api_walkthrough.html">NCCL Device API walkthrough</a>.</p>
+</section>
+</main>
+</div>
+<script id="charts">
+// Line charts for §10, drawn from the measured medians of the scalability series (8 GPUs).
+(function () {
+  var ARMS = [
+    { key: 'nvls', name: 'NVLS', cls: 'gin', marker: 'circle' },
+    { key: 'sym', name: 'Symmetric multicast', cls: 'lsa', marker: 'square' }
+  ];
+  var DATA = {
+    chartCtas: {
+      xs: [2, 4, 8, 16, 24, 32, 48, 64],
+      fmt: function (x) { return String(x); },
+      nvls: [44.18, 87.70, 163.34, 270.44, 271.13, 271.71, 269.32, 272.04],
+      sym: [276.09, 274.38, 276.63, 276.79, 276.16, 275.09, 274.13, 274.47],
+      marks: { nvls: 16, sym: 2 }
+    },
+    chartPayload: {
+      xs: [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192],
+      fmt: function (x) { return x >= 1024 ? (x / 1024) + ' GiB' : x + ' MiB'; },
+      nvls: [165.52, 205.58, 228.66, 241.48, 249.91, 266.61, 270.28, 272.83, 274.43],
+      sym: [248.13, 260.16, 265.75, 269.61, 271.67, 273.12, 274.54, 275.29, 275.66]
+    }
+  };
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs, parent) {
+    var node = document.createElementNS(NS, name);
+    for (var k in attrs) node.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+  function draw(id) {
+    var host = document.getElementById(id);
+    if (!host) return;
+    var d = DATA[id];
+    var width = 800, height = 330, left = 58, right = 200, top = 18, bottom = 52;
+    var plotW = width - left - right, plotH = height - top - bottom;
+    var yMax = 300;
+    var lx = d.xs.map(function (x) { return Math.log2(x); });
+    var x0 = lx[0], x1 = lx[lx.length - 1];
+    function px(i) { return left + (lx[i] - x0) / (x1 - x0) * plotW; }
+    function py(v) { return top + plotH - v / yMax * plotH; }
+    var svg = el('svg', { viewBox: '0 0 ' + width + ' ' + height, role: 'img', 'class': 'chart',
+      'aria-label': host.getAttribute('data-xlabel') + ' against algBW for NVLS and symmetric multicast' }, host);
+    for (var v = 0; v <= yMax; v += 50) {
+      el('line', { x1: left, x2: left + plotW, y1: py(v), y2: py(v), 'class': v === 0 ? 'axis' : 'grid' }, svg);
+      var t = el('text', { x: left - 8, y: py(v) + 4, 'text-anchor': 'end', 'class': 'tick' }, svg);
+      t.textContent = v;
+    }
+    d.xs.forEach(function (x, i) {
+      var t = el('text', { x: px(i), y: top + plotH + 18, 'text-anchor': 'middle', 'class': 'tick' }, svg);
+      t.textContent = d.fmt(x);
+    });
+    var xl = el('text', { x: left + plotW / 2, y: height - 10, 'text-anchor': 'middle', 'class': 'axlabel' }, svg);
+    xl.textContent = host.getAttribute('data-xlabel');
+    var yl = el('text', { x: 14, y: top + plotH / 2, 'text-anchor': 'middle', 'class': 'axlabel',
+      transform: 'rotate(-90 14 ' + (top + plotH / 2) + ')' }, svg);
+    yl.textContent = 'algBW, GB/s';
+    ARMS.forEach(function (arm) {
+      var pts = d[arm.key].map(function (v, i) { return px(i) + ',' + py(v); }).join(' ');
+      el('polyline', { points: pts, 'class': 'series s-' + arm.cls }, svg);
+      d[arm.key].forEach(function (v, i) {
+        var big = d.marks && d.marks[arm.key] === d.xs[i];
+        if (arm.marker === 'circle') el('circle', { cx: px(i), cy: py(v), r: big ? 6 : 4, 'class': 'pt s-' + arm.cls + (big ? ' chosen' : '') }, svg);
+        else { var r = big ? 6 : 4; el('rect', { x: px(i) - r, y: py(v) - r, width: 2 * r, height: 2 * r, rx: 1.5, 'class': 'pt s-' + arm.cls + (big ? ' chosen' : '') }, svg); }
+      });
+      var last = d[arm.key].length - 1;
+      var label = el('text', { x: px(last) + 12, y: py(d[arm.key][last]) + (arm.key === 'nvls' ? 14 : -6), 'class': 'direct' }, svg);
+      label.textContent = arm.name;
+    });
+    // legend
+    var lg = el('g', { 'class': 'legend' }, svg);
+    ARMS.forEach(function (arm, k) {
+      var y = top + 160 + k * 22, x = left + plotW + 16;
+      el('line', { x1: x, x2: x + 18, y1: y, y2: y, 'class': 'series s-' + arm.cls }, lg);
+      if (arm.marker === 'circle') el('circle', { cx: x + 9, cy: y, r: 4, 'class': 'pt s-' + arm.cls }, lg);
+      else el('rect', { x: x + 5, y: y - 4, width: 8, height: 8, rx: 1.5, 'class': 'pt s-' + arm.cls }, lg);
+      var t = el('text', { x: x + 24, y: y + 4, 'class': 'tick' }, lg);
+      t.textContent = arm.name;
+    });
+    if (d.marks) {
+      var y = top + 160 + 2 * 22 + 4, x = left + plotW + 16;
+      el('circle', { cx: x + 9, cy: y, r: 6, 'class': 'pt chosen-key' }, lg);
+      var t = el('text', { x: x + 24, y: y + 4, 'class': 'tick' }, lg);
+      t.textContent = "NCCL's choice";
+    }
+    // hover layer: crosshair + readout for the nearest x
+    var cross = el('line', { y1: top, y2: top + plotH, 'class': 'cross', visibility: 'hidden' }, svg);
+    var tip = document.createElement('div');
+    tip.className = 'chart-tip';
+    tip.hidden = true;
+    host.appendChild(tip);
+    var hit = el('rect', { x: left, y: top, width: plotW, height: plotH, 'class': 'hit', tabindex: 0 }, svg);
+    var current = -1;
+    function show(i) {
+      current = i;
+      cross.setAttribute('x1', px(i));
+      cross.setAttribute('x2', px(i));
+      cross.setAttribute('visibility', 'visible');
+      tip.innerHTML = '<b>' + d.fmt(d.xs[i]) + (id === 'chartCtas' ? ' CTAs' : ' per GPU') + '</b>' +
+        ARMS.map(function (a) { return '<div><span class="sw s-' + a.cls + '"></span>' + a.name + ': ' + d[a.key][i].toFixed(1) + ' GB/s</div>'; }).join('');
+      tip.hidden = false;
+      var box = svg.getBoundingClientRect(), scale = box.width / width;
+      var tx = px(i) * scale + 12;
+      if (tx + 220 > box.width) tx = px(i) * scale - 232;
+      tip.style.left = Math.max(0, tx) + 'px';
+      tip.style.top = (top * scale + 8) + 'px';
+    }
+    function hide() { cross.setAttribute('visibility', 'hidden'); tip.hidden = true; current = -1; }
+    function nearest(evt) {
+      var box = svg.getBoundingClientRect(), scale = box.width / width;
+      var mx = (evt.clientX - box.left) / scale, best = 0;
+      for (var i = 1; i < d.xs.length; i++) if (Math.abs(px(i) - mx) < Math.abs(px(best) - mx)) best = i;
+      return best;
+    }
+    hit.addEventListener('pointermove', function (e) { show(nearest(e)); });
+    hit.addEventListener('pointerleave', hide);
+    hit.addEventListener('focus', function () { show(current < 0 ? 0 : current); });
+    hit.addEventListener('blur', hide);
+    hit.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { show(Math.min(d.xs.length - 1, current + 1)); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { show(Math.max(0, current - 1)); e.preventDefault(); }
+    });
+    // table view
+    var tableHost = document.getElementById(id === 'chartCtas' ? 'tableCtas' : 'tablePayload');
+    if (tableHost) {
+      var head = id === 'chartCtas' ? 'CTAs requested' : 'Payload per GPU';
+      var html = '<table><thead><tr><th>' + head + '</th>' + ARMS.map(function (a) { return '<th>' + a.name + ', algBW GB/s</th>'; }).join('') + '</tr></thead><tbody>';
+      d.xs.forEach(function (x, i) { html += '<tr><td>' + d.fmt(x) + '</td>' + ARMS.map(function (a) { return '<td class="num">' + d[a.key][i].toFixed(2) + '</td>'; }).join('') + '</tr>'; });
+      tableHost.innerHTML = html + '</tbody></table>';
+    }
+  }
+  draw('chartCtas');
+  draw('chartPayload');
+})();
+</script>
+<script id="theme-toggle">
+(function () {
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('nccl-devapi-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('nccl-devapi-theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

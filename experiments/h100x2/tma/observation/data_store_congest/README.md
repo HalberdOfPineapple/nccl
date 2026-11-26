@@ -80,6 +80,21 @@ Co-runner (the pressure):
 | **Co-runner change** | During the copy ÷ alone − 1. Negative = the copy slowed the co-runner |
 | **Slowest ÷ fastest CTA** | Rate of the slowest co-runner CTA ÷ rate of the fastest. 1 = all CTAs got the same share; below 0.95 = uneven |
 | **Coverage** (A8) | Every co-runner CTA must be active from before the copy starts until after it ends; runs that fail are rejected |
+| **Co-runner footprint** | Where the writer stores go. The co-runner buffer is 1 GiB of local global memory. Each writer CTA owns one slice of 1 GiB ÷ (writer CTAs). It writes 64 KiB chunks forward through its slice and wraps around to the slice start. A **pass** is one full sweep over the slice. The source of a TMA store writer is one private 64 KiB chunk in its own CTA's shared memory, filled once per launch, and every chunk in flight reads it. A colocated writer's chunk is placed after the copy's staging slots, so the copy and the writer never share shared-memory bytes. The thread-store writer stores from registers and uses no shared memory |
+
+Co-runner footprint per launch, from the per-writer chunk counts in the raw records (active launches only):
+
+| Test | Writer CTAs | Slice per writer CTA | Data stored per launch | Distinct bytes written | Passes over the slice (median / max) |
+|---|---|---|---|---|---|
+| TMA writes on other SMs of the source GPU; TMA writes on the destination GPU; the TMA-writer arm of TMA reads instead of TMA writes; Thread-store writer instead of TMA store writer (both writer kinds) | 64 | 16 MiB | 3.6 – 18 GiB | 1 GiB | about 11 / 18 |
+| More requests in flight, writer on the destination | 64 or 105 | 16 or 9.8 MiB | 15.5 – 17.6 GiB | 1 GiB | 22 / 36 |
+| TMA writes from the same SMs as the push (and its 16-other-SM arm) | 16 | 64 MiB | 1.0 – 4.5 GiB | about 1 GiB | 2–3 / 4.8 |
+| Writes from the same SMs at low rates: TMA and thread stores (both writer kinds) | 16 | 64 MiB | 40 MiB – 5 GiB | 40 MiB – 1 GiB | 0.41 / 5.8 |
+
+How to read the footprint:
+
+- **Rewrites are far apart.** When a writer returns to an address, the writers together have written about 1 GiB of other data since its last visit. That is about 20 times the 50 MB L2, so the rewrite is not a hit on a line that is still in L2. Each launch also writes a new data pattern.
+- **Exception: the lowest levels of the low-rate same-SM test.** There, one launch writes only about 40 MiB in total, less than the L2 size. Those writes may stay in L2 as dirty lines and never reach HBM during the launch, so do not read those levels as HBM write pressure.
 
 ## Setup shared by all sections
 

@@ -1,0 +1,49 @@
+{
+ "rounds": 5,
+ "cells": [
+  {
+   "id": "n6_ring_auto",
+   "arm": "ring",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n6_nvls_auto",
+   "arm": "nvls",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n6_sym_multicast_auto",
+   "arm": "sym_multicast",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n6_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n6_sym_plain_c16",
+   "arm": "sym_plain",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 16
+  },
+  {
+   "id": "n6_sym_plain_c48",
+   "arm": "sym_plain",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 48
+  }
+ ]
+}

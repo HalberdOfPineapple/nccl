@@ -1,0 +1,487 @@
+cell_id,arm,gpu_count,devices,requested_ctas,ctas_used,threads_per_cta,size_bytes,runs,algbw_median_gbps,algbw_min_gbps,algbw_max_gbps,in_place_algbw_median_gbps,bus_factor,busbw_median_gbps,collective
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),33554432,5,259.37,256.58,261.14,259.0,1.0,259.37,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),33554432,5,276.01,266.22,278.19,277.92,1.0,276.01,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),67108864,5,291.22,288.68,291.72,292.38,1.0,291.22,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),67108864,5,302.93,300.98,304.97,302.37,1.0,302.93,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),134217728,5,305.92,304.47,307.82,308.94,1.0,305.92,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),134217728,5,335.07,333.95,335.44,334.79,1.0,335.07,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),268435456,5,313.24,312.22,314.88,314.29,1.0,313.24,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),268435456,5,352.91,352.34,353.35,353.54,1.0,352.91,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),536870912,5,320.23,320.02,321.15,319.81,1.0,320.23,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),536870912,5,361.81,361.01,362.21,361.85,1.0,361.81,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),1073741824,5,323.42,322.73,325.23,324.59,1.0,323.42,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),1073741824,5,362.55,362.36,363.12,362.66,1.0,362.55,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),2147483648,5,325.56,324.93,326.38,324.89,1.0,325.56,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),2147483648,5,366.78,366.05,366.84,366.48,1.0,366.78,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),4294967296,5,327.11,324.21,327.63,326.44,1.0,327.11,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),4294967296,5,368.37,367.99,369.0,368.58,1.0,368.37,allgather
+payload_n2_allgather_nvls_auto,nvls,2,"4,5",auto,16,640 (code),8589934592,5,326.22,324.71,326.93,327.3,1.0,326.22,allgather
+payload_n2_allgather_nvls_c64,nvls,2,"4,5",64,64,640 (code),8589934592,5,370.1,369.65,370.19,369.57,1.0,370.1,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),33554432,5,353.86,352.39,355.97,374.09,0.5,176.93,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),33554432,5,392.63,281.04,395.77,409.75,0.5,196.31,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),67108864,5,416.78,415.16,419.65,434.06,0.5,208.39,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),67108864,5,477.36,476.61,477.55,492.96,0.5,238.68,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),134217728,5,456.01,454.76,457.17,478.62,0.5,228.0,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),134217728,5,544.55,542.22,544.91,555.81,0.5,272.27,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),268435456,5,486.19,484.6,486.47,510.16,0.5,243.09,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),268435456,5,588.54,588.03,588.71,596.91,0.5,294.27,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),536870912,5,508.12,506.62,511.62,547.3,0.5,254.06,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),536870912,5,657.99,657.24,658.4,662.69,0.5,329.0,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),1073741824,5,536.9,533.61,541.88,580.68,0.5,268.45,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),1073741824,5,677.66,676.29,678.09,690.14,0.5,338.83,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),2147483648,5,558.37,545.94,576.64,599.09,0.5,279.19,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),2147483648,5,698.58,698.04,699.79,709.15,0.5,349.29,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),4294967296,5,581.44,563.34,602.57,621.15,0.5,290.72,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),4294967296,5,707.91,705.94,709.54,718.35,0.5,353.95,allgather
+payload_n2_allgather_ring_auto,ring,2,"4,5",auto,24,512 (code),8589934592,5,585.0,583.45,594.28,622.33,0.5,292.5,allgather
+payload_n2_allgather_ring_c64,ring,2,"4,5",64,64,512 (code),8589934592,5,716.4,713.88,718.18,725.42,0.5,358.2,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,33554432,5,424.52,423.83,426.23,492.44,0.5,212.26,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,33554432,5,572.08,571.58,575.85,596.71,0.5,286.04,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,67108864,5,464.71,464.02,466.04,528.01,0.5,232.35,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,67108864,5,643.43,642.26,648.13,654.04,0.5,321.71,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,134217728,5,490.43,488.52,491.28,554.08,0.5,245.22,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,134217728,5,687.05,684.86,688.68,693.29,0.5,343.52,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,268435456,5,502.86,500.58,503.57,567.01,0.5,251.43,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,268435456,5,709.43,699.66,710.49,715.53,0.5,354.71,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,536870912,5,511.17,507.67,511.32,573.4,0.5,255.59,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,536870912,5,721.87,721.18,722.11,726.87,0.5,360.94,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,1073741824,5,514.87,511.49,515.01,576.56,0.5,257.44,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,1073741824,5,727.44,726.91,727.93,732.99,0.5,363.72,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,2147483648,5,516.97,513.26,517.01,578.3,0.5,258.49,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,2147483648,5,732.15,731.65,732.46,735.18,0.5,366.07,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,4294967296,5,517.35,514.22,517.91,578.84,0.5,258.68,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,4294967296,5,732.56,732.5,732.81,736.5,0.5,366.28,allgather
+payload_n2_allgather_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,8589934592,5,518.22,514.84,518.48,578.87,0.5,259.11,allgather
+payload_n2_allgather_sym_plain_c32,sym_plain,2,"4,5",32,32,512,8589934592,5,735.61,735.59,735.98,736.92,0.5,367.81,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),33554432,5,237.67,236.45,240.62,238.66,1.0,237.67,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),33554432,5,248.29,247.0,248.51,247.98,1.0,248.29,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),67108864,5,273.22,271.34,274.24,272.14,1.0,273.22,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),67108864,5,299.89,298.1,300.53,300.43,1.0,299.89,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),134217728,5,305.5,304.4,307.19,303.9,1.0,305.5,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),134217728,5,315.2,314.01,315.32,314.66,1.0,315.2,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),268435456,5,324.71,323.87,326.05,325.46,1.0,324.71,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),268435456,5,345.82,345.74,346.27,346.53,1.0,345.82,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),536870912,5,345.98,343.43,346.71,346.26,1.0,345.98,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),536870912,5,356.85,356.41,357.29,356.64,1.0,356.85,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),1073741824,5,357.8,357.34,358.2,358.06,1.0,357.8,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),1073741824,5,363.12,362.95,363.21,363.09,1.0,363.12,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),2147483648,5,361.64,361.05,362.94,361.58,1.0,361.64,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),2147483648,5,365.11,364.56,365.18,365.02,1.0,365.11,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),4294967296,5,363.44,362.71,364.86,363.42,1.0,363.44,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),4294967296,5,367.05,366.61,367.26,366.94,1.0,367.05,allgather
+payload_n4_allgather_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),8589934592,5,363.67,362.15,366.42,364.42,1.0,363.67,allgather
+payload_n4_allgather_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),8589934592,5,368.2,367.26,368.4,368.34,1.0,368.2,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),33554432,5,303.78,300.58,305.55,311.09,0.75,227.83,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),33554432,5,324.46,323.59,325.73,328.37,0.75,243.34,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),67108864,5,346.4,343.89,347.6,347.39,0.75,259.8,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),67108864,5,380.98,380.53,381.95,382.57,0.75,285.74,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),134217728,5,380.4,379.31,383.94,381.89,0.75,285.3,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),134217728,5,417.76,416.6,418.12,416.72,0.75,313.32,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),268435456,5,404.51,403.65,404.66,410.27,0.75,303.38,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),268435456,5,440.26,439.55,440.91,440.54,0.75,330.19,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),536870912,5,421.96,420.98,422.07,427.95,0.75,316.47,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),536870912,5,453.42,453.23,453.66,453.42,0.75,340.06,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),1073741824,5,433.58,432.64,436.45,444.1,0.75,325.19,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),1073741824,5,472.24,471.0,472.47,472.13,0.75,354.18,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),2147483648,5,442.33,440.4,444.09,458.96,0.75,331.75,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),2147483648,5,479.77,479.23,480.08,480.55,0.75,359.83,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),4294967296,5,450.9,450.2,456.66,467.93,0.75,338.17,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),4294967296,5,486.76,486.39,486.97,486.75,0.75,365.07,allgather
+payload_n4_allgather_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),8589934592,5,458.27,453.35,465.06,475.57,0.75,343.7,allgather
+payload_n4_allgather_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),8589934592,5,489.81,488.93,490.09,490.28,0.75,367.36,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,33554432,5,334.42,333.9,334.74,337.2,1.0,334.42,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,67108864,5,352.46,352.07,352.71,352.35,1.0,352.46,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,134217728,5,362.42,362.3,362.75,362.39,1.0,362.42,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,268435456,5,367.44,367.28,367.67,367.56,1.0,367.44,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,536870912,5,370.16,370.11,370.49,370.13,1.0,370.16,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,1073741824,5,371.79,371.76,371.88,371.94,1.0,371.79,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,2147483648,5,372.02,371.9,372.04,372.18,1.0,372.02,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,4294967296,5,373.04,372.95,373.14,373.06,1.0,373.04,allgather
+payload_n4_allgather_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,8589934592,5,373.55,373.1,373.61,373.64,1.0,373.55,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,33554432,5,347.94,346.76,349.37,348.45,0.75,260.95,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,33554432,5,385.15,379.7,387.87,408.82,0.75,288.86,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,67108864,5,376.52,373.74,377.25,371.49,0.75,282.39,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,67108864,5,430.66,429.64,432.95,434.2,0.75,323.0,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,134217728,5,387.98,386.77,389.16,381.99,0.75,290.99,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,134217728,5,451.19,449.24,451.65,455.9,0.75,338.39,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,268435456,5,393.32,392.16,395.92,389.13,0.75,294.99,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,268435456,5,462.57,462.47,463.22,465.01,0.75,346.93,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,536870912,5,394.93,392.78,396.02,391.95,0.75,296.2,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,536870912,5,466.57,464.55,466.87,468.28,0.75,349.93,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,1073741824,5,394.33,392.34,395.18,394.05,0.75,295.75,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,1073741824,5,467.85,467.73,468.1,469.79,0.75,350.89,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,2147483648,5,393.83,392.13,394.46,394.72,0.75,295.37,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,2147483648,5,468.42,467.92,468.61,470.43,0.75,351.31,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,4294967296,5,393.24,392.01,393.36,394.7,0.75,294.93,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,4294967296,5,469.27,468.87,469.37,471.06,0.75,351.95,allgather
+payload_n4_allgather_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,8589934592,5,392.24,391.73,392.51,394.74,0.75,294.18,allgather
+payload_n4_allgather_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,8589934592,5,470.03,469.88,470.17,471.68,0.75,352.52,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),33554400,5,236.5,234.31,238.06,237.59,1.0,236.5,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),33554400,5,225.51,225.39,225.77,225.9,1.0,225.51,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),67108800,5,241.98,240.87,243.02,242.85,1.0,241.98,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),67108800,5,275.59,275.35,276.47,275.64,1.0,275.59,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),134217696,5,283.75,283.63,285.06,283.59,1.0,283.75,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),134217696,5,312.92,312.56,313.23,312.83,1.0,312.92,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),268435392,5,317.33,317.13,318.27,317.15,1.0,317.33,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),268435392,5,331.69,330.36,332.95,331.31,1.0,331.69,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),536870880,5,334.01,333.82,334.23,333.77,1.0,334.01,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),536870880,5,352.01,351.93,352.39,352.03,1.0,352.01,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),1073741760,5,346.55,346.44,348.61,347.83,1.0,346.55,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),1073741760,5,360.89,360.56,361.11,360.94,1.0,360.89,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),2147483616,5,353.56,349.93,356.2,352.43,1.0,353.56,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),2147483616,5,364.34,364.31,365.26,364.7,1.0,364.34,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),4294967232,5,359.4,356.53,361.64,358.03,1.0,359.4,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),4294967232,5,367.0,366.69,367.13,366.93,1.0,367.0,allgather
+payload_n6_allgather_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),8589934560,5,360.34,358.18,362.41,360.15,1.0,360.34,allgather
+payload_n6_allgather_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),8589934560,5,369.0,368.86,369.01,369.01,1.0,369.0,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),33554400,5,271.35,270.54,272.64,281.79,0.8333,226.13,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),33554400,5,297.15,293.45,298.46,299.13,0.8333,247.62,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),67108800,5,325.14,322.73,327.52,329.19,0.8333,270.95,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),67108800,5,352.06,350.76,353.3,352.87,0.8333,293.38,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),134217696,5,351.25,346.46,352.41,355.29,0.8333,292.71,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),134217696,5,382.79,381.04,383.57,382.88,0.8333,318.99,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),268435392,5,378.11,376.12,378.76,380.72,0.8333,315.09,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),268435392,5,402.28,401.87,402.82,402.23,0.8333,335.23,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),536870880,5,394.39,394.15,394.95,397.78,0.8333,328.66,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),536870880,5,415.41,415.15,415.64,415.22,0.8333,346.18,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),1073741760,5,405.31,404.75,406.32,410.94,0.8333,337.76,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),1073741760,5,423.8,423.27,424.45,424.74,0.8333,353.17,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),2147483616,5,409.2,408.72,409.74,416.15,0.8333,341.0,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),2147483616,5,433.51,433.43,434.05,433.94,0.8333,361.26,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),4294967232,5,418.18,416.88,419.47,426.86,0.8333,348.48,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),4294967232,5,438.96,438.68,439.34,438.86,0.8333,365.8,allgather
+payload_n6_allgather_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),8589934560,5,423.0,422.78,423.51,432.71,0.8333,352.5,allgather
+payload_n6_allgather_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),8589934560,5,441.46,441.32,441.72,440.85,0.8333,367.88,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,33554400,5,318.49,312.48,319.24,319.88,1.0,318.49,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,67108800,5,345.22,344.7,345.49,345.69,1.0,345.22,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,134217696,5,343.06,342.14,343.51,343.25,1.0,343.06,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,268435392,5,357.92,357.68,358.14,358.03,1.0,357.92,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,536870880,5,347.74,346.81,348.35,347.26,1.0,347.74,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,1073741760,5,360.73,360.13,361.73,360.25,1.0,360.73,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,2147483616,5,349.84,349.59,350.35,350.32,1.0,349.84,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,4294967232,5,362.28,362.1,362.68,363.75,1.0,362.28,allgather
+payload_n6_allgather_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,8589934560,5,354.84,354.59,355.1,354.44,1.0,354.84,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,33554400,5,273.37,268.81,274.85,285.19,0.8333,227.81,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,33554400,5,278.82,273.98,282.7,302.4,0.8333,232.35,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,67108800,5,305.25,304.71,305.9,316.83,0.8333,254.38,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,67108800,5,359.75,358.48,360.61,358.7,0.8333,299.79,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,134217696,5,299.11,297.82,300.0,308.65,0.8333,249.26,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,134217696,5,346.0,344.02,347.5,347.4,0.8333,288.33,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,268435392,5,320.11,318.71,320.62,332.46,0.8333,266.76,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,268435392,5,388.53,387.36,389.03,391.59,0.8333,323.77,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,536870880,5,304.01,303.73,305.11,314.52,0.8333,253.34,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,536870880,5,357.92,357.65,358.86,359.12,0.8333,298.27,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,1073741760,5,323.2,322.45,323.97,336.16,0.8333,269.33,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,1073741760,5,395.4,395.13,395.51,396.65,0.8333,329.5,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,2147483616,5,305.18,303.77,305.99,316.01,0.8333,254.32,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,2147483616,5,359.4,359.2,359.6,360.78,0.8333,299.5,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,4294967232,5,323.26,322.74,323.86,335.55,0.8333,269.38,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,4294967232,5,394.74,394.6,395.24,396.59,0.8333,328.95,allgather
+payload_n6_allgather_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,8589934560,5,308.91,307.76,309.15,319.67,0.8333,257.43,allgather
+payload_n6_allgather_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,8589934560,5,358.84,358.54,359.26,360.18,0.8333,299.03,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),33554432,5,241.76,240.68,242.64,242.6,1.0,241.76,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),33554432,5,227.25,226.48,227.62,227.73,1.0,227.25,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),67108864,5,243.01,242.41,243.99,244.4,1.0,243.01,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),67108864,5,272.58,272.17,273.16,273.11,1.0,272.58,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),134217728,5,285.95,285.26,286.36,285.22,1.0,285.95,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),134217728,5,313.52,312.86,314.03,314.15,1.0,313.52,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),268435456,5,323.73,322.42,324.47,323.62,1.0,323.73,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),268435456,5,322.33,321.3,323.8,322.14,1.0,322.33,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),536870912,5,344.46,342.75,346.88,345.27,1.0,344.46,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),536870912,5,348.85,347.87,349.06,348.65,1.0,348.85,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),1073741824,5,341.63,338.93,342.49,340.05,1.0,341.63,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),1073741824,5,359.28,359.17,359.81,358.89,1.0,359.28,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),2147483648,5,348.81,347.61,349.51,349.47,1.0,348.81,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),2147483648,5,365.67,364.81,366.17,364.95,1.0,365.67,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),4294967296,5,353.18,351.77,353.63,352.91,1.0,353.18,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),4294967296,5,367.16,366.55,367.68,367.22,1.0,367.16,allgather
+payload_n8_allgather_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),8589934592,5,355.1,352.65,356.12,354.16,1.0,355.1,allgather
+payload_n8_allgather_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),8589934592,5,367.62,366.93,369.12,367.56,1.0,367.62,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),33554432,5,262.9,261.07,263.47,271.47,0.875,230.04,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),33554432,5,285.52,284.95,288.76,288.19,0.875,249.83,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),67108864,5,319.08,318.07,319.96,323.96,0.875,279.19,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),67108864,5,338.52,337.4,340.49,341.2,0.875,296.2,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),134217728,5,344.55,343.07,345.68,342.67,0.875,301.48,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),134217728,5,370.71,369.99,371.7,371.89,0.875,324.37,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),268435456,5,367.91,366.89,368.49,371.06,0.875,321.92,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),268435456,5,388.32,388.28,388.88,388.32,0.875,339.78,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),536870912,5,382.88,382.12,383.89,384.08,0.875,335.02,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),536870912,5,400.06,399.62,400.26,399.96,0.875,350.05,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),1073741824,5,393.95,393.48,394.48,396.79,0.875,344.71,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),1073741824,5,407.17,403.49,407.23,407.15,0.875,356.27,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),2147483648,5,399.87,399.44,400.81,404.31,0.875,349.89,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),2147483648,5,414.47,412.59,414.49,413.49,0.875,362.66,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),4294967296,5,405.64,405.38,405.84,410.38,0.875,354.94,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),4294967296,5,418.14,418.01,418.51,417.67,0.875,365.87,allgather
+payload_n8_allgather_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),8589934592,5,409.0,408.26,410.18,414.42,0.875,357.88,allgather
+payload_n8_allgather_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),8589934592,5,420.36,419.57,420.68,420.35,0.875,367.81,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,33554432,5,330.13,329.28,331.44,332.44,1.0,330.13,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,67108864,5,350.32,349.69,350.99,350.79,1.0,350.32,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,134217728,5,361.66,361.36,361.85,361.77,1.0,361.66,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,268435456,5,366.98,366.28,367.36,367.86,1.0,366.98,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,536870912,5,370.88,370.78,370.96,370.87,1.0,370.88,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,1073741824,5,371.75,371.49,371.88,371.83,1.0,371.75,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,2147483648,5,373.38,373.33,373.41,373.38,1.0,373.38,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,4294967296,5,373.09,372.88,373.12,373.33,1.0,373.09,allgather
+payload_n8_allgather_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,8589934592,5,374.2,374.14,374.21,374.12,1.0,374.2,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,33554432,5,283.33,272.82,284.11,293.9,0.875,247.91,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,33554432,5,288.51,278.17,292.12,297.47,0.875,252.45,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,67108864,5,298.47,298.23,298.93,308.68,0.875,261.16,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,67108864,5,328.16,324.3,333.92,328.91,0.875,287.14,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,134217728,5,308.87,307.85,309.25,319.1,0.875,270.26,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,134217728,5,359.22,356.03,360.45,360.06,0.875,314.32,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,268435456,5,313.69,313.05,314.38,323.66,0.875,274.48,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,268435456,5,374.29,374.09,376.96,376.68,0.875,327.5,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,536870912,5,316.65,316.45,316.79,326.12,0.875,277.07,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,536870912,5,382.38,381.23,383.99,384.31,0.875,334.58,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,1073741824,5,317.6,317.13,318.26,327.02,0.875,277.9,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,1073741824,5,385.28,384.93,385.6,386.81,0.875,337.12,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,2147483648,5,318.31,318.24,318.37,327.17,0.875,278.52,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,2147483648,5,386.42,386.3,386.68,387.08,0.875,338.12,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,4294967296,5,318.3,318.06,318.43,327.02,0.875,278.51,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,4294967296,5,386.29,386.2,386.3,386.91,0.875,338.0,allgather
+payload_n8_allgather_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,8589934592,5,318.53,318.3,318.81,326.89,0.875,278.71,allgather
+payload_n8_allgather_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,8589934592,5,386.0,385.89,386.12,386.92,0.875,337.75,allgather
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),33554432,5,220.75,219.31,222.26,221.01,1.0,220.75,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),33554432,5,257.79,255.61,258.01,259.49,1.0,257.79,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),67108864,5,249.92,249.73,250.36,249.95,1.0,249.92,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),67108864,5,287.42,286.87,288.04,287.84,1.0,287.42,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),134217728,5,266.66,266.13,267.28,267.07,1.0,266.66,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),134217728,5,309.16,308.88,309.47,308.93,1.0,309.16,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),268435456,5,308.28,307.08,309.21,306.81,1.0,308.28,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),268435456,5,322.09,321.73,322.34,322.23,1.0,322.09,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),536870912,5,317.11,316.07,318.49,317.9,1.0,317.11,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),536870912,5,329.73,329.56,329.77,329.58,1.0,329.73,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),1073741824,5,324.72,324.67,325.69,325.33,1.0,324.72,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),1073741824,5,333.06,333.04,333.12,333.13,1.0,333.06,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),2147483648,5,328.76,327.41,329.14,328.25,1.0,328.76,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),2147483648,5,335.55,335.37,335.63,335.42,1.0,335.55,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),4294967296,5,329.67,329.3,330.06,329.91,1.0,329.67,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),4294967296,5,336.71,336.65,336.73,336.68,1.0,336.71,reducescatter
+payload_n2_reducescatter_nvls_auto,nvls,2,"4,5",auto,16,640 (code),8589934592,5,330.37,329.79,330.51,330.33,1.0,330.37,reducescatter
+payload_n2_reducescatter_nvls_c64,nvls,2,"4,5",64,64,640 (code),8589934592,5,337.25,337.16,337.41,337.23,1.0,337.25,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),33554432,5,354.98,353.59,355.95,362.18,0.5,177.49,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),33554432,5,397.41,396.94,398.74,406.56,0.5,198.71,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),67108864,5,405.61,404.99,406.7,411.32,0.5,202.81,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),67108864,5,470.18,469.53,470.87,476.15,0.5,235.09,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),134217728,5,441.86,441.24,443.48,446.33,0.5,220.93,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),134217728,5,522.1,520.77,522.72,524.33,0.5,261.05,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),268435456,5,468.03,465.64,475.36,473.38,0.5,234.01,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),268435456,5,561.82,561.4,562.3,562.44,0.5,280.91,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),536870912,5,504.07,500.67,523.57,511.03,0.5,252.03,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),536870912,5,647.07,646.57,647.83,648.5,0.5,323.54,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),1073741824,5,536.6,532.54,545.87,548.26,0.5,268.3,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),1073741824,5,660.75,650.43,666.61,660.06,0.5,330.38,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),2147483648,5,560.64,539.02,565.95,585.84,0.5,280.32,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),2147483648,5,691.23,690.49,692.05,691.69,0.5,345.62,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),4294967296,5,572.25,547.05,578.78,575.73,0.5,286.12,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),4294967296,5,703.31,701.19,707.49,702.36,0.5,351.65,reducescatter
+payload_n2_reducescatter_ring_auto,ring,2,"4,5",auto,24,512 (code),8589934592,5,577.42,558.71,582.95,582.58,0.5,288.71,reducescatter
+payload_n2_reducescatter_ring_c64,ring,2,"4,5",64,64,512 (code),8589934592,5,710.09,707.68,711.49,708.98,0.5,355.05,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,33554432,5,287.95,287.24,288.36,292.99,0.5,143.97,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,33554432,5,549.1,546.79,550.95,562.38,0.5,274.55,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,67108864,5,306.36,305.8,307.14,309.19,0.5,153.18,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,67108864,5,603.63,602.07,605.8,604.14,0.5,301.81,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,134217728,5,317.27,316.83,318.05,320.06,0.5,158.63,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,134217728,5,633.59,631.9,634.76,634.71,0.5,316.8,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,268435456,5,322.95,322.47,323.36,324.97,0.5,161.47,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,268435456,5,650.57,650.41,651.34,651.91,0.5,325.29,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,536870912,5,325.75,325.31,326.35,326.91,0.5,162.88,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,536870912,5,660.99,660.9,661.37,660.91,0.5,330.5,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,1073741824,5,326.56,326.26,327.01,328.66,0.5,163.28,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,1073741824,5,666.36,666.15,666.56,666.83,0.5,333.18,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,2147483648,5,327.42,327.18,327.75,328.97,0.5,163.71,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,2147483648,5,669.43,669.41,669.56,669.96,0.5,334.71,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,4294967296,5,327.81,327.59,328.74,329.06,0.5,163.91,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,4294967296,5,671.22,671.07,671.69,671.22,0.5,335.61,reducescatter
+payload_n2_reducescatter_sym_plain_auto,sym_plain,2,"4,5",auto,10,512,8589934592,5,327.67,327.6,327.99,329.19,0.5,163.84,reducescatter
+payload_n2_reducescatter_sym_plain_c32,sym_plain,2,"4,5",32,32,512,8589934592,5,672.16,671.91,672.41,672.19,0.5,336.08,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),33554432,5,241.04,239.5,242.32,241.92,1.0,241.04,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),33554432,5,255.57,254.14,255.75,254.17,1.0,255.57,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),67108864,5,284.64,283.58,284.84,284.26,1.0,284.64,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),67108864,5,294.9,294.66,295.62,295.42,1.0,294.9,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),134217728,5,308.21,307.23,308.55,308.3,1.0,308.21,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),134217728,5,315.58,315.24,315.75,315.37,1.0,315.58,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),268435456,5,319.38,319.29,320.31,320.1,1.0,319.38,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),268435456,5,333.21,332.72,333.43,333.08,1.0,333.21,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),536870912,5,344.48,343.73,344.54,344.35,1.0,344.48,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),536870912,5,343.31,342.88,343.91,343.62,1.0,343.31,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),1073741824,5,349.46,348.21,349.73,349.47,1.0,349.46,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),1073741824,5,349.49,349.32,349.58,349.52,1.0,349.49,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),2147483648,5,348.88,347.91,351.77,349.19,1.0,348.88,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),2147483648,5,351.93,351.63,352.1,351.68,1.0,351.93,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),4294967296,5,348.32,348.0,350.79,350.55,1.0,348.32,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),4294967296,5,353.67,353.59,353.72,353.57,1.0,353.67,reducescatter
+payload_n4_reducescatter_nvls_auto,nvls,4,"4,5,6,7",auto,16,640 (code),8589934592,5,350.79,349.01,350.89,348.93,1.0,350.79,reducescatter
+payload_n4_reducescatter_nvls_c64,nvls,4,"4,5,6,7",64,64,640 (code),8589934592,5,354.7,354.59,354.75,354.62,1.0,354.7,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),33554432,5,314.15,313.89,315.43,317.64,0.75,235.61,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),33554432,5,334.09,334.0,334.83,336.28,0.75,250.57,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),67108864,5,349.4,348.76,352.73,353.91,0.75,262.05,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),67108864,5,387.78,387.08,388.81,390.67,0.75,290.83,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),134217728,5,383.8,383.12,384.3,385.79,0.75,287.85,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),134217728,5,419.57,419.08,420.8,421.75,0.75,314.68,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),268435456,5,403.96,402.93,404.2,405.64,0.75,302.97,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),268435456,5,438.13,437.95,438.22,439.52,0.75,328.6,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),536870912,5,417.69,416.78,423.73,419.92,0.75,313.27,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),536870912,5,448.08,447.29,448.15,448.02,0.75,336.06,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),1073741824,5,438.68,433.65,442.2,435.15,0.75,329.01,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),1073741824,5,470.26,468.5,470.36,470.57,0.75,352.69,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),2147483648,5,451.4,447.03,454.22,453.49,0.75,338.55,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),2147483648,5,479.59,479.04,481.47,479.73,0.75,359.69,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),4294967296,5,458.44,452.09,462.16,461.98,0.75,343.83,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),4294967296,5,486.99,486.26,487.41,487.09,0.75,365.24,reducescatter
+payload_n4_reducescatter_ring_auto,ring,4,"4,5,6,7",auto,24,512 (code),8589934592,5,466.75,464.88,467.9,468.38,0.75,350.06,reducescatter
+payload_n4_reducescatter_ring_c64,ring,4,"4,5,6,7",64,64,512 (code),8589934592,5,489.36,487.61,490.64,489.23,0.75,367.02,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,33554432,5,320.04,319.64,320.63,320.18,1.0,320.04,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,67108864,5,335.62,335.41,335.99,335.67,1.0,335.62,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,134217728,5,343.4,343.01,343.46,343.6,1.0,343.4,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,268435456,5,348.78,348.36,348.98,348.95,1.0,348.78,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,536870912,5,351.84,351.58,351.89,351.68,1.0,351.84,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,1073741824,5,353.33,353.27,353.37,353.27,1.0,353.33,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,2147483648,5,354.42,354.3,354.44,354.34,1.0,354.42,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,4294967296,5,355.12,355.1,355.15,355.13,1.0,355.12,reducescatter
+payload_n4_reducescatter_sym_multicast_auto,sym_multicast,4,"4,5,6,7",auto,4,512,8589934592,5,355.45,355.37,355.48,355.44,1.0,355.45,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,33554432,5,303.59,300.57,304.75,307.01,0.75,227.69,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,33554432,5,376.79,374.64,379.28,382.78,0.75,282.59,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,67108864,5,335.0,333.38,335.57,336.32,0.75,251.25,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,67108864,5,406.18,405.85,407.9,405.68,0.75,304.63,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,134217728,5,348.16,348.03,348.59,349.44,0.75,261.12,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,134217728,5,422.89,422.22,423.39,422.46,0.75,317.17,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,268435456,5,355.83,355.5,356.33,356.53,0.75,266.87,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,268435456,5,432.79,431.46,433.43,432.82,0.75,324.59,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,536870912,5,361.54,361.13,361.92,361.78,0.75,271.16,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,536870912,5,438.23,437.76,438.36,438.24,0.75,328.67,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,1073741824,5,363.75,363.47,364.47,364.18,0.75,272.81,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,1073741824,5,441.21,441.06,441.68,441.36,0.75,330.91,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,2147483648,5,364.47,363.77,365.22,365.16,0.75,273.35,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,2147483648,5,442.93,442.74,443.17,443.09,0.75,332.2,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,4294967296,5,365.41,364.95,365.6,365.27,0.75,274.06,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,4294967296,5,444.21,444.03,444.29,444.1,0.75,333.16,reducescatter
+payload_n4_reducescatter_sym_plain_auto,sym_plain,4,"4,5,6,7",auto,10,512,8589934592,5,365.65,365.5,365.81,365.26,0.75,274.24,reducescatter
+payload_n4_reducescatter_sym_plain_c32,sym_plain,4,"4,5,6,7",32,32,512,8589934592,5,444.42,444.3,444.45,444.61,0.75,333.31,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),33554400,5,211.71,211.33,212.24,211.96,1.0,211.71,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),33554400,5,243.38,241.43,243.96,243.79,1.0,243.38,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),67108800,5,273.59,273.11,275.5,273.83,1.0,273.59,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),67108800,5,289.01,288.31,289.61,288.88,1.0,289.01,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),134217696,5,299.33,295.28,300.2,298.7,1.0,299.33,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),134217696,5,319.93,319.24,320.07,319.64,1.0,319.93,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),268435392,5,310.44,309.18,313.21,312.06,1.0,310.44,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),268435392,5,333.62,333.07,333.85,333.3,1.0,333.62,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),536870880,5,316.84,314.78,318.97,316.65,1.0,316.84,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),536870880,5,346.29,346.15,346.72,346.37,1.0,346.29,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),1073741760,5,350.12,349.88,351.2,350.03,1.0,350.12,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),1073741760,5,353.8,353.71,354.0,353.74,1.0,353.8,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),2147483616,5,354.0,353.5,355.01,353.76,1.0,354.0,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),2147483616,5,357.27,357.24,357.63,357.28,1.0,357.27,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),4294967232,5,356.08,355.7,356.52,356.3,1.0,356.08,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),4294967232,5,358.37,358.33,358.61,358.6,1.0,358.37,reducescatter
+payload_n6_reducescatter_nvls_auto,nvls,6,"1,2,3,4,5,6",auto,16,640 (code),8589934560,5,357.51,356.88,357.75,357.81,1.0,357.51,reducescatter
+payload_n6_reducescatter_nvls_c64,nvls,6,"1,2,3,4,5,6",64,64,640 (code),8589934560,5,359.5,359.43,359.59,359.46,1.0,359.5,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),33554400,5,294.29,290.41,295.11,293.39,0.8333,245.24,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),33554400,5,307.0,306.63,308.77,309.36,0.8333,255.83,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),67108800,5,333.54,332.55,334.8,335.9,0.8333,277.95,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),67108800,5,355.4,354.03,355.72,356.79,0.8333,296.17,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),134217696,5,361.37,360.39,361.67,361.77,0.8333,301.14,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),134217696,5,385.71,385.11,386.67,386.09,0.8333,321.43,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),268435392,5,381.95,381.65,382.92,382.87,0.8333,318.29,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),268435392,5,402.83,401.81,403.5,403.67,0.8333,335.69,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),536870880,5,393.87,393.84,395.18,393.8,0.8333,328.23,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),536870880,5,414.63,414.55,414.97,414.84,0.8333,345.53,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),1073741760,5,406.56,405.42,409.01,407.58,0.8333,338.8,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),1073741760,5,421.68,421.11,422.11,421.23,0.8333,351.4,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),2147483616,5,412.65,412.14,416.77,413.34,0.8333,343.88,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),2147483616,5,434.44,432.84,434.53,433.54,0.8333,362.03,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),4294967232,5,424.7,420.12,427.06,423.5,0.8333,353.92,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),4294967232,5,440.07,439.08,440.17,439.97,0.8333,366.73,reducescatter
+payload_n6_reducescatter_ring_auto,ring,6,"1,2,3,4,5,6",auto,24,512 (code),8589934560,5,430.9,428.08,432.66,429.28,0.8333,359.08,reducescatter
+payload_n6_reducescatter_ring_c64,ring,6,"1,2,3,4,5,6",64,64,512 (code),8589934560,5,441.88,441.39,442.26,441.84,0.8333,368.23,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,33554400,5,299.48,298.7,299.89,300.14,1.0,299.48,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,67108800,5,325.51,324.85,326.27,325.8,1.0,325.51,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,134217696,5,327.2,326.84,327.61,327.13,1.0,327.2,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,268435392,5,341.58,341.28,341.81,341.38,1.0,341.58,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,536870880,5,335.9,335.85,335.93,335.78,1.0,335.9,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,1073741760,5,346.1,345.94,346.24,345.99,1.0,346.1,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,2147483616,5,337.43,337.34,337.58,337.29,1.0,337.43,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,4294967232,5,346.98,346.92,347.06,346.83,1.0,346.98,reducescatter
+payload_n6_reducescatter_sym_multicast_auto,sym_multicast,6,"1,2,3,4,5,6",auto,2,512,8589934560,5,337.8,337.73,337.98,337.58,1.0,337.8,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,33554400,5,284.0,283.31,284.96,287.15,0.8333,236.67,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,33554400,5,309.6,308.07,310.29,311.94,0.8333,258.0,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,67108800,5,316.74,316.16,316.93,316.75,0.8333,263.95,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,67108800,5,341.45,341.04,343.01,342.51,0.8333,284.54,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,134217696,5,334.8,334.32,335.04,335.16,0.8333,279.0,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,134217696,5,352.83,351.65,354.08,353.71,0.8333,294.02,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,268435392,5,346.86,346.54,347.71,346.67,0.8333,289.05,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,268435392,5,358.95,357.92,359.56,359.0,0.8333,299.12,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,536870880,5,349.72,349.24,349.83,349.63,0.8333,291.43,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,536870880,5,367.85,367.43,368.45,367.38,0.8333,306.54,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,1073741760,5,351.96,351.69,352.15,351.82,0.8333,293.3,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,1073741760,5,369.43,368.79,370.45,369.54,0.8333,307.86,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,2147483616,5,350.86,350.5,351.12,350.97,0.8333,292.38,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,2147483616,5,374.22,374.14,374.43,374.25,0.8333,311.85,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,4294967232,5,351.46,351.01,351.69,351.57,0.8333,292.88,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,4294967232,5,374.25,373.8,374.31,374.54,0.8333,311.88,reducescatter
+payload_n6_reducescatter_sym_plain_auto,sym_plain,6,"1,2,3,4,5,6",auto,10,512,8589934560,5,350.39,350.33,350.53,350.58,0.8333,291.99,reducescatter
+payload_n6_reducescatter_sym_plain_c32,sym_plain,6,"1,2,3,4,5,6",32,32,512,8589934560,5,376.87,376.82,377.03,376.91,0.8333,314.06,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),33554432,5,213.69,212.96,214.2,213.32,1.0,213.69,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),33554432,5,233.87,233.44,235.57,234.64,1.0,233.87,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),67108864,5,271.49,270.65,272.47,271.78,1.0,271.49,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),67108864,5,281.86,280.9,282.6,282.25,1.0,281.86,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),134217728,5,303.0,301.92,304.51,303.88,1.0,303.0,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),134217728,5,315.71,315.29,316.23,315.69,1.0,315.71,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),268435456,5,320.13,319.12,322.33,320.66,1.0,320.13,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),268435456,5,329.12,328.85,329.87,329.42,1.0,329.12,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),536870912,5,329.99,327.89,332.32,328.94,1.0,329.99,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),536870912,5,345.5,344.19,346.0,345.22,1.0,345.5,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),1073741824,5,353.7,353.42,353.86,353.48,1.0,353.7,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),1073741824,5,354.71,352.36,354.87,354.59,1.0,354.71,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),2147483648,5,358.24,358.02,358.55,358.34,1.0,358.24,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),2147483648,5,359.05,357.07,359.36,358.98,1.0,359.05,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),4294967296,5,360.77,360.26,360.9,360.77,1.0,360.77,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),4294967296,5,360.18,359.46,360.37,360.07,1.0,360.18,reducescatter
+payload_n8_reducescatter_nvls_auto,nvls,8,"0,1,2,3,4,5,6,7",auto,16,640 (code),8589934592,5,361.85,361.33,362.26,361.61,1.0,361.85,reducescatter
+payload_n8_reducescatter_nvls_c64,nvls,8,"0,1,2,3,4,5,6,7",64,64,640 (code),8589934592,5,359.92,358.61,360.44,360.14,1.0,359.92,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),33554432,5,287.15,284.67,288.2,287.48,0.875,251.26,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),33554432,5,295.74,294.35,297.1,296.66,0.875,258.77,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),67108864,5,328.25,325.83,330.46,332.11,0.875,287.22,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),67108864,5,344.76,343.94,345.32,345.15,0.875,301.66,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),134217728,5,350.7,350.14,352.34,352.4,0.875,306.86,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),134217728,5,375.57,375.22,376.47,376.58,0.875,328.62,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),268435456,5,374.12,373.68,374.8,374.93,0.875,327.36,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),268435456,5,390.78,390.59,391.08,391.76,0.875,341.93,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),536870912,5,384.76,384.41,385.71,385.37,0.875,336.66,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),536870912,5,400.75,400.54,400.77,401.07,0.875,350.66,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),1073741824,5,394.36,394.19,395.41,395.23,0.875,345.06,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),1073741824,5,406.19,405.93,406.23,406.22,0.875,355.42,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),2147483648,5,401.37,400.6,403.26,402.14,0.875,351.2,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),2147483648,5,414.68,412.9,414.99,414.65,0.875,362.85,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),4294967296,5,408.72,407.77,410.51,409.27,0.875,357.63,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),4294967296,5,418.75,418.56,418.81,418.8,0.875,366.41,reducescatter
+payload_n8_reducescatter_ring_auto,ring,8,"0,1,2,3,4,5,6,7",auto,24,512 (code),8589934592,5,414.56,411.68,414.95,414.65,0.875,362.74,reducescatter
+payload_n8_reducescatter_ring_c64,ring,8,"0,1,2,3,4,5,6,7",64,64,512 (code),8589934592,5,420.92,420.69,421.16,420.86,0.875,368.31,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,33554432,5,320.25,319.47,321.43,321.27,1.0,320.25,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,67108864,5,339.86,339.43,340.4,340.65,1.0,339.86,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,134217728,5,351.16,350.68,351.31,351.39,1.0,351.16,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,268435456,5,357.33,357.12,357.35,357.32,1.0,357.33,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,536870912,5,360.83,360.64,360.86,360.57,1.0,360.83,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,1073741824,5,362.76,362.69,362.89,362.66,1.0,362.76,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,2147483648,5,363.99,363.89,364.04,363.96,1.0,363.99,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,4294967296,5,364.61,364.57,364.62,364.04,1.0,364.61,reducescatter
+payload_n8_reducescatter_sym_multicast_auto,sym_multicast,8,"0,1,2,3,4,5,6,7",auto,2,512,8589934592,5,364.99,364.9,365.01,362.58,1.0,364.99,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,33554432,5,281.99,278.28,282.4,285.07,0.875,246.74,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,33554432,5,318.61,317.41,320.54,322.07,0.875,278.78,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,67108864,5,304.87,301.46,305.31,305.81,0.875,266.76,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,67108864,5,345.69,344.94,345.98,344.61,0.875,302.48,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,134217728,5,331.23,330.85,331.39,331.68,0.875,289.83,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,134217728,5,359.42,359.12,360.32,359.64,0.875,314.49,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,268435456,5,346.61,346.08,346.8,346.53,0.875,303.28,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,268435456,5,368.36,367.7,368.68,368.09,0.875,322.31,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,536870912,5,350.88,350.19,351.41,350.53,0.875,307.02,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,536870912,5,372.72,372.6,373.0,372.63,0.875,326.13,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,1073741824,5,352.95,352.12,353.37,353.27,0.875,308.83,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,1073741824,5,375.42,375.16,375.51,375.43,0.875,328.49,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,2147483648,5,353.3,353.16,354.67,354.59,0.875,309.14,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,2147483648,5,376.86,376.65,376.91,376.96,0.875,329.75,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,4294967296,5,355.55,354.03,355.74,355.49,0.875,311.11,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,4294967296,5,377.68,377.62,377.73,377.68,0.875,330.47,reducescatter
+payload_n8_reducescatter_sym_plain_auto,sym_plain,8,"0,1,2,3,4,5,6,7",auto,10,512,8589934592,5,355.41,354.08,355.43,355.15,0.875,310.98,reducescatter
+payload_n8_reducescatter_sym_plain_c32,sym_plain,8,"0,1,2,3,4,5,6,7",32,32,512,8589934592,5,377.95,377.88,378.09,378.06,0.875,330.71,reducescatter

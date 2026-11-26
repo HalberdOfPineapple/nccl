@@ -1,0 +1,69 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "n6_ring_auto_long",
+   "arm": "ring",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "n6_ring_auto_short",
+   "arm": "ring",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "n6_nvls_auto_long",
+   "arm": "nvls",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "n6_nvls_auto_short",
+   "arm": "nvls",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "n6_sym_multicast_auto_long",
+   "arm": "sym_multicast",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "n6_sym_multicast_auto_short",
+   "arm": "sym_multicast",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "n6_sym_plain_auto_long",
+   "arm": "sym_plain",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "n6_sym_plain_auto_short",
+   "arm": "sym_plain",
+   "devices": "1,2,3,4,5,6",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  }
+ ]
+}

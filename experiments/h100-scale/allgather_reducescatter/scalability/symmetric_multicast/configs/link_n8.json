@@ -1,0 +1,149 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "link_n8_allgather_ring_auto_long",
+   "collective": "allgather",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_allgather_ring_auto_short",
+   "collective": "allgather",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_allgather_nvls_auto_long",
+   "collective": "allgather",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_allgather_nvls_auto_short",
+   "collective": "allgather",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_allgather_sym_multicast_auto_long",
+   "collective": "allgather",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_allgather_sym_multicast_auto_short",
+   "collective": "allgather",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_allgather_sym_plain_auto_long",
+   "collective": "allgather",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_allgather_sym_plain_auto_short",
+   "collective": "allgather",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_reducescatter_ring_auto_long",
+   "collective": "reducescatter",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_reducescatter_ring_auto_short",
+   "collective": "reducescatter",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_reducescatter_nvls_auto_long",
+   "collective": "reducescatter",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_reducescatter_nvls_auto_short",
+   "collective": "reducescatter",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_reducescatter_sym_multicast_auto_long",
+   "collective": "reducescatter",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_reducescatter_sym_multicast_auto_short",
+   "collective": "reducescatter",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  },
+  {
+   "id": "link_n8_reducescatter_sym_plain_auto_long",
+   "collective": "reducescatter",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 200
+  },
+  {
+   "id": "link_n8_reducescatter_sym_plain_auto_short",
+   "collective": "reducescatter",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "iters": 20
+  }
+ ]
+}

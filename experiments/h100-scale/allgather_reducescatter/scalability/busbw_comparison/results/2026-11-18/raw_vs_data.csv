@@ -1,0 +1,11 @@
+collective,arm,gpu_count,direction,pairs,algbw_long_run_gbps,data_bytes_per_payload_byte,raw_bytes_per_payload_byte,raw_over_data,data_link_rate_gbps,raw_link_rate_gbps,raw_share_of_rating
+allgather,ring,8,Rx,3,400.4,0.875,1.0315,1.179,350.4,413.1,0.864
+allgather,ring,8,Tx,3,400.4,0.875,1.0281,1.175,350.4,411.7,0.861
+allgather,sym_multicast,8,Rx,3,373.6,1.0,1.1328,1.133,373.6,423.2,0.885
+allgather,sym_multicast,8,Tx,3,373.6,0.125,0.8872,7.098,46.7,331.5,0.693
+allreduce,ring,8,Rx,3,208.0,1.7501,2.0283,1.159,364.0,421.8,0.882
+allreduce,ring,8,Tx,3,208.0,1.7501,2.0258,1.158,364.0,421.3,0.881
+allreduce,sym_multicast,8,Rx,3,276.3,1.125,1.5302,1.36,310.8,422.8,0.884
+allreduce,sym_multicast,8,Tx,3,276.3,1.125,1.519,1.35,310.8,419.7,0.878
+reducescatter,sym_multicast,8,Rx,3,364.2,0.125,1.0437,8.35,45.5,380.2,0.795
+reducescatter,sym_multicast,8,Tx,3,364.2,1.0,1.1591,1.159,364.2,422.2,0.883

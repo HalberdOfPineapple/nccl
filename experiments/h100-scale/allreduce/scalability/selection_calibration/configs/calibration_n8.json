@@ -1,0 +1,289 @@
+{
+ "rounds": 3,
+ "cells": [
+  {
+   "id": "n8_ring_auto",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n8_nvls_auto",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n8_sym_multicast_auto",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n8_sym_plain_auto",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "n8_ring_c2",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 2
+  },
+  {
+   "id": "n8_nvls_c2",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 2
+  },
+  {
+   "id": "n8_sym_multicast_c2",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 2
+  },
+  {
+   "id": "n8_sym_plain_c2",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 2
+  },
+  {
+   "id": "n8_ring_c4",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 4
+  },
+  {
+   "id": "n8_nvls_c4",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 4
+  },
+  {
+   "id": "n8_sym_multicast_c4",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 4
+  },
+  {
+   "id": "n8_sym_plain_c4",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 4
+  },
+  {
+   "id": "n8_ring_c8",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 8
+  },
+  {
+   "id": "n8_nvls_c8",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 8
+  },
+  {
+   "id": "n8_sym_multicast_c8",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 8
+  },
+  {
+   "id": "n8_sym_plain_c8",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 8
+  },
+  {
+   "id": "n8_ring_c16",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 16
+  },
+  {
+   "id": "n8_nvls_c16",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 16
+  },
+  {
+   "id": "n8_sym_multicast_c16",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 16
+  },
+  {
+   "id": "n8_sym_plain_c16",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 16
+  },
+  {
+   "id": "n8_ring_c24",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 24
+  },
+  {
+   "id": "n8_nvls_c24",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 24
+  },
+  {
+   "id": "n8_sym_multicast_c24",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 24
+  },
+  {
+   "id": "n8_sym_plain_c24",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 24
+  },
+  {
+   "id": "n8_ring_c32",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 32
+  },
+  {
+   "id": "n8_nvls_c32",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 32
+  },
+  {
+   "id": "n8_sym_multicast_c32",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 32
+  },
+  {
+   "id": "n8_sym_plain_c32",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 32
+  },
+  {
+   "id": "n8_ring_c48",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 48
+  },
+  {
+   "id": "n8_nvls_c48",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 48
+  },
+  {
+   "id": "n8_sym_multicast_c48",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 48
+  },
+  {
+   "id": "n8_sym_plain_c48",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 48
+  },
+  {
+   "id": "n8_ring_c64",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  },
+  {
+   "id": "n8_nvls_c64",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  },
+  {
+   "id": "n8_sym_multicast_c64",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  },
+  {
+   "id": "n8_sym_plain_c64",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  }
+ ]
+}

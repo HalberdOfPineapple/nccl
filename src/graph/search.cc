@@ -904,12 +904,17 @@ ncclResult_t ncclTopoSearchRec(struct ncclTopoSystem* system, struct ncclTopoGra
   } else {
     // Intra-node only.
     if (graph->pattern == NCCL_TOPO_PATTERN_NVLS) {
-      NCCLCHECK(ncclTopoSearchTryGpu(system, graph, saveGraph, 0, backToNet, backToFirstRank, 0, time, -1, -1,
-                                     graph->nChannels));
+      NCCLCHECK(
+        ncclTopoSearchTryGpu(
+          system, graph, saveGraph, 0, backToNet, backToFirstRank, 0, time, -1, -1,
+          graph->nChannels
+        )
+      );
       return ncclSuccess;
     } else if (graph->nChannels == 0) {
       // Try PCI order first
-      NCCLCHECK(ncclTopoSearchTryGpu(system, graph, saveGraph, 0, backToNet, backToFirstRank, FORCED_ORDER_PCI, time,
+      NCCLCHECK(
+        ncclTopoSearchTryGpu(system, graph, saveGraph, 0, backToNet, backToFirstRank, FORCED_ORDER_PCI, time,
                                      -1, -1, 0));
     } else {
       // Also try to replay previous channel

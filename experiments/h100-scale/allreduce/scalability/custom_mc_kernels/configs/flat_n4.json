@@ -1,0 +1,32 @@
+{
+ "rounds": 5,
+ "cells": [
+  {
+   "id": "flat_n4_oneshot_c16",
+   "devices": "4,5,6,7",
+   "min_ctas": 16,
+   "max_ctas": 16,
+   "min_size": 16777216,
+   "max_size": 2147483648,
+   "kernels": "oneshot,nccl"
+  },
+  {
+   "id": "flat_n4_twoshot_c16",
+   "devices": "4,5,6,7",
+   "min_ctas": 16,
+   "max_ctas": 16,
+   "min_size": 16777216,
+   "max_size": 2147483648,
+   "kernels": "twoshot,nccl"
+  },
+  {
+   "id": "flat_n4_poison_c256",
+   "devices": "4,5,6,7",
+   "min_ctas": 256,
+   "max_ctas": 256,
+   "min_size": 16777216,
+   "max_size": 2147483648,
+   "kernels": "poison,nccl"
+  }
+ ]
+}

@@ -1,0 +1,123 @@
+{
+ "rounds": 5,
+ "cells": [
+  {
+   "id": "scaling_n8_allgather_ring_auto",
+   "collective": "allgather",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_allgather_nvls_auto",
+   "collective": "allgather",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_allgather_sym_multicast_auto",
+   "collective": "allgather",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_allgather_sym_plain_auto",
+   "collective": "allgather",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_reducescatter_ring_auto",
+   "collective": "reducescatter",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_reducescatter_nvls_auto",
+   "collective": "reducescatter",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_reducescatter_sym_multicast_auto",
+   "collective": "reducescatter",
+   "arm": "sym_multicast",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_reducescatter_sym_plain_auto",
+   "collective": "reducescatter",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G"
+  },
+  {
+   "id": "scaling_n8_allgather_sym_plain_c32",
+   "collective": "allgather",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 32
+  },
+  {
+   "id": "scaling_n8_reducescatter_sym_plain_c32",
+   "collective": "reducescatter",
+   "arm": "sym_plain",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 32
+  },
+  {
+   "id": "scaling_n8_allgather_ring_c64",
+   "collective": "allgather",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  },
+  {
+   "id": "scaling_n8_allgather_nvls_c64",
+   "collective": "allgather",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  },
+  {
+   "id": "scaling_n8_reducescatter_ring_c64",
+   "collective": "reducescatter",
+   "arm": "ring",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  },
+  {
+   "id": "scaling_n8_reducescatter_nvls_c64",
+   "collective": "reducescatter",
+   "arm": "nvls",
+   "devices": "0,1,2,3,4,5,6,7",
+   "min_size": "2G",
+   "max_size": "2G",
+   "ctas": 64
+  }
+ ]
+}

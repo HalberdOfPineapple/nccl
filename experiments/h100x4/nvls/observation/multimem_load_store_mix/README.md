@@ -63,6 +63,41 @@ Notes that apply to every section:
 - The five single-arm results at 32 CTAs × 512 threads/CTA match to 0.1 GB/s across that change, so we see no effect on those arms.
 - We cannot prove there is none; see the odd GPU 6 result in the multimem table section.
 
+## Which NCCL implementation of NVLS AllReduce this report covers
+
+**Added 2026-11-17.** The rest of the report is unchanged. This section says which code ran.
+
+**Answer: every measurement in this report used multimem on registered symmetric windows. NCCL's classic NVLS algorithm (`NCCL_ALGO=NVLS`) was never run.** In this report, "NVLS AllGather", "NVLS ReduceScatter" and "NVLS AllReduce" mean "the collective built from multimem (NVLink SHARP) instructions", not NCCL's algorithm named NVLS.
+
+NCCL 2.32.3 has two AllReduce implementations that use multimem. Both use the same two instructions, `multimem.ld_reduce` and `multimem.st`, but on different memory and with different work around them:
+
+| | Classic NVLS algorithm | Symmetric multicast kernel |
+|---|---|---|
+| How it is selected | `NCCL_ALGO=NVLS`; buffers not registered as symmetric windows | Buffers registered with `ncclCommWindowRegister(…, NCCL_WIN_COLL_SYMMETRIC)`; NCCL picks the kernel, or `NCCL_SYM_KERNEL=allreduce:AllReduce_RSxLDMC_AGxSTMC` forces it |
+| Code | `RunWorkColl<…, NCCL_ALGO_NVLS, NCCL_PROTO_SIMPLE>` in [`src/device/all_reduce.h`](../../../../../src/device/all_reduce.h) | `ncclSymkRun_AllReduce_RSxLDMC_AGxSTMC` in [`src/device/symmetric/all_reduce.cuh`](../../../../../src/device/symmetric/all_reduce.cuh) |
+| Memory the switch works on | NCCL's own internal buffer, bound to a multicast object by NCCL | The user's buffer, bound to a multicast object at registration |
+| Work around the instructions | Each CTA has three warp groups: copy the input into NCCL's buffer, reduce through the switch, copy the result out. Groups and GPUs wait on step flags every 128 KiB. Only 4 of 20 warps per CTA issue multimem | Every warp loads with `ld_reduce` and stores with `st` directly on the user's buffer. One barrier across GPUs at the start of the call and one at the end |
+| Name in the NCCL log | `Algo NVLS proto SIMPLE` | `AllReduce [Symmetric]: … -> Kernel AllReduce_RSxLDMC_AGxSTMC` |
+
+The full call paths of both, from `all_reduce_perf` down to the PTX, are in the [NVLS AllReduce walkthrough](../../../../../notes/nvls_allreduce_walkthrough.html).
+
+What each part of this report ran:
+
+| Part of this report | What ran | Which implementation it matches | Evidence |
+|---|---|---|---|
+| Harness (`mm_mix`): the multimem table, the split mix, the calibration, the link data | Our own kernel. Memory from `ncclMemAlloc`, registered as a symmetric window, device communicator with `lsaMultimem = true` ([`mm_mix.cu:613-619`](../../common/src/mm_mix.cu)). Every thread issues `multimem.ld_reduce` and `multimem.st` directly through `ncclGetLsaMultimemPointer` ([`mm_mix.cu:142-149`](../../common/src/mm_mix.cu), [`:320-335`](../../common/src/mm_mix.cu)). No staging buffer, no step flags | **Symmetric multicast**: the role loops are modelled on its `allreduceMultimem` |
+| NCCL cross-check | NCCL symmetric kernels, forced: `AllGather_STMC`, `ReduceScatter_LDMC`, `AllReduce_RSxLDMC_AGxSTMC`, with `-R 2` ([`run_nccl_check.py:45-50`](../../common/scripts/run_nccl_check.py)) | **Symmetric multicast** | Every log names the forced kernel and no other |
+| Support check, step 3 (NCCL's own choice) | With `-R 2` at 1 GiB, NCCL chose `AllReduce_RSxLDMC_AGxSTMC` by itself | **Symmetric multicast** | Kernel name on all 52 logged calls |
+| Classic NVLS | Not run | — | — |
+
+What this means for the results:
+
+- **The comparison with the source report is like for like.** Its section 3.4 used the author's own benchmark, which issues multimem directly from 32 blocks per operation. Our harness does the same on registered memory. The NCCL cross-check uses the NCCL kernels with the same structure, and it agrees with the harness within about 1%.
+- **The busBW factor applies to both implementations.** The [AllReduce scalability series](../../../../h100-scale/allreduce/scalability/link_bytes/README.md) measured NVLink data bytes per payload byte on GPUs 4–7 at 2 GiB: 1.2503 for classic NVLS and 1.2500 for the symmetric kernel, both matching 1 + 1/4. Classic NVLS's extra copies stay in each GPU's own memory and do not reach NVLink.
+- **The 13% mixing drop is not shown for classic NVLS.** Its reduce warps also issue `ld_reduce` and then `st` in the same warps, so the same effect is plausible. But classic NVLS also copies data, waits on flags, and has fewer warps issuing multimem, so its rate may be limited elsewhere. The ratio for classic NVLS would need classic NVLS AllGather and ReduceScatter references, which were not measured.
+- **A hint only:** on the same GPUs 4–7 at 2 GiB, classic NVLS AllReduce reached 309.0 GB/s busBW (16 CTAs × 640 threads/CTA) and the symmetric kernel 314.9 GB/s (4 CTAs × 512 threads/CTA), in the [scalability series](../../../../h100-scale/allreduce/scalability/gpu_count_scaling/README.md). That compares AllReduce alone and says nothing about the mixing ratio.
+- **The source report's NCCL numbers have the same ambiguity.** Its section 2 explains NCCL AllGather and ReduceScatter at about 620 GB/s by copies through a "bounce buffer", which matches classic NVLS's copies through its own buffer. It reports higher rates "registered", and its section 3 gives "registered AllReduce about 550". It does not say whether "registered" means NVLS buffer registration (`ncclCommRegister`, the classic kernel without copies) or symmetric windows (the symmetric kernels). This is a question for the author, alongside the open points in [What this report does not establish](#what-this-report-does-not-establish).
+
 ## How each number is measured
 
 Every table in this report is built from the same few measurements. This section says what each one is, where it comes from in the code, and works through one real run. The run is `e1_2_single_multicast_R1`: NVLS AllGather, 32 `st_multicast` CTAs × 512 threads/CTA on each GPU, round 1. Raw records are in `results/2026-11-01/e1_2/raw/`.
